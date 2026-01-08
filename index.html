@@ -183,15 +183,16 @@
         }
         
         .paragraph-text {
-            background: #1e293b;
-            color: #e2e8f0;
-            font-family: 'Courier New', Consolas, monospace;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: #1e293b;
+            font-family: 'Georgia', 'Times New Roman', serif;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 12px;
             text-align: justify;
             line-height: 1.9;
-            font-size: 0.95rem;
+            font-size: 1rem;
             border-left: 4px solid #4f46e5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
         
         .questions-grid {
@@ -253,7 +254,7 @@
             color: white;
             font-weight: 600;
         }
-        .option-btn.correct-answer::after {
+        .option-btn.correct-answer.was-selected::after {
             content: '✓';
             position: absolute;
             top: -8px;
@@ -322,7 +323,7 @@
             color: white;
             font-weight: 600;
         }
-        .tropos-btn.correct-answer::after {
+        .tropos-btn.correct-answer.was-selected::after {
             content: '✓';
             position: absolute;
             top: -8px;
@@ -344,7 +345,7 @@
             color: white;
             font-weight: 600;
         }
-        .tropos-btn.correct-primary::after {
+        .tropos-btn.correct-primary.was-selected::after {
             content: '✓';
             position: absolute;
             top: -8px;
@@ -933,11 +934,11 @@
                     <div class="question-card ${state.showResult ? (state.selectedDomi === current.domi ? 'correct' : 'incorrect') : ''}">
                         <h3>1️⃣ Ποια είναι η δομή της παραγράφου;</h3>
                         <div class="options-list">
-                            <button class="option-btn ${state.selectedDomi === 'Τριμερής' ? 'selected' : ''} ${state.showResult && 'Τριμερής' === current.domi ? 'correct-answer' : ''} ${state.showResult && state.selectedDomi === 'Τριμερής' && 'Τριμερής' !== current.domi ? 'wrong-answer' : ''}" 
+                            <button class="option-btn ${state.selectedDomi === 'Τριμερής' ? 'selected' : ''} ${state.showResult && 'Τριμερής' === current.domi ? 'correct-answer' : ''} ${state.showResult && state.selectedDomi === 'Τριμερής' && 'Τριμερής' === current.domi ? 'was-selected' : ''} ${state.showResult && state.selectedDomi === 'Τριμερής' && 'Τριμερής' !== current.domi ? 'wrong-answer' : ''}" 
                                     data-domi="Τριμερής" ${state.showResult ? 'disabled' : ''}>
                                 Τριμερής <span class="option-hint">(με κατακλείδα)</span>
                             </button>
-                            <button class="option-btn ${state.selectedDomi === 'Διμερής' ? 'selected' : ''} ${state.showResult && 'Διμερής' === current.domi ? 'correct-answer' : ''} ${state.showResult && state.selectedDomi === 'Διμερής' && 'Διμερής' !== current.domi ? 'wrong-answer' : ''}" 
+                            <button class="option-btn ${state.selectedDomi === 'Διμερής' ? 'selected' : ''} ${state.showResult && 'Διμερής' === current.domi ? 'correct-answer' : ''} ${state.showResult && state.selectedDomi === 'Διμερής' && 'Διμερής' === current.domi ? 'was-selected' : ''} ${state.showResult && state.selectedDomi === 'Διμερής' && 'Διμερής' !== current.domi ? 'wrong-answer' : ''}" 
                                     data-domi="Διμερής" ${state.showResult ? 'disabled' : ''}>
                                 Διμερής <span class="option-hint">(χωρίς κατακλείδα)</span>
                             </button>
@@ -964,6 +965,8 @@
                                     if (isCorrectKyrios) classes += ' correct-primary';
                                     else if (isCorrectDeyt) classes += ' correct-answer';
                                     else if (isWrong) classes += ' wrong-answer';
+                                    // Προσθήκη was-selected αν επιλέχθηκε και είναι σωστό
+                                    if (isSelected && (isCorrectKyrios || isCorrectDeyt)) classes += ' was-selected';
                                 }
                                 
                                 return `
