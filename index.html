@@ -1,1551 +1,427 @@
-<!DOCTYPE html>
-<html lang="el">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏺 Αρχαία Αίγυπτος - Κεφάλαιο 2.2</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #F5F5DC;
-            min-height: 100vh;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #8B4513, #DEB887);
-            color: white;
-            padding: 20px;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header-info {
-            font-size: 12px;
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-
-        h1 {
-            font-size: 24px;
-            margin: 5px 0;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .points {
-            text-align: right;
-        }
-
-        .points-label {
-            font-size: 12px;
-        }
-
-        .points-value {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background-color: rgba(255,255,255,0.3);
-            border-radius: 10px;
-            margin-top: 10px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background-color: #2ECC71;
-            border-radius: 10px;
-            transition: width 0.3s;
-        }
-
-        .navigation {
-            background-color: white;
-            border-bottom: 2px solid #DEB887;
-        }
-
-        .nav-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 15px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .nav-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .nav-btn.active {
-            background-color: #1E90FF;
-            color: white;
-        }
-
-        .nav-btn:not(.active) {
-            background-color: white;
-            color: #2C3E50;
-        }
-
-        .nav-btn.locked {
-            background-color: #e0e0e0;
-            color: #999;
-            cursor: not-allowed;
-        }
-
-        .glossary-btn {
-            padding: 12px 20px;
-            border-radius: 8px;
-            border: 2px solid #FFD700;
-            background-color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .card {
-            background-color: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .section-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .section-tab {
-            flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            background-color: #e0e0e0;
-            color: #2C3E50;
-        }
-
-        .section-tab.active {
-            background-color: #1E90FF;
-            color: white;
-        }
-
-        .subsection {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #F5F5DC;
-            border-radius: 10px;
-            border-left: 4px solid #1E90FF;
-        }
-
-        .subsection h3 {
-            margin-top: 0;
-            color: #2C3E50;
-        }
-
-        .subsection ul {
-            margin: 10px 0;
-            padding-left: 20px;
-        }
-
-        .subsection li {
-            margin-bottom: 8px;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        .grid-item {
-            padding: 15px;
-            background-color: white;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .grid-item-icon {
-            font-size: 32px;
-            margin-bottom: 5px;
-        }
-
-        .grid-item-label {
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .pyramid {
-            text-align: center;
-            margin: 20px 0;
-        }
-
-        .pyramid h3 {
-            margin-bottom: 15px;
-        }
-
-        .pyramid-levels {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .pyramid-level {
-            background-color: #DEB887;
-            border: 3px solid #8B4513;
-            border-radius: 8px;
-            padding: 12px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .pyramid-level:hover {
-            background-color: #FFD700;
-            transform: scale(1.05);
-        }
-
-        .pyramid-level-name {
-            font-weight: bold;
-            font-size: 13px;
-        }
-
-        .pyramid-level-desc {
-            font-size: 11px;
-            color: #666;
-        }
-
-        .hierarchy {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .hierarchy-box {
-            background-color: #F5F5DC;
-            border: 3px solid #1E90FF;
-            border-radius: 12px;
-            padding: 15px;
-            min-width: 280px;
-            text-align: center;
-        }
-
-        .hierarchy-icon {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        .hierarchy-title {
-            margin: 8px 0;
-            color: #8B4513;
-            font-size: 16px;
-        }
-
-        .hierarchy-points {
-            list-style: none;
-            padding: 0;
-            font-size: 13px;
-        }
-
-        .hierarchy-points li {
-            margin-bottom: 5px;
-        }
-
-        .hierarchy-arrow {
-            text-align: center;
-            font-size: 20px;
-            color: #1E90FF;
-            margin: 5px 0;
-        }
-
-        .info-box {
-            background-color: #e3f2fd;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-top: 15px;
-        }
-
-        .definition-box {
-            background-color: #fff3cd;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            margin-top: 15px;
-        }
-
-        .button-group {
-            margin-top: 25px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-prev {
-            background-color: #DEB887;
-            color: #2C3E50;
-        }
-
-        .btn-prev:disabled {
-            background-color: #e0e0e0;
-            cursor: not-allowed;
-        }
-
-        .btn-next {
-            background-color: #2ECC71;
-            color: white;
-        }
-
-        .success-box {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #d4edda;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .success-box p {
-            margin: 0;
-            font-weight: bold;
-        }
-
-        .continue-btn {
-            margin-top: 10px;
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            background-color: #1E90FF;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .image-card {
-            background-color: #F5F5DC;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 20px;
-            border: 3px solid #DEB887;
-            text-align: center;
-        }
-
-        .image-emoji {
-            font-size: 100px;
-            margin-bottom: 15px;
-        }
-
-        .image-title {
-            color: #8B4513;
-            margin-bottom: 10px;
-        }
-
-        .image-desc {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .parathema-box {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #F5F5DC;
-            border-radius: 12px;
-            border: 3px solid #FFD700;
-        }
-
-        .parathema-text {
-            background-color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-style: italic;
-            line-height: 1.7;
-            border-left: 4px solid #1E90FF;
-        }
-
-        .keywords-box {
-            background-color: #e3f2fd;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-
-        .keywords-flex {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 10px 0;
-        }
-
-        .keyword-btn {
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: none;
-            background-color: white;
-            color: #2C3E50;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .keyword-btn.highlighted {
-            background-color: #FFD700;
-            color: white;
-        }
-
-        .exercise-numbers {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .exercise-number {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            border: none;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #e0e0e0;
-            color: #2C3E50;
-        }
-
-        .exercise-number.active {
-            background-color: #1E90FF;
-            color: white;
-        }
-
-        .exercise-number.completed {
-            background-color: #2ECC71;
-            color: white;
-        }
-
-        .exercise-tag {
-            padding: 5px 10px;
-            background-color: #FFD700;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-
-        .question {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 20px 0;
-        }
-
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .option-btn {
-            padding: 15px;
-            border-radius: 10px;
-            border: 3px solid #ddd;
-            background-color: white;
-            cursor: pointer;
-            text-align: left;
-            font-size: 15px;
-            transition: all 0.3s;
-        }
-
-        .option-btn.selected {
-            border-color: #1E90FF;
-            background-color: #e3f2fd;
-            font-weight: bold;
-        }
-
-        .option-btn.correct {
-            border-color: #2ECC71;
-            background-color: #d4edda;
-        }
-
-        .option-btn.wrong {
-            border-color: #E74C3C;
-            background-color: #f8d7da;
-        }
-
-        .submit-btn {
-            margin-top: 15px;
-            padding: 12px 24px;
-            border-radius: 8px;
-            border: none;
-            background-color: #2ECC71;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .submit-btn:disabled {
-            background-color: #e0e0e0;
-            cursor: not-allowed;
-        }
-
-        .result-box {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
-        .result-box.correct {
-            background-color: #d4edda;
-        }
-
-        .result-box.incorrect {
-            background-color: #fff3cd;
-        }
-
-        .pyramid-drag {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .pyramid-drag-levels {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .pyramid-slot {
-            min-height: 50px;
-            background-color: #F5F5DC;
-            border: 3px dashed #ccc;
-            border-radius: 8px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .pyramid-slot.filled {
-            background-color: #DEB887;
-            border: 3px solid #8B4513;
-        }
-
-        .drag-items-box {
-            padding: 15px;
-            background-color: #F5F5DC;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-
-        .drag-items-flex {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .drag-item {
-            padding: 10px 15px;
-            background-color: #1E90FF;
-            color: white;
-            border-radius: 8px;
-            cursor: move;
-            font-weight: bold;
-            font-size: 13px;
-        }
-
-        .truefalse-question {
-            margin-bottom: 15px;
-            padding: 15px;
-            background-color: #F5F5DC;
-            border-radius: 10px;
-        }
-
-        .truefalse-text {
-            margin-bottom: 10px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .truefalse-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .truefalse-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 8px;
-            border: 3px solid #ddd;
-            background-color: white;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .truefalse-btn.selected {
-            border-color: #1E90FF;
-            background-color: #e3f2fd;
-        }
-
-        .truefalse-btn.correct-answer {
-            border-color: #2ECC71;
-            background-color: #d4edda;
-        }
-
-        .quiz-container {
-            background-color: white;
-            border-radius: 15px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .quiz-emoji {
-            font-size: 64px;
-            margin-bottom: 20px;
-        }
-
-        .quiz-score-box {
-            background-color: #F5F5DC;
-            padding: 30px;
-            border-radius: 12px;
-            margin: 20px 0;
-            border: 4px solid #FFD700;
-        }
-
-        .quiz-score {
-            font-size: 48px;
-            color: #FFD700;
-            margin-bottom: 15px;
-        }
-
-        .quiz-details {
-            margin: 10px 0;
-        }
-
-        .quiz-question-card {
-            background-color: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .quiz-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0,0,0,0.7);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background-color: white;
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        .close-btn {
-            border: none;
-            background: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #E74C3C;
-        }
-
-        .glossary-item {
-            margin-bottom: 15px;
-            padding: 15px;
-            background-color: #F5F5DC;
-            border-radius: 10px;
-            border-left: 4px solid #FFD700;
-        }
-
-        .glossary-term-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
-        .glossary-icon {
-            font-size: 24px;
-            margin-right: 10px;
-        }
-
-        .glossary-term {
-            font-weight: bold;
-        }
-
-        .glossary-def {
-            margin: 0;
-            font-size: 14px;
-        }
-
-        footer {
-            background-color: #8B4513;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        footer p {
-            margin: 5px 0;
-            font-size: 13px;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            .grid-3 {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .nav-content {
-                flex-direction: column;
-            }
-
-            .section-tabs {
-                flex-direction: column;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- HEADER -->
-    <header class="header">
-        <div class="header-content">
-            <div class="header-flex">
-                <div>
-                    <div class="header-info">ΚΕΦΑΛΑΙΟ 2.2 | Α' ΛΥΚΕΙΟΥ</div>
-                    <h1>🏺 ΑΡΧΑΙΑ ΑΙΓΥΠΤΟΣ</h1>
-                    <div class="subtitle">Οικονομική, Κοινωνική και Πολιτική Οργάνωση</div>
-                </div>
-                <div class="points">
-                    <div class="points-label">Πόντοι</div>
-                    <div class="points-value">🔺 <span id="points">0</span></div>
-                </div>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-            </div>
+import React, { useState } from 'react';
+
+const XenofontasApp = () => {
+  const [activeSection, setActiveSection] = useState('theory');
+  const [exerciseAnswers, setExerciseAnswers] = useState({});
+  const [showResults, setShowResults] = useState({});
+  const [currentExercise, setCurrentExercise] = useState(0);
+  const [openCategory, setOpenCategory] = useState(null);
+
+  const theoryData = {
+    life: {
+      title: "Η ΖΩΗ ΤΟΥ",
+      icon: "👤",
+      sections: [
+        {
+          name: "Καταγωγή & Μόρφωση",
+          content: [
+            "Γέννηση: μεταξύ 431 και 429 π.Χ.",
+            "Τόπος: δήμος Ερχιάς της Αττικής",
+            "Πατέρας: Γρύλλος (εύπορος κτηματίας)",
+            "Μόρφωση: καλή παιδεία",
+            "Ενδιαφέροντα: αγάπη για άλογα, οργάνωση αγροκτήματος",
+            "Υπηρέτησε στο σώμα των ιππέων"
+          ]
+        },
+        {
+          name: "Σωκράτης",
+          content: [
+            "Γνωρίστηκε με τον Σωκράτη",
+            "Έζησε τις περιπέτειες της Αθήνας στον Πελοποννησιακό πόλεμο",
+            "Ήττα του 404 π.Χ.",
+            "Άνοδος των Τριάκοντα Τυράννων",
+            "Αποκατάσταση δημοκρατίας το 403 π.Χ."
+          ]
+        },
+        {
+          name: "Εκστρατεία του Κύρου (401 π.Χ.)",
+          content: [
+            "Φίλος του Πρόξενος τού πρότεινε τη συμμετοχή",
+            "Κύρος: ήθελε να εκθρονίσει τον αδελφό του Αρταξέρξη Β'",
+            "10.000 μισθοφόροι (οι «Μύριοι»)",
+            "Μάχη στα Κούναξα - θάνατος του Κύρου",
+            "Ξενοφών: ανέλαβε ηγετικές πρωτοβουλίες για την επιστροφή",
+            "Πορεία: Εύξεινος Πόντος → Βυζάντιο → Αιγαίο"
+          ]
+        },
+        {
+          name: "Αγησίλαος & Εξορία",
+          content: [
+            "Μισθοφόρος του βασιλιά Σεύθη των Οδρυσών (Θράκη)",
+            "Επαφή με σπαρτιατικό στρατό (399 π.Χ.)",
+            "Αγησίλαος: ανέλαβε ηγεσία (396 π.Χ.)",
+            "Εντυπωσιάστηκε από την προσωπικότητά του",
+            "Μάχη Κορώνειας (394 π.Χ.): πολέμησε κατά Αθήνας και Θήβας",
+            "Εξορία από την Αθήνα: αναπόφευκτη και δικαιολογημένη"
+          ]
+        },
+        {
+          name: "Κτήμα στον Σκιλλούντα",
+          content: [
+            "Οι Σπαρτιάτες του έδωσαν «προξενίαν» (άδεια διαμονής)",
+            "Κτήμα κοντά στην Ολυμπία",
+            "~20 χρόνια ήρεμης οικογενειακής ζωής",
+            "Γυναίκα και δύο γιοι: Γρύλλος και Διόδωρος",
+            "Συγγραφή πολλών έργων",
+            "Μάχη Λεύκτρων (371 π.Χ.): ήττα Σπαρτιατών",
+            "Μετακόμιση στην Κόρινθο (370 π.Χ.)"
+          ]
+        },
+        {
+          name: "Επιστροφή στην Αθήνα",
+          content: [
+            "Προσέγγιση Αθηναίων-Σπαρτιατών κατά Θηβαίων (365 π.Χ.)",
+            "Άρση ψηφίσματος εξορίας",
+            "Γιοι: υπηρέτησαν στον αθηναϊκό στρατό",
+            "Γρύλλος: σκοτώθηκε στη μάχη Μαντινείας (362 π.Χ.)",
+            "Θάνατος Ξενοφώντα: μετά το 355 π.Χ."
+          ]
+        }
+      ]
+    },
+    work: {
+      title: "ΤΟ ΕΡΓΟ ΤΟΥ",
+      icon: "📚",
+      sections: [
+        {
+          name: "Τα πρότυπά του",
+          content: [
+            "Σωκράτης: πρότυπο ζωής",
+            "Αγησίλαος: ηγετικά προσόντα, απλότητα συμπεριφοράς"
+          ]
+        },
+        {
+          name: "Χρονολόγηση έργων",
+          content: [
+            "Συγγραφή: άρχισε στον Σκιλλούντα",
+            "Εντάθηκε τα τελευταία χρόνια",
+            "Σειρά: Ιστορικά → Σωκρατικά → Διδακτικά"
+          ]
+        }
+      ]
+    },
+    works: {
+      title: "ΤΑ ΕΡΓΑ ΤΟΥ",
+      icon: "📖",
+      categories: [
+        {
+          name: "ΙΣΤΟΡΙΚΑ",
+          color: "#3b82f6",
+          items: [
+            { title: "Κύρου Ἀνάβασις", desc: "Η εκστρατεία των 10.000 μισθοφόρων (401 π.Χ.)" },
+            { title: "Ἑλληνικά", desc: "Γεγονότα 411-362 π.Χ. (μοναδική πηγή)" },
+            { title: "Ἀγησίλαος", desc: "Εγκωμιαστική βιογραφία του Σπαρτιάτη βασιλιά" },
+            { title: "Λακεδαιμονίων Πολιτεία", desc: "Στρατιωτική οργάνωση & θεσμοί Σπάρτης" },
+            { title: "Κύρου Παιδεία", desc: "Μυθιστορηματική βιογραφία Κύρου του Μεγάλου" }
+          ]
+        },
+        {
+          name: "ΣΩΚΡΑΤΙΚΑ",
+          color: "#8b5cf6",
+          items: [
+            { title: "Ἀπολογία Σωκράτους", desc: "Αντίκρουση κατηγορίας αθεΐας" },
+            { title: "Ἀπομνημονεύματα", desc: "Συζητήσεις & διάλογοι του Σωκράτη" },
+            { title: "Συμπόσιον", desc: "Συζήτηση για τον έρωτα" },
+            { title: "Οἰκονομικός", desc: "Διαχείριση νοικοκυριού & αγροκτήματος" }
+          ]
+        },
+        {
+          name: "ΔΙΔΑΚΤΙΚΑ",
+          color: "#059669",
+          items: [
+            { title: "Περί ἱππικῆς", desc: "Περιποίηση & χρήση ίππων" },
+            { title: "Ἱππαρχικός", desc: "Οργάνωση & τακτική ιππικού" },
+            { title: "Ἱέρων", desc: "Διάλογος τυράννου & ποιητή Σιμωνίδη" },
+            { title: "Πόροι", desc: "Λύσεις για τα οικονομικά της Αθήνας" }
+          ]
+        }
+      ]
+    },
+    style: {
+      title: "ΥΦΟΣ & ΑΞΙΟΛΟΓΗΣΗ",
+      icon: "✨",
+      points: [
+        { label: "Σαφήνεια & ακρίβεια", desc: "στην έκφραση" },
+        { label: "Ακρίβεια περιγραφής", desc: "χώρων & γεγονότων" },
+        { label: "Ζωντάνια γραφής", desc: "σαν ικανός «ρεπόρτερ»" },
+        { label: "Δραματική ένταση", desc: "σε εντυπωσιακές σκηνές" },
+        { label: "Απλότητα ύφους", desc: "καθαρότητα νοημάτων" }
+      ],
+      epithets: ["«ἀττική μέλισσα»", "«ἀττική μοῦσα»"],
+      values: [
+        "Πίστη σε υψηλές αξίες",
+        "Καταδίκη αυθαιρεσίας & ανηθικότητας",
+        "Αποδοκιμασία κατάληψης Καδμείας (382 π.Χ.)",
+        "Απόδοση ήττας Σπαρτιατών σε θεϊκή τιμωρία"
+      ]
+    }
+  };
+
+  const exercises = [
+    // ΖΩΗΤ
+    { id: 1, type: 'multiple', category: 'Ζωή', question: "Πού γεννήθηκε ο Ξενοφών;", options: ["Στην Αθήνα", "Στον δήμο Ερχιάς της Αττικής", "Στη Σπάρτη", "Στην Κόρινθο"], correct: 1, explanation: "Ο Ξενοφών γεννήθηκε στον δήμο της Ερχιάς της Αττικής, μεταξύ 431 και 429 π.Χ." },
+    { id: 2, type: 'multiple', category: 'Ζωή', question: "Ποιο ήταν το επάγγελμα του πατέρα του;", options: ["Στρατηγός", "Φιλόσοφος", "Εύπορος κτηματίας", "Έμπορος"], correct: 2, explanation: "Ο πατέρας του Γρύλλος ήταν εύπορος κτηματίας." },
+    { id: 3, type: 'multiple', category: 'Ζωή', question: "Σε ποιο σώμα του στρατού υπηρέτησε ο Ξενοφών;", options: ["Πεζικό", "Ναυτικό", "Ιππείς", "Τοξότες"], correct: 2, explanation: "Υπηρέτησε στο σώμα των ιππέων, μαζί με άλλους εύπορους νέους." },
+    { id: 4, type: 'fill', category: 'Ζωή', question: "Ο Ξενοφών γνωρίστηκε με τον μεγάλο φιλόσοφο _____.", answer: "Σωκράτη", alternatives: ["σωκρατη", "Σωκράτης", "σωκράτης"] },
+    { id: 5, type: 'multiple', category: 'Εκστρατεία', question: "Ποιος πρότεινε στον Ξενοφώντα να συμμετάσχει στην εκστρατεία του Κύρου;", options: ["Ο Σωκράτης", "Ο Αγησίλαος", "Ο Πρόξενος", "Ο πατέρας του"], correct: 2, explanation: "Ο φίλος του Πρόξενος του πρότεινε τη συμμετοχή." },
+    { id: 6, type: 'multiple', category: 'Εκστρατεία', question: "Τι ήθελε να πετύχει ο Κύρος με την εκστρατεία του;", options: ["Να κατακτήσει την Ελλάδα", "Να εκθρονίσει τον αδελφό του Αρταξέρξη Β'", "Να νικήσει τους Σπαρτιάτες", "Να καταλάβει την Αίγυπτο"], correct: 1, explanation: "Ο Κύρος ήθελε να εκθρονίσει τον αδελφό του, τον βασιλιά της Περσίας Αρταξέρξη Β'." },
+    { id: 7, type: 'fill', category: 'Εκστρατεία', question: "Οι Έλληνες μισθοφόροι ονομάζονταν «_____» (10.000).", answer: "Μύριοι", alternatives: ["μυριοι", "μύριοι", "Μυριοι"] },
+    { id: 8, type: 'multiple', category: 'Εκστρατεία', question: "Σε ποια μάχη σκοτώθηκε ο Κύρος;", options: ["Κορώνεια", "Μαντίνεια", "Κούναξα", "Λεύκτρα"], correct: 2, explanation: "Ο Κύρος σκοτώθηκε στη μάχη στα Κούναξα το 401 π.Χ." },
+    { id: 9, type: 'truefalse', category: 'Εκστρατεία', statements: [{ text: "Μετά τον θάνατο του Κύρου, ο Ξενοφών ανέλαβε ηγετικές πρωτοβουλίες.", correct: true, expl: "Σωστό! Ανέλαβε την οργάνωση της επιστροφής των μισθοφόρων." }, { text: "Η πορεία των μισθοφόρων κατέληξε απευθείας στην Αθήνα.", correct: false, expl: "Λάθος! Κατέληξε στον Εύξεινο Πόντο → Βυζάντιο → Αιγαίο." }] },
+    { id: 10, type: 'multiple', category: 'Αγησίλαος', question: "Ποιος Σπαρτιάτης βασιλιάς εντυπωσίασε τον Ξενοφώντα;", options: ["Λεωνίδας", "Αγησίλαος", "Κλεομένης", "Παυσανίας"], correct: 1, explanation: "Ο βασιλιάς Αγησίλαος εντυπωσίασε τον Ξενοφώντα με την προσωπικότητά του." },
+    { id: 11, type: 'multiple', category: 'Αγησίλαος', question: "Στη μάχη της Κορώνειας (394 π.Χ.) ο Ξενοφών πολέμησε:", options: ["Υπέρ της Αθήνας", "Κατά της Αθήνας και της Θήβας", "Κατά της Σπάρτης", "Δεν συμμετείχε"], correct: 1, explanation: "Ακολούθησε τον Αγησίλαο εναντίον του αντισπαρτιατικού συνασπισμού (Αθήνα, Θήβα)." },
+    { id: 12, type: 'fill', category: 'Εξορία', question: "Οι Σπαρτιάτες παραχώρησαν στον Ξενοφώντα κτήμα στον _____, κοντά στην Ολυμπία.", answer: "Σκιλλούντα", alternatives: ["σκιλλουντα", "Σκιλούντα", "σκιλουντα"] },
+    { id: 13, type: 'multiple', category: 'Εξορία', question: "Πόσα χρόνια έζησε ο Ξενοφών στον Σκιλλούντα;", options: ["5 χρόνια", "10 χρόνια", "20 χρόνια", "30 χρόνια"], correct: 2, explanation: "Έζησε περίπου είκοσι χρόνια ήρεμη οικογενειακή ζωή." },
+    { id: 14, type: 'multiple', category: 'Εξορία', question: "Ποια μάχη οδήγησε στην αποχώρηση του Ξενοφώντα από τον Σκιλλούντα;", options: ["Μάχη Μαραθώνα", "Μάχη Λεύκτρων", "Μάχη Σαλαμίνας", "Μάχη Πλαταιών"], correct: 1, explanation: "Η ήττα των Σπαρτιατών στα Λεύκτρα (371 π.Χ.) εξασθένισε τη θέση τους." },
+    { id: 15, type: 'fill', category: 'Οικογένεια', question: "Ο Ξενοφών είχε δύο γιους: τον _____ και τον Διόδωρο.", answer: "Γρύλλο", alternatives: ["γρυλλο", "Γρύλλος", "γρύλλος"] },
+    { id: 16, type: 'multiple', category: 'Οικογένεια', question: "Σε ποια μάχη σκοτώθηκε ο γιος του Γρύλλος;", options: ["Κορώνεια", "Μαντίνεια", "Λεύκτρα", "Κούναξα"], correct: 1, explanation: "Ο Γρύλλος σκοτώθηκε στη μάχη της Μαντινείας (362 π.Χ.)." },
+    // ΕΡΓΑ
+    { id: 17, type: 'multiple', category: 'Έργα', question: "Ποιο έργο περιγράφει την εκστρατεία των «Μυρίων»;", options: ["Ἑλληνικά", "Κύρου Ἀνάβασις", "Κύρου Παιδεία", "Ἀγησίλαος"], correct: 1, explanation: "Η Κύρου Ἀνάβασις περιγράφει την εκστρατεία των 10.000 μισθοφόρων." },
+    { id: 18, type: 'multiple', category: 'Έργα', question: "Ποιο έργο καλύπτει τα γεγονότα 411-362 π.Χ.;", options: ["Κύρου Ἀνάβασις", "Ἑλληνικά", "Λακεδαιμονίων Πολιτεία", "Πόροι"], correct: 1, explanation: "Τα Ἑλληνικά είναι η μοναδική πηγή για την περίοδο 411-362 π.Χ." },
+    { id: 19, type: 'match', category: 'Έργα', instruction: "Αντιστοίχισε έργο με περιεχόμενο:", pairs: [{ left: "Ἀγησίλαος", right: "Βιογραφία Σπαρτιάτη βασιλιά" }, { left: "Οἰκονομικός", right: "Διαχείριση νοικοκυριού" }, { left: "Πόροι", right: "Οικονομικά της Αθήνας" }] },
+    { id: 20, type: 'multiple', category: 'Έργα', question: "Η «Κύρου Παιδεία» είναι:", options: ["Ιστορικό χρονικό", "Μυθιστορηματική βιογραφία", "Φιλοσοφικό δοκίμιο", "Στρατιωτικό εγχειρίδιο"], correct: 1, explanation: "Είναι μυθιστορηματική βιογραφία του Κύρου του Μεγάλου με παιδαγωγικές ιδέες." },
+    { id: 21, type: 'categorize', category: 'Έργα', instruction: "Ποια κατηγορία ανήκει κάθε έργο;", items: [{ work: "Ἀπομνημονεύματα", category: "Σωκρατικά" }, { work: "Περί ἱππικῆς", category: "Διδακτικά" }, { work: "Ἑλληνικά", category: "Ιστορικά" }] },
+    { id: 22, type: 'multiple', category: 'Έργα', question: "Ποιο έργο αναφέρεται στη ζωή του τυράννου;", options: ["Ἱέρων", "Ἀγησίλαος", "Συμπόσιον", "Οἰκονομικός"], correct: 0, explanation: "Ο Ἱέρων είναι διάλογος για τις διαφορές ζωής τυράννου και πολίτη." },
+    { id: 23, type: 'truefalse', category: 'Ύφος', statements: [{ text: "Ο Ξενοφών χαρακτηρίστηκε «ἀττική μέλισσα» για τη γλώσσα του.", correct: true, expl: "Σωστό! Δείχνει τον θαυμασμό για το ύφος του." }, { text: "Ο Ξενοφών θεωρείται ανώτερος του Θουκυδίδη στην πολιτική σκέψη.", correct: false, expl: "Λάθος! Δεν διαθέτει τη διεισδυτικότητα του Θουκυδίδη." }] },
+    { id: 24, type: 'multiple', category: 'Ύφος', question: "Ποιο χαρακτηριστικό ΔΕΝ αποδίδεται στον Ξενοφώντα;", options: ["Σαφήνεια έκφρασης", "Ζωντάνια γραφής", "Βαθιά φιλοσοφική σκέψη", "Δραματική ένταση"], correct: 2, explanation: "Δεν διαθέτει τη βαθιά φιλοσοφημένη πολιτική σκέψη του Θουκυδίδη." },
+    { id: 25, type: 'multiple', category: 'Αξίες', question: "Ο Ξενοφών αποδοκίμασε έντονα:", options: ["Την αθηναϊκή δημοκρατία", "Τους Τριάκοντα Τυράννους", "Την κατάληψη της Καδμείας", "Όλα τα παραπάνω"], correct: 3, explanation: "Καταδίκασε τις αγριότητες των Τριάκοντα και την κατάληψη της Καδμείας." },
+    { id: 26, type: 'fill', category: 'Αξίες', question: "Ο Ξενοφών απέδωσε την ήττα των Σπαρτιατών σε _____ τιμωρία.", answer: "θεϊκή", alternatives: ["θεική", "θεια", "θεϊκη"] },
+    { id: 27, type: 'multiple', category: 'Πρότυπα', question: "Ποιοι ήταν οι δύο άνθρωποι που επηρέασαν βαθύτατα τον Ξενοφώντα;", options: ["Πλάτων και Αριστοτέλης", "Σωκράτης και Αγησίλαος", "Περικλής και Θεμιστοκλής", "Ηρόδοτος και Θουκυδίδης"], correct: 1, explanation: "Ο Σωκράτης (πρότυπο ζωής) και ο Αγησίλαος (ηγετικά προσόντα)." },
+    { id: 28, type: 'order', category: 'Χρονολογία', instruction: "Βάλε σε χρονολογική σειρά:", events: ["Μάχη Κούναξα (401)", "Μάχη Κορώνειας (394)", "Μάχη Λεύκτρων (371)", "Μάχη Μαντινείας (362)"], correctOrder: [0, 1, 2, 3] },
+    { id: 29, type: 'multiple', category: 'Σημασία', question: "Γιατί τα Ἑλληνικά θεωρούνται σημαντικό έργο;", options: ["Είναι το αρχαιότερο ιστορικό έργο", "Είναι η μοναδική πηγή για την περίοδο 411-362 π.Χ.", "Περιγράφει τους Περσικούς πολέμους", "Είναι γραμμένο σε ποιητική μορφή"], correct: 1, explanation: "Είναι το μόνο ιστορικό σύγγραμμα του 4ου αι. π.Χ. που σώθηκε για αυτή την περίοδο." },
+    { id: 30, type: 'multiple', category: 'Αξιολόγηση', question: "Με ποιους ιστορικούς κατατάσσεται ο Ξενοφών;", options: ["Πλάτων και Αριστοτέλης", "Ηρόδοτος και Θουκυδίδης", "Όμηρος και Ησίοδος", "Αισχύλος και Σοφοκλής"], correct: 1, explanation: "Οι Αλεξανδρινοί φιλόλογοι τον κατέτασσαν μαζί με Ηρόδοτο και Θουκυδίδη." }
+  ];
+
+  // ============ EXERCISE COMPONENTS ============
+  const MultipleExercise = ({ ex }) => {
+    const key = `multi-${ex.id}`;
+    const handleAnswer = (i) => { setExerciseAnswers({ ...exerciseAnswers, [key]: i }); setShowResults({ ...showResults, [key]: true }); };
+    const isCorrect = exerciseAnswers[key] === ex.correct;
+    return (
+      <div>
+        <p style={{ fontWeight: '600', marginBottom: '15px' }}>{ex.question}</p>
+        <div style={{ display: 'grid', gap: '10px' }}>
+          {ex.options.map((opt, i) => (<button key={i} onClick={() => !showResults[key] && handleAnswer(i)} style={{ padding: '12px', border: showResults[key] ? `2px solid ${i === ex.correct ? '#059669' : '#ef4444'}` : '2px solid #e2e8f0', borderRadius: '8px', backgroundColor: showResults[key] && i === ex.correct ? '#d1fae5' : 'white', cursor: showResults[key] ? 'default' : 'pointer', textAlign: 'left' }}>{opt}</button>))}
         </div>
-    </header>
+        {showResults[key] && <div style={{ marginTop: '16px', padding: '14px', borderRadius: '10px', backgroundColor: isCorrect ? '#d1fae5' : '#fee2e2' }}><p style={{ margin: 0, fontSize: '0.9rem', color: isCorrect ? '#065f46' : '#991b1b' }}>{isCorrect ? '✓ ' : '✗ '}{ex.explanation}</p></div>}
+      </div>
+    );
+  };
 
-    <!-- NAVIGATION -->
-    <div class="navigation">
-        <div class="nav-content">
-            <button class="nav-btn active" id="navTheory" onclick="switchTab('theory')">📚 ΘΕΩΡΙΑ</button>
-            <button class="nav-btn locked" id="navVisual" onclick="switchTab('visual')">🔒 🖼️ ΟΠΤΙΚΟ</button>
-            <button class="nav-btn locked" id="navExercises" onclick="switchTab('exercises')">🔒 ✏️ ΑΣΚΗΣΕΙΣ</button>
-            <button class="glossary-btn" onclick="toggleGlossary()">📖</button>
+  const FillExercise = ({ ex }) => {
+    const [input, setInput] = useState('');
+    const [checked, setChecked] = useState(false);
+    const isCorrect = input.trim().toLowerCase() === ex.answer.toLowerCase() || (ex.alternatives && ex.alternatives.some(a => input.trim().toLowerCase() === a.toLowerCase()));
+    return (
+      <div>
+        <p style={{ fontWeight: '600', marginBottom: '15px' }}>{ex.question}</p>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <input value={input} onChange={(e) => setInput(e.target.value)} disabled={checked} placeholder="Απάντηση..." style={{ padding: '10px 14px', border: checked ? `2px solid ${isCorrect ? '#059669' : '#ef4444'}` : '2px solid #e2e8f0', borderRadius: '8px', flex: 1, minWidth: '150px' }} />
+          {!checked && <button onClick={() => setChecked(true)} style={{ padding: '10px 20px', backgroundColor: '#7c3aed', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>Έλεγχος</button>}
         </div>
+        {checked && <p style={{ marginTop: '12px', fontSize: '0.9rem', color: isCorrect ? '#065f46' : '#991b1b' }}>{isCorrect ? '✓ Σωστά!' : `✗ Σωστή απάντηση: ${ex.answer}`}</p>}
+      </div>
+    );
+  };
+
+  const TrueFalseExercise = ({ ex }) => {
+    const [answers, setAnswers] = useState({});
+    const [checked, setChecked] = useState(false);
+    return (
+      <div>
+        {ex.statements.map((st, i) => (
+          <div key={i} style={{ backgroundColor: 'white', padding: '14px', borderRadius: '10px', marginBottom: '10px', border: checked ? `2px solid ${answers[i] === st.correct ? '#059669' : '#ef4444'}` : '1px solid #e2e8f0' }}>
+            <p style={{ marginBottom: '10px' }}>{st.text}</p>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button onClick={() => !checked && setAnswers({ ...answers, [i]: true })} style={{ padding: '8px 16px', backgroundColor: answers[i] === true ? '#059669' : 'white', color: answers[i] === true ? 'white' : '#1e293b', border: '2px solid #059669', borderRadius: '6px', cursor: checked ? 'default' : 'pointer' }}>Σ</button>
+              <button onClick={() => !checked && setAnswers({ ...answers, [i]: false })} style={{ padding: '8px 16px', backgroundColor: answers[i] === false ? '#ef4444' : 'white', color: answers[i] === false ? 'white' : '#1e293b', border: '2px solid #ef4444', borderRadius: '6px', cursor: checked ? 'default' : 'pointer' }}>Λ</button>
+            </div>
+            {checked && <p style={{ marginTop: '10px', fontSize: '0.85rem', color: answers[i] === st.correct ? '#065f46' : '#991b1b' }}>{st.expl}</p>}
+          </div>
+        ))}
+        {!checked && <button onClick={() => setChecked(true)} style={{ padding: '12px 24px', backgroundColor: '#7c3aed', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>Έλεγχος</button>}
+      </div>
+    );
+  };
+
+  const MatchExercise = ({ ex }) => {
+    const [revealed, setRevealed] = useState(false);
+    return (
+      <div>
+        <p style={{ fontWeight: '600', marginBottom: '15px' }}>{ex.instruction}</p>
+        {ex.pairs.map((p, i) => (
+          <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <span style={{ backgroundColor: '#ede9fe', padding: '10px 14px', borderRadius: '8px', fontWeight: '600', color: '#7c3aed', minWidth: '150px' }}>{p.left}</span>
+            <span>→</span>
+            {revealed ? <span style={{ backgroundColor: '#d1fae5', padding: '10px 14px', borderRadius: '8px', color: '#065f46' }}>{p.right}</span> : <span style={{ backgroundColor: '#f1f5f9', padding: '10px 14px', borderRadius: '8px', color: '#94a3b8' }}>???</span>}
+          </div>
+        ))}
+        {!revealed && <button onClick={() => setRevealed(true)} style={{ marginTop: '10px', padding: '12px 24px', backgroundColor: '#7c3aed', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>Απαντήσεις</button>}
+      </div>
+    );
+  };
+
+  const CategorizeExercise = ({ ex }) => {
+    const [revealed, setRevealed] = useState(false);
+    const catColors = { 'Σωκρατικά': '#8b5cf6', 'Διδακτικά': '#059669', 'Ιστορικά': '#3b82f6' };
+    return (
+      <div>
+        <p style={{ fontWeight: '600', marginBottom: '15px' }}>{ex.instruction}</p>
+        {ex.items.map((item, i) => (
+          <div key={i} style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <span style={{ backgroundColor: '#f1f5f9', padding: '10px 14px', borderRadius: '8px', fontWeight: '600', color: '#475569', minWidth: '180px' }}>{item.work}</span>
+            <span>→</span>
+            {revealed ? <span style={{ backgroundColor: catColors[item.category] + '20', padding: '10px 14px', borderRadius: '8px', color: catColors[item.category], fontWeight: '600' }}>{item.category}</span> : <span style={{ backgroundColor: '#f1f5f9', padding: '10px 14px', borderRadius: '8px', color: '#94a3b8' }}>???</span>}
+          </div>
+        ))}
+        {!revealed && <button onClick={() => setRevealed(true)} style={{ marginTop: '10px', padding: '12px 24px', backgroundColor: '#7c3aed', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>Απαντήσεις</button>}
+      </div>
+    );
+  };
+
+  const OrderExercise = ({ ex }) => {
+    const [revealed, setRevealed] = useState(false);
+    return (
+      <div>
+        <p style={{ fontWeight: '600', marginBottom: '15px' }}>{ex.instruction}</p>
+        <div style={{ display: 'grid', gap: '8px' }}>
+          {revealed ? ex.events.map((ev, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', backgroundColor: '#d1fae5', borderRadius: '8px' }}>
+              <span style={{ backgroundColor: '#059669', color: 'white', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600' }}>{i + 1}</span>
+              <span style={{ color: '#065f46' }}>{ev}</span>
+            </div>
+          )) : ex.events.map((ev, i) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', backgroundColor: '#f1f5f9', borderRadius: '8px' }}>
+              <span style={{ backgroundColor: '#94a3b8', color: 'white', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600' }}>?</span>
+              <span style={{ color: '#64748b' }}>{ev}</span>
+            </div>
+          ))}
+        </div>
+        {!revealed && <button onClick={() => setRevealed(true)} style={{ marginTop: '16px', padding: '12px 24px', backgroundColor: '#7c3aed', color: 'white', border: 'none', borderRadius: '8px', cursor: 'pointer' }}>Σωστή σειρά</button>}
+      </div>
+    );
+  };
+
+  const renderExercise = (ex) => {
+    switch (ex.type) {
+      case 'multiple': return <MultipleExercise ex={ex} />;
+      case 'fill': return <FillExercise ex={ex} />;
+      case 'truefalse': return <TrueFalseExercise ex={ex} />;
+      case 'match': return <MatchExercise ex={ex} />;
+      case 'categorize': return <CategorizeExercise ex={ex} />;
+      case 'order': return <OrderExercise ex={ex} />;
+      default: return null;
+    }
+  };
+
+  // ============ SECTIONS ============
+  const TheorySection = () => (
+    <div>
+      {/* ΖΩΗ */}
+      <div style={{ marginBottom: '20px' }}>
+        <h3 style={{ color: '#7c3aed', margin: '0 0 12px 0', borderBottom: '3px solid #7c3aed', paddingBottom: '8px' }}>{theoryData.life.icon} {theoryData.life.title}</h3>
+        {theoryData.life.sections.map((section, i) => (
+          <div key={i} style={{ marginBottom: '8px' }}>
+            <button onClick={() => setOpenCategory(openCategory === `life-${i}` ? null : `life-${i}`)} style={{ width: '100%', padding: '12px 16px', backgroundColor: openCategory === `life-${i}` ? '#7c3aed' : '#f5f3ff', color: openCategory === `life-${i}` ? 'white' : '#5b21b6', border: '2px solid #7c3aed', borderRadius: openCategory === `life-${i}` ? '10px 10px 0 0' : '10px', cursor: 'pointer', textAlign: 'left', fontWeight: '600', display: 'flex', justifyContent: 'space-between' }}>
+              {section.name}<span>{openCategory === `life-${i}` ? '▲' : '▼'}</span>
+            </button>
+            {openCategory === `life-${i}` && (
+              <div style={{ backgroundColor: 'white', border: '2px solid #7c3aed', borderTop: 'none', borderRadius: '0 0 10px 10px', padding: '14px' }}>
+                {section.content.map((item, j) => <p key={j} style={{ margin: '0 0 6px 0', color: '#475569', fontSize: '0.95rem' }}>• {item}</p>)}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* ΕΡΓΑ */}
+      <div style={{ marginBottom: '20px' }}>
+        <h3 style={{ color: '#7c3aed', margin: '0 0 12px 0', borderBottom: '3px solid #7c3aed', paddingBottom: '8px' }}>{theoryData.works.icon} {theoryData.works.title}</h3>
+        {theoryData.works.categories.map((cat, i) => (
+          <div key={i} style={{ marginBottom: '12px' }}>
+            <h4 style={{ color: cat.color, margin: '0 0 8px 0', fontSize: '1rem' }}>{cat.name}</h4>
+            <div style={{ display: 'grid', gap: '6px' }}>
+              {cat.items.map((item, j) => (
+                <div key={j} style={{ backgroundColor: `${cat.color}10`, padding: '10px 14px', borderRadius: '8px', borderLeft: `4px solid ${cat.color}` }}>
+                  <span style={{ fontWeight: '600', color: cat.color }}>{item.title}:</span>
+                  <span style={{ color: '#475569', marginLeft: '8px' }}>{item.desc}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* ΥΦΟΣ */}
+      <div style={{ marginBottom: '20px' }}>
+        <h3 style={{ color: '#7c3aed', margin: '0 0 12px 0', borderBottom: '3px solid #7c3aed', paddingBottom: '8px' }}>{theoryData.style.icon} {theoryData.style.title}</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '16px' }}>
+          {theoryData.style.points.map((p, i) => (
+            <div key={i} style={{ backgroundColor: '#f5f3ff', padding: '12px', borderRadius: '10px', borderLeft: '4px solid #7c3aed' }}>
+              <p style={{ margin: '0 0 4px 0', fontWeight: '600', color: '#5b21b6' }}>{p.label}</p>
+              <p style={{ margin: 0, fontSize: '0.9rem', color: '#64748b' }}>{p.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div style={{ backgroundColor: '#fef3c7', padding: '14px', borderRadius: '10px', marginBottom: '12px' }}>
+          <p style={{ margin: 0, color: '#92400e' }}><strong>Χαρακτηρισμοί:</strong> {theoryData.style.epithets.join(' • ')}</p>
+        </div>
+        <div style={{ backgroundColor: '#dcfce7', padding: '14px', borderRadius: '10px' }}>
+          <p style={{ margin: '0 0 8px 0', fontWeight: '600', color: '#166534' }}>Αξίες & Στάση:</p>
+          {theoryData.style.values.map((v, i) => <p key={i} style={{ margin: '0 0 4px 0', color: '#15803d', fontSize: '0.9rem' }}>• {v}</p>)}
+        </div>
+      </div>
     </div>
+  );
 
-    <!-- MAIN CONTENT -->
-    <div class="main-content">
-        <!-- THEORY TAB -->
-        <div id="theoryTab" class="card">
-            <div class="section-tabs">
-                <button class="section-tab active" onclick="switchTheorySection(0)">🌾 Η ΟΙΚΟΝΟΜΙΑ</button>
-                <button class="section-tab" onclick="switchTheorySection(1)">👥 Η ΚΟΙΝΩΝΙΑ</button>
-                <button class="section-tab" onclick="switchTheorySection(2)">⚖️ Η ΠΟΛΙΤΙΚΗ</button>
-            </div>
-
-            <div id="theoryContent"></div>
+  const ExercisesSection = () => {
+    const ex = exercises[currentExercise];
+    const catColors = { 'Ζωή': '#7c3aed', 'Εκστρατεία': '#f97316', 'Αγησίλαος': '#3b82f6', 'Εξορία': '#ef4444', 'Οικογένεια': '#ec4899', 'Έργα': '#059669', 'Ύφος': '#0891b2', 'Αξίες': '#84cc16', 'Πρότυπα': '#8b5cf6', 'Χρονολογία': '#f59e0b', 'Σημασία': '#6366f1', 'Αξιολόγηση': '#14b8a6' };
+    return (
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+          <div>
+            <span style={{ backgroundColor: catColors[ex.category] || '#7c3aed', color: 'white', padding: '4px 12px', borderRadius: '12px', fontSize: '0.85rem' }}>{ex.category}</span>
+            <span style={{ marginLeft: '10px', color: '#64748b', fontSize: '0.9rem' }}>Ερώτηση {currentExercise + 1}/{exercises.length}</span>
+          </div>
+        </div>
+        
+        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginBottom: '16px' }}>
+          {exercises.map((_, i) => (<button key={i} onClick={() => setCurrentExercise(i)} style={{ width: '26px', height: '26px', borderRadius: '50%', border: 'none', backgroundColor: currentExercise === i ? '#7c3aed' : '#e2e8f0', color: currentExercise === i ? 'white' : '#64748b', cursor: 'pointer', fontWeight: '600', fontSize: '0.75rem' }}>{i + 1}</button>))}
         </div>
 
-        <!-- VISUAL TAB -->
-        <div id="visualTab" class="card hidden">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                <h2 style="margin: 0;">🖼️ ΟΠΤΙΚΟ ΥΛΙΚΟ</h2>
-                <div>Εικόνα <span id="imageNumber">1</span>/4</div>
-            </div>
-            <div id="visualContent"></div>
+        {renderExercise(ex)}
+        
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+          <button onClick={() => setCurrentExercise(Math.max(0, currentExercise - 1))} disabled={currentExercise === 0} style={{ padding: '10px 20px', backgroundColor: currentExercise === 0 ? '#e2e8f0' : '#7c3aed', color: currentExercise === 0 ? '#94a3b8' : 'white', border: 'none', borderRadius: '8px', cursor: currentExercise === 0 ? 'default' : 'pointer' }}>← Προηγ.</button>
+          <button onClick={() => setCurrentExercise(Math.min(exercises.length - 1, currentExercise + 1))} disabled={currentExercise === exercises.length - 1} style={{ padding: '10px 20px', backgroundColor: currentExercise === exercises.length - 1 ? '#e2e8f0' : '#7c3aed', color: currentExercise === exercises.length - 1 ? '#94a3b8' : 'white', border: 'none', borderRadius: '8px', cursor: currentExercise === exercises.length - 1 ? 'default' : 'pointer' }}>Επόμ. →</button>
         </div>
+      </div>
+    );
+  };
 
-        <!-- EXERCISES TAB -->
-        <div id="exercisesTab" class="hidden">
-            <div class="exercise-numbers" id="exerciseNumbers"></div>
-            <div class="card" id="exerciseContent"></div>
+  return (
+    <div style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", background: 'linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%)', minHeight: '100vh', padding: '16px' }}>
+      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <h1 style={{ margin: '0 0 8px 0', fontSize: '1.8rem', color: '#5b21b6' }}>📜 ΞΕΝΟΦΩΝ</h1>
+          <p style={{ margin: 0, color: '#64748b' }}>Γρύλλου Ἐρχιεύς (431-355 π.Χ.)</p>
         </div>
-
-        <!-- QUIZ TAB -->
-        <div id="quizTab" class="hidden">
-            <div id="quizContent"></div>
+        
+        <div style={{ background: 'white', borderRadius: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', padding: '20px', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '20px', borderBottom: '2px solid #e2e8f0', paddingBottom: '14px' }}>
+            <button onClick={() => setActiveSection('theory')} style={{ padding: '10px 20px', fontWeight: '600', border: 'none', borderRadius: '8px', backgroundColor: activeSection === 'theory' ? '#7c3aed' : 'transparent', color: activeSection === 'theory' ? 'white' : '#64748b', cursor: 'pointer' }}>📚 Πληροφορίες</button>
+            <button onClick={() => setActiveSection('exercises')} style={{ padding: '10px 20px', fontWeight: '600', border: 'none', borderRadius: '8px', backgroundColor: activeSection === 'exercises' ? '#7c3aed' : 'transparent', color: activeSection === 'exercises' ? 'white' : '#64748b', cursor: 'pointer' }}>✏️ Ερωτήσεις ({exercises.length})</button>
+          </div>
+          
+          {activeSection === 'theory' && <TheorySection />}
+          {activeSection === 'exercises' && <ExercisesSection />}
         </div>
+        
+        <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: '0.8rem' }}>Αρχαία Ελληνικά - Λύκειο | ΞΕΝΟΦΩΝ</p>
+      </div>
     </div>
+  );
+};
 
-    <!-- GLOSSARY MODAL -->
-    <div id="glossaryModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>📖 ΓΛΩΣΣΑΡΙΟ</h2>
-                <button class="close-btn" onclick="toggleGlossary()">✕</button>
-            </div>
-            <div id="glossaryContent"></div>
-        </div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer>
-        <p>📚 Πηγή: Α. Μαστραπά, Ιστορία του Αρχαίου Κόσμου</p>
-        <p style="opacity: 0.8;">© 2025 | Διαδραστική Εφαρμογή Αρχαία Αίγυπτος</p>
-    </footer>
-
-    <script>
-        // STATE
-        let state = {
-            activeTab: 'theory',
-            currentTheorySection: 0,
-            currentImage: 0,
-            currentExercise: 0,
-            points: 0,
-            completedSections: {
-                theory: false,
-                visual: false,
-                exercises: false
-            },
-            answers: {},
-            showResults: {},
-            highlightedKeywords: [],
-            quizActive: false,
-            quizAnswers: [],
-            quizComplete: false,
-            pyramidSlots: [null, null, null, null, null],
-            draggedItem: null
-        };
-
-        // DATA
-        const glossary = [
-            { term: 'ΘΕΟΚΡΑΤΙΚΟ', def: 'Κράτος όπου η εξουσία προέρχεται από θεϊκή θέληση', icon: '👑' },
-            { term: 'ΠΛΕΟΝΑΣΜΑ', def: 'Η περίσσεια παραγωγής', icon: '📦' },
-            { term: 'ΤΑΡΙΧΕΥΣΗ', def: 'Συντήρηση σώματος νεκρού', icon: '🏺' },
-            { term: 'ΜΝΗΜΕΙΑΚΟΣ', def: 'Μεγάλες διαστάσεις', icon: '🏛️' },
-            { term: 'ΗΛΕΚΤΡΟ', def: 'Κράμα χρυσού και αργύρου', icon: '✨' }
-        ];
-
-        const visualContent = {
-            images: [
-                { id: 1, title: 'Τοιχογραφία Θερισμού', emoji: '🌾', desc: 'Εργασίες θερισμού από τάφο Θήβας' },
-                { id: 2, title: 'Ξύλινα Ομοιώματα', emoji: '🏺', desc: 'Ομοίωμα γεωργού και σιταποθήκη' },
-                { id: 3, title: 'Κυνήγι στα Έλη', emoji: '🦆', desc: 'Κυνήγι με γάτα' },
-                { id: 4, title: 'Άγαλμα Γραφέα', emoji: '📜', desc: 'Γραφέας Αρχαίου Βασιλείου' }
-            ],
-            parathema: {
-                text: 'Ο Νείλος δεν κομίζει μόνον το νερό. Η πλημμύρα φτάνει φορτωμένη με λάσπη που αποσπάται κυρίως από τα ηφαιστειογενή χώματα της Άνω Αβυσσηνίας. Καταλαβαίνουμε το γιατί οι Αιγύπτιοι, βλέποντας αυτή την πλημμύρα, που τους φέρνει συγχρόνως νερό και χώμα, την έκαναν θεό, τον Χαπί...',
-                keywords: ['νερό', 'λάσπη', 'θεός Χαπί', 'πλημμύρα']
-            }
-        };
-
-        const exercises = [
-            {
-                id: 1,
-                type: 'multiple',
-                question: 'Ποια ήταν η βάση της αιγυπτιακής οικονομίας;',
-                options: ['Το εμπόριο', 'Η γεωργία', 'Η βιοτεχνία', 'Ο πόλεμος'],
-                correct: 1,
-                points: 10
-            },
-            {
-                id: 2,
-                type: 'pyramid',
-                question: 'Τοποθέτησε τις ομάδες στην πυραμίδα:',
-                items: ['Φαραώ', 'Ιερείς', 'Γραφείς', 'Ελεύθεροι', 'Δούλοι'],
-                points: 15
-            },
-            {
-                id: 3,
-                type: 'truefalse',
-                questions: [
-                    { text: 'Ο φαραώ θεωρούνταν θεός στη γη', correct: true },
-                    { text: 'Οι δούλοι ήταν πλειοψηφία', correct: false },
-                    { text: 'Η βιοτεχνία ελεγχόταν από το κράτος', correct: true }
-                ],
-                points: 10
-            }
-        ];
-
-        const finalQuiz = [
-            { q: 'Ποιος ποταμός ήταν καθοριστικός;', opts: ['Ευφράτης', 'Νείλος', 'Τίγρης', 'Ιορδάνης'], correct: 1 },
-            { q: 'Ποιος στην κορυφή της πυραμίδας;', opts: ['Ιερείς', 'Φαραώ', 'Γραφείς', 'Στρατιωτικοί'], correct: 1 },
-            { q: 'Τι χαρακτήρα είχε η πολιτική;', opts: ['Δημοκρατικό', 'Ολιγαρχικό', 'Θεοκρατικό', 'Τυραννικό'], correct: 2 },
-            { q: 'Τι έφερναν οι πλημμύρες;', opts: ['Λάσπη', 'Ψάρια', 'Χρυσό', 'Ξυλεία'], correct: 0 },
-            { q: 'Ποιοι ήταν πλειοψηφία;', opts: ['Δούλοι', 'Ιερείς', 'Ελεύθεροι', 'Στρατιωτικοί'], correct: 2 }
-        ];
-
-        // INIT
-        function init() {
-            renderGlossary();
-            renderTheorySection();
-            renderExerciseNumbers();
-            updatePoints();
-            updateProgress();
-        }
-
-        // GLOSSARY
-        function renderGlossary() {
-            const content = glossary.map(g => `
-                <div class="glossary-item">
-                    <div class="glossary-term-header">
-                        <span class="glossary-icon">${g.icon}</span>
-                        <strong class="glossary-term">${g.term}</strong>
-                    </div>
-                    <p class="glossary-def">${g.def}</p>
-                </div>
-            `).join('');
-            document.getElementById('glossaryContent').innerHTML = content;
-        }
-
-        function toggleGlossary() {
-            document.getElementById('glossaryModal').classList.toggle('show');
-        }
-
-        // NAVIGATION
-        function switchTab(tab) {
-            if (tab === 'visual' && !state.completedSections.theory) return;
-            if (tab === 'exercises' && !state.completedSections.visual) return;
-
-            state.activeTab = tab;
-
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('theoryTab').classList.add('hidden');
-            document.getElementById('visualTab').classList.add('hidden');
-            document.getElementById('exercisesTab').classList.add('hidden');
-            document.getElementById('quizTab').classList.add('hidden');
-
-            if (tab === 'theory') {
-                document.getElementById('navTheory').classList.add('active');
-                document.getElementById('theoryTab').classList.remove('hidden');
-            } else if (tab === 'visual') {
-                document.getElementById('navVisual').classList.add('active');
-                document.getElementById('visualTab').classList.remove('hidden');
-                renderVisual();
-            } else if (tab === 'exercises') {
-                document.getElementById('navExercises').classList.add('active');
-                document.getElementById('exercisesTab').classList.remove('hidden');
-                renderExercise();
-            }
-        }
-
-        // THEORY
-        function switchTheorySection(section) {
-            state.currentTheorySection = section;
-            renderTheorySection();
-            
-            document.querySelectorAll('.section-tab').forEach((tab, i) => {
-                tab.classList.toggle('active', i === section);
-            });
-        }
-
-        function renderTheorySection() {
-            const sections = [
-                {
-                    title: '🌾 Η ΟΙΚΟΝΟΜΙΑ',
-                    subsections: [
-                        {
-                            title: '🏞️ Ο ΡΟΛΟΣ ΤΟΥ ΝΕΙΛΟΥ',
-                            points: [
-                                'Πλημμύρες κάθε καλοκαίρι',
-                                'Λιπαίνουν τη γη με λάσπη',
-                                'Άρδευση = συλλογική εργασία',
-                                'Επίβλεψη από το κράτος'
-                            ]
-                        },
-                        {
-                            title: '🌱 ΓΕΩΡΓΙΑ (Βάση οικονομίας)',
-                            content: [
-                                { label: 'Σιτάρι', icon: '🌾' },
-                                { label: 'Κριθάρι', icon: '🌾' },
-                                { label: 'Λινάρι', icon: '🌿' },
-                                { label: 'Κηπευτικά', icon: '🥬' },
-                                { label: 'Οπωροφόρα', icon: '🍎' },
-                                { label: 'Πάπυρος', icon: '📜' }
-                            ]
-                        },
-                        {
-                            title: '🏭 ΒΙΟΤΕΧΝΙΑ & ΕΜΠΟΡΙΟ',
-                            points: [
-                                'Τεχνίτες: μεταλλουργοί, κεραμοποιοί, ξυλουργοί',
-                                '⚠️ Έλεγχος από το κράτος (φαραώ)',
-                                'Εξαγωγές: δημητριακά, πάπυρος, χρυσός',
-                                'Εισαγωγές: ξυλεία, χαλκός, άργυρος'
-                            ]
-                        }
-                    ]
-                },
-                {
-                    title: '👥 Η ΚΟΙΝΩΝΙΑ',
-                    pyramid: [
-                        { name: 'ΦΑΡΑΩ', desc: 'Θεός στη γη', width: 20 },
-                        { name: 'ΙΕΡΕΙΣ & ΥΠΑΛΛΗΛΟΙ', desc: 'Ισχυροί', width: 35 },
-                        { name: 'ΓΡΑΦΕΙΣ & ΣΤΡΑΤΙΩΤΙΚΟΙ', desc: 'Μορφωμένοι', width: 50 },
-                        { name: 'ΕΛΕΥΘΕΡΟΙ ΠΟΛΙΤΕΣ', desc: 'Πλειοψηφία', width: 70 },
-                        { name: 'ΔΟΥΛΟΙ', desc: 'Ιδιωτικοί & Κρατικοί', width: 90 }
-                    ]
-                },
-                {
-                    title: '⚖️ Η ΠΟΛΙΤΙΚΗ',
-                    hierarchy: [
-                        { title: 'ΦΑΡΑΩ', icon: '👑', points: ['Απόλυτη εξουσία', 'Θέλησή του = Νόμος'] },
-                        { title: 'ΚΡΑΤΙΚΗ ΜΗΧΑΝΗ', icon: '🏛️', points: ['Ιερείς', 'Υπάλληλοι', 'Γραφείς'] },
-                        { title: 'ΛΑΟΣ', icon: '👥', points: ['Υπακοή & Εργασία'] }
-                    ]
-                }
-            ];
-
-            const section = sections[state.currentTheorySection];
-            let html = `<h2>${section.title}</h2>`;
-
-            if (section.subsections) {
-                section.subsections.forEach(sub => {
-                    html += `<div class="subsection"><h3>${sub.title}</h3>`;
-                    if (sub.content) {
-                        html += '<div class="grid-3">';
-                        sub.content.forEach(item => {
-                            html += `
-                                <div class="grid-item">
-                                    <div class="grid-item-icon">${item.icon}</div>
-                                    <div class="grid-item-label">${item.label}</div>
-                                </div>
-                            `;
-                        });
-                        html += '</div>';
-                    } else if (sub.points) {
-                        html += '<ul>';
-                        sub.points.forEach(p => html += `<li>${p}</li>`);
-                        html += '</ul>';
-                    }
-                    html += '</div>';
-                });
-            }
-
-            if (section.pyramid) {
-                html += '<div class="pyramid"><h3>🔺 ΚΟΙΝΩΝΙΚΗ ΠΥΡΑΜΙΔΑ</h3><div class="pyramid-levels">';
-                section.pyramid.forEach(lvl => {
-                    html += `
-                        <div class="pyramid-level" style="width: ${lvl.width}%;">
-                            <div class="pyramid-level-name">${lvl.name}</div>
-                            <div class="pyramid-level-desc">${lvl.desc}</div>
-                        </div>
-                    `;
-                });
-                html += '</div><div class="info-box">ℹ️ Κοινωνική ευελιξία στο Νέο Βασίλειο!</div></div>';
-            }
-
-            if (section.hierarchy) {
-                html += '<div class="pyramid"><h3>🏛️ ΘΕΟΚΡΑΤΙΚΟ ΚΡΑΤΟΣ</h3><div class="hierarchy">';
-                section.hierarchy.forEach((h, i) => {
-                    html += `
-                        <div>
-                            <div class="hierarchy-box">
-                                <div class="hierarchy-icon">${h.icon}</div>
-                                <h4 class="hierarchy-title">${h.title}</h4>
-                                <ul class="hierarchy-points">
-                                    ${h.points.map(p => `<li>• ${p}</li>`).join('')}
-                                </ul>
-                            </div>
-                            ${i < section.hierarchy.length - 1 ? '<div class="hierarchy-arrow">↓</div>' : ''}
-                        </div>
-                    `;
-                });
-                html += '</div><div class="definition-box">📌 Θεοκρατικό = εξουσία από θεό</div></div>';
-            }
-
-            html += `
-                <div class="button-group">
-                    <button class="btn btn-prev" ${state.currentTheorySection === 0 ? 'disabled' : ''} 
-                        onclick="switchTheorySection(${state.currentTheorySection - 1})">← Προηγ.</button>
-                    <button class="btn btn-next" onclick="handleNextTheory()">
-                        ${state.currentTheorySection === 2 ? 'Ολοκλήρωση' : 'Επόμενο'} →
-                    </button>
-                </div>
-            `;
-
-            if (state.currentTheorySection === 2) {
-                html += `
-                    <div class="success-box" id="theorySuccess" style="display: none;">
-                        <p>✅ Ολοκλήρωσες τη Θεωρία! (+20 πόντοι 🔺)</p>
-                        <button class="continue-btn" onclick="completeTheory()">Συνέχεια στο Οπτικό →</button>
-                    </div>
-                `;
-            }
-
-            document.getElementById('theoryContent').innerHTML = html;
-        }
-
-        function handleNextTheory() {
-            if (state.currentTheorySection < 2) {
-                addPoints(10);
-                switchTheorySection(state.currentTheorySection + 1);
-            } else {
-                document.getElementById('theorySuccess').style.display = 'block';
-            }
-        }
-
-        function completeTheory() {
-            state.completedSections.theory = true;
-            addPoints(20);
-            document.getElementById('navVisual').classList.remove('locked');
-            document.getElementById('navVisual').innerHTML = '🖼️ ΟΠΤΙΚΟ';
-            updateProgress();
-            switchTab('visual');
-        }
-
-        // VISUAL
-        function renderVisual() {
-            const img = visualContent.images[state.currentImage];
-            let html = `
-                <div class="image-card">
-                    <div class="image-emoji">${img.emoji}</div>
-                    <h3 class="image-title">${img.title}</h3>
-                    <p class="image-desc">${img.desc}</p>
-                </div>
-                <div class="button-group">
-                    <button class="btn btn-prev" ${state.currentImage === 0 ? 'disabled' : ''} 
-                        onclick="prevImage()">← Προηγ.</button>
-                    <button class="btn btn-next" ${state.currentImage === 3 ? 'disabled' : ''} 
-                        onclick="nextImage()">Επόμ. →</button>
-                </div>
-            `;
-
-            if (state.currentImage === 3) {
-                html += `
-                    <div class="parathema-box">
-                        <h3>📜 Jean Vercoutter</h3>
-                        <h4 style="font-style: italic; color: #666;">"Η σημασία του Νείλου"</h4>
-                        <div class="parathema-text">${visualContent.parathema.text}</div>
-                        <h4>🎯 ΕΡΩΤΗΣΕΙΣ:</h4>
-                        <div class="keywords-box">
-                            <p style="font-weight: bold;">Βρες τις λέξεις-κλειδιά:</p>
-                            <div class="keywords-flex" id="keywordsContainer">
-                                ${visualContent.parathema.keywords.map((kw, i) => `
-                                    <button class="keyword-btn" onclick="toggleKeyword(${i})">${kw}</button>
-                                `).join('')}
-                            </div>
-                            <div style="font-size: 12px; color: #666; margin-top: 10px;">
-                                (+<span id="keywordPoints">0</span> πόντοι)
-                            </div>
-                        </div>
-                        <div class="success-box" style="margin-top: 20px;">
-                            <p>✅ Ολοκλήρωσες το Οπτικό! (+25 πόντοι 🔺)</p>
-                            <button class="continue-btn" onclick="completeVisual()">Συνέχεια στις Ασκήσεις →</button>
-                        </div>
-                    </div>
-                `;
-            }
-
-            document.getElementById('visualContent').innerHTML = html;
-            document.getElementById('imageNumber').textContent = state.currentImage + 1;
-        }
-
-        function prevImage() {
-            if (state.currentImage > 0) {
-                state.currentImage--;
-                renderVisual();
-            }
-        }
-
-        function nextImage() {
-            if (state.currentImage < 3) {
-                state.currentImage++;
-                renderVisual();
-            }
-        }
-
-        function toggleKeyword(index) {
-            const keywordBtns = document.querySelectorAll('.keyword-btn');
-            if (state.highlightedKeywords.includes(index)) {
-                state.highlightedKeywords = state.highlightedKeywords.filter(i => i !== index);
-                keywordBtns[index].classList.remove('highlighted');
-            } else {
-                state.highlightedKeywords.push(index);
-                keywordBtns[index].classList.add('highlighted');
-                addPoints(2);
-            }
-            document.getElementById('keywordPoints').textContent = state.highlightedKeywords.length * 2;
-        }
-
-        function completeVisual() {
-            state.completedSections.visual = true;
-            addPoints(25);
-            document.getElementById('navExercises').classList.remove('locked');
-            document.getElementById('navExercises').innerHTML = '✏️ ΑΣΚΗΣΕΙΣ';
-            updateProgress();
-            switchTab('exercises');
-        }
-
-        // EXERCISES
-        function renderExerciseNumbers() {
-            const html = exercises.map((ex, i) => `
-                <button class="exercise-number ${i === state.currentExercise ? 'active' : ''} ${state.showResults[ex.id] ? 'completed' : ''}" 
-                    onclick="switchExercise(${i})">${i + 1}</button>
-            `).join('');
-            document.getElementById('exerciseNumbers').innerHTML = html;
-        }
-
-        function switchExercise(index) {
-            state.currentExercise = index;
-            renderExerciseNumbers();
-            renderExercise();
-        }
-
-        function renderExercise() {
-            const ex = exercises[state.currentExercise];
-            let html = `
-                <span class="exercise-tag">ΑΣΚΗΣΗ ${ex.id} | ${ex.points} Πόντοι</span>
-                <p class="question">❓ ${ex.question}</p>
-            `;
-
-            if (ex.type === 'multiple') {
-                html += '<div class="options">';
-                ex.options.forEach((opt, i) => {
-                    const selected = state.answers[ex.id] === i;
-                    const showResult = state.showResults[ex.id];
-                    const correct = i === ex.correct;
-                    const wrong = selected && !correct;
-                    
-                    html += `
-                        <button class="option-btn ${selected ? 'selected' : ''} ${showResult && correct ? 'correct' : ''} ${showResult && wrong ? 'wrong' : ''}"
-                            onclick="selectAnswer(${ex.id}, ${i})">
-                            ${['A', 'B', 'Γ', 'Δ'][i]}. ${opt}
-                        </button>
-                    `;
-                });
-                html += '</div>';
-
-                if (!state.showResults[ex.id]) {
-                    html += `<button class="submit-btn" ${state.answers[ex.id] === undefined ? 'disabled' : ''} 
-                        onclick="checkAnswer(${ex.id})">Υποβολή</button>`;
-                } else {
-                    const correct = state.answers[ex.id] === ex.correct;
-                    html += `
-                        <div class="result-box ${correct ? 'correct' : 'incorrect'}">
-                            <p style="margin: 0; font-weight: bold;">
-                                ${correct ? `✓ ΣΩΣΤΟ! (+${ex.points} πόντοι 🔺)` : '✗ Λάθος!'}
-                            </p>
-                        </div>
-                    `;
-                }
-            } else if (ex.type === 'pyramid') {
-                html += '<div class="pyramid-drag"><div class="pyramid-drag-levels">';
-                [20, 35, 50, 70, 90].forEach((w, i) => {
-                    html += `
-                        <div class="pyramid-slot ${state.pyramidSlots[i] ? 'filled' : ''}" 
-                            style="width: ${w}%;" 
-                            ondrop="drop(event, ${i})" 
-                            ondragover="allowDrop(event)">
-                            ${state.pyramidSlots[i] || `Θέση ${i + 1}`}
-                        </div>
-                    `;
-                });
-                html += '</div></div>';
-
-                html += '<div class="drag-items-box"><p style="font-weight: bold; margin-bottom: 10px;">📦 Σύρε:</p><div class="drag-items-flex">';
-                ex.items.forEach((item, i) => {
-                    if (!state.pyramidSlots.includes(item)) {
-                        html += `<div class="drag-item" draggable="true" ondragstart="drag(event, ${i})">${item}</div>`;
-                    }
-                });
-                html += '</div></div>';
-
-                html += `
-                    <div class="button-group">
-                        <button class="btn btn-next" ${state.pyramidSlots.includes(null) ? 'disabled' : ''} 
-                            onclick="checkPyramid()">Έλεγχος</button>
-                        <button class="btn" onclick="resetPyramid()" style="background-color: white; border: 2px solid #ddd; color: #2C3E50;">Επαναφορά</button>
-                    </div>
-                `;
-
-                if (state.showResults[ex.id]) {
-                    const correct = state.pyramidSlots.every((s, i) => s === ex.items[i]);
-                    html += `
-                        <div class="result-box ${correct ? 'correct' : 'incorrect'}">
-                            <p style="margin: 0; font-weight: bold;">
-                                ${correct ? `✓ ΣΩΣΤΟ! (+${ex.points} πόντοι 🔺)` : '✗ Ξανά!'}
-                            </p>
-                        </div>
-                    `;
-                }
-            } else if (ex.type === 'truefalse') {
-                ex.questions.forEach((q, i) => {
-                    const answer = state.answers[ex.id] ? state.answers[ex.id][i] : undefined;
-                    const showResult = state.showResults[ex.id];
-                    
-                    html += `
-                        <div class="truefalse-question">
-                            <p class="truefalse-text">${q.text}</p>
-                            <div class="truefalse-buttons">
-                                <button class="truefalse-btn ${answer === true ? 'selected' : ''} ${showResult && q.correct ? 'correct-answer' : ''}"
-                                    onclick="selectTrueFalse(${ex.id}, ${i}, true)">Σωστό ✓</button>
-                                <button class="truefalse-btn ${answer === false ? 'selected' : ''} ${showResult && !q.correct ? 'correct-answer' : ''}"
-                                    onclick="selectTrueFalse(${ex.id}, ${i}, false)">Λάθος ✗</button>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                if (!state.showResults[ex.id]) {
-                    const allAnswered = state.answers[ex.id] && state.answers[ex.id].length === ex.questions.length;
-                    html += `<button class="submit-btn" ${!allAnswered ? 'disabled' : ''} 
-                        onclick="checkTrueFalse(${ex.id})">Υποβολή</button>`;
-                }
-            }
-
-            html += `
-                <div class="button-group" style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #eee;">
-                    <button class="btn btn-prev" ${state.currentExercise === 0 ? 'disabled' : ''} 
-                        onclick="switchExercise(${state.currentExercise - 1})">← Προηγ.</button>
-                    ${state.currentExercise === exercises.length - 1 
-                        ? '<button class="btn" style="background-color: #FFD700; color: #2C3E50;" onclick="startQuiz()">🏆 Τελικό Quiz</button>'
-                        : `<button class="btn btn-next" onclick="switchExercise(${state.currentExercise + 1})">Επόμ. →</button>`
-                    }
-                </div>
-            `;
-
-            document.getElementById('exerciseContent').innerHTML = html;
-        }
-
-        function selectAnswer(exId, optionIndex) {
-            if (!state.showResults[exId]) {
-                state.answers[exId] = optionIndex;
-                renderExercise();
-            }
-        }
-
-        function checkAnswer(exId) {
-            const ex = exercises.find(e => e.id === exId);
-            state.showResults[exId] = true;
-            if (state.answers[exId] === ex.correct) {
-                addPoints(ex.points);
-            }
-            renderExerciseNumbers();
-            renderExercise();
-        }
-
-        function selectTrueFalse(exId, questionIndex, answer) {
-            if (!state.showResults[exId]) {
-                if (!state.answers[exId]) state.answers[exId] = [];
-                state.answers[exId][questionIndex] = answer;
-                renderExercise();
-            }
-        }
-
-        function checkTrueFalse(exId) {
-            const ex = exercises.find(e => e.id === exId);
-            state.showResults[exId] = true;
-            const allCorrect = ex.questions.every((q, i) => state.answers[exId][i] === q.correct);
-            if (allCorrect) {
-                addPoints(ex.points);
-            }
-            renderExerciseNumbers();
-            renderExercise();
-        }
-
-        function allowDrop(ev) {
-            ev.preventDefault();
-        }
-
-        function drag(ev, index) {
-            state.draggedItem = index;
-        }
-
-        function drop(ev, slotIndex) {
-            ev.preventDefault();
-            if (state.draggedItem !== null) {
-                state.pyramidSlots[slotIndex] = exercises[1].items[state.draggedItem];
-                state.draggedItem = null;
-                renderExercise();
-            }
-        }
-
-        function resetPyramid() {
-            state.pyramidSlots = [null, null, null, null, null];
-            renderExercise();
-        }
-
-        function checkPyramid() {
-            const ex = exercises[1];
-            state.showResults[ex.id] = true;
-            const correct = state.pyramidSlots.every((s, i) => s === ex.items[i]);
-            if (correct) {
-                addPoints(ex.points);
-            }
-            renderExerciseNumbers();
-            renderExercise();
-        }
-
-        // QUIZ
-        function startQuiz() {
-            state.quizActive = true;
-            state.quizAnswers = [];
-            state.quizComplete = false;
-            state.completedSections.exercises = true;
-            updateProgress();
-            
-            document.getElementById('exercisesTab').classList.add('hidden');
-            document.getElementById('quizTab').classList.remove('hidden');
-            renderQuiz();
-        }
-
-        function renderQuiz() {
-            if (state.quizComplete) {
-                const correct = finalQuiz.filter((q, i) => state.quizAnswers[i] === q.correct).length;
-                const score = Math.round((correct / finalQuiz.length) * 100);
-                
-                const html = `
-                    <div class="quiz-container">
-                        <div class="quiz-emoji">🎊</div>
-                        <h2>ΣΥΓΧΑΡΗΤΗΡΙΑ!</h2>
-                        <div class="quiz-score-box">
-                            <div class="quiz-score">⭐ ${score}/100 ⭐</div>
-                            <p class="quiz-details">Σωστές: ${correct}/${finalQuiz.length}</p>
-                            <p class="quiz-details">Πόντοι: 🔺 ${state.points}</p>
-                        </div>
-                        <button class="continue-btn" onclick="resetApp()">📚 Επανάληψη</button>
-                    </div>
-                `;
-                document.getElementById('quizContent').innerHTML = html;
-            } else {
-                let html = '<div class="quiz-question-card"><h3>🎯 ΤΕΛΙΚΟ QUIZ</h3>';
-                
-                finalQuiz.forEach((q, qIdx) => {
-                    html += `
-                        <div style="margin-bottom: 25px;">
-                            <p style="font-weight: bold; margin-bottom: 10px;">${qIdx + 1}. ${q.q}</p>
-                            <div class="options">
-                                ${q.opts.map((opt, oIdx) => {
-                                    const selected = state.quizAnswers[qIdx] === oIdx;
-                                    return `
-                                        <button class="option-btn ${selected ? 'selected' : ''}"
-                                            onclick="selectQuizAnswer(${qIdx}, ${oIdx})">
-                                            ${['A', 'B', 'Γ', 'Δ'][oIdx]}. ${opt}
-                                        </button>
-                                    `;
-                                }).join('')}
-                            </div>
-                        </div>
-                    `;
-                });
-
-                html += `
-                    <button class="submit-btn" ${state.quizAnswers.length !== finalQuiz.length ? 'disabled' : ''} 
-                        onclick="submitQuiz()">Ολοκλήρωση</button>
-                    </div>
-                `;
-                
-                document.getElementById('quizContent').innerHTML = html;
-            }
-        }
-
-        function selectQuizAnswer(qIdx, oIdx) {
-            state.quizAnswers[qIdx] = oIdx;
-            renderQuiz();
-        }
-
-        function submitQuiz() {
-            const correct = finalQuiz.filter((q, i) => state.quizAnswers[i] === q.correct).length;
-            const score = Math.round((correct / finalQuiz.length) * 100);
-            addPoints(score);
-            state.quizComplete = true;
-            renderQuiz();
-        }
-
-        function resetApp() {
-            location.reload();
-        }
-
-        // UTILITIES
-        function addPoints(pts) {
-            state.points += pts;
-            updatePoints();
-        }
-
-        function updatePoints() {
-            document.getElementById('points').textContent = state.points;
-        }
-
-        function updateProgress() {
-            let progress = 0;
-            if (state.completedSections.theory) progress += 33;
-            if (state.completedSections.visual) progress += 33;
-            if (state.completedSections.exercises) progress += 34;
-            document.getElementById('progressFill').style.width = progress + '%';
-        }
-
-        // INIT APP
-        init();
-    </script>
-</body>
-</html>
+export default XenofontasApp;
