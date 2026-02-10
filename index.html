@@ -18,7 +18,7 @@
         }
         
         .container { 
-            max-width: 900px; 
+            max-width: 1000px; 
             margin: 0 auto;
             animation: fadeIn 0.3s ease-in;
         }
@@ -242,20 +242,47 @@
         }
         .mc-btn:disabled { cursor: default; }
 
-        /* === ORDERING / DRAG DROP === */
-        .drop-slots { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+        /* === ORDERING / DRAG DROP - TWO COLUMN === */
+        .ordering-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 16px;
+        }
+        
+        .ordering-column {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        
+        .ordering-column-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+            text-align: center;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .drop-slots { display: flex; flex-direction: column; gap: 10px; }
         
         .drop-slot {
-            display: flex; align-items: center; gap: 12px;
+            display: flex; align-items: center; gap: 10px;
             min-height: 60px;
         }
         
         .slot-number {
-            width: 40px; height: 40px;
+            width: 36px; height: 36px;
             background: #4f46e5; color: white;
             border-radius: 50%; display: flex;
             align-items: center; justify-content: center;
-            font-weight: 700; font-size: 1.1rem;
+            font-weight: 700; font-size: 1rem;
             flex-shrink: 0;
         }
         
@@ -263,16 +290,17 @@
             flex: 1; min-height: 56px;
             border: 3px dashed #c7d2fe;
             border-radius: 10px;
-            background: #f8fafc;
-            padding: 14px 16px;
+            background: white;
+            padding: 12px 14px;
             transition: all 0.2s;
             display: flex; align-items: center;
-            font-size: 0.95rem; color: #64748b;
+            font-size: 0.9rem; color: #64748b;
+            line-height: 1.4;
         }
         
         .slot-area:empty::before {
-            content: 'Σύρετε εδώ μια πρόταση...';
-            color: #94a3b8; font-style: italic; font-size: 0.9rem;
+            content: '📥 Σύρετε εδώ...';
+            color: #94a3b8; font-style: italic; font-size: 0.85rem;
         }
         
         .slot-area.drag-over {
@@ -286,33 +314,24 @@
             background: #f5f3ff;
             color: #1e293b;
             font-weight: 500;
+            cursor: pointer;
         }
         
         .slot-area.correct { border-color: #059669; background: #d1fae5; }
+        .slot-area.correct::after { content: ' ✓'; color: #059669; font-weight: bold; }
         .slot-area.wrong { border-color: #dc2626; background: #fee2e2; }
-        
-        .sentence-bank {
-            margin-top: 24px;
-            padding: 16px;
-            background: #f8fafc;
-            border-radius: 12px;
-        }
-        
-        .sentence-bank h4 {
-            font-size: 0.9rem; color: #64748b;
-            margin-bottom: 12px;
-        }
+        .slot-area.wrong::after { content: ' ✗'; color: #dc2626; font-weight: bold; }
         
         .sentence-bank-items { display: flex; flex-direction: column; gap: 8px; }
         
         .draggable-sentence {
-            padding: 14px 16px;
+            padding: 12px 14px;
             background: white;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
             cursor: grab;
             transition: all 0.2s;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #1e293b;
             user-select: none;
             line-height: 1.5;
@@ -325,7 +344,18 @@
         }
         
         .draggable-sentence.dragging { opacity: 0.4; cursor: grabbing; }
-        .draggable-sentence.used { display: none; }
+        .draggable-sentence.used { 
+            opacity: 0.3; 
+            pointer-events: none;
+            border-style: dashed;
+            background: #f1f5f9;
+        }
+        
+        @media (max-width: 700px) {
+            .ordering-layout {
+                grid-template-columns: 1fr;
+            }
+        }
 
         /* === FILL GAP === */
         .fill-gap-container {
@@ -453,7 +483,6 @@
         .repeat-btn:hover { background: #d97706; }
         
         @media (max-width: 600px) {
-            .drop-slot { flex-direction: row; }
             .gap-input { width: 140px; }
         }
     </style>
@@ -726,25 +755,29 @@
             
             return `
                 <div class="card">
-                    <div class="drop-slots">
-                        ${Array.from({length: slotCount}, (_, i) => {
-                            const placed = state.orderingPlacements[i];
-                            const slotClass = 'slot-area' + (placed ? ' filled' : '');
-                            return `
-                                <div class="drop-slot">
-                                    <div class="slot-number">${i + 1}</div>
-                                    <div class="${slotClass}" data-slot="${i}">${placed ? placed.text : ''}</div>
-                                </div>`;
-                        }).join('')}
-                    </div>
-                    
-                    <div class="sentence-bank">
-                        <h4>💡 Σύρετε τις προτάσεις στα κενά (πατήστε, κρατήστε, σύρετε)</h4>
-                        <div class="sentence-bank-items">
-                            ${q._shuffledSentences.map((s, i) => {
-                                const isUsed = Object.values(state.orderingPlacements).some(p => p && p.id === i);
-                                return `<div class="draggable-sentence ${isUsed ? 'used' : ''}" draggable="true" data-sentence-id="${i}" data-correct-index="${s.correctIndex}">${s.text}</div>`;
-                            }).join('')}
+                    <div class="ordering-layout">
+                        <div class="ordering-column">
+                            <div class="ordering-column-title">🎯 Θέσεις (σωστή σειρά)</div>
+                            <div class="drop-slots">
+                                ${Array.from({length: slotCount}, (_, i) => {
+                                    const placed = state.orderingPlacements[i];
+                                    const slotClass = 'slot-area' + (placed ? ' filled' : '');
+                                    return `
+                                        <div class="drop-slot">
+                                            <div class="slot-number">${i + 1}</div>
+                                            <div class="${slotClass}" data-slot="${i}">${placed ? placed.text : ''}</div>
+                                        </div>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                        <div class="ordering-column" style="background:#faf5ff;">
+                            <div class="ordering-column-title">📋 Προτάσεις (σύρετε αριστερά)</div>
+                            <div class="sentence-bank-items">
+                                ${q._shuffledSentences.map((s, i) => {
+                                    const isUsed = Object.values(state.orderingPlacements).some(p => p && p.id === i);
+                                    return `<div class="draggable-sentence ${isUsed ? 'used' : ''}" draggable="true" data-sentence-id="${i}" data-correct-index="${s.correctIndex}">${s.text}</div>`;
+                                }).join('')}
+                            </div>
                         </div>
                     </div>
                     
