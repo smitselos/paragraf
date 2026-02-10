@@ -3,690 +3,1111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Διαφήμιση - Κριτήριο Αξιολόγησης</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>Quiz Σύνδεσης Προτάσεων - Λύκειο</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.5;
-        }
-        
-        .container {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
             min-height: 100vh;
-            background: linear-gradient(to bottom right, #eff6ff, #e0e7ff);
-            padding: 1.5rem;
+            padding: 16px;
+            line-height: 1.6;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
         }
         
-        .max-w-7xl {
-            max-width: 80rem;
+        .container { 
+            max-width: 900px; 
             margin: 0 auto;
+            animation: fadeIn 0.3s ease-in;
         }
-        
-        .card {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-        }
-        
-        .card-lg {
-            background: white;
-            padding: 2rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-        
-        .title {
-            font-size: 2.25rem;
-            font-weight: bold;
-            text-align: center;
-            color: #312e81;
-            margin-bottom: 0.5rem;
-        }
-        
-        .subtitle {
-            text-align: center;
-            color: #4b5563;
-            font-size: 1.125rem;
-        }
-        
-        .grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-        
-        @media (min-width: 1024px) {
-            .grid-cols-3 {
-                grid-template-columns: 1fr 2fr;
-            }
-        }
-        
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #3730a3;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .btn {
-            width: 100%;
-            text-align: left;
-            padding: 1rem 1.5rem;
-            border-radius: 0.5rem;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 1rem;
-        }
-        
-        .btn-theme {
-            background: #f3f4f6;
-            color: #1f2937;
-        }
-        
-        .btn-theme:hover {
-            background: #e0e7ff;
-        }
-        
-        .btn-theme.active {
-            background: #4f46e5;
-            color: white;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            transform: scale(1.05);
-        }
-        
-        .btn-question {
-            background: linear-gradient(to right, #eef2ff, #dbeafe);
-            border: 2px solid #c7d2fe;
-            padding: 1.25rem;
-        }
-        
-        .btn-question:hover {
-            background: linear-gradient(to right, #e0e7ff, #bfdbfe);
-            border-color: #818cf8;
-        }
-        
-        .btn-answer {
-            width: 100%;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            font-size: 1rem;
-        }
-        
-        .btn-show {
-            background: #10b981;
-            color: white;
-        }
-        
-        .btn-show:hover {
-            background: #059669;
-        }
-        
-        .btn-hide {
-            background: #ef4444;
-            color: white;
-        }
-        
-        .btn-hide:hover {
-            background: #dc2626;
-        }
-        
-        .btn-back {
-            background: #e5e7eb;
-            color: #1f2937;
-        }
-        
-        .btn-back:hover {
-            background: #d1d5db;
-        }
-        
-        .question-card {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-        }
-        
-        .question-header {
-            display: flex;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        
-        .question-badge {
-            background: #4f46e5;
-            color: white;
-            border-radius: 50%;
-            width: 2rem;
-            height: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-        
-        .question-title {
-            font-weight: bold;
-            color: #312e81;
-            margin-bottom: 0.5rem;
-        }
-        
-        .question-text {
-            color: #1f2937;
-            line-height: 1.625;
-        }
-        
-        .answer-card {
-            background: linear-gradient(to bottom right, #f0fdf4, #d1fae5);
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            border: 2px solid #86efac;
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        .answer-header {
-            display: flex;
-            gap: 0.75rem;
-        }
-        
-        .answer-badge {
-            background: #16a34a;
-            color: white;
-            border-radius: 50%;
-            width: 2rem;
-            height: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-        
-        .answer-title {
-            font-weight: bold;
-            color: #14532d;
-            margin-bottom: 0.75rem;
-        }
-        
-        .answer-content {
-            flex: 1;
-        }
-        
-        .answer-line {
-            margin-bottom: 0.5rem;
-            line-height: 1.625;
-        }
-        
-        .answer-line-main {
-            font-weight: 600;
-            color: #111827;
-        }
-        
-        .answer-line-sub {
-            margin-left: 1rem;
-            color: #374151;
-        }
-        
-        .welcome {
-            text-align: center;
-            padding: 3rem 1.5rem;
-        }
-        
-        .welcome-emoji {
-            font-size: 3.75rem;
-            margin-bottom: 1rem;
-        }
-        
-        .welcome-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #374151;
-            margin-bottom: 0.5rem;
-        }
-        
-        .welcome-text {
-            color: #6b7280;
-        }
-        
-        .question-list-title {
-            font-weight: 600;
-            color: #312e81;
-            margin-bottom: 0.5rem;
-        }
-        
-        .question-list-text {
-            color: #374151;
-            font-size: 0.875rem;
-            line-height: 1.625;
-        }
-        
-        .space-y-3 > * + * {
-            margin-top: 0.75rem;
-        }
-        
-        .space-y-4 > * + * {
-            margin-top: 1rem;
-        }
-        
-        .space-y-6 > * + * {
-            margin-top: 1.5rem;
-        }
-        
-        .mb-2 { margin-bottom: 0.5rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .mb-6 { margin-bottom: 1.5rem; }
         
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .card.full-height {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        .header h1 { font-size: 1.5rem; color: #1e293b; }
+        .header-subtitle { color: #64748b; font-size: 0.875rem; }
+        
+        .question-counter { text-align: right; }
+        .question-counter p {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin-bottom: 4px;
+        }
+        .question-counter span {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+        
+        .copyright-notice {
+            text-align: center;
+            margin-top: 24px;
+            padding: 16px;
+        }
+        
+        .copyright-notice a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+        
+        .copyright-notice a:hover { color: #64748b; }
+        
+        @media (max-width: 600px) {
+            .header { gap: 8px; flex-wrap: nowrap; justify-content: flex-end; }
+            .header > div:first-child { display: none; }
+            .question-counter { flex-shrink: 0; }
+            .question-counter p { font-size: 0.7rem; margin-bottom: 0; }
+            .question-counter span { font-size: 1.2rem; }
+            .card { padding: 10px; }
+            .progress-bar { margin-top: 6px; height: 6px; }
+        }
+        
+        .progress-bar {
+            background: #e2e8f0;
+            border-radius: 999px;
+            height: 8px;
+            margin-top: 16px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: #4f46e5;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .selection-screen { text-align: center; }
+        .selection-screen h2 { color: #1e293b; margin-bottom: 8px; font-size: 1.75rem; }
+        .selection-screen p { color: #64748b; margin-bottom: 24px; }
+        
+        .filter-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .filter-section h3 {
+            color: #374151;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-options { display: flex; flex-wrap: wrap; gap: 8px; }
+        
+        .filter-btn {
+            padding: 10px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        
+        .filter-btn:hover { border-color: #94a3b8; }
+        
+        .filter-btn.selected {
+            border-color: #4f46e5;
+            background: #4f46e5;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .start-btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            background: #4f46e5;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        
+        .start-btn:hover { background: #3730a3; }
+        .start-btn:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
+        
+        .loading { text-align: center; padding: 60px 20px; }
+        .loading-spinner {
+            width: 60px; height: 60px;
+            border: 5px solid #e2e8f0;
+            border-top-color: #7c3aed;
+            border-right-color: #7c3aed;
+            border-radius: 50%;
+            animation: spin 0.8s cubic-bezier(0.5, 0.2, 0.5, 0.8) infinite;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .text-label {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .question-text {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            color: #1e293b;
+            padding: 20px;
+            border-radius: 12px;
+            line-height: 1.8;
+            font-size: 1rem;
+            border-left: 4px solid #4f46e5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .question-prompt {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        /* === MULTIPLE CHOICE === */
+        .mc-options { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+        
+        .mc-btn {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .mc-btn:hover:not(:disabled) { border-color: #94a3b8; background: #f8fafc; }
+        .mc-btn.selected { border-color: #4f46e5; background: #eef2ff; }
+        .mc-btn.correct-answer { 
+            border-color: #047857; background: #059669; color: white; font-weight: 600;
+        }
+        .mc-btn.correct-answer::after {
+            content: '✓'; position: absolute; top: 50%; right: 16px;
+            transform: translateY(-50%); font-size: 1.2rem; font-weight: bold;
+        }
+        .mc-btn.wrong-answer { 
+            border-color: #b91c1c; background: #dc2626; color: white; font-weight: 600;
+        }
+        .mc-btn.wrong-answer::after {
+            content: '✗'; position: absolute; top: 50%; right: 16px;
+            transform: translateY(-50%); font-size: 1.2rem; font-weight: bold;
+        }
+        .mc-btn:disabled { cursor: default; }
+
+        /* === ORDERING / DRAG DROP === */
+        .drop-slots { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+        
+        .drop-slot {
+            display: flex; align-items: center; gap: 12px;
+            min-height: 60px;
+        }
+        
+        .slot-number {
+            width: 40px; height: 40px;
+            background: #4f46e5; color: white;
+            border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        
+        .slot-area {
+            flex: 1; min-height: 56px;
+            border: 3px dashed #c7d2fe;
+            border-radius: 10px;
+            background: #f8fafc;
+            padding: 14px 16px;
+            transition: all 0.2s;
+            display: flex; align-items: center;
+            font-size: 0.95rem; color: #64748b;
+        }
+        
+        .slot-area:empty::before {
+            content: 'Σύρετε εδώ μια πρόταση...';
+            color: #94a3b8; font-style: italic; font-size: 0.9rem;
+        }
+        
+        .slot-area.drag-over {
+            border-color: #7c3aed; background: #f5f3ff;
+            transform: scale(1.02);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+        }
+        
+        .slot-area.filled {
+            border: 2px solid #7c3aed;
+            background: #f5f3ff;
+            color: #1e293b;
+            font-weight: 500;
+        }
+        
+        .slot-area.correct { border-color: #059669; background: #d1fae5; }
+        .slot-area.wrong { border-color: #dc2626; background: #fee2e2; }
+        
+        .sentence-bank {
+            margin-top: 24px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        
+        .sentence-bank h4 {
+            font-size: 0.9rem; color: #64748b;
+            margin-bottom: 12px;
+        }
+        
+        .sentence-bank-items { display: flex; flex-direction: column; gap: 8px; }
+        
+        .draggable-sentence {
+            padding: 14px 16px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: grab;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            color: #1e293b;
+            user-select: none;
+            line-height: 1.5;
+        }
+        
+        .draggable-sentence:hover {
+            border-color: #7c3aed; background: #faf5ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .draggable-sentence.dragging { opacity: 0.4; cursor: grabbing; }
+        .draggable-sentence.used { display: none; }
+
+        /* === FILL GAP === */
+        .fill-gap-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 24px;
+            border-radius: 12px;
+            border-left: 4px solid #4f46e5;
+            margin-top: 16px;
+            font-size: 1.05rem;
+            line-height: 2.2;
+            color: #1e293b;
+        }
+        
+        .gap-input {
+            display: inline-block;
+            padding: 8px 14px;
+            border: 2px solid #c7d2fe;
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 180px;
+            transition: all 0.2s;
+            margin: 0 6px;
+            vertical-align: middle;
+            text-align: center;
+        }
+        
+        .gap-input:focus { outline: none; border-color: #4f46e5; background: #f0f9ff; }
+        .gap-input.correct { border-color: #059669; background: #d1fae5; color: #047857; font-weight: 600; }
+        .gap-input.wrong { border-color: #dc2626; background: #fee2e2; color: #b91c1c; font-weight: 600; }
+        .gap-input:disabled { background: #f1f5f9; cursor: not-allowed; }
+
+        /* === COMMON BUTTONS === */
+        .main-btn {
+            width: 100%; padding: 16px;
+            border: none; border-radius: 12px;
+            font-size: 1.1rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .main-btn.primary { background: #4f46e5; color: white; }
+        .main-btn.primary:hover { background: #3730a3; }
+        .main-btn.success { background: #16a34a; color: white; }
+        .main-btn.success:hover { background: #15803d; }
+        .main-btn:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; }
+        
+        .hint-btn {
+            background: #fef3c7; color: #92400e;
+            border: 1px solid #fcd34d;
+            padding: 8px 14px; border-radius: 8px;
+            font-size: 0.8rem; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+            margin-top: 12px;
+            display: inline-flex; align-items: center; gap: 6px;
+            width: 100%; justify-content: center;
+        }
+        .hint-btn:hover { background: #fde68a; border-color: #f59e0b; transform: translateY(-2px); }
+        
+        .hint-box {
+            background: #fffbeb; border: 1px solid #fcd34d;
+            border-radius: 10px; padding: 12px;
+            margin-top: 8px; display: none;
+        }
+        .hint-box.show { display: block; animation: slideDown 0.3s ease; }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .hint-box h4 { color: #92400e; font-size: 0.8rem; margin-bottom: 6px; }
+        .hint-box p { color: #78350f; font-size: 0.8rem; line-height: 1.5; }
+
+        .feedback-container { margin-top: 20px; }
+        
+        .correct-answer-box {
+            background: #ecfdf5; border: 1px solid #059669;
+            border-radius: 12px; padding: 16px; margin-bottom: 16px;
+        }
+        .correct-answer-box h4 { color: #065f46; font-size: 0.95rem; margin-bottom: 8px; }
+        .correct-answer-box p { color: #047857; font-size: 0.95rem; font-weight: 600; }
+        
+        .notes-box {
+            background: #fffbeb; border: 1px solid #fcd34d;
+            border-radius: 12px; padding: 16px; margin-bottom: 16px;
+        }
+        .notes-box h4 { color: #92400e; font-size: 0.95rem; margin-bottom: 8px; }
+        .notes-box p { color: #78350f; font-size: 0.875rem; line-height: 1.6; }
+
+        .sound-toggle {
+            position: fixed; top: 20px; right: 20px;
+            background: white; border: 2px solid #e2e8f0;
+            border-radius: 50%; width: 48px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 1000;
+        }
+        .sound-toggle:hover { border-color: #4f46e5; transform: scale(1.05); }
+        .sound-toggle svg { width: 24px; height: 24px; color: #4f46e5; }
+        .sound-toggle.muted { background: #fee2e2; border-color: #dc2626; }
+        .sound-toggle.muted svg { color: #dc2626; }
+
+        .results-card { text-align: center; padding: 40px 24px; }
+        .results-emoji { font-size: 4rem; margin-bottom: 16px; }
+        .results-title { font-size: 1.75rem; color: #1e293b; margin-bottom: 24px; }
+        
+        .results-score-box {
+            background: linear-gradient(135deg, #eef2ff 0%, #faf5ff 100%);
+            border-radius: 16px; padding: 24px; margin-bottom: 24px;
+        }
+        .results-score { font-size: 3rem; font-weight: 700; color: #4f46e5; }
+        .results-percentage { color: #64748b; font-size: 1.1rem; }
+        
+        .wrong-questions-section {
+            background: #fef3c7; border: 1px solid #fcd34d;
+            border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: left;
+        }
+        .wrong-questions-section h3 { color: #92400e; font-size: 1.1rem; margin-bottom: 12px; }
+        
+        .repeat-btn {
+            background: #f59e0b; color: white;
+            width: 100%; padding: 14px;
+            border: none; border-radius: 10px;
+            font-size: 1rem; font-weight: 600;
+            cursor: pointer; margin-bottom: 12px;
+        }
+        .repeat-btn:hover { background: #d97706; }
+        
+        @media (max-width: 600px) {
+            .drop-slot { flex-direction: row; }
+            .gap-input { width: 140px; }
+        }
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div class="container" id="app">
+        <div class="card loading">
+            <div class="loading-spinner"></div>
+            <p>Φόρτωση δεδομένων...</p>
+        </div>
+    </div>
 
-    <script type="text/babel">
-        const { useState } = React;
+    <script>
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSkdf5Vy91y6zZe0vcNR0cdJ9emkEeahzwt46kDGnmhEeQKNMfIIAnKwtTzy2XMrEnqrFEUdNhmEOHR/pub?gid=1448323190&single=true&output=csv';
 
-        // Lucide Icons as SVG components
-        const ChevronRight = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-        );
+        const mcChoices = [
+            "Ασύνδετο σχήμα",
+            "Παρατακτική σύνδεση",
+            "Υποτακτική σύνδεση"
+        ];
 
-        const CheckCircle = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-        );
-
-        const XCircle = () => (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="15" y1="9" x2="9" y2="15"></line>
-                <line x1="9" y1="9" x2="15" y2="15"></line>
-            </svg>
-        );
-
-        const Award = () => (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="8" r="7"></circle>
-                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
-            </svg>
-        );
-
-        const DiafimisiKritirio = () => {
-            const [selectedThema, setSelectedThema] = useState(null);
-            const [selectedQuestion, setSelectedQuestion] = useState(null);
-            const [showAnswer, setShowAnswer] = useState(false);
-
-            const themata = {
-                themaA: {
-                    title: 'ΘΕΜΑ Α - Περίληψη',
-                    questions: [
-                        {
-                            id: 'a1',
-                            question: 'Να παρουσιάσεις σε ένα περιληπτικό κείμενο 70 περίπου λέξεων τη βασική θέση του αρθρογράφου στο Κείμενο 1 και τις απόψεις με τις οποίες τη στηρίζει.',
-                            answer: {
-                                title: 'Απάντηση:',
-                                content: [
-                                    '• Βασική θέση: Στον 20ό αιώνα οι διαφημιστικές τεχνικές τελειοποιήθηκαν και η επιρροή της διαφήμισης πολλαπλασιάστηκε',
-                                    '• Στήριξη: Αξιοποίηση επιστημονικών μεθόδων για αποτελεσματικότερη επίδραση',
-                                    '• Υποσχέσεις ικανοποίησης που εξασφαλίζουν τα προϊόντα',
-                                    '• Ωραιοποιημένη εικόνα κόσμου, απόκρυψη προβλημάτων',
-                                    '• Αναπαραγωγή στερεοτύπων, εκμετάλλευση γυναίκας και παιδιών'
-                                ]
-                            }
-                        }
-                    ]
-                },
-                themaB: {
-                    title: 'ΘΕΜΑ Β - Ανάλυση',
-                    questions: [
-                        {
-                            id: 'b1',
-                            question: 'Αντιστοίχιση διαφημιστικών μηνυμάτων με τεχνικές',
-                            answer: {
-                                title: 'Αντιστοιχίες:',
-                                content: [
-                                    '1. Στέγη για όλους → β (πουλάει σε όλους αδιακρίτως)',
-                                    '2. DNA Ινστιτούτο → δ (γυναίκα ως αντικείμενο επιθυμίας)',
-                                    '3. Personal Banking → ε (σύντομοι δρόμοι κοινωνικής ανόδου)',
-                                    '4. Εκπτώσεις → γ (υπόσχεση ικανοποίησης)',
-                                    '5. Κύπρος → α (παραδεισένιος κόσμος)'
-                                ]
-                            }
-                        },
-                        {
-                            id: 'b2a',
-                            question: 'Ποιοι όροι συγκρίνονται στην τελευταία παράγραφο και ποια η διαφορά τους;',
-                            answer: {
-                                title: 'Σύγκριση:',
-                                content: [
-                                    '• Όροι: Δικτατορικά καθεστώτα vs Διαφήμιση',
-                                    '• Διαφορά: Τα πρώτα χρησιμοποιούν βία και λογοκρισία',
-                                    '• Η διαφήμιση επικαλείται την ελευθερία και χειραγωγεί με ήπιο τρόπο',
-                                    '• Σχέση με πρόλογο: Επαναβεβαιώνει ότι η διαφήμιση είναι επιστήμη με εκλεπτυσμένες τεχνικές πειθούς'
-                                ]
-                            }
-                        },
-                        {
-                            id: 'b2b',
-                            question: 'Σχολιασμός τίτλου «Εργοστάσιο επιθυμιών»',
-                            answer: {
-                                title: 'Σχολιασμός:',
-                                content: [
-                                    'Μορφή: Σύντομος, ονοματικός, μεταφορά',
-                                    '• Μεταφορά: Η διαφήμιση παράγει διαρκώς καταναλωτικές επιθυμίες',
-                                    '• Υπαινικτικότητα: Προσελκύει ενδιαφέρον',
-                                    'Περιεχόμενο: Ανταποκρίνεται στη λειτουργία της διαφήμισης',
-                                    '• Πολλαπλασιασμός καταναλωτικών επιθυμιών με διάφορες τεχνικές'
-                                ]
-                            }
-                        },
-                        {
-                            id: 'b3',
-                            question: 'Εκφραστικές επιλογές διαφημιστικών μηνυμάτων',
-                            answer: {
-                                title: 'Επιδράσεις:',
-                                content: [
-                                    '1. Ερώτηση: Διεγείρει ενδιαφέρον, προετοιμάζει να δεχτεί την υπηρεσία',
-                                    '2. Επίθετα: Κολακεία, δεσμεύει κρίση (αν θέλεις να είσαι επιτυχημένος...)',
-                                    '3. Ομοιοτέλευτο: Απομνημόνευση ως σλόγκαν, θετικοί συνειρμοί',
-                                    '4. «Στέγη για όλους»: Αγαθό προσιτό σε όλους, ενισχύει επιθυμία'
-                                ]
-                            }
-                        }
-                    ]
-                },
-                themaG: {
-                    title: 'ΘΕΜΑ Γ - Ερμηνευτικό σχόλιο',
-                    questions: [
-                        {
-                            id: 'g1',
-                            question: 'Θέση προσώπων/αντικειμένων στο Κείμενο 3 και στάση αφηγητή',
-                            answer: {
-                                title: 'Ερμηνευτικά στοιχεία:',
-                                content: [
-                                    'Κλίμα: Ακραίος καταναλωτισμός, αλλοτρίωση ανθρώπων',
-                                    'Αντικείμενα: Κυρίαρχα - αντικείμενα πόθου και σύμβολα καταξίωσης',
-                                    'Πρόσωπα: Απουσιάζουν ή έχουν δευτερεύοντα ρόλο, μετατροπή σε "αντικείμενα"',
-                                    'Στάση αφηγητή: Επικριτική, οργισμένος, ντροπιασμένος',
-                                    'Κειμενικοί δείκτες:',
-                                    '  - Μεταφορά: "Πούρα που κάπνιζαν συνειδήσεις"',
-                                    '  - Ερωτήσεις: "Πότε έγιναν όλα αυτά;"',
-                                    '  - Σύγκριση εθισμών: ναρκωτικά vs κατανάλωση'
-                                ]
-                            }
-                        }
-                    ]
-                },
-                themaDelta: {
-                    title: 'ΘΕΜΑ Δ - Άρθρο',
-                    questions: [
-                        {
-                            id: 'd1',
-                            question: 'Άρθρο: «Οι τεχνικές επηρεασμού της σύγχρονης διαφήμισης και η σωστή στάση του δέκτη-καταναλωτή»',
-                            answer: {
-                                title: 'Δομή άρθρου:',
-                                content: [
-                                    'Πρόλογος: Η διαφήμιση ως μηχανισμός επηρεασμού',
-                                    'Α. Τεχνικές διαφήμισης:',
-                                    '  • Επιστημονική προετοιμασία (ψυχολόγοι, σημειολόγοι)',
-                                    '  • Αθέμιτες τεχνικές - παραπλάνηση',
-                                    '  • Υποσχέσεις κοινωνικής αναγνώρισης',
-                                    '  • Συνειρμοί ιδεών - αυθεντίες',
-                                    '  • Επανάληψη μηνυμάτων',
-                                    '  • Χειραγώγηση γυναίκας - εκμετάλλευση παιδιών',
-                                    'Β. Σωστή στάση καταναλωτή:',
-                                    '  • Σκεπτικισμός και δυσπιστία',
-                                    '  • Έρευνα αγοράς, σύγκριση',
-                                    '  • Ιεράρχηση αναγκών',
-                                    '  • Επαναπροσδιορισμός αξιών',
-                                    'Επίλογος: Ατομική ευθύνη για προστασία ελευθερίας'
-                                ]
-                            }
-                        }
-                    ]
-                },
-                praktiki: {
-                    title: 'ΠΡΑΚΤΙΚΕΣ ΕΦΑΡΜΟΓΕΣ',
-                    questions: [
-                        {
-                            id: 'p1',
-                            question: 'Εκφραστικές επιλογές - Λειτουργία',
-                            answer: {
-                                title: 'Παραδείγματα:',
-                                content: [
-                                    'α. Επανάληψη (Beau Mec - μαλακά×3): Απομνημόνευση',
-                                    'β. Πολυσημία (Μινιόν): Συνειρμός χαμηλών τιμών',
-                                    'γ. Ομοιοτέλευτο (Honda-προσόντα): Θετική προδιάθεση',
-                                    'δ. Παρήχηση (ΤΟΠ): Εντύπωση στη μνήμη',
-                                    'ε. Ενεστώτας: Διάρκεια ευεργετικών επιδράσεων',
-                                    'στ. Νεολογισμοί (εολικέρ): Διέγερση ενδιαφέροντος',
-                                    'ζ. Αντίθεση: Μοναδικότητα προϊόντος'
-                                ]
-                            }
-                        },
-                        {
-                            id: 'p2',
-                            question: 'Διαφημιστικές τεχνικές',
-                            answer: {
-                                title: 'Τεχνικές:',
-                                content: [
-                                    'α. Forte: Συνειρμός ιδεών (δύναμη)',
-                                    'β. 3 τροχοί: Επίκληση στη λογική (σόφισμα)',
-                                    'γ. Επιστημονικές έρευνες: Επίκληση σε αυθεντία',
-                                    'δ. Γκόλφω-Σερενάτα: Επίκληση στο συναίσθημα (χιούμορ)',
-                                    'ε. Αμονιοζόλ: Παρουσίαση ιδιοτήτων',
-                                    'στ. Πραγματικός άντρας: Λανθάνων αξιολογικός χαρακτηρισμός',
-                                    'ζ. Roll=λευκό: Συνειρμός ιδεών',
-                                    'η. Jet: Επίκληση στη λογική',
-                                    'θ. Πολυτέλεια: Επίκληση στο συναίσθημα'
-                                ]
-                            }
-                        }
-                    ]
-                }
-            };
-
-            const handleThemaClick = (themaKey) => {
-                setSelectedThema(themaKey);
-                setSelectedQuestion(null);
-                setShowAnswer(false);
-            };
-
-            const handleQuestionClick = (questionId) => {
-                setSelectedQuestion(questionId);
-                setShowAnswer(false);
-            };
-
-            const toggleAnswer = () => {
-                setShowAnswer(!showAnswer);
-            };
-
-            const currentThema = selectedThema ? themata[selectedThema] : null;
-            const currentQuestion = currentThema?.questions.find(q => q.id === selectedQuestion);
-
-            return (
-                <div className="container">
-                    <div className="max-w-7xl">
-                        <div className="card-lg mb-6">
-                            <h1 className="title">
-                                Διαφήμιση - Κριτήριο Αξιολόγησης
-                            </h1>
-                            <p className="subtitle">
-                                Διαδραστική Εφαρμογή Θεωρίας & Ασκήσεων
-                            </p>
-                        </div>
-
-                        <div className="grid grid-cols-3">
-                            <div className="space-y-4">
-                                <div className="card">
-                                    <h2 className="section-title">
-                                        <Award />
-                                        Επιλογή Θέματος
-                                    </h2>
-                                    <div className="space-y-3">
-                                        {Object.entries(themata).map(([key, thema]) => (
-                                            <button
-                                                key={key}
-                                                onClick={() => handleThemaClick(key)}
-                                                className={`btn btn-theme ${selectedThema === key ? 'active' : ''}`}
-                                            >
-                                                <span>{thema.title}</span>
-                                                <ChevronRight />
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                {!selectedThema && (
-                                    <div className="card welcome">
-                                        <div className="welcome-emoji">📚</div>
-                                        <h3 className="welcome-title">
-                                            Καλώς ήρθατε!
-                                        </h3>
-                                        <p className="welcome-text">
-                                            Επιλέξτε ένα θέμα από την αριστερή στήλη για να ξεκινήσετε
-                                        </p>
-                                    </div>
-                                )}
-
-                                {selectedThema && !selectedQuestion && (
-                                    <div className="card">
-                                        <h2 className="section-title mb-6">
-                                            {currentThema.title}
-                                        </h2>
-                                        <div className="space-y-3">
-                                            {currentThema.questions.map((q, idx) => (
-                                                <button
-                                                    key={q.id}
-                                                    onClick={() => handleQuestionClick(q.id)}
-                                                    className="btn btn-question"
-                                                >
-                                                    <div>
-                                                        <div className="question-list-title">
-                                                            Ερώτηση {idx + 1}
-                                                        </div>
-                                                        <div className="question-list-text">
-                                                            {q.question}
-                                                        </div>
-                                                    </div>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {selectedQuestion && currentQuestion && (
-                                    <div className="space-y-6">
-                                        <div className="question-card">
-                                            <div className="question-header">
-                                                <div className="question-badge">Ε</div>
-                                                <div>
-                                                    <h3 className="question-title">ΕΡΩΤΗΣΗ:</h3>
-                                                    <p className="question-text">
-                                                        {currentQuestion.question}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            
-                                            <button
-                                                onClick={toggleAnswer}
-                                                className={`btn-answer ${showAnswer ? 'btn-hide' : 'btn-show'}`}
-                                            >
-                                                {showAnswer ? (
-                                                    <>
-                                                        <XCircle />
-                                                        Απόκρυψη Απάντησης
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <CheckCircle />
-                                                        Εμφάνιση Απάντησης
-                                                    </>
-                                                )}
-                                            </button>
-                                        </div>
-
-                                        {showAnswer && (
-                                            <div className="answer-card">
-                                                <div className="answer-header">
-                                                    <div className="answer-badge">Α</div>
-                                                    <div className="answer-content">
-                                                        <h3 className="answer-title">
-                                                            {currentQuestion.answer.title}
-                                                        </h3>
-                                                        <div>
-                                                            {currentQuestion.answer.content.map((line, idx) => (
-                                                                <div 
-                                                                    key={idx} 
-                                                                    className={`answer-line ${
-                                                                        line.startsWith('•') || line.startsWith('  -')
-                                                                            ? 'answer-line-sub'
-                                                                            : 'answer-line-main'
-                                                                    }`}
-                                                                >
-                                                                    {line}
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        <button
-                                            onClick={() => {
-                                                setSelectedQuestion(null);
-                                                setShowAnswer(false);
-                                            }}
-                                            className="btn-answer btn-back"
-                                        >
-                                            ← Επιστροφή στις Ερωτήσεις
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
+        let allData = [];
+        let questions = [];
+        let wrongQuestions = [];
+        
+        let state = {
+            screen: 'loading',
+            selectedLevel: null,
+            selectedCount: null,
+            currentQuestion: 0,
+            answered: false,
+            correctCount: 0,
+            soundEnabled: true,
+            orderingPlacements: {},
+            draggedItem: null
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<DiafimisiKritirio />);
+        // === SOUND ===
+        function playSound(correct) {
+            if (!state.soundEnabled) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.frequency.value = correct ? 800 : 200;
+                osc.type = correct ? 'sine' : 'sawtooth';
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
+            } catch(e) {}
+        }
+
+        function toggleSound() {
+            state.soundEnabled = !state.soundEnabled;
+            updateSoundButton();
+        }
+        
+        function updateSoundButton() {
+            const btn = document.getElementById('soundToggle');
+            if (!btn) return;
+            btn.classList.toggle('muted', !state.soundEnabled);
+            btn.innerHTML = state.soundEnabled
+                ? '<svg viewBox="0 0 24 24" fill="none"><path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M15.54 8.46C16.48 9.4 17 10.67 17 12s-.52 2.6-1.46 3.54" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19.07 4.93C20.94 6.81 22 9.35 22 12s-1.06 5.19-2.93 7.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
+                : '<svg viewBox="0 0 24 24" fill="none"><path d="M11 5L6 9H2V15H6L11 19V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+        }
+
+        // === CSV PARSE ===
+        function parseCSV(text) {
+            const rows = [];
+            let row = [], cell = '', inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                const ch = text[i], next = text[i + 1];
+                if (ch === '"' && inQuotes && next === '"') { cell += '"'; i++; }
+                else if (ch === '"') { inQuotes = !inQuotes; }
+                else if (ch === ',' && !inQuotes) { row.push(cell); cell = ''; }
+                else if ((ch === '\n' || ch === '\r') && !inQuotes) {
+                    if (cell || row.length) { row.push(cell); rows.push(row); }
+                    row = []; cell = '';
+                } else cell += ch;
+            }
+            if (cell || row.length) { row.push(cell); rows.push(row); }
+            const headers = rows.shift();
+            return rows.map(r => {
+                let obj = {};
+                headers.forEach((k, i) => obj[k.trim()] = (r[i] || '').trim());
+                return obj;
+            }).filter(r => r.question_type);
+        }
+        
+        function normalize(str) {
+            return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+        }
+
+        // === LOAD DATA ===
+        async function loadData() {
+            try {
+                const response = await fetch(CSV_URL);
+                if (!response.ok) throw new Error('Network error');
+                const csv = await response.text();
+                allData = parseCSV(csv);
+                state.screen = 'selection';
+                render();
+            } catch (error) {
+                console.error('Σφάλμα:', error);
+                document.getElementById('app').innerHTML = `
+                    <div class="card" style="text-align:center;padding:40px;">
+                        <h2 style="color:#dc2626;margin-bottom:16px;">⚠️ Πρόβλημα Φόρτωσης</h2>
+                        <p style="color:#64748b;margin-bottom:20px;">Δεν φορτώθηκαν τα δεδομένα. Ελέγξτε τη σύνδεσή σας.</p>
+                        <button class="start-btn" onclick="location.reload()">🔄 Δοκιμάστε Ξανά</button>
+                    </div>`;
+            }
+        }
+
+        // === SHUFFLE ===
+        function shuffleArray(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        // === RENDER ===
+        function render() {
+            const app = document.getElementById('app');
+            switch (state.screen) {
+                case 'loading': app.innerHTML = renderLoading(); break;
+                case 'selection': app.innerHTML = renderSelection(); break;
+                case 'quiz':
+                    app.innerHTML = renderQuiz();
+                    if (!document.getElementById('soundToggle')) {
+                        const btn = document.createElement('button');
+                        btn.id = 'soundToggle'; btn.className = 'sound-toggle';
+                        btn.addEventListener('click', toggleSound);
+                        document.body.appendChild(btn);
+                        updateSoundButton();
+                    }
+                    break;
+                case 'results':
+                    app.innerHTML = renderResults();
+                    const sb = document.getElementById('soundToggle');
+                    if (sb) sb.remove();
+                    break;
+            }
+            attachEventListeners();
+        }
+        
+        function renderLoading() {
+            return '<div class="card loading"><div class="loading-spinner"></div><p>Φόρτωση δεδομένων...</p></div>';
+        }
+        
+        function renderSelection() {
+            const mcCount = allData.filter(q => q.question_type === 'multiple_choice').length;
+            const ordCount = allData.filter(q => q.question_type === 'ordering').length;
+            const fgCount = allData.filter(q => q.question_type === 'fill_gap').length;
+            
+            return `
+                <div class="card selection-screen full-height">
+                    <h2>📝 Σύνδεση Προτάσεων</h2>
+                    <p>Νεοελληνική Γλώσσα - Λύκειο</p>
+                    
+                    <div class="filter-section">
+                        <h3>📊 Επιλέξτε Επίπεδο</h3>
+                        <div class="filter-options">
+                            <button class="filter-btn ${state.selectedLevel === 1 ? 'selected' : ''}" data-level="1">
+                                Επίπεδο 1 – Πολλαπλή Επιλογή (${mcCount})
+                            </button>
+                            <button class="filter-btn ${state.selectedLevel === 2 ? 'selected' : ''}" data-level="2">
+                                Επίπεδο 2 – Σειρά Προτάσεων (${ordCount})
+                            </button>
+                            <button class="filter-btn ${state.selectedLevel === 3 ? 'selected' : ''}" data-level="3">
+                                Επίπεδο 3 – Συμπλήρωση Κενού (${fgCount})
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="filter-section">
+                        <h3>🔢 Αριθμός Ασκήσεων</h3>
+                        <div class="filter-options">
+                            <button class="filter-btn ${state.selectedCount === 5 ? 'selected' : ''}" data-count="5">5</button>
+                            <button class="filter-btn ${state.selectedCount === 10 ? 'selected' : ''}" data-count="10">10</button>
+                            <button class="filter-btn ${state.selectedCount === 'all' ? 'selected' : ''}" data-count="all">Όλες</button>
+                        </div>
+                    </div>
+                    
+                    <button class="start-btn" id="startBtn" ${!state.selectedLevel || !state.selectedCount ? 'disabled' : ''}>
+                        Ξεκινήστε το Quiz
+                    </button>
+                    
+                    <div class="copyright-notice">
+                        <a href="http://nea-ellinika.blog" target="_blank" rel="noopener">
+                            Α & Σ Μητσέλος, Νέα Ελληνικά για το Λύκειο, 2026
+                        </a>
+                    </div>
+                </div>`;
+        }
+        
+        function renderQuiz() {
+            const q = questions[state.currentQuestion];
+            const progress = ((state.currentQuestion + 1) / questions.length) * 100;
+            
+            return `
+                <div class="card">
+                    <div class="header">
+                        <div>
+                            <h1>📝 Σύνδεση Προτάσεων</h1>
+                            <p class="header-subtitle">Νεοελληνική Γλώσσα - Λύκειο</p>
+                        </div>
+                        <div class="question-counter">
+                            <p>Άσκηση</p>
+                            <span>${state.currentQuestion + 1}/${questions.length}</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:${progress}%"></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <span class="text-label">Άσκηση ${state.currentQuestion + 1}</span>
+                    ${q.question_type !== 'ordering' ? `<div class="question-text">${q.text}</div>` : ''}
+                    <div class="question-prompt">${q.question}</div>
+                    ${q['Βοήθεια'] && q['Βοήθεια'].trim() && !state.answered ? `
+                        <button class="hint-btn" id="hintBtn">💡 Βοήθεια</button>
+                        <div class="hint-box" id="hintBox"><h4>💡 Υπόδειξη:</h4><p>${q['Βοήθεια']}</p></div>
+                    ` : ''}
+                </div>
+                ${renderQuestionType(q)}
+                <div id="feedback"></div>`;
+        }
+        
+        function renderQuestionType(q) {
+            switch(q.question_type) {
+                case 'multiple_choice': return renderMC(q);
+                case 'ordering': return renderOrdering(q);
+                case 'fill_gap': return renderFillGap(q);
+                default: return '';
+            }
+        }
+
+        // === MULTIPLE CHOICE ===
+        function renderMC(q) {
+            return `
+                <div class="card">
+                    <h3 style="color:#374151;font-size:1rem;margin-bottom:16px;text-align:center;">
+                        Ποιος είναι ο τρόπος σύνδεσης;
+                    </h3>
+                    <div class="mc-options">
+                        ${mcChoices.map((choice, i) => {
+                            const val = i + 1;
+                            const isCorrect = parseInt(q.answer) === val;
+                            let cls = 'mc-btn';
+                            if (state.answered && isCorrect) cls += ' correct-answer';
+                            return `<button class="${cls}" data-value="${val}" ${state.answered ? 'disabled' : ''}>${choice}</button>`;
+                        }).join('')}
+                    </div>
+                </div>`;
+        }
+
+        // === ORDERING ===
+        function renderOrdering(q) {
+            const sentences = q.text.split('|').map(s => s.trim());
+            const slotCount = sentences.length;
+            
+            if (!q._shuffled) {
+                q._shuffledSentences = shuffleArray(sentences.map((s, i) => ({ text: s, correctIndex: i })));
+                q._shuffled = true;
+            }
+            
+            return `
+                <div class="card">
+                    <div class="drop-slots">
+                        ${Array.from({length: slotCount}, (_, i) => {
+                            const placed = state.orderingPlacements[i];
+                            const slotClass = 'slot-area' + (placed ? ' filled' : '');
+                            return `
+                                <div class="drop-slot">
+                                    <div class="slot-number">${i + 1}</div>
+                                    <div class="${slotClass}" data-slot="${i}">${placed ? placed.text : ''}</div>
+                                </div>`;
+                        }).join('')}
+                    </div>
+                    
+                    <div class="sentence-bank">
+                        <h4>💡 Σύρετε τις προτάσεις στα κενά (πατήστε, κρατήστε, σύρετε)</h4>
+                        <div class="sentence-bank-items">
+                            ${q._shuffledSentences.map((s, i) => {
+                                const isUsed = Object.values(state.orderingPlacements).some(p => p && p.id === i);
+                                return `<div class="draggable-sentence ${isUsed ? 'used' : ''}" draggable="true" data-sentence-id="${i}" data-correct-index="${s.correctIndex}">${s.text}</div>`;
+                            }).join('')}
+                        </div>
+                    </div>
+                    
+                    ${!state.answered ? `
+                        <button class="main-btn primary" id="checkOrderingBtn" style="margin-top:16px;" ${Object.keys(state.orderingPlacements).length < slotCount ? 'disabled' : ''}>
+                            Έλεγχος Απαντήσεων
+                        </button>
+                    ` : ''}
+                </div>`;
+        }
+
+        // === FILL GAP ===
+        function renderFillGap(q) {
+            const parts = q.text.split('______');
+            let html = '';
+            parts.forEach((part, i) => {
+                html += `<span>${part}</span>`;
+                if (i < parts.length - 1) {
+                    html += `<input type="text" class="gap-input" data-gap-index="${i}" placeholder="σύνδεσμος..." ${state.answered ? 'disabled' : ''}>`;
+                }
+            });
+            
+            return `
+                <div class="card">
+                    <div class="fill-gap-container">${html}</div>
+                    ${!state.answered ? `
+                        <button class="main-btn primary" id="checkFillGapBtn" style="margin-top:16px;">
+                            Έλεγχος Απάντησης
+                        </button>
+                    ` : ''}
+                </div>`;
+        }
+
+        // === RESULTS ===
+        function renderResults() {
+            const pct = Math.round((state.correctCount / questions.length) * 100);
+            const emoji = pct >= 80 ? '🎉' : pct >= 60 ? '👍' : '📚';
+            return `
+                <div class="card results-card">
+                    <div class="results-emoji">${emoji}</div>
+                    <h2 class="results-title">Ολοκλήρωσες το Quiz!</h2>
+                    <div class="results-score-box">
+                        <p class="results-score">${state.correctCount} / ${questions.length}</p>
+                        <p class="results-percentage">(${pct}%)</p>
+                    </div>
+                    ${wrongQuestions.length > 0 ? `
+                        <div class="wrong-questions-section">
+                            <h3>📌 Έχεις ${wrongQuestions.length} λανθασμένη/ες απάντηση/εις</h3>
+                            <button class="repeat-btn" id="repeatBtn">🔁 Επανάληψη Λανθασμένων</button>
+                        </div>
+                    ` : ''}
+                    <button class="main-btn primary" id="homeBtn">⬅ Επιστροφή στην Αρχή</button>
+                </div>`;
+        }
+
+        // === EVENT LISTENERS ===
+        function attachEventListeners() {
+            document.querySelectorAll('[data-level]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    state.selectedLevel = parseInt(btn.dataset.level);
+                    render();
+                });
+            });
+            
+            document.querySelectorAll('[data-count]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    state.selectedCount = btn.dataset.count === 'all' ? 'all' : parseInt(btn.dataset.count);
+                    render();
+                });
+            });
+            
+            document.getElementById('startBtn')?.addEventListener('click', startQuiz);
+            
+            // Hint
+            const hintBtn = document.getElementById('hintBtn');
+            const hintBox = document.getElementById('hintBox');
+            if (hintBtn && hintBox) {
+                hintBtn.addEventListener('click', () => {
+                    hintBox.classList.toggle('show');
+                    hintBtn.textContent = hintBox.classList.contains('show') ? '🔼 Απόκρυψη' : '💡 Βοήθεια';
+                });
+            }
+            
+            // MC
+            let mcTimeout = null;
+            document.querySelectorAll('.mc-btn[data-value]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (state.answered) return;
+                    if (mcTimeout) clearTimeout(mcTimeout);
+                    document.querySelectorAll('.mc-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    const val = parseInt(btn.dataset.value);
+                    mcTimeout = setTimeout(() => { if (!state.answered) checkMC(btn, val); }, 800);
+                });
+            });
+            
+            // Ordering drag & drop
+            attachOrderingListeners();
+            document.getElementById('checkOrderingBtn')?.addEventListener('click', checkOrdering);
+            
+            // Fill gap
+            document.getElementById('checkFillGapBtn')?.addEventListener('click', checkFillGap);
+            document.querySelectorAll('.gap-input').forEach(input => {
+                input.addEventListener('keypress', (e) => { if (e.key === 'Enter' && !state.answered) checkFillGap(); });
+            });
+            
+            // Results
+            document.getElementById('repeatBtn')?.addEventListener('click', repeatWrong);
+            document.getElementById('homeBtn')?.addEventListener('click', () => { resetState(); render(); });
+        }
+
+        // === ORDERING DRAG LISTENERS ===
+        function attachOrderingListeners() {
+            const sentences = document.querySelectorAll('.draggable-sentence');
+            const slots = document.querySelectorAll('.slot-area');
+            
+            sentences.forEach(el => {
+                el.addEventListener('dragstart', (e) => {
+                    state.draggedItem = el;
+                    el.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+                el.addEventListener('dragend', () => el.classList.remove('dragging'));
+                
+                // Touch
+                el.addEventListener('touchstart', touchStart, { passive: false });
+                el.addEventListener('touchmove', touchMove, { passive: false });
+                el.addEventListener('touchend', touchEnd, { passive: false });
+            });
+            
+            slots.forEach(slot => {
+                slot.addEventListener('dragover', (e) => { e.preventDefault(); slot.classList.add('drag-over'); });
+                slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+                slot.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    slot.classList.remove('drag-over');
+                    performDrop(slot);
+                });
+                // Click to remove
+                slot.addEventListener('click', () => {
+                    if (state.answered) return;
+                    const slotIdx = parseInt(slot.dataset.slot);
+                    const placed = state.orderingPlacements[slotIdx];
+                    if (placed) {
+                        delete state.orderingPlacements[slotIdx];
+                        render();
+                    }
+                });
+            });
+        }
+        
+        let touchClone = null;
+        function touchStart(e) {
+            e.preventDefault();
+            state.draggedItem = e.target.closest('.draggable-sentence');
+            if (!state.draggedItem) return;
+            const touch = e.touches[0];
+            touchClone = state.draggedItem.cloneNode(true);
+            Object.assign(touchClone.style, {
+                position: 'fixed', opacity: '0.8', pointerEvents: 'none',
+                zIndex: '10000', width: state.draggedItem.offsetWidth + 'px',
+                left: touch.clientX - 30 + 'px', top: touch.clientY - 20 + 'px',
+                maxWidth: '300px', fontSize: '0.85rem'
+            });
+            document.body.appendChild(touchClone);
+            state.draggedItem.classList.add('dragging');
+        }
+        
+        function touchMove(e) {
+            e.preventDefault();
+            if (!touchClone) return;
+            const touch = e.touches[0];
+            touchClone.style.left = touch.clientX - 30 + 'px';
+            touchClone.style.top = touch.clientY - 20 + 'px';
+            document.querySelectorAll('.slot-area').forEach(z => z.classList.remove('drag-over'));
+            const el = document.elementFromPoint(touch.clientX, touch.clientY);
+            const slot = el?.closest('.slot-area');
+            if (slot) slot.classList.add('drag-over');
+        }
+        
+        function touchEnd(e) {
+            e.preventDefault();
+            if (!state.draggedItem) return;
+            const touch = e.changedTouches[0];
+            const el = document.elementFromPoint(touch.clientX, touch.clientY);
+            const slot = el?.closest('.slot-area');
+            if (slot) performDrop(slot);
+            if (touchClone) { touchClone.remove(); touchClone = null; }
+            state.draggedItem.classList.remove('dragging');
+            document.querySelectorAll('.slot-area').forEach(z => z.classList.remove('drag-over'));
+        }
+        
+        function performDrop(slot) {
+            if (!state.draggedItem || state.answered) return;
+            const slotIdx = parseInt(slot.dataset.slot);
+            const sentenceId = parseInt(state.draggedItem.dataset.sentenceId);
+            const q = questions[state.currentQuestion];
+            const sentenceData = q._shuffledSentences[sentenceId];
+            
+            // Remove from previous slot if placed elsewhere
+            Object.keys(state.orderingPlacements).forEach(k => {
+                if (state.orderingPlacements[k]?.id === sentenceId) delete state.orderingPlacements[k];
+            });
+            
+            // Remove previous occupant of this slot
+            if (state.orderingPlacements[slotIdx]) {
+                // free it
+            }
+            
+            state.orderingPlacements[slotIdx] = { id: sentenceId, text: sentenceData.text, correctIndex: sentenceData.correctIndex };
+            render();
+        }
+
+        // === CHECK ANSWERS ===
+        function checkMC(btn, value) {
+            state.answered = true;
+            const q = questions[state.currentQuestion];
+            const correct = parseInt(q.answer);
+            const btns = document.querySelectorAll('.mc-btn');
+            btns.forEach(b => b.disabled = true);
+            
+            if (value === correct) {
+                btn.classList.add('correct-answer');
+                state.correctCount++;
+                playSound(true);
+            } else {
+                btn.classList.add('wrong-answer');
+                btns[correct - 1]?.classList.add('correct-answer');
+                wrongQuestions.push(q);
+                playSound(false);
+            }
+            showFeedback(q, value !== correct);
+        }
+        
+        function checkOrdering() {
+            state.answered = true;
+            const q = questions[state.currentQuestion];
+            const sentences = q.text.split('|').map(s => s.trim());
+            const slotCount = sentences.length;
+            let allCorrect = true;
+            
+            const slots = document.querySelectorAll('.slot-area');
+            slots.forEach((slot, i) => {
+                const placed = state.orderingPlacements[i];
+                if (placed && placed.correctIndex === i) {
+                    slot.classList.add('correct');
+                } else {
+                    slot.classList.add('wrong');
+                    allCorrect = false;
+                }
+            });
+            
+            if (allCorrect) { state.correctCount++; playSound(true); }
+            else { wrongQuestions.push(q); playSound(false); }
+            
+            const correctOrder = sentences.map((s, i) => `${i + 1}. ${s}`).join('\n');
+            showFeedback(q, !allCorrect, `Σωστή σειρά:\n${correctOrder}`);
+        }
+        
+        function checkFillGap() {
+            if (state.answered) return;
+            state.answered = true;
+            const q = questions[state.currentQuestion];
+            const inputs = document.querySelectorAll('.gap-input');
+            const correctAnswers = q.answer.split(',').map(a => a.trim());
+            let allCorrect = true;
+            
+            inputs.forEach((input, idx) => {
+                const userAnswer = input.value.trim();
+                const possibles = (correctAnswers[idx] || correctAnswers[0] || '').split('|').map(a => a.trim());
+                const isCorrect = possibles.some(ans => normalize(ans) === normalize(userAnswer));
+                input.classList.add(isCorrect ? 'correct' : 'wrong');
+                input.disabled = true;
+                if (!isCorrect) allCorrect = false;
+            });
+            
+            if (allCorrect) { state.correctCount++; playSound(true); }
+            else { wrongQuestions.push(q); playSound(false); }
+            
+            const displayAnswer = q.answer.replace(/\|/g, ' / ');
+            showFeedback(q, !allCorrect, !allCorrect ? `Σωστή απάντηση: ${displayAnswer}` : null);
+        }
+
+        // === FEEDBACK ===
+        function showFeedback(q, showCorrect = false, correctText = null) {
+            let html = '<div class="feedback-container">';
+            
+            if (showCorrect && correctText) {
+                html += `<div class="correct-answer-box"><h4>✅ Σωστή απάντηση:</h4><p style="white-space:pre-line">${correctText}</p></div>`;
+            }
+            
+            if (q['Παρατηρήσεις'] && q['Παρατηρήσεις'].trim()) {
+                html += `<div class="notes-box"><h4>💡 Παρατήρηση:</h4><p>${q['Παρατηρήσεις']}</p></div>`;
+            }
+            
+            html += `
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">
+                    <button class="main-btn" id="homeBtn" style="background:#64748b;color:white;">⬅ Επιστροφή</button>
+                    <button class="main-btn success" id="nextBtn">
+                        ${state.currentQuestion < questions.length - 1 ? 'Επόμενη →' : 'Αποτελέσματα'}
+                    </button>
+                </div></div>`;
+            
+            document.getElementById('feedback').innerHTML = html;
+            
+            document.getElementById('homeBtn').addEventListener('click', () => {
+                if (confirm('Θέλεις να επιστρέψεις στην αρχή;')) { resetState(); render(); }
+            });
+            
+            document.getElementById('nextBtn').addEventListener('click', () => {
+                if (state.currentQuestion < questions.length - 1) {
+                    state.currentQuestion++;
+                    state.answered = false;
+                    state.orderingPlacements = {};
+                    render();
+                } else {
+                    state.screen = 'results';
+                    render();
+                }
+            });
+        }
+
+        // === START / RESET ===
+        function startQuiz() {
+            const typeMap = { 1: 'multiple_choice', 2: 'ordering', 3: 'fill_gap' };
+            let pool = allData.filter(q => q.question_type === typeMap[state.selectedLevel]);
+            pool = shuffleArray(pool);
+            if (state.selectedCount !== 'all') pool = pool.slice(0, state.selectedCount);
+            
+            questions = pool;
+            wrongQuestions = [];
+            state.currentQuestion = 0;
+            state.answered = false;
+            state.correctCount = 0;
+            state.orderingPlacements = {};
+            state.screen = 'quiz';
+            render();
+        }
+        
+        function resetState() {
+            state.screen = 'selection';
+            state.selectedLevel = null;
+            state.selectedCount = null;
+            state.currentQuestion = 0;
+            state.answered = false;
+            state.correctCount = 0;
+            state.orderingPlacements = {};
+            questions = [];
+            wrongQuestions = [];
+        }
+        
+        function repeatWrong() {
+            questions = wrongQuestions.map(q => { q._shuffled = false; return q; });
+            wrongQuestions = [];
+            state.currentQuestion = 0;
+            state.answered = false;
+            state.correctCount = 0;
+            state.orderingPlacements = {};
+            state.screen = 'quiz';
+            render();
+        }
+
+        loadData();
     </script>
 </body>
 </html>
