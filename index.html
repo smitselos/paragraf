@@ -92,6 +92,82 @@ h1 em{font-style:italic;color:var(--rust)}
 .deck-2 .tag{background:rgba(74,103,65,.12);color:var(--sage)}
 .footnote{text-align:center;margin-top:48px;font-size:12px;color:var(--muted);font-style:italic}
 @media(max-width:620px){.card{grid-template-columns:1fr}.card-left{min-height:120px}}
+
+/* ── CARD EXPAND CURSOR ── */
+.card{cursor:pointer}
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay{
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:rgba(20,16,10,.65);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;
+  padding:20px;
+}
+.modal-overlay.open{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.modal-box{
+  background:#fff;border-radius:10px;
+  box-shadow:0 20px 60px rgba(20,16,10,.4);
+  width:100%;max-width:1100px;height:92vh;
+  display:grid;grid-template-columns:280px 1fr;
+  overflow:hidden;animation:scaleIn .25s ease;
+  position:relative;
+}
+@keyframes scaleIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+
+.modal-close{
+  position:absolute;top:14px;right:16px;z-index:10;
+  background:rgba(255,255,255,.85);border:1px solid rgba(26,22,16,.15);
+  border-radius:50%;width:32px;height:32px;cursor:pointer;
+  font-size:17px;line-height:32px;text-align:center;color:var(--muted);
+  transition:all .18s;
+}
+.modal-close:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+.modal-left{
+  padding:36px 28px;display:flex;flex-direction:column;
+  justify-content:space-between;position:relative;overflow:hidden;
+  overflow-y:auto;
+}
+.modal-left::after{content:'';position:absolute;bottom:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.1)}
+.deck-1-modal .modal-left{background:var(--rust)}
+.deck-2-modal .modal-left{background:var(--sage)}
+
+.modal-index{font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.6);letter-spacing:1px;margin-bottom:10px}
+.modal-question{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:#fff;line-height:1.4;margin-bottom:14px}
+.modal-topic{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);font-weight:600}
+
+.modal-right{
+  padding:32px 36px;overflow-y:auto;
+  display:flex;flex-direction:column;
+  background:#fff;border-left:1px solid rgba(26,22,16,.06);
+}
+.modal-answer-label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+.modal-answer{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:12px}
+.deck-1-modal .modal-answer{color:var(--rust)}.deck-2-modal .modal-answer{color:var(--sage)}
+.modal-body{font-size:15px;line-height:1.7;color:#3a3428;flex:1}
+.modal-tags{margin-top:20px;padding-top:14px;border-top:1px solid rgba(26,22,16,.08)}
+.modal-ref{font-size:12px;color:var(--muted);margin-top:8px}
+.modal-ref::before{content:'☞ ';opacity:.5}
+
+/* inside modal, bigger para-tab text */
+.modal-right .para-section-header{font-size:11.5px}
+.modal-right .para-tab{font-size:13px;padding:5px 16px}
+.modal-right .seg{font-size:14px;padding:10px 14px}
+.modal-right .seg-m{font-size:15px;padding:12px 16px}
+.modal-right .seg-pt{font-size:16px;padding:12px 16px}
+.modal-right .detail-content{font-size:14px;padding:14px 16px}
+.modal-right .legend{font-size:13px;padding:9px 14px}
+
+@media(max-width:700px){.modal-box{grid-template-columns:1fr}.modal-left{min-height:130px}}
+
+/* deck-2 para tabs — sage */
+.ptabs-prosopa-v .para-tab,.ptabs-prosopa-d .para-tab,.ptabs-topos .para-tab,.ptabs-ploki .para-tab{border:1.5px solid var(--sage);color:var(--sage)}
+.ptabs-prosopa-v .para-tab:hover,.ptabs-prosopa-v .para-tab.active,
+.ptabs-prosopa-d .para-tab:hover,.ptabs-prosopa-d .para-tab.active,
+.ptabs-topos .para-tab:hover,.ptabs-topos .para-tab.active,
+.ptabs-ploki .para-tab:hover,.ptabs-ploki .para-tab.active{background:var(--sage);color:#fff}
 </style>
 </head>
 <body>
@@ -119,7 +195,7 @@ h1 em{font-style:italic;color:var(--rust)}
   <div class="cards-grid">
 
     <!-- ═══ ΚΆΡΤΑ α΄ — ΔΟΜΗ ═══ -->
-    <div class="card">
+    <div class="card" onclick="openModal(this)">
       <div class="card-left">
         <div class="card-index">Κάρτα α΄</div>
         <div class="card-question">«Πώς είναι χτισμένη μια παράγραφος;»</div>
@@ -176,7 +252,7 @@ h1 em{font-style:italic;color:var(--rust)}
     </div>
 
     <!-- ═══ ΚΆΡΤΑ β΄ — ΤΡΟΠΟΙ ΑΝΑΠΤΥΞΗΣ ═══ -->
-    <div class="card">
+    <div class="card" onclick="openModal(this)">
       <div class="card-left">
         <div class="card-index">Κάρτα β΄</div>
         <div class="card-question">«Με ποιους τρόπους αναπτύσσεται η κεντρική ιδέα;»</div>
@@ -220,7 +296,7 @@ h1 em{font-style:italic;color:var(--rust)}
     </div>
 
     <!-- ═══ ΚΆΡΤΑ γ΄ — ΠΛΑΓΙΟΤΙΤΛΟΣ ═══ -->
-    <div class="card">
+    <div class="card" onclick="openModal(this)">
       <div class="card-left">
         <div class="card-index">Κάρτα γ΄</div>
         <div class="card-question">«Τι "λέει" μια παράγραφος σε μία φράση;»</div>
@@ -272,11 +348,13 @@ h1 em{font-style:italic;color:var(--rust)}
     <div class="deck-number">02</div>
     <div>
       <div class="deck-title">Η ιστορία και ο κόσμος της</div>
-      <div class="deck-desc">Εισαγωγή στην αφηγηματική ανάλυση πεζού λογοτεχνικού κειμένου</div>
+      <div class="deck-desc">«Στου Χατζηφράγκου» — Κοσμάς Πολίτης · απόσπασμα</div>
     </div>
   </div>
   <div class="cards-grid">
-    <div class="card">
+
+    <!-- ═══ ΚΆΡΤΑ α΄ — ΠΡΟΣΩΠΑ ═══ -->
+    <div class="card" onclick="openModal(this)">
       <div class="card-left">
         <div class="card-index">Κάρτα α΄</div>
         <div class="card-question">«Ποιοι ζουν μέσα στην ιστορία και ποιος ρόλος έχει ο καθένας;»</div>
@@ -290,15 +368,52 @@ h1 em{font-style:italic;color:var(--rust)}
             Διάκριση <strong>βασικών</strong> από <strong>δευτερεύοντα</strong> πρόσωπα · εντοπισμός πληροφοριών για το ήθος, τις σχέσεις και τον ρόλο καθενός στην εξέλιξη της πλοκής.
             <button class="detail-toggle" onclick="toggleDetail(this)">+ Διδακτικός στόχος</button>
             <div class="detail-content">Οι μαθητές να διακρίνουν τα πρόσωπα της αφήγησης και να κατανοούν τη λειτουργία τους στη δομή και τη σημασία του κειμένου.</div>
+
+            <div class="para-section-header">Πρόσωπα στο απόσπασμα</div>
+
+            <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--sage);margin:6px 0 5px;">Βασικά πρόσωπα <span style="font-size:9px;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400;">(τρεις γυναίκες που αγωνίζονται για καταξίωση)</span></div>
+            <div class="para-tabs ptabs-prosopa-v">
+              <button class="para-tab" onclick="showPara('pr-chrysa',this,'ptabs-prosopa-v')">Κυρία Χρύσα</button>
+              <button class="para-tab" onclick="showPara('pr-eromfili',this,'ptabs-prosopa-v')">Κώνα Ερωμφίλη</button>
+              <button class="para-tab" onclick="showPara('pr-sofia',this,'ptabs-prosopa-v')">Κώνα Σοφία</button>
+            </div>
+            <div id="pr-chrysa" class="para-block">
+              <div class="seg seg-sc"><span class="badge b-sc">Κυρία Χρύσα</span>Γεροντοκόρη που αναζητά την κοινωνική καταξίωση που της στέρησε η έλλειψη γάμου μέσα από δύο δρόμους: την οικονομική ανεξαρτησία (σπιτικό σχολείο, «ένα οχταράκι το μήνα») και την αναγνώριση που της εξασφαλίζει η μόρφωσή της. Εκπροσωπεί έτσι την «αριστοκρατία» του μαχαλά — όχι πλούτου, αλλά γνώσης.</div>
+            </div>
+            <div id="pr-sofia" class="para-block">
+              <div class="seg seg-sc"><span class="badge b-sc">Κώνα Σοφία η Αιβαλιώτισσα</span>Αναζητά κοινωνική αναγνώριση επικαλούμενη την καταγωγή της (<em>«Ξέρετε τι οικογένειες έχομε στο Αϊβαλί;»</em>) και αγωνιά για την έλλειψη προίκας που της στερεί τη δυνατότητα να παντρέψει τη «μεγαλοκοπέλα» κόρη της. Η προίκα — που της «έφαγε» ο άντρας της — λειτουργεί ως σύμβολο του χαμένου κοινωνικού της αξιώματος.</div>
+            </div>
+            <div id="pr-eromfili" class="para-block">
+              <div class="seg seg-sc"><span class="badge b-sc">Κώνα Ερωμφίλη</span>Παραδουλεύτρα σε πλουσιόσπιτα, αναζητά την καταξίωσή της μέσα από τη σχέση με τη νονά του γιου της — μια εύπορη γυναίκα υψηλής τάξης που η ίδια αποκαλεί «πριγκηπέσσα» (<em>«η κουμπάρα μου η πριγκηπέσσα»</em>). Η επίδειξη αυτής της σχέσης είναι ο τρόπος με τον οποίο διεκδικεί κοινωνική αναγνώριση.</div>
+            </div>
+
+
+            <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:12px 0 5px;">Δευτερεύοντα πρόσωπα</div>
+            <div class="para-tabs ptabs-prosopa-d">
+              <button class="para-tab" onclick="showPara('pr-anthippi',this,'ptabs-prosopa-d')">Ανθίππη</button>
+              <button class="para-tab" onclick="showPara('pr-amana',this,'ptabs-prosopa-d')">Αμανατζής</button>
+              <button class="para-tab" onclick="showPara('pr-kimon',this,'ptabs-prosopa-d')">Κίμωνας</button>
+            </div>
+            <div id="pr-anthippi" class="para-block">
+              <div class="seg seg-tp"><span class="badge b-tp">Ανθίππη</span>Κόρη της Σοφίας, «μεγαλοκοπέλα, κοντά τριαντάρα», ανύπαντρη και παθιασμένη («κάθε τόσο ανάβανε τα αίματά της»). Δεν αναπτύσσεται αυτόνομα ως χαρακτήρας — λειτουργεί ως <em>καταλύτης</em> που αναδεικνύει την αγωνία της μητέρας και τον οικονομικό εγκλωβισμό της οικογένειας.</div>
+            </div>
+            <div id="pr-amana" class="para-block">
+              <div class="seg seg-tp"><span class="badge b-tp">Αμανατζής</span>Σύζυγος της Σοφίας. Επεμβαίνει ειρωνικά στον καβγά μητέρας-κόρης: <em>«Τα δυο λαγήνια λάδι;»</em> — φωνή ψύχραιμης αντίρρησης που αποκαλύπτει την πραγματική οικονομική κατάσταση της οικογένειας.</div>
+            </div>
+            <div id="pr-kimon" class="para-block">
+              <div class="seg seg-tp"><span class="badge b-tp">Κίμωνας</span>Γιος της Ερωμφίλης, βαφτισμένος από την «Πριγκηπέσσα». Δεν δρα — αποτελεί σύμβολο της κοινωνικής ανέλιξης που επιδιώκει η μητέρα του.</div>
+            </div>
           </div>
         </div>
         <div>
-          <div class="tags-row"><span class="tag">Βασικά πρόσωπα</span><span class="tag">Ήθος</span><span class="tag">Ρόλος</span></div>
+          <div class="tags-row"><span class="tag">Αγώνας καταξίωσης</span><span class="tag">Γυναικείοι χαρακτήρες</span><span class="tag">Κοινωνική αναγνώριση</span></div>
           <div class="card-ref">Θεωρία σελ. 0–0 · _Ι_ΕΡΜΗΝΕΥΤΙΚΟ.pdf</div>
         </div>
       </div>
     </div>
-    <div class="card">
+
+    <!-- ═══ ΚΆΡΤΑ β΄ — ΤΟΠΟΣ & ΧΡΟΝΟΣ ═══ -->
+    <div class="card" onclick="openModal(this)">
       <div class="card-left">
         <div class="card-index">Κάρτα β΄</div>
         <div class="card-question">«Πού και πότε εκτυλίσσεται — και τι σημαίνει αυτό για τους ήρωες;»</div>
@@ -309,18 +424,36 @@ h1 em{font-style:italic;color:var(--rust)}
           <div class="card-answer-label">Απάντηση / Έννοια-κλειδί</div>
           <div class="card-answer">Τόπος &amp; Χρόνος</div>
           <div class="card-body">
-            Το <strong>χωροχρονικό πλαίσιο</strong> (ιστορικό, κοινωνικό, πολιτισμικό) καθορίζει τις συμπεριφορές και τις επιλογές των προσώπων. Παράλληλα, τα γεγονότα τοποθετούνται στα διάφορα <strong>χρονικά επίπεδα</strong> της αφήγησης (γραμμική, αναδρομική, προδρομική).
+            Το <strong>χωροχρονικό πλαίσιο</strong> (ιστορικό, κοινωνικό, πολιτισμικό) καθορίζει τις συμπεριφορές και τις επιλογές των προσώπων. Τα γεγονότα τοποθετούνται στα διάφορα <strong>χρονικά επίπεδα</strong> της αφήγησης.
             <button class="detail-toggle" onclick="toggleDetail(this)">+ Διδακτικός στόχος</button>
             <div class="detail-content">Οι μαθητές να κατανοούν πώς ο τόπος και ο χρόνος ερμηνεύουν τις πράξεις των ηρώων και να αναγνωρίζουν τα χρονικά επίπεδα της αφήγησης.</div>
+
+            <div class="para-section-header">Χωροχρονικό πλαίσιο κειμένου</div>
+            <div class="para-tabs ptabs-topos">
+              <button class="para-tab" onclick="showPara('tx-topos',this,'ptabs-topos')">Τόπος</button>
+              <button class="para-tab" onclick="showPara('tx-chronos',this,'ptabs-topos')">Χρόνος</button>
+              <button class="para-tab" onclick="showPara('tx-plaisio',this,'ptabs-topos')">Ιστορικό πλαίσιο</button>
+            </div>
+            <div id="tx-topos" class="para-block">
+              <div class="seg seg-sc"><span class="badge b-sc">Τόπος</span><strong>Σμύρνη</strong> — συγκεκριμένα η λαϊκή συνοικία «Στου Χατζηφράγκου» (εισαγωγικό). Ο αφηγηματικός χώρος εστιάζει στο σοκάκι πάνω από το σπίτι του μπαρμπα-Λάμπρου και στις φτωχογειτονιές («το Αλάνι», ο μαχαλάς). Ο τόπος σηματοδοτεί ταξικές διακρίσεις και αγωνίες κοινωνικής ανόδου.</div>
+            </div>
+            <div id="tx-chronos" class="para-block">
+              <div class="seg seg-sc"><span class="badge b-sc">Χρόνος</span>Ο <strong>αφηγηματικός χρόνος</strong> είναι <em>γραμμικός</em>: σκηνές από την καθημερινή ζωή παρατίθενται διαδοχικά. Ο <strong>ιστορικός χρόνος</strong> αναφέρεται στα χρόνια πριν από τη Μικρασιατική Καταστροφή (1922). Ωστόσο το μυθιστόρημα γράφτηκε το 1962-3 — η αφήγηση φέρει χαρακτήρα <em>νοσταλγικής ανάμνησης</em>.</div>
+            </div>
+            <div id="tx-plaisio" class="para-block">
+              <div class="seg seg-sc"><span class="badge b-sc">Ιστορικό &amp; κοινωνικό πλαίσιο</span>Σμύρνη αρχών 20ού αιώνα: <strong>πολυπολιτισμική πόλη</strong> με ελληνικό, τουρκικό και λεβαντίνικο στοιχείο. Η συνοικία κατοικείται από εργατικές τάξεις (μεροκαματιάρηδες, ψαράδες, ράφτρες, κεντήστρες). Η κοινωνική ιεραρχία αναπαράγεται ακόμη και εντός της φτώχειας — η «αριστοκρατία του μαχαλά» βασίζεται στη μόρφωση ή στις διασυνδέσεις.</div>
+            </div>
           </div>
         </div>
         <div>
-          <div class="tags-row"><span class="tag">Συγκείμενο</span><span class="tag">Χρονικά επίπεδα</span><span class="tag">Ανάληψη</span></div>
+          <div class="tags-row"><span class="tag">Σμύρνη</span><span class="tag">Χρονικά επίπεδα</span><span class="tag">Κοινωνικό πλαίσιο</span></div>
           <div class="card-ref">Θεωρία σελ. 0–0 · _Ι_ΕΡΜΗΝΕΥΤΙΚΟ.pdf</div>
         </div>
       </div>
     </div>
-    <div class="card">
+
+    <!-- ═══ ΚΆΡΤΑ γ΄ — ΠΛΟΚΗ ═══ -->
+    <div class="card" onclick="openModal(this)">
       <div class="card-left">
         <div class="card-index">Κάρτα γ΄</div>
         <div class="card-question">«Πώς ο αφηγητής "δένει" τα γεγονότα για να κρατά αμείωτο το ενδιαφέρον;»</div>
@@ -334,18 +467,57 @@ h1 em{font-style:italic;color:var(--rust)}
             Ο τρόπος με τον οποίο ο αφηγητής οργανώνει την εξιστόρηση μέσω τεχνικών όπως: <strong>σύγκρουση, κλιμάκωση, ανατροπή, τραγική ειρωνεία, επιβράδυνση</strong>. Η πλοκή δεν ταυτίζεται με την απλή χρονολόγηση των γεγονότων.
             <button class="detail-toggle" onclick="toggleDetail(this)">+ Διδακτικός στόχος</button>
             <div class="detail-content">Οι μαθητές να κατανοούν ότι η πλοκή είναι συνειδητή αφηγηματική επιλογή και να αναγνωρίζουν τις τεχνικές που χρησιμοποιεί ο αφηγητής.</div>
+
+            <div class="para-section-header">Πλοκή στο απόσπασμα</div>
+            <div class="para-tabs ptabs-ploki">
+              <button class="para-tab" onclick="showPara('pl-domi',this,'ptabs-ploki')">Δομή αφήγησης</button>
+              <button class="para-tab" onclick="showPara('pl-synkroysi',this,'ptabs-ploki')">Σύγκρουση</button>
+              <button class="para-tab" onclick="showPara('pl-eironeia',this,'ptabs-ploki')">Ειρωνεία</button>
+            </div>
+            <div id="pl-domi" class="para-block">
+              <div class="seg seg-ka"><span class="badge b-ka">Δομή αφήγησης</span>Το απόσπασμα δεν έχει κεντρική <em>υπόθεση</em> αλλά <strong>παρατακτική παρουσίαση χαρακτήρων</strong>: ο αφηγητής ξεναγεί τον αναγνώστη στη συνοικία, παρουσιάζοντας διαδοχικά τους κατοίκους της. Η πλοκή αναδύεται από τη συσσώρευση χαρακτήρων και την εστίαση στην οικογένεια του Αμανατζή στο τέλος.</div>
+            </div>
+            <div id="pl-synkroysi" class="para-block">
+              <div class="seg seg-ka"><span class="badge b-ka">Σύγκρουση</span>Κεντρική σύγκρουση: <strong>Ανθίππη ↔ μητέρα Σοφία</strong>. Η κόρη απαιτεί γάμο, η μητέρα αδυνατεί («μου 'φαγε την προίκα μου»). Αποκαλύπτεται βαθύτερη αντίθεση: <em>ατομική επιθυμία</em> έναντι <em>οικονομικής αδυναμίας</em>. Τον τελευταίο λόγο έχει ο Αμανατζής με ειρωνεία.</div>
+            </div>
+            <div id="pl-eironeia" class="para-block">
+              <div class="seg seg-ka"><span class="badge b-ka">Αφηγηματική ειρωνεία</span>Διάχυτη σε όλο το απόσπασμα: η «αριστοκρατία» φτωχής γειτονιάς, η «Πριγκηπέσσα» που είναι χήρα επαρχιώτη γιατρού, η «εκατό λίρες» από λαγήνια λαδιού. Ο αφηγητής παρουσιάζει χωρίς σχολιασμό — ο αναγνώστης καλείται να εντοπίσει τον υπαινιγμό.</div>
+            </div>
+            <div class="seg-note" style="margin-top:8px;">ℹ️ Το απόσπασμα ανήκει στον τύπο της <em>ηθογραφικής αφήγησης</em>: η πλοκή υποχωρεί υπέρ της παρουσίασης ηθών και κοινωνικών τύπων.</div>
           </div>
         </div>
         <div>
-          <div class="tags-row"><span class="tag">Ανατροπή</span><span class="tag">Κλιμάκωση</span><span class="tag">Τραγική ειρωνεία</span></div>
+          <div class="tags-row"><span class="tag">Σύγκρουση</span><span class="tag">Ηθογραφία</span><span class="tag">Αφηγηματική ειρωνεία</span></div>
           <div class="card-ref">Θεωρία σελ. 0–0 · ΛΟΓΟΤΕΧΝΙΑ_Α.pdf</div>
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
-<p class="footnote">Πατήστε παράγραφο για να ανοίξει η ανάλυση · «+ Διδακτικός στόχος» για τους στόχους κάθε ενότητας</p>
+<p class="footnote">Κάντε κλικ σε κάρτα για πλήρη οθόνη · Πατήστε παράγραφο για ανάλυση · «+ Διδακτικός στόχος» για στόχους</p>
+
+<!-- ══ MODAL ══ -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-left" id="modalLeft">
+      <div>
+        <div class="modal-index" id="modalIndex"></div>
+        <div class="modal-question" id="modalQuestion"></div>
+      </div>
+      <div class="modal-topic" id="modalTopic"></div>
+    </div>
+    <div class="modal-right" id="modalRight">
+      <div class="modal-answer-label">Απάντηση / Έννοια-κλειδί</div>
+      <div class="modal-answer" id="modalAnswer"></div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-tags" id="modalTags"></div>
+      <div class="modal-ref" id="modalRef"></div>
+    </div>
+  </div>
+</div>
 
 <script>
 function switchDeck(num,btn){
@@ -361,20 +533,63 @@ function toggleDetail(btn){
   btn.textContent=open?'+ Διδακτικός στόχος':'− Διδακτικός στόχος';
 }
 function showPara(id, btn, groupClass) {
-  // find the parent card-body to scope the toggle
-  const cardBody = btn.closest('.card-body');
-  // hide all para-blocks within this card-body
+  const cardBody = btn.closest('.card-body, .modal-body');
   cardBody.querySelectorAll('.para-block').forEach(b => b.classList.remove('visible'));
-  // deactivate all para-tabs within the same group in this card-body
   cardBody.querySelectorAll('.' + groupClass + ' .para-tab').forEach(b => b.classList.remove('active'));
-  // if btn was already active, just close (toggle off)
   if (btn.classList.contains('active')) {
     btn.classList.remove('active');
     return;
   }
-  document.getElementById(id).classList.add('visible');
+  // find the block by id — search in same cardBody scope, fallback to document
+  const block = cardBody.querySelector('#' + id) || document.getElementById(id);
+  block.classList.add('visible');
   btn.classList.add('active');
 }
+
+// ── MODAL ──
+function openModal(cardEl) {
+  // don't open if a button/link was clicked
+  if (event.target.closest('button, a')) return;
+
+  const left = cardEl.querySelector('.card-left');
+  const right = cardEl.querySelector('.card-right');
+
+  // deck color
+  const isDeck1 = cardEl.closest('.deck-1');
+  const box = document.getElementById('modalBox');
+  box.className = 'modal-box ' + (isDeck1 ? 'deck-1-modal' : 'deck-2-modal');
+
+  // populate left
+  document.getElementById('modalIndex').textContent = left.querySelector('.card-index').textContent;
+  document.getElementById('modalQuestion').innerHTML = left.querySelector('.card-question').innerHTML;
+  document.getElementById('modalTopic').textContent = left.querySelector('.card-topic-label').textContent;
+
+  // populate right — clone the card-body so interactive elements work
+  document.getElementById('modalAnswer').innerHTML = right.querySelector('.card-answer').innerHTML;
+  const bodyClone = right.querySelector('.card-body').cloneNode(true);
+  // reset all open states in clone
+  bodyClone.querySelectorAll('.detail-content').forEach(d => d.classList.remove('open'));
+  bodyClone.querySelectorAll('.detail-toggle').forEach(b => b.textContent = '+ Διδακτικός στόχος');
+  bodyClone.querySelectorAll('.para-block').forEach(b => b.classList.remove('visible'));
+  bodyClone.querySelectorAll('.para-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('modalBody').innerHTML = '';
+  document.getElementById('modalBody').appendChild(bodyClone);
+
+  document.getElementById('modalTags').innerHTML = right.querySelector('.tags-row') ? right.querySelector('.tags-row').innerHTML : '';
+  document.getElementById('modalRef').textContent = right.querySelector('.card-ref') ? right.querySelector('.card-ref').textContent : '';
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOnBg(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 </script>
 </body>
 </html>
