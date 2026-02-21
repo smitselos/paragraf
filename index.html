@@ -151,14 +151,142 @@ h1 em{font-style:italic;color:var(--rust)}
 .modal-ref{font-size:12px;color:var(--muted);margin-top:8px}
 .modal-ref::before{content:'☞ ';opacity:.5}
 
-/* inside modal, bigger para-tab text */
-.modal-right .para-section-header{font-size:11.5px}
-.modal-right .para-tab{font-size:13px;padding:5px 16px}
-.modal-right .seg{font-size:14px;padding:10px 14px}
-.modal-right .seg-m{font-size:15px;padding:12px 16px}
-.modal-right .seg-pt{font-size:16px;padding:12px 16px}
-.modal-right .detail-content{font-size:14px;padding:14px 16px}
-.modal-right .legend{font-size:13px;padding:9px 14px}
+/* ═══════════════════════════════════════════════
+   MODAL — ENLARGED & AIRY TYPOGRAPHY
+   Μεγαλύτερα γράμματα, αραιότερο κείμενο στο modal
+   ═══════════════════════════════════════════════ */
+
+/* Κεντρικό κείμενο modal */
+.modal-right .modal-body{
+  font-size:16.5px;
+  line-height:1.85;
+  letter-spacing:0.01em;
+}
+
+/* Εισαγωγική περιγραφή (πρώτο κείμενο πριν τα tabs) */
+.modal-right .modal-body > div:first-child{
+  font-size:16.5px;
+  line-height:1.85;
+}
+
+/* Section headers */
+.modal-right .para-section-header{
+  font-size:12.5px;
+  letter-spacing:2px;
+  margin:22px 0 10px;
+}
+
+/* Para tabs — μεγαλύτερα κουμπιά */
+.modal-right .para-tab{
+  font-size:14px;
+  padding:7px 20px;
+}
+
+/* Legend */
+.modal-right .legend{
+  font-size:14px;
+  padding:10px 16px;
+  gap:16px;
+  margin-bottom:14px;
+}
+.modal-right .legend-dot{
+  width:11px;
+  height:11px;
+}
+
+/* Segments — μεγαλύτερα, αεράτα */
+.modal-right .seg{
+  font-size:15.5px;
+  line-height:1.8;
+  padding:14px 18px;
+  margin-bottom:10px;
+  border-radius:5px;
+  border-left-width:4px;
+}
+.modal-right .seg-m{
+  font-size:16px;
+  line-height:1.8;
+  padding:16px 20px;
+}
+.modal-right .seg-pt{
+  font-size:18px;
+  line-height:1.7;
+  padding:16px 20px;
+}
+.modal-right .seg-note{
+  font-size:14px;
+  padding:10px 16px;
+  margin-bottom:10px;
+  line-height:1.7;
+}
+
+/* Badges μέσα σε segments */
+.modal-right .badge{
+  font-size:10.5px;
+  padding:3px 9px;
+  border-radius:10px;
+  margin-right:8px;
+}
+
+/* Detail toggle & content */
+.modal-right .detail-toggle{
+  font-size:14px;
+  margin-top:12px;
+}
+.modal-right .detail-content{
+  font-size:15px;
+  line-height:1.75;
+  padding:16px 20px;
+  margin-top:12px;
+  border-left-width:4px;
+}
+
+/* Tags στο modal */
+.modal-tags .tag{
+  font-size:12.5px;
+  padding:4px 12px;
+  margin-right:6px;
+  margin-bottom:5px;
+}
+
+/* Modal ref */
+.modal-ref{
+  font-size:13px;
+  margin-top:12px;
+}
+
+/* Αριστερό panel — μεγαλύτερα γράμματα */
+.modal-index{
+  font-size:15px;
+  margin-bottom:14px;
+}
+.modal-question{
+  font-size:26px;
+  line-height:1.45;
+  margin-bottom:18px;
+}
+.modal-topic{
+  font-size:12px;
+  letter-spacing:2.5px;
+}
+
+/* Modal answer title */
+.modal-answer{
+  font-size:30px;
+  margin-bottom:16px;
+}
+.modal-answer-label{
+  font-size:11px;
+  letter-spacing:3px;
+  margin-bottom:8px;
+}
+
+/* Πρόσωπα subheaders στο modal */
+.modal-right [style*="font-size:10px"]{
+  font-size:12px !important;
+  margin-top:18px !important;
+  margin-bottom:8px !important;
+}
 
 @media(max-width:700px){.modal-box{grid-template-columns:1fr}.modal-left{min-height:130px}}
 
@@ -535,16 +663,31 @@ function toggleDetail(btn){
 }
 function showPara(id, btn, groupClass) {
   const cardBody = btn.closest('.card-body, .modal-body');
-  cardBody.querySelectorAll('.para-block').forEach(b => b.classList.remove('visible'));
-  cardBody.querySelectorAll('.' + groupClass + ' .para-tab').forEach(b => b.classList.remove('active'));
-  if (btn.classList.contains('active')) {
-    btn.classList.remove('active');
+  // close all para-blocks that belong to the same tab group
+  const tabsContainer = btn.closest('.para-tabs');
+  const allTabs = tabsContainer.querySelectorAll('.para-tab');
+  // find all sibling para-blocks (blocks right after this tabs group)
+  let sibling = tabsContainer.nextElementSibling;
+  while (sibling && sibling.classList.contains('para-block')) {
+    sibling.classList.remove('visible');
+    sibling = sibling.nextElementSibling;
+  }
+  allTabs.forEach(b => b.classList.remove('active'));
+  
+  if (btn.dataset.wasActive === 'true') {
+    btn.dataset.wasActive = 'false';
     return;
   }
-  // find the block by id — search in same cardBody scope, fallback to document
+  // mark all tabs as not-was-active
+  allTabs.forEach(b => b.dataset.wasActive = 'false');
+  
+  // find the target block
   const block = cardBody.querySelector('#' + id) || document.getElementById(id);
-  block.classList.add('visible');
-  btn.classList.add('active');
+  if (block) {
+    block.classList.add('visible');
+    btn.classList.add('active');
+    btn.dataset.wasActive = 'true';
+  }
 }
 
 // ── MODAL ──
@@ -572,7 +715,7 @@ function openModal(cardEl) {
   bodyClone.querySelectorAll('.detail-content').forEach(d => d.classList.remove('open'));
   bodyClone.querySelectorAll('.detail-toggle').forEach(b => b.textContent = '+ Διδακτικός στόχος');
   bodyClone.querySelectorAll('.para-block').forEach(b => b.classList.remove('visible'));
-  bodyClone.querySelectorAll('.para-tab').forEach(b => b.classList.remove('active'));
+  bodyClone.querySelectorAll('.para-tab').forEach(b => { b.classList.remove('active'); b.dataset.wasActive = 'false'; });
   document.getElementById('modalBody').innerHTML = '';
   document.getElementById('modalBody').appendChild(bodyClone);
 
