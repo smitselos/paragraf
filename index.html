@@ -153,140 +153,119 @@ h1 em{font-style:italic;color:var(--rust)}
 
 /* ═══════════════════════════════════════════════
    MODAL — ENLARGED & AIRY TYPOGRAPHY
-   Μεγαλύτερα γράμματα, αραιότερο κείμενο στο modal
+   Μόνο για desktop (≥701px) — στα κινητά μένουν
+   τα αρχικά μεγέθη για εύκολο scrolling
    ═══════════════════════════════════════════════ */
+@media(min-width:701px){
 
-/* Κεντρικό κείμενο modal */
-.modal-right .modal-body{
-  font-size:16.5px;
-  line-height:1.85;
-  letter-spacing:0.01em;
-}
+  .modal-right .modal-body{
+    font-size:16.5px;
+    line-height:1.85;
+    letter-spacing:0.01em;
+  }
+  .modal-right .modal-body > div:first-child{
+    font-size:16.5px;
+    line-height:1.85;
+  }
+  .modal-right .para-section-header{
+    font-size:12.5px;
+    letter-spacing:2px;
+    margin:22px 0 10px;
+  }
+  .modal-right .para-tab{
+    font-size:14px;
+    padding:7px 20px;
+  }
+  .modal-right .legend{
+    font-size:14px;
+    padding:10px 16px;
+    gap:16px;
+    margin-bottom:14px;
+  }
+  .modal-right .legend-dot{
+    width:11px;
+    height:11px;
+  }
+  .modal-right .seg{
+    font-size:15.5px;
+    line-height:1.8;
+    padding:14px 18px;
+    margin-bottom:10px;
+    border-radius:5px;
+    border-left-width:4px;
+  }
+  .modal-right .seg-m{
+    font-size:16px;
+    line-height:1.8;
+    padding:16px 20px;
+  }
+  .modal-right .seg-pt{
+    font-size:18px;
+    line-height:1.7;
+    padding:16px 20px;
+  }
+  .modal-right .seg-note{
+    font-size:14px;
+    padding:10px 16px;
+    margin-bottom:10px;
+    line-height:1.7;
+  }
+  .modal-right .badge{
+    font-size:10.5px;
+    padding:3px 9px;
+    border-radius:10px;
+    margin-right:8px;
+  }
+  .modal-right .detail-toggle{
+    font-size:14px;
+    margin-top:12px;
+  }
+  .modal-right .detail-content{
+    font-size:15px;
+    line-height:1.75;
+    padding:16px 20px;
+    margin-top:12px;
+    border-left-width:4px;
+  }
+  .modal-tags .tag{
+    font-size:12.5px;
+    padding:4px 12px;
+    margin-right:6px;
+    margin-bottom:5px;
+  }
+  .modal-ref{
+    font-size:13px;
+    margin-top:12px;
+  }
+  .modal-index{
+    font-size:15px;
+    margin-bottom:14px;
+  }
+  .modal-question{
+    font-size:26px;
+    line-height:1.45;
+    margin-bottom:18px;
+  }
+  .modal-topic{
+    font-size:12px;
+    letter-spacing:2.5px;
+  }
+  .modal-answer{
+    font-size:30px;
+    margin-bottom:16px;
+  }
+  .modal-answer-label{
+    font-size:11px;
+    letter-spacing:3px;
+    margin-bottom:8px;
+  }
+  .modal-right [style*="font-size:10px"]{
+    font-size:12px !important;
+    margin-top:18px !important;
+    margin-bottom:8px !important;
+  }
 
-/* Εισαγωγική περιγραφή (πρώτο κείμενο πριν τα tabs) */
-.modal-right .modal-body > div:first-child{
-  font-size:16.5px;
-  line-height:1.85;
-}
-
-/* Section headers */
-.modal-right .para-section-header{
-  font-size:12.5px;
-  letter-spacing:2px;
-  margin:22px 0 10px;
-}
-
-/* Para tabs — μεγαλύτερα κουμπιά */
-.modal-right .para-tab{
-  font-size:14px;
-  padding:7px 20px;
-}
-
-/* Legend */
-.modal-right .legend{
-  font-size:14px;
-  padding:10px 16px;
-  gap:16px;
-  margin-bottom:14px;
-}
-.modal-right .legend-dot{
-  width:11px;
-  height:11px;
-}
-
-/* Segments — μεγαλύτερα, αεράτα */
-.modal-right .seg{
-  font-size:15.5px;
-  line-height:1.8;
-  padding:14px 18px;
-  margin-bottom:10px;
-  border-radius:5px;
-  border-left-width:4px;
-}
-.modal-right .seg-m{
-  font-size:16px;
-  line-height:1.8;
-  padding:16px 20px;
-}
-.modal-right .seg-pt{
-  font-size:18px;
-  line-height:1.7;
-  padding:16px 20px;
-}
-.modal-right .seg-note{
-  font-size:14px;
-  padding:10px 16px;
-  margin-bottom:10px;
-  line-height:1.7;
-}
-
-/* Badges μέσα σε segments */
-.modal-right .badge{
-  font-size:10.5px;
-  padding:3px 9px;
-  border-radius:10px;
-  margin-right:8px;
-}
-
-/* Detail toggle & content */
-.modal-right .detail-toggle{
-  font-size:14px;
-  margin-top:12px;
-}
-.modal-right .detail-content{
-  font-size:15px;
-  line-height:1.75;
-  padding:16px 20px;
-  margin-top:12px;
-  border-left-width:4px;
-}
-
-/* Tags στο modal */
-.modal-tags .tag{
-  font-size:12.5px;
-  padding:4px 12px;
-  margin-right:6px;
-  margin-bottom:5px;
-}
-
-/* Modal ref */
-.modal-ref{
-  font-size:13px;
-  margin-top:12px;
-}
-
-/* Αριστερό panel — μεγαλύτερα γράμματα */
-.modal-index{
-  font-size:15px;
-  margin-bottom:14px;
-}
-.modal-question{
-  font-size:26px;
-  line-height:1.45;
-  margin-bottom:18px;
-}
-.modal-topic{
-  font-size:12px;
-  letter-spacing:2.5px;
-}
-
-/* Modal answer title */
-.modal-answer{
-  font-size:30px;
-  margin-bottom:16px;
-}
-.modal-answer-label{
-  font-size:11px;
-  letter-spacing:3px;
-  margin-bottom:8px;
-}
-
-/* Πρόσωπα subheaders στο modal */
-.modal-right [style*="font-size:10px"]{
-  font-size:12px !important;
-  margin-top:18px !important;
-  margin-bottom:8px !important;
-}
+} /* end @media min-width:701px */
 
 @media(max-width:700px){.modal-box{grid-template-columns:1fr}.modal-left{min-height:130px}}
 
