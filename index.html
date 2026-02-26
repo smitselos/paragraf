@@ -45,34 +45,24 @@ h1 em{font-style:italic;color:var(--rust)}
 .card-body{font-size:14px;line-height:1.65;color:#3a3428;flex:1;margin-bottom:14px}
 .card-ref{font-size:11px;color:var(--muted);border-top:1px solid rgba(26,22,16,.08);padding-top:9px}
 .card-ref::before{content:'☞ ';opacity:.5}
-
-/* ── GENERIC EXPANDABLE (διδακτικός στόχος) ── */
 .detail-toggle{display:inline-block;margin-top:8px;font-size:12px;color:var(--muted);cursor:pointer;border:none;background:none;font-family:'Source Sans 3',sans-serif;padding:0;text-decoration:underline;text-underline-offset:3px}
 .detail-toggle:hover{color:var(--ink)}
 .detail-content{display:none;margin-top:9px;padding:11px 13px;background:var(--paper);border-radius:4px;font-size:13px;line-height:1.6;color:#4a4030;border-left:3px solid var(--gold)}
 .detail-content.open{display:block}
-
-/* ── SHARED PARA-WIDGET styles ── */
 .para-section-header{font-size:10.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:14px 0 7px}
 .legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;padding:7px 11px;background:#fff;border-radius:4px;border:1px solid rgba(26,22,16,.08);font-size:12px}
 .legend-item{display:flex;align-items:center;gap:5px}
 .legend-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
 .dot-tp{background:var(--rust)}.dot-sc{background:var(--gold)}.dot-ka{background:var(--sage)}
 .dot-m{background:var(--blue)}.dot-pt{background:#8b4fa8}
-
-/* Para toggle buttons — each card uses its own color via wrapper class */
 .para-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
 .para-tab{padding:4px 13px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;background:#fff;transition:all .2s;font-family:'Source Sans 3',sans-serif}
-/* ΔΟΜΗ = rust */
 .ptabs-domi .para-tab{border:1.5px solid var(--rust);color:var(--rust)}
 .ptabs-domi .para-tab:hover,.ptabs-domi .para-tab.active{background:var(--rust);color:#fff}
-/* ΤΡΟΠΟΙ = blue */
 .ptabs-tropoi .para-tab{border:1.5px solid var(--blue);color:var(--blue)}
 .ptabs-tropoi .para-tab:hover,.ptabs-tropoi .para-tab.active{background:var(--blue);color:#fff}
-/* ΠΛΑΓΙΟΤΙΤΛΟΣ = purple */
 .ptabs-platio .para-tab{border:1.5px solid #8b4fa8;color:#8b4fa8}
 .ptabs-platio .para-tab:hover,.ptabs-platio .para-tab.active{background:#8b4fa8;color:#fff}
-
 .para-block{display:none}.para-block.visible{display:block}
 .seg{padding:7px 10px;border-radius:3px;font-size:13px;line-height:1.55;margin-bottom:5px}
 .seg-tp{background:rgba(196,98,45,.1);border-left:3px solid var(--rust);color:#2a1810}
@@ -81,68 +71,47 @@ h1 em{font-style:italic;color:var(--rust)}
 .seg-m{background:var(--blue-l);border-left:3px solid var(--blue);color:#0f1e2a;font-size:13.5px;padding:9px 12px}
 .seg-pt{background:rgba(139,79,168,.09);border-left:3px solid #8b4fa8;color:#200f2a;font-size:14px;padding:10px 12px;font-family:'Playfair Display',serif;font-style:italic}
 .seg-note{background:rgba(26,22,16,.04);border-radius:3px;padding:6px 10px;font-size:12px;color:var(--muted);font-style:italic;margin-bottom:5px}
-
 .badge{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:2px 7px;border-radius:9px;margin-right:5px;vertical-align:middle}
 .b-tp{background:var(--rust);color:#fff}.b-sc{background:var(--gold);color:#fff}.b-ka{background:var(--sage);color:#fff}
 .b-m{background:var(--blue);color:#fff}.b-pt{background:#8b4fa8;color:#fff}
-
 .tags-row{margin-top:7px}
 .tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.5px;margin-right:5px;margin-bottom:3px}
 .deck-1 .tag{background:rgba(196,98,45,.12);color:var(--rust)}
 .deck-2 .tag{background:rgba(74,103,65,.12);color:var(--sage)}
 .footnote{text-align:center;margin-top:48px;font-size:12px;color:var(--muted);font-style:italic}
 @media(max-width:620px){.card{grid-template-columns:1fr}.card-left{min-height:120px}}
-
-/* ── CARD EXPAND CURSOR ── */
 .card{cursor:pointer}
 
-/* ── MODAL OVERLAY ── */
-.modal-overlay{
-  display:none;position:fixed;inset:0;z-index:1000;
-  background:rgba(20,16,10,.65);backdrop-filter:blur(4px);
-  align-items:center;justify-content:center;
-  padding:20px;
-}
+/* ══ METHOD TAGS with popovers ══ */
+.method-tags-section{margin:14px 0 4px}
+.method-tags-row{display:flex;flex-wrap:wrap;gap:6px;position:relative}
+.method-tag{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.3px;cursor:pointer;border:1.5px solid var(--blue);color:var(--blue);background:#fff;transition:all .2s;font-family:'Source Sans 3',sans-serif;position:relative;user-select:none}
+.method-tag:hover{background:rgba(58,110,168,.08)}
+.method-tag.active{background:var(--blue);color:#fff}
+.method-tag .mt-icon{font-size:11px;font-weight:700;opacity:.7;transition:transform .2s;line-height:1}
+.method-tag.active .mt-icon{transform:rotate(45deg);opacity:1}
+.method-popover{display:none;position:absolute;top:calc(100% + 8px);left:0;z-index:300;background:#fff;border:1.5px solid var(--blue);border-radius:7px;box-shadow:0 8px 28px rgba(26,22,16,.18);padding:13px 16px;min-width:240px;max-width:310px;font-size:13px;line-height:1.65;color:#2a3040;animation:popIn .18s ease}
+.method-popover.open{display:block}
+@keyframes popIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+.method-popover .pop-title{color:var(--blue);display:block;margin-bottom:5px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.method-popover p{margin:0;color:#2a3040}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(20,16,10,.65);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex;animation:fadeIn .2s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-
-.modal-box{
-  background:#fff;border-radius:10px;
-  box-shadow:0 20px 60px rgba(20,16,10,.4);
-  width:100%;max-width:1100px;height:92vh;
-  display:grid;grid-template-columns:280px 1fr;
-  overflow:hidden;animation:scaleIn .25s ease;
-  position:relative;
-}
+.modal-box{background:#fff;border-radius:10px;box-shadow:0 20px 60px rgba(20,16,10,.4);width:100%;max-width:1100px;height:92vh;display:grid;grid-template-columns:280px 1fr;overflow:hidden;animation:scaleIn .25s ease;position:relative}
 @keyframes scaleIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
-
-.modal-close{
-  position:absolute;top:14px;right:16px;z-index:10;
-  background:rgba(255,255,255,.85);border:1px solid rgba(26,22,16,.15);
-  border-radius:50%;width:32px;height:32px;cursor:pointer;
-  font-size:17px;line-height:32px;text-align:center;color:var(--muted);
-  transition:all .18s;
-}
+.modal-close{position:absolute;top:14px;right:16px;z-index:10;background:rgba(255,255,255,.85);border:1px solid rgba(26,22,16,.15);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:17px;line-height:32px;text-align:center;color:var(--muted);transition:all .18s}
 .modal-close:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
-
-.modal-left{
-  padding:36px 28px;display:flex;flex-direction:column;
-  justify-content:space-between;position:relative;overflow:hidden;
-  overflow-y:auto;
-}
+.modal-left{padding:36px 28px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;overflow-y:auto}
 .modal-left::after{content:'';position:absolute;bottom:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.1)}
 .deck-1-modal .modal-left{background:var(--rust)}
 .deck-2-modal .modal-left{background:var(--sage)}
-
 .modal-index{font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.6);letter-spacing:1px;margin-bottom:10px}
 .modal-question{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:#fff;line-height:1.4;margin-bottom:14px}
 .modal-topic{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);font-weight:600}
-
-.modal-right{
-  padding:32px 36px;overflow-y:auto;
-  display:flex;flex-direction:column;
-  background:#fff;border-left:1px solid rgba(26,22,16,.06);
-}
+.modal-right{padding:32px 36px;overflow-y:auto;display:flex;flex-direction:column;background:#fff;border-left:1px solid rgba(26,22,16,.06)}
 .modal-answer-label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
 .modal-answer{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:12px}
 .deck-1-modal .modal-answer{color:var(--rust)}.deck-2-modal .modal-answer{color:var(--sage)}
@@ -151,125 +120,26 @@ h1 em{font-style:italic;color:var(--rust)}
 .modal-ref{font-size:12px;color:var(--muted);margin-top:8px}
 .modal-ref::before{content:'☞ ';opacity:.5}
 
-/* ═══════════════════════════════════════════════
-   MODAL — ENLARGED & AIRY TYPOGRAPHY
-   Μόνο για desktop (≥701px) — στα κινητά μένουν
-   τα αρχικά μεγέθη για εύκολο scrolling
-   ═══════════════════════════════════════════════ */
 @media(min-width:701px){
-
-  .modal-right .modal-body{
-    font-size:16.5px;
-    line-height:1.85;
-    letter-spacing:0.01em;
-  }
-  .modal-right .modal-body > div:first-child{
-    font-size:16.5px;
-    line-height:1.85;
-  }
-  .modal-right .para-section-header{
-    font-size:12.5px;
-    letter-spacing:2px;
-    margin:22px 0 10px;
-  }
-  .modal-right .para-tab{
-    font-size:14px;
-    padding:7px 20px;
-  }
-  .modal-right .legend{
-    font-size:14px;
-    padding:10px 16px;
-    gap:16px;
-    margin-bottom:14px;
-  }
-  .modal-right .legend-dot{
-    width:11px;
-    height:11px;
-  }
-  .modal-right .seg{
-    font-size:15.5px;
-    line-height:1.8;
-    padding:14px 18px;
-    margin-bottom:10px;
-    border-radius:5px;
-    border-left-width:4px;
-  }
-  .modal-right .seg-m{
-    font-size:16px;
-    line-height:1.8;
-    padding:16px 20px;
-  }
-  .modal-right .seg-pt{
-    font-size:18px;
-    line-height:1.7;
-    padding:16px 20px;
-  }
-  .modal-right .seg-note{
-    font-size:14px;
-    padding:10px 16px;
-    margin-bottom:10px;
-    line-height:1.7;
-  }
-  .modal-right .badge{
-    font-size:10.5px;
-    padding:3px 9px;
-    border-radius:10px;
-    margin-right:8px;
-  }
-  .modal-right .detail-toggle{
-    font-size:14px;
-    margin-top:12px;
-  }
-  .modal-right .detail-content{
-    font-size:15px;
-    line-height:1.75;
-    padding:16px 20px;
-    margin-top:12px;
-    border-left-width:4px;
-  }
-  .modal-tags .tag{
-    font-size:12.5px;
-    padding:4px 12px;
-    margin-right:6px;
-    margin-bottom:5px;
-  }
-  .modal-ref{
-    font-size:13px;
-    margin-top:12px;
-  }
-  .modal-index{
-    font-size:15px;
-    margin-bottom:14px;
-  }
-  .modal-question{
-    font-size:26px;
-    line-height:1.45;
-    margin-bottom:18px;
-  }
-  .modal-topic{
-    font-size:12px;
-    letter-spacing:2.5px;
-  }
-  .modal-answer{
-    font-size:30px;
-    margin-bottom:16px;
-  }
-  .modal-answer-label{
-    font-size:11px;
-    letter-spacing:3px;
-    margin-bottom:8px;
-  }
-  .modal-right [style*="font-size:10px"]{
-    font-size:12px !important;
-    margin-top:18px !important;
-    margin-bottom:8px !important;
-  }
-
-} /* end @media min-width:701px */
-
+  .modal-right .modal-body{font-size:16.5px;line-height:1.85}
+  .modal-right .para-section-header{font-size:12.5px;letter-spacing:2px;margin:22px 0 10px}
+  .modal-right .para-tab{font-size:14px;padding:7px 20px}
+  .modal-right .legend{font-size:14px;padding:10px 16px;margin-bottom:14px}
+  .modal-right .seg{font-size:15.5px;line-height:1.8;padding:14px 18px;margin-bottom:10px;border-radius:5px;border-left-width:4px}
+  .modal-right .seg-m{font-size:16px;padding:16px 20px}
+  .modal-right .seg-pt{font-size:18px;padding:16px 20px}
+  .modal-right .seg-note{font-size:14px;padding:10px 16px;margin-bottom:10px}
+  .modal-right .badge{font-size:10.5px;padding:3px 9px;margin-right:8px}
+  .modal-right .detail-toggle{font-size:14px;margin-top:12px}
+  .modal-right .detail-content{font-size:15px;line-height:1.75;padding:16px 20px;margin-top:12px;border-left-width:4px}
+  .modal-tags .tag{font-size:12.5px;padding:4px 12px}
+  .modal-ref{font-size:13px}
+  .modal-answer{font-size:30px}
+  .modal-right .method-tag{font-size:13px;padding:6px 16px}
+  .modal-right .method-popover{font-size:14.5px;min-width:260px;max-width:360px;padding:16px 20px}
+}
 @media(max-width:700px){.modal-box{grid-template-columns:1fr}.modal-left{min-height:130px}}
 
-/* deck-2 para tabs — sage */
 .ptabs-prosopa-v .para-tab,.ptabs-prosopa-d .para-tab,.ptabs-topos .para-tab,.ptabs-ploki .para-tab{border:1.5px solid var(--sage);color:var(--sage)}
 .ptabs-prosopa-v .para-tab:hover,.ptabs-prosopa-v .para-tab.active,
 .ptabs-prosopa-d .para-tab:hover,.ptabs-prosopa-d .para-tab.active,
@@ -282,7 +152,7 @@ h1 em{font-style:italic;color:var(--rust)}
 <header>
   <div class="eyebrow">Νεοελληνική Γλώσσα — Α΄ Λυκείου</div>
   <h1>Διδακτική πρόταση <em>1η</em></h1>
-  <p class="subtitle">Σημεία εστίασης: η αρχιτεκτονική της παραγράφου· ο κόσμος του λογοτεχνικού κειμένου: πρόσωπα, χρόνος, τόπος & ειρωνεία</p>
+  <p class="subtitle">Σημεία εστίασης: η αρχιτεκτονική της παραγράφου· ο κόσμος του λογοτεχνικού κειμένου: πρόσωπα, χρόνος, τόπος &amp; ειρωνεία</p>
 </header>
 
 <div class="tab-bar">
@@ -301,7 +171,7 @@ h1 em{font-style:italic;color:var(--rust)}
   </div>
   <div class="cards-grid">
 
-    <!-- ═══ ΚΆΡΤΑ α΄ — ΔΟΜΗ ═══ -->
+    <!-- ΚΑΡΤΑ α — ΔΟΜΗ -->
     <div class="card" onclick="openModal(this)">
       <div class="card-left">
         <div class="card-index">Κάρτα α΄</div>
@@ -316,7 +186,6 @@ h1 em{font-style:italic;color:var(--rust)}
             Κάθε παράγραφος αποτελείται από δύο (διμερής) ή τρία μέρη (τριμερής): τη <strong>θεματική περίοδο</strong> (κεντρική ιδέα), τα <strong>σχόλια</strong> (ανάπτυξη-τεκμηρίωση) και την <strong>κατακλείδα</strong> (συμπέρασμα, προαιρετικά).
             <button class="detail-toggle" onclick="toggleDetail(this)">+ Διδακτικός στόχος</button>
             <div class="detail-content">Οι μαθητές να αποτυπώνουν το διάγραμμα κάθε παραγράφου και να συντάσσουν δικά τους κείμενα με λογική δόμηση.</div>
-
             <div class="para-section-header">Ανάλυση παραγράφων κειμένου</div>
             <div class="legend">
               <div class="legend-item"><div class="legend-dot dot-tp"></div><span>Θεματική περίοδος</span></div>
@@ -324,10 +193,10 @@ h1 em{font-style:italic;color:var(--rust)}
               <div class="legend-item"><div class="legend-dot dot-ka"></div><span>Κατακλείδα</span></div>
             </div>
             <div class="para-tabs ptabs-domi">
-              <button class="para-tab" onclick="showPara('d1',this,'ptabs-domi')">1η παράγραφος</button>
-              <button class="para-tab" onclick="showPara('d2',this,'ptabs-domi')">2η παράγραφος</button>
-              <button class="para-tab" onclick="showPara('d3',this,'ptabs-domi')">3η παράγραφος</button>
-              <button class="para-tab" onclick="showPara('d4',this,'ptabs-domi')">4η παράγραφος</button>
+              <button class="para-tab" onclick="showPara('d1',this)">1η παράγραφος</button>
+              <button class="para-tab" onclick="showPara('d2',this)">2η παράγραφος</button>
+              <button class="para-tab" onclick="showPara('d3',this)">3η παράγραφος</button>
+              <button class="para-tab" onclick="showPara('d4',this)">4η παράγραφος</button>
             </div>
             <div id="d1" class="para-block">
               <div class="seg seg-tp"><span class="badge b-tp">Θ.Π.</span>Αν κάποιος αμφιβάλλει για τη σημασία της γλώσσας στη ζωή του, αρκεί να σκεφτεί για μια στιγμή πόσο απίστευτα περιορισμένος θα ήταν χωρίς τη γλώσσα.</div>
@@ -336,19 +205,18 @@ h1 em{font-style:italic;color:var(--rust)}
             </div>
             <div id="d2" class="para-block">
               <div class="seg seg-tp"><span class="badge b-tp">Θ.Π.</span>Τι είναι, όμως, η γλώσσα;</div>
-              <div class="seg seg-sc"><span class="badge b-sc">Σχόλια</span>Διατυπώθηκε ο ορισμός ότι η γλώσσα είναι «ένα συμβατικό σύστημα επικοινωνιακών ήχων και μερικές φορές (αν και όχι απαραίτητα) γραπτών συμβόλων».Σ' αυτόν τον ορισμό η κρίσιμη λέξη είναι το επίθετο «επικοινωνιακών», επειδή η πρωταρχική λειτουργία της γλώσσας είναι η επικοινωνία. Βέβαια, με τη γλώσσα επιτελούνται και άλλες λειτουργίες. Για παράδειγμα, οι άνθρωποι χρησιμοποιούμε τη γλώσσα, για να σκεφτόμαστε, να καταγράφουμε πληροφορίες, να συνειδητοποιούμε και να εκφράζουμε συναισθήματα, να εκφράζουμε την ταύτισή μας με μια ομάδα κ.λπ.</div>
+              <div class="seg seg-sc"><span class="badge b-sc">Σχόλια</span>Διατυπώθηκε ο ορισμός ότι η γλώσσα είναι «ένα συμβατικό σύστημα επικοινωνιακών ήχων και μερικές φορές (αν και όχι απαραίτητα) γραπτών συμβόλων». Σ' αυτόν τον ορισμό η κρίσιμη λέξη είναι το επίθετο «επικοινωνιακών», επειδή η πρωταρχική λειτουργία της γλώσσας είναι η επικοινωνία. Βέβαια, με τη γλώσσα επιτελούνται και άλλες λειτουργίες. Για παράδειγμα, οι άνθρωποι χρησιμοποιούμε τη γλώσσα, για να σκεφτόμαστε, να καταγράφουμε πληροφορίες, να συνειδητοποιούμε και να εκφράζουμε συναισθήματα, να εκφράζουμε την ταύτισή μας με μια ομάδα κ.λπ.</div>
               <div class="seg-note">ℹ️ Χωρίς κατακλείδα — η παράγραφος τελειώνει με σχόλια (παραδείγματα λειτουργιών).</div>
             </div>
             <div id="d3" class="para-block">
               <div class="seg seg-tp"><span class="badge b-tp">Θ.Π.</span>Αναμφίβολα, η γλώσσα είναι ένα εντυπωσιακό επίτευγμα των ανθρώπων.</div>
-              <div class="seg seg-sc"><span class="badge b-sc">Σχόλια</span> Υπάρχουν όμως άλλα είδη που κάνουν χρήση της γλώσσας; Ίσως κάποιος να έδινε καταφατική απάντηση σκεπτόμενος για παράδειγμα τους παπαγάλους που λένε μερικές λέξεις. Ωστόσο, οι παπαγάλοι, ακόμα και αν προσπαθούν να επικοινωνήσουν, δεν χρησιμοποιούν γλώσσα με την πλήρη σημασία της έννοιας, επειδή δεν ακολουθούν κανόνες ούτε δείχνουν την ευελιξία στη χρήση της γλώσσας που δείχνουν οι άνθρωποι.</div>
+              <div class="seg seg-sc"><span class="badge b-sc">Σχόλια</span>Υπάρχουν όμως άλλα είδη που κάνουν χρήση της γλώσσας; Ίσως κάποιος να έδινε καταφατική απάντηση σκεπτόμενος για παράδειγμα τους παπαγάλους που λένε μερικές λέξεις. Ωστόσο, οι παπαγάλοι, ακόμα και αν προσπαθούν να επικοινωνήσουν, δεν χρησιμοποιούν γλώσσα με την πλήρη σημασία της έννοιας, επειδή δεν ακολουθούν κανόνες ούτε δείχνουν την ευελιξία στη χρήση της γλώσσας που δείχνουν οι άνθρωποι.</div>
               <div class="seg-note">ℹ️ Χωρίς κατακλείδα.</div>
             </div>
             <div id="d4" class="para-block">
               <div class="seg seg-tp"><span class="badge b-tp">Θ.Π.</span>Στην καθημερινή μας ζωή οι περισσότεροι από εμάς κάνουμε εκτεταμένη χρήση τεσσάρων βασικών γλωσσικών δεξιοτήτων.</div>
               <div class="seg seg-sc"><span class="badge b-sc">Σχόλια</span>Αυτές είναι οι ακόλουθες: ακούμε την ομιλία, διαβάζουμε, μιλάμε και γράφουμε. Είναι ίσως φυσικό να υποθέσουμε πως οι τέσσερις κεντρικές γλωσσικές δεξιότητες κάθε ανθρώπου μπορούν να είναι συνολικά ισχυρές ή αδύναμες.</div>
               <div class="seg-note">ℹ️ Χωρίς κατακλείδα — η τελευταία περίοδος δεν περιέχει συμπέρασμα, αλλά επιφύλαξη σχετικά με το προηγούμενο συμπέρασμα.</div>
-      
             </div>
           </div>
         </div>
@@ -359,54 +227,10 @@ h1 em{font-style:italic;color:var(--rust)}
       </div>
     </div>
 
-    <!-- ═══ ΚΆΡΤΑ β΄ — ΤΡΟΠΟΙ ΑΝΑΠΤΥΞΗΣ ═══ -->
+    <!-- ΚΑΡΤΑ β — ΠΛΑΓΙΟΤΙΤΛΟΣ (πρώην γ) -->
     <div class="card" onclick="openModal(this)">
       <div class="card-left">
         <div class="card-index">Κάρτα β΄</div>
-        <div class="card-question">«Με ποιους τρόπους αναπτύσσεται η κεντρική ιδέα;»</div>
-        <div class="card-topic-label">Τρόποι Ανάπτυξης</div>
-      </div>
-      <div class="card-right">
-        <div>
-          <div class="card-answer-label">Απάντηση / Έννοια-κλειδί</div>
-          <div class="card-answer">Τρόποι ανάπτυξης</div>
-          <div class="card-body">
-            Σε αυτή την ενότητα παρουσιάζονται <strong>συνοπτικά</strong> οι κυριότεροι τρόποι: παραδείγματα, αιτιολόγηση, αίτιο-αποτέλεσμα, διαίρεση, σύγκριση-αντίθεση, ορισμός, αναλογία. Η αναλυτική παρουσίαση ακολουθεί σε επόμενες ενότητες.
-            <button class="detail-toggle" onclick="toggleDetail(this)">+ Διδακτικός στόχος</button>
-            <div class="detail-content">Πρώτη, ολιστική γνωριμία με τις μεθόδους ανάπτυξης, ώστε οι μαθητές να μπορούν να τις αναγνωρίζουν στα κείμενα.</div>
-
-            <div class="para-section-header">Τρόπος ανάπτυξης ανά παράγραφο</div>
-            <div class="para-tabs ptabs-tropoi">
-              <button class="para-tab" onclick="showPara('t1',this,'ptabs-tropoi')">1η παράγραφος</button>
-              <button class="para-tab" onclick="showPara('t2',this,'ptabs-tropoi')">2η παράγραφος</button>
-              <button class="para-tab" onclick="showPara('t3',this,'ptabs-tropoi')">3η παράγραφος</button>
-              <button class="para-tab" onclick="showPara('t4',this,'ptabs-tropoi')">4η παράγραφος</button>
-            </div>
-            <div id="t1" class="para-block">
-              <div class="seg seg-m"><span class="badge b-m">Αιτιολόγηση</span>Ο συντάκτης θέτει τη θέση (αναγκαιότητα γνώσης της γλώσσας) και την αποδεικνύει με επιχειρήματα: οι κοινωνικές σχέσεις εξαρτώνται από τη γλώσσα · η γλώσσα μεταδίδει τη γνώση από γενιά σε γενιά. Κειμενικοί δείκτες: <em>«γιατί»</em>.</div>
-            </div>
-            <div id="t2" class="para-block">
-              <div class="seg seg-m"><span class="badge b-m">Ορισμός + Παραδείγματα</span>Πρώτα δίνεται ο επιστημονικός ορισμός της γλώσσας ως «συμβατικό σύστημα επικοινωνιακών ήχων». Στη συνέχεια παρατίθενται παραδείγματα λειτουργιών (σκέψη, καταγραφή, έκφραση συναισθήματος κ.λπ.) για να επεξξηγηθεί ο ορισμός. Κειμενικός δείκτης: <em>«για παράδειγμα»</em>.</div>
-            </div>
-            <div id="t3" class="para-block">
-              <div class="seg seg-m"><span class="badge b-m">Παράδειγμα</span>Ο συντάκτης ανασκευάζει την αντίθετη άποψη (ότι τα ζώα χρησιμοποιούν γλώσσα) χρησιμοποιώντας ως αντιπαράδειγμα τους παπαγάλους: αν και φαινομενικά «μιλούν», δεν πληρούν τα κριτήρια της γλωσσικής επικοινωνίας. Κειμενικός δείκτης: <em>«για παράδειγμα»</em>.</div>
-            </div>
-            <div id="t4" class="para-block">
-              <div class="seg seg-m"><span class="badge b-m">Διαίρεση</span>Η έννοια «γλωσσικές δεξιότητες» διαιρείται σε τέσσερα είδη: ακρόαση, ανάγνωση, ομιλία, γραφή. Κειμενικοί δείκτες: <em>«τεσσάρων»</em>, <em>«αυτές είναι οι ακόλουθες»</em>.</div>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="tags-row"><span class="tag">Αιτιολόγηση</span><span class="tag">Ορισμός</span><span class="tag">Παραδείγματα</span><span class="tag">Διαίρεση</span><span class="tag">Σύγκριση-αντίθεση</span><span class="tag">Αίτιο-αποτέλεσμα</span><span class="tag">Αναλογία</span></div>
-          <div class="card-ref">Θεωρία σελ. 0–0 · ΤΡΟΠΟΣ_ΑΝΑΠΤΥΞΗΣ.pdf</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══ ΚΆΡΤΑ γ΄ — ΠΛΑΓΙΟΤΙΤΛΟΣ ═══ -->
-    <div class="card" onclick="openModal(this)">
-      <div class="card-left">
-        <div class="card-index">Κάρτα γ΄</div>
         <div class="card-question">«Τι "λέει" μια παράγραφος σε μία φράση;»</div>
         <div class="card-topic-label">Πλαγιότιτλος</div>
       </div>
@@ -418,31 +242,86 @@ h1 em{font-style:italic;color:var(--rust)}
             Σύντομη ονοματική φράση (έως 10 λέξεις) που αποδίδει <strong>το συνολικό νόημα</strong> της παραγράφου — λιτά, πυκνά, ελλειπτικά. Δεν επαναλαμβάνει τη θεματική περίοδο, αλλά συμπυκνώνει όλη την παράγραφο.
             <button class="detail-toggle" onclick="toggleDetail(this)">+ Διδακτικός στόχος</button>
             <div class="detail-content">Οι μαθητές να αποδίδουν συνοπτικά το βασικό νόημα κάθε παραγράφου, ώστε να παρακολουθούν τη νοηματική διάρθρωση του κειμένου στο σύνολό του.</div>
-
             <div class="para-section-header">Πλαγιότιτλοι παραγράφων κειμένου</div>
             <div class="para-tabs ptabs-platio">
-              <button class="para-tab" onclick="showPara('pl1',this,'ptabs-platio')">1η παράγραφος</button>
-              <button class="para-tab" onclick="showPara('pl2',this,'ptabs-platio')">2η παράγραφος</button>
-              <button class="para-tab" onclick="showPara('pl3',this,'ptabs-platio')">3η παράγραφος</button>
-              <button class="para-tab" onclick="showPara('pl4',this,'ptabs-platio')">4η παράγραφος</button>
+              <button class="para-tab" onclick="showPara('pl1',this)">1η παράγραφος</button>
+              <button class="para-tab" onclick="showPara('pl2',this)">2η παράγραφος</button>
+              <button class="para-tab" onclick="showPara('pl3',this)">3η παράγραφος</button>
+              <button class="para-tab" onclick="showPara('pl4',this)">4η παράγραφος</button>
             </div>
-            <div id="pl1" class="para-block">
-              <div class="seg seg-pt"><span class="badge b-pt">Πλαγιότιτλος 1</span>Αναγκαιότητα της γνώσης της γλώσσας</div>
-            </div>
-            <div id="pl2" class="para-block">
-              <div class="seg seg-pt"><span class="badge b-pt">Πλαγιότιτλος 2</span>Ορισμός και λειτουργίες της γλώσσας</div>
-            </div>
-            <div id="pl3" class="para-block">
-              <div class="seg seg-pt"><span class="badge b-pt">Πλαγιότιτλος 3</span>Γλώσσα: αποκλειστικό ανθρώπινο επίτευγμα</div>
-            </div>
-            <div id="pl4" class="para-block">
-              <div class="seg seg-pt"><span class="badge b-pt">Πλαγιότιτλος 4</span>Τέσσερις βασικές γλωσσικές δεξιότητες</div>
-            </div>
+            <div id="pl1" class="para-block"><div class="seg seg-pt"><span class="badge b-pt">Πλαγιότιτλος 1</span>Αναγκαιότητα της γνώσης της γλώσσας</div></div>
+            <div id="pl2" class="para-block"><div class="seg seg-pt"><span class="badge b-pt">Πλαγιότιτλος 2</span>Ορισμός και λειτουργίες της γλώσσας</div></div>
+            <div id="pl3" class="para-block"><div class="seg seg-pt"><span class="badge b-pt">Πλαγιότιτλος 3</span>Γλώσσα: αποκλειστικό ανθρώπινο επίτευγμα</div></div>
+            <div id="pl4" class="para-block"><div class="seg seg-pt"><span class="badge b-pt">Πλαγιότιτλος 4</span>Τέσσερις βασικές γλωσσικές δεξιότητες</div></div>
           </div>
         </div>
         <div>
           <div class="tags-row"><span class="tag">Ονοματική φράση</span><span class="tag">Πύκνωση</span></div>
           <div class="card-ref">Θεωρία σελ. 0–0 · ΠΛΑΓΙΟΤΙΤΛΟΣ.pdf</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ΚΑΡΤΑ γ — ΤΡΟΠΟΙ ΑΝΑΠΤΥΞΗΣ (πρώην β) -->
+    <div class="card" onclick="openModal(this)">
+      <div class="card-left">
+        <div class="card-index">Κάρτα γ΄</div>
+        <div class="card-question">«Με ποιους τρόπους αναπτύσσεται η κεντρική ιδέα;»</div>
+        <div class="card-topic-label">Τρόποι Ανάπτυξης</div>
+      </div>
+      <div class="card-right">
+        <div>
+          <div class="card-answer-label">Απάντηση / Έννοια-κλειδί</div>
+          <div class="card-answer">Τρόποι ανάπτυξης</div>
+          <div class="card-body">
+            Σε αυτή την ενότητα παρουσιάζονται <strong>συνοπτικά</strong> οι κυριότεροι τρόποι ανάπτυξης. Πατήστε σε κάθε τρόπο για σύντομο ορισμό. Η αναλυτική παρουσίαση ακολουθεί σε επόμενες ενότητες.
+            <button class="detail-toggle" onclick="toggleDetail(this)">+ Διδακτικός στόχος</button>
+            <div class="detail-content">Πρώτη, ολιστική γνωριμία με τις μεθόδους ανάπτυξης, ώστε οι μαθητές να μπορούν να τις αναγνωρίζουν στα κείμενα.</div>
+
+            <!-- METHOD TAGS με popovers — ΠΑΝΩ από την ανάλυση παραγράφων -->
+            <div class="method-tags-section">
+              <div class="para-section-header" style="margin-top:4px;">Τρόποι ανάπτυξης — κλικ για ορισμό</div>
+              <div class="method-tags-row">
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-paradei')">Παραδείγματα <span class="mt-icon">+</span></button>
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-aitiolo')">Αιτιολόγηση <span class="mt-icon">+</span></button>
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-aitioap')">Αίτιο-αποτέλεσμα <span class="mt-icon">+</span></button>
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-diaire')">Διαίρεση <span class="mt-icon">+</span></button>
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-sygkris')">Σύγκριση-αντίθεση <span class="mt-icon">+</span></button>
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-orismos')">Ορισμός <span class="mt-icon">+</span></button>
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-analogi')">Αναλογία <span class="mt-icon">+</span></button>
+                <div class="method-popover" id="mc-paradei"><span class="pop-title">Παραδείγματα</span><p>Ο συντάκτης παραθέτει συγκεκριμένες, αντιπροσωπευτικές περιπτώσεις για να <em>τεκμηριώσει, επεξηγήσει ή διασαφηνίσει</em> τη θέση του.</p></div>
+                <div class="method-popover" id="mc-aitiolo"><span class="pop-title">Αιτιολόγηση</span><p>Ο συντάκτης διατυπώνει μια θέση και παραθέτει επιχειρήματα που την <em>αποδεικνύουν</em>, με σκοπό να πείσει τον αναγνώστη.</p></div>
+                <div class="method-popover" id="mc-aitioap"><span class="pop-title">Αίτιο-αποτέλεσμα</span><p>Ο συντάκτης παρουσιάζει τα αίτια ή τα αποτελέσματα ενός φαινομένου, με σκοπό να το <em>εξηγήσει / ερμηνεύσει</em>.</p></div>
+                <div class="method-popover" id="mc-diaire"><span class="pop-title">Διαίρεση</span><p>Ο συντάκτης <em>διαιρεί</em> μια έννοια σε επιμέρους είδη ή μέρη, ώστε να τη φωτίσει από διάφορες πτυχές της.</p></div>
+                <div class="method-popover" id="mc-sygkris"><span class="pop-title">Σύγκριση-αντίθεση</span><p>Ο συντάκτης <em>αναδεικνύει ομοιότητες ή/και διαφορές</em> μεταξύ δύο όρων του ίδιου είδους.</p></div>
+                <div class="method-popover" id="mc-orismos"><span class="pop-title">Ορισμός</span><p>Ο συντάκτης <em>προσδιορίζει επακριβώς</em> μια έννοια: Οριστέα έννοια = Γένος + Ειδοποιός διαφορά.</p></div>
+                <div class="method-popover" id="mc-analogi"><span class="pop-title">Αναλογία</span><p>Ο συντάκτης <em>συγκρίνει</em> μια άγνωστη / σύνθετη έννοια με κάτι οικείο για να γίνει πιο κατανοητή.</p></div>
+              </div>
+            </div>
+
+            <div class="para-section-header">Τρόπος ανάπτυξης ανά παράγραφο</div>
+            <div class="para-tabs ptabs-tropoi">
+              <button class="para-tab" onclick="showPara('t1',this)">1η παράγραφος</button>
+              <button class="para-tab" onclick="showPara('t2',this)">2η παράγραφος</button>
+              <button class="para-tab" onclick="showPara('t3',this)">3η παράγραφος</button>
+              <button class="para-tab" onclick="showPara('t4',this)">4η παράγραφος</button>
+            </div>
+            <div id="t1" class="para-block">
+              <div class="seg seg-m"><span class="badge b-m">Αιτιολόγηση</span>Ο συντάκτης θέτει τη θέση (αναγκαιότητα γνώσης της γλώσσας) και την αποδεικνύει με επιχειρήματα: οι κοινωνικές σχέσεις εξαρτώνται από τη γλώσσα · η γλώσσα μεταδίδει τη γνώση από γενιά σε γενιά. Κειμενικοί δείκτες: <em>«γιατί»</em>.</div>
+            </div>
+            <div id="t2" class="para-block">
+              <div class="seg seg-m"><span class="badge b-m">Ορισμός + Παραδείγματα</span>Πρώτα δίνεται ο επιστημονικός ορισμός της γλώσσας ως «συμβατικό σύστημα επικοινωνιακών ήχων». Στη συνέχεια παρατίθενται παραδείγματα λειτουργιών (σκέψη, καταγραφή, έκφραση συναισθήματος κ.λπ.) για να επεξηγηθεί ο ορισμός. Κειμενικός δείκτης: <em>«για παράδειγμα»</em>.</div>
+            </div>
+            <div id="t3" class="para-block">
+              <div class="seg seg-m"><span class="badge b-m">Παράδειγμα</span>Ο συντάκτης ανασκευάζει την αντίθετη άποψη (ότι τα ζώα χρησιμοποιούν γλώσσα) χρησιμοποιώντας ως αντιπαράδειγμα τους παπαγάλους: αν και φαινομενικά «μιλούν», δεν πληρούν τα κριτήρια της γλωσσικής επικοινωνίας. Κειμενικός δείκτης: <em>«για παράδειγμα»</em>.</div>
+            </div>
+            <div id="t4" class="para-block">
+              <div class="seg seg-m"><span class="badge b-m">Διαίρεση</span>Η έννοια «γλωσσικές δεξιότητες» διαιρείται σε τέσσερα είδη: ακρόαση, ανάγνωση, ομιλία, γραφή. Κειμενικοί δείκτες: <em>«τεσσάρων»</em>, <em>«αυτές είναι οι ακόλουθες»</em>.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card-ref">Θεωρία σελ. 0–0 · ΤΡΟΠΟΣ_ΑΝΑΠΤΥΞΗΣ.pdf</div>
         </div>
       </div>
     </div>
@@ -461,7 +340,7 @@ h1 em{font-style:italic;color:var(--rust)}
   </div>
   <div class="cards-grid">
 
-    <!-- ═══ ΚΆΡΤΑ α΄ — ΠΡΟΣΩΠΑ ═══ -->
+    <!-- ΚΑΡΤΑ α — ΠΡΟΣΩΠΑ -->
     <div class="card" onclick="openModal(this)">
       <div class="card-left">
         <div class="card-index">Κάρτα α΄</div>
@@ -476,14 +355,12 @@ h1 em{font-style:italic;color:var(--rust)}
             Διάκριση <strong>βασικών</strong> από <strong>δευτερεύοντα</strong> πρόσωπα · εντοπισμός πληροφοριών για το ήθος, τις σχέσεις και τον ρόλο καθενός στην εξέλιξη της πλοκής.
             <button class="detail-toggle" onclick="toggleDetail(this)">+ Διδακτικός στόχος</button>
             <div class="detail-content">Οι μαθητές να διακρίνουν τα πρόσωπα της αφήγησης και να κατανοούν τη λειτουργία τους στη δομή και τη σημασία του κειμένου.</div>
-
             <div class="para-section-header">Πρόσωπα στο απόσπασμα</div>
-
             <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--sage);margin:6px 0 5px;">Βασικά πρόσωπα <span style="font-size:9px;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400;">(τρεις γυναίκες που αγωνίζονται για καταξίωση)</span></div>
             <div class="para-tabs ptabs-prosopa-v">
-              <button class="para-tab" onclick="showPara('pr-chrysa',this,'ptabs-prosopa-v')">Κυρία Χρύσα</button>
-              <button class="para-tab" onclick="showPara('pr-eromfili',this,'ptabs-prosopa-v')">Κώνα Ερωμφίλη</button>
-              <button class="para-tab" onclick="showPara('pr-sofia',this,'ptabs-prosopa-v')">Κώνα Σοφία</button>
+              <button class="para-tab" onclick="showPara('pr-chrysa',this)">Κυρία Χρύσα</button>
+              <button class="para-tab" onclick="showPara('pr-eromfili',this)">Κώνα Ερωμφίλη</button>
+              <button class="para-tab" onclick="showPara('pr-sofia',this)">Κώνα Σοφία</button>
             </div>
             <div id="pr-chrysa" class="para-block">
               <div class="seg seg-sc"><span class="badge b-sc">Κυρία Χρύσα</span>Γεροντοκόρη που αναζητά την κοινωνική καταξίωση που της στέρησε η έλλειψη γάμου μέσα από δύο δρόμους: την οικονομική ανεξαρτησία (σπιτικό σχολείο, «ένα οχταράκι το μήνα») και την αναγνώριση που της εξασφαλίζει η μόρφωσή της. Εκπροσωπεί έτσι την «αριστοκρατία» του μαχαλά — όχι πλούτου, αλλά γνώσης.</div>
@@ -494,13 +371,11 @@ h1 em{font-style:italic;color:var(--rust)}
             <div id="pr-eromfili" class="para-block">
               <div class="seg seg-sc"><span class="badge b-sc">Κώνα Ερωμφίλη</span>Παραδουλεύτρα σε πλουσιόσπιτα, αναζητά την καταξίωσή της μέσα από τη σχέση με τη νονά του γιου της — μια εύπορη γυναίκα υψηλής τάξης που η ίδια αποκαλεί «πριγκηπέσσα» (<em>«η κουμπάρα μου η πριγκηπέσσα»</em>). Η επίδειξη αυτής της σχέσης είναι ο τρόπος με τον οποίο διεκδικεί κοινωνική αναγνώριση.</div>
             </div>
-
-
             <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:12px 0 5px;">Δευτερεύοντα πρόσωπα</div>
             <div class="para-tabs ptabs-prosopa-d">
-              <button class="para-tab" onclick="showPara('pr-anthippi',this,'ptabs-prosopa-d')">Ανθίππη</button>
-              <button class="para-tab" onclick="showPara('pr-amana',this,'ptabs-prosopa-d')">Αμανατζής</button>
-              <button class="para-tab" onclick="showPara('pr-kimon',this,'ptabs-prosopa-d')">Κίμωνας</button>
+              <button class="para-tab" onclick="showPara('pr-anthippi',this)">Ανθίππη</button>
+              <button class="para-tab" onclick="showPara('pr-amana',this)">Αμανατζής</button>
+              <button class="para-tab" onclick="showPara('pr-kimon',this)">Κίμωνας</button>
             </div>
             <div id="pr-anthippi" class="para-block">
               <div class="seg seg-tp"><span class="badge b-tp">Ανθίππη</span>Κόρη της Σοφίας, «μεγαλοκοπέλα, κοντά τριαντάρα», ανύπαντρη και παθιασμένη («κάθε τόσο ανάβανε τα αίματά της»). Δεν αναπτύσσεται αυτόνομα ως χαρακτήρας — λειτουργεί ως <em>καταλύτης</em> που αναδεικνύει την αγωνία της μητέρας και τον οικονομικό εγκλωβισμό της οικογένειας.</div>
@@ -520,7 +395,7 @@ h1 em{font-style:italic;color:var(--rust)}
       </div>
     </div>
 
-    <!-- ═══ ΚΆΡΤΑ β΄ — ΤΟΠΟΣ & ΧΡΟΝΟΣ ═══ -->
+    <!-- ΚΑΡΤΑ β — ΤΟΠΟΣ & ΧΡΟΝΟΣ -->
     <div class="card" onclick="openModal(this)">
       <div class="card-left">
         <div class="card-index">Κάρτα β΄</div>
@@ -535,15 +410,14 @@ h1 em{font-style:italic;color:var(--rust)}
             Το <strong>χωροχρονικό πλαίσιο</strong> (ιστορικό, κοινωνικό, πολιτισμικό) καθορίζει τις συμπεριφορές και τις επιλογές των προσώπων. Τα γεγονότα τοποθετούνται στα διάφορα <strong>χρονικά επίπεδα</strong> της αφήγησης.
             <button class="detail-toggle" onclick="toggleDetail(this)">+ Διδακτικός στόχος</button>
             <div class="detail-content">Οι μαθητές να κατανοούν πώς ο τόπος και ο χρόνος ερμηνεύουν τις πράξεις των ηρώων και να αναγνωρίζουν τα χρονικά επίπεδα της αφήγησης.</div>
-
             <div class="para-section-header">Χωροχρονικό πλαίσιο κειμένου</div>
             <div class="para-tabs ptabs-topos">
-              <button class="para-tab" onclick="showPara('tx-topos',this,'ptabs-topos')">Τόπος</button>
-              <button class="para-tab" onclick="showPara('tx-chronos',this,'ptabs-topos')">Χρόνος</button>
-              <button class="para-tab" onclick="showPara('tx-plaisio',this,'ptabs-topos')">Ιστορικό πλαίσιο</button>
+              <button class="para-tab" onclick="showPara('tx-topos',this)">Τόπος</button>
+              <button class="para-tab" onclick="showPara('tx-chronos',this)">Χρόνος</button>
+              <button class="para-tab" onclick="showPara('tx-plaisio',this)">Ιστορικό πλαίσιο</button>
             </div>
             <div id="tx-topos" class="para-block">
-              <div class="seg seg-sc"><span class="badge b-sc">Τόπος</span><strong>Σμύρνη</strong> — συγκεκριμένα η λαϊκή συνοικία «Στου Χατζηφράγκου» (εισαγωγικό). Ο αφηγηματικός χώρος εστιάζει στο σοκάκι πάνω από το σπίτι του μπαρμπα-Λάμπρου και στις φτωχογειτονιές («το Αλάνι», ο μαχαλάς). Ο τόπος σηματοδοτεί ταξικές διακρίσεις και αγωνίες κοινωνικής ανόδου.</div>
+              <div class="seg seg-sc"><span class="badge b-sc">Τόπος</span><strong>Σμύρνη</strong> — συγκεκριμένα η λαϊκή συνοικία «Στου Χατζηφράγκου». Ο αφηγηματικός χώρος εστιάζει στο σοκάκι πάνω από το σπίτι του μπαρμπα-Λάμπρου και στις φτωχογειτονιές («το Αλάνι», ο μαχαλάς). Ο τόπος σηματοδοτεί ταξικές διακρίσεις και αγωνίες κοινωνικής ανόδου.</div>
             </div>
             <div id="tx-chronos" class="para-block">
               <div class="seg seg-sc"><span class="badge b-sc">Χρόνος</span>Ο <strong>αφηγηματικός χρόνος</strong> είναι <em>γραμμικός</em>: σκηνές από την καθημερινή ζωή παρατίθενται διαδοχικά. Ο <strong>ιστορικός χρόνος</strong> αναφέρεται στα χρόνια πριν από τη Μικρασιατική Καταστροφή (1922). Ωστόσο το μυθιστόρημα γράφτηκε το 1962-3 — η αφήγηση φέρει χαρακτήρα <em>νοσταλγικής ανάμνησης</em>.</div>
@@ -560,7 +434,7 @@ h1 em{font-style:italic;color:var(--rust)}
       </div>
     </div>
 
-    <!-- ═══ ΚΆΡΤΑ γ΄ — ΕΙΡΩΝΕΙΑ ═══ -->
+    <!-- ΚΑΡΤΑ γ — ΕΙΡΩΝΕΙΑ -->
     <div class="card" onclick="openModal(this)">
       <div class="card-left">
         <div class="card-index">Κάρτα γ΄</div>
@@ -574,22 +448,21 @@ h1 em{font-style:italic;color:var(--rust)}
           <div class="card-body">
             Σχήμα λόγου ή κατάσταση όπου το <strong>φαινομενικό</strong> (αυτό που λέγεται ή φαίνεται) έρχεται σε πλήρη αντίθεση με το <strong>πραγματικό</strong> (αυτό που εννοείται ή συμβαίνει). Χρησιμοποιείται για να τονίσει μια αλήθεια με δηκτικό, σκωπτικό τρόπο.
             <button class="detail-toggle" onclick="toggleDetail(this)">+ Διδακτικός στόχος</button>
-            <div class="detail-content">Οι μαθητές να αναγνωρίζουν τα σημεία ειρωνείας στο κείμενο και να κατανοούν από τι δημιουργείται (αντίφαση φαινομενικού–πραγματικού). Αναλυτικά παραδείγματα και θεωρία: Ι. ΕΡΜΗΝΕΥΤΙΚΟ.pdf · ΛΟΓΟΤΕΧΝΙΑ_Α_Η_ΘΕΩΡΙΑ.pdf</div>
-
+            <div class="detail-content">Οι μαθητές να αναγνωρίζουν τα σημεία ειρωνείας στο κείμενο και να κατανοούν από τι δημιουργείται (αντίφαση φαινομενικού–πραγματικού).</div>
             <div class="para-section-header">Πηγές ειρωνείας στο απόσπασμα</div>
             <div class="para-tabs ptabs-ploki">
-              <button class="para-tab" onclick="showPara('eir-simeia',this,'ptabs-ploki')">Σημεία ειρωνείας στο κείμενο</button>
-              <button class="para-tab" onclick="showPara('eir-tragiki',this,'ptabs-ploki')">Τραγική ειρωνεία</button>
+              <button class="para-tab" onclick="showPara('eir-simeia',this)">Σημεία ειρωνείας στο κείμενο</button>
+              <button class="para-tab" onclick="showPara('eir-tragiki',this)">Τραγική ειρωνεία</button>
             </div>
             <div id="eir-simeia" class="para-block">
               <div class="seg seg-sc"><span class="badge b-sc">①</span><strong>«αριστοκρατία» του μαχαλά</strong> → Η λέξη «αριστοκρατία» αποδίδεται σε φτωχογειτονιά. Αντίφαση μεταξύ μεγαλοπρεπούς χαρακτηρισμού και πραγματικής φτώχειας.</div>
               <div class="seg seg-sc"><span class="badge b-sc">②</span><strong>«Πριγκηπέσσα»</strong> → Η Ερωμφίλη αποκαλεί «πριγκηπέσσα» τη νονά — χήρα επαρχιώτη γιατρού. Ο υπερβολικός τίτλος αποκαλύπτει την αυταπάτη.</div>
               <div class="seg seg-sc"><span class="badge b-sc">③</span><strong>«Τα δυο λαγήνια λάδι;»</strong> → Ο Αμανατζής ειρωνεύεται τη γυναίκα του που μιλά για «εκατό λίρες» προίκα: η πραγματικότητα (λαγήνια λάδι) αποδομεί τον ισχυρισμό.</div>
-              <div class="seg-note" style="margin-top:8px;">ℹ️ Σε κάθε περίπτωση η ειρωνεία δημιουργείται από τη <strong>δυσαναλογία</strong> ανάμεσα στις αξιώσεις των προσώπων και στην πραγματική τους κατάσταση: κάθε πρόσωπο «παίζει ρόλο» μεγαλύτερο από αυτόν που αντέχει η ζωή του.</div>
+              <div class="seg-note" style="margin-top:8px;">ℹ️ Σε κάθε περίπτωση η ειρωνεία δημιουργείται από τη <strong>δυσαναλογία</strong> ανάμεσα στις αξιώσεις των προσώπων και στην πραγματική τους κατάσταση.</div>
             </div>
             <div id="eir-tragiki" class="para-block">
               <div class="seg seg-ka"><span class="badge b-ka">Τραγική ειρωνεία</span>Ο <strong>αναγνώστης γνωρίζει</strong> την αλήθεια (ή το τραγικό τέλος), ενώ ο ήρωας την αγνοεί: ο ήρωας κάνει σχέδια ή εκφράζει βεβαιότητα για το μέλλον που ο αναγνώστης γνωρίζει ότι δεν θα πραγματοποιηθεί.</div>
-              <div class="seg-note" style="margin-top:8px;">ℹ️ <strong>Εξωκειμενική ανάγνωση:</strong> Στο συγκεκριμένο απόσπασμα δεν τεκμηριώνεται τραγική ειρωνεία. Ωστόσο, αν ο αναγνώστης γνωρίζει το ιστορικό πλαίσιο (Μικρασιατική Καταστροφή, 1922) και το σύνολο του μυθιστορήματος, μπορεί να διαβάσει τους αγώνες των ηρώων για κοινωνική καταξίωση (προίκα, μόρφωση, διασυνδέσεις) ως μάταιους — γνώση όμως που φέρνει ο αναγνώστης, δεν σηματοδοτείται από το ίδιο το κείμενο.</div>
+              <div class="seg-note" style="margin-top:8px;">ℹ️ <strong>Εξωκειμενική ανάγνωση:</strong> Στο συγκεκριμένο απόσπασμα δεν τεκμηριώνεται τραγική ειρωνεία. Αν όμως ο αναγνώστης γνωρίζει το ιστορικό πλαίσιο (Μικρασιατική Καταστροφή, 1922), μπορεί να διαβάσει τους αγώνες των ηρώων ως μάταιους — γνώση που φέρνει ο αναγνώστης, δεν σηματοδοτείται από το ίδιο το κείμενο.</div>
             </div>
           </div>
         </div>
@@ -603,9 +476,9 @@ h1 em{font-style:italic;color:var(--rust)}
   </div>
 </div>
 
-<p class="footnote">Α & Σ Μητσέλος - Νέα Ελληνικά για την Α΄Λυκείου, 2026</p>
+<p class="footnote">Α &amp; Σ Μητσέλος - Νέα Ελληνικά για την Α΄Λυκείου, 2026</p>
 
-<!-- ══ MODAL ══ -->
+<!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
   <div class="modal-box" id="modalBox">
     <button class="modal-close" onclick="closeModal()">✕</button>
@@ -633,34 +506,74 @@ function switchDeck(num,btn){
   document.getElementById('deck'+num).classList.add('visible');
   btn.classList.add('active');
 }
+
 function toggleDetail(btn){
+  event.stopPropagation();
   const d=btn.nextElementSibling;
   const open=d.classList.contains('open');
   d.classList.toggle('open');
   btn.textContent=open?'+ Διδακτικός στόχος':'− Διδακτικός στόχος';
 }
-function showPara(id, btn, groupClass) {
-  const cardBody = btn.closest('.card-body, .modal-body');
-  // close all para-blocks that belong to the same tab group
+
+/* ── METHOD TAG POPOVERS ── */
+function toggleMethodTag(e, btn, popId) {
+  e.stopPropagation();
+  const row = btn.closest('.method-tags-row');
+  const pop = row.querySelector('#'+popId);
+  if (!pop) return;
+  const isOpen = pop.classList.contains('open');
+
+  // close all in this row
+  row.querySelectorAll('.method-popover').forEach(p=>p.classList.remove('open'));
+  row.querySelectorAll('.method-tag').forEach(t=>t.classList.remove('active'));
+
+  if (!isOpen) {
+    pop.classList.add('open');
+    btn.classList.add('active');
+    // smart flip: if too close to right edge, align right
+    const rect = btn.getBoundingClientRect();
+    if (rect.left + 310 > window.innerWidth - 10) {
+      pop.style.left = 'auto'; pop.style.right = '0';
+    } else {
+      pop.style.left = '0'; pop.style.right = 'auto';
+    }
+  }
+}
+
+document.addEventListener('click', function(){
+  document.querySelectorAll('.method-popover.open').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.method-tag.active').forEach(t=>t.classList.remove('active'));
+});
+
+/* ── PARA TABS ── */
+function showPara(id, btn) {
+  event.stopPropagation();
   const tabsContainer = btn.closest('.para-tabs');
   const allTabs = tabsContainer.querySelectorAll('.para-tab');
-  // find all sibling para-blocks (blocks right after this tabs group)
-  let sibling = tabsContainer.nextElementSibling;
-  while (sibling && sibling.classList.contains('para-block')) {
-    sibling.classList.remove('visible');
-    sibling = sibling.nextElementSibling;
-  }
-  allTabs.forEach(b => b.classList.remove('active'));
-  
+
+  // find the container (card-body or modal-body)
+  const container = btn.closest('.card-body, .modal-body');
+
+  // hide ALL para-blocks that belong to this tab group
+  // (identified by shared id-prefix: grab ids from all sibling tabs)
+  allTabs.forEach(t => {
+    const oc = t.getAttribute('onclick') || '';
+    const m = oc.match(/showPara\('([^']+)'/);
+    if (m) {
+      const blk = container ? container.querySelector('#'+m[1]) : document.getElementById(m[1]);
+      if (blk) blk.classList.remove('visible');
+    }
+  });
+  allTabs.forEach(b=>b.classList.remove('active'));
+
   if (btn.dataset.wasActive === 'true') {
     btn.dataset.wasActive = 'false';
     return;
   }
-  // mark all tabs as not-was-active
-  allTabs.forEach(b => b.dataset.wasActive = 'false');
-  
-  // find the target block
-  const block = cardBody.querySelector('#' + id) || document.getElementById(id);
+  allTabs.forEach(b=>b.dataset.wasActive='false');
+
+  // show the target block
+  const block = container ? container.querySelector('#'+id) : document.getElementById(id);
   if (block) {
     block.classList.add('visible');
     btn.classList.add('active');
@@ -668,50 +581,51 @@ function showPara(id, btn, groupClass) {
   }
 }
 
-// ── MODAL ──
+/* ── MODAL ── */
 function openModal(cardEl) {
-  // don't open if a button/link was clicked
   if (event.target.closest('button, a')) return;
-
   const left = cardEl.querySelector('.card-left');
   const right = cardEl.querySelector('.card-right');
-
-  // deck color
   const isDeck1 = cardEl.closest('.deck-1');
   const box = document.getElementById('modalBox');
-  box.className = 'modal-box ' + (isDeck1 ? 'deck-1-modal' : 'deck-2-modal');
-
-  // populate left
+  box.className = 'modal-box '+(isDeck1?'deck-1-modal':'deck-2-modal');
   document.getElementById('modalIndex').textContent = left.querySelector('.card-index').textContent;
   document.getElementById('modalQuestion').innerHTML = left.querySelector('.card-question').innerHTML;
   document.getElementById('modalTopic').textContent = left.querySelector('.card-topic-label').textContent;
-
-  // populate right — clone the card-body so interactive elements work
   document.getElementById('modalAnswer').innerHTML = right.querySelector('.card-answer').innerHTML;
+
   const bodyClone = right.querySelector('.card-body').cloneNode(true);
-  // reset all open states in clone
-  bodyClone.querySelectorAll('.detail-content').forEach(d => d.classList.remove('open'));
-  bodyClone.querySelectorAll('.detail-toggle').forEach(b => b.textContent = '+ Διδακτικός στόχος');
-  bodyClone.querySelectorAll('.para-block').forEach(b => b.classList.remove('visible'));
-  bodyClone.querySelectorAll('.para-tab').forEach(b => { b.classList.remove('active'); b.dataset.wasActive = 'false'; });
-  document.getElementById('modalBody').innerHTML = '';
+  // reset states
+  bodyClone.querySelectorAll('.detail-content').forEach(d=>d.classList.remove('open'));
+  bodyClone.querySelectorAll('.detail-toggle').forEach(b=>b.textContent='+ Διδακτικός στόχος');
+  bodyClone.querySelectorAll('.para-block').forEach(b=>b.classList.remove('visible'));
+  bodyClone.querySelectorAll('.para-tab').forEach(b=>{b.classList.remove('active');b.dataset.wasActive='false';});
+  bodyClone.querySelectorAll('.method-popover').forEach(p=>p.classList.remove('open'));
+  bodyClone.querySelectorAll('.method-tag').forEach(t=>t.classList.remove('active'));
+
+  // prefix IDs in clone to avoid conflicts with card DOM IDs
+  bodyClone.querySelectorAll('[id]').forEach(el=>{el.id='m-'+el.id;});
+  // update onclick references in method-tags
+  bodyClone.querySelectorAll('.method-tag[onclick]').forEach(t=>{
+    const oc = t.getAttribute('onclick');
+    // replace the popover id argument: e.g. 'mc-aitiolo' -> 'm-mc-aitiolo'
+    t.setAttribute('onclick', oc.replace(/'(mc-[^']+)'/g, "'m-$1'"));
+  });
+
+  document.getElementById('modalBody').innerHTML='';
   document.getElementById('modalBody').appendChild(bodyClone);
-
-  document.getElementById('modalTags').innerHTML = right.querySelector('.tags-row') ? right.querySelector('.tags-row').innerHTML : '';
-  document.getElementById('modalRef').textContent = right.querySelector('.card-ref') ? right.querySelector('.card-ref').textContent : '';
-
+  document.getElementById('modalTags').innerHTML = right.querySelector('.tags-row')?right.querySelector('.tags-row').innerHTML:'';
+  document.getElementById('modalRef').textContent = right.querySelector('.card-ref')?right.querySelector('.card-ref').textContent:'';
   document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 }
 
-function closeModal() {
+function closeModal(){
   document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
+  document.body.style.overflow='';
 }
-function closeModalOnBg(e) {
-  if (e.target === document.getElementById('modalOverlay')) closeModal();
-}
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+function closeModalOnBg(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 </script>
 </body>
 </html>
