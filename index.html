@@ -203,15 +203,6 @@ h1 em{font-style:italic;color:var(--rust)}
 .pdf-fab{position:fixed;bottom:28px;right:28px;z-index:500;display:flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border:none;border-radius:30px;padding:13px 22px;font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(26,22,16,.35);transition:all .2s;letter-spacing:.3px;}
 .pdf-fab:hover{background:var(--rust);transform:translateY(-2px);box-shadow:0 6px 24px rgba(26,22,16,.4);}
 .pdf-fab .fab-icon{font-size:18px;line-height:1;}
-.pdf-modal-overlay{display:none;position:fixed;inset:0;z-index:3000;background:rgba(20,16,10,.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;}
-.pdf-modal-overlay.open{display:flex;animation:fadeIn .2s ease;}
-.pdf-modal-box{background:#1a1610;border-radius:10px;box-shadow:0 20px 60px rgba(20,16,10,.6);width:100%;max-width:1400px;height:95vh;display:flex;flex-direction:column;overflow:hidden;animation:scaleIn .25s ease;position:relative;}
-.pdf-modal-header{background:var(--ink);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.08);}
-.pdf-modal-title{font-family:'Playfair Display',serif;font-size:16px;color:#fff;font-weight:700;display:flex;align-items:center;gap:10px;}
-.pdf-modal-title span{font-size:11px;color:rgba(255,255,255,.45);font-family:'Source Sans 3',sans-serif;font-weight:400;letter-spacing:1.5px;text-transform:uppercase;}
-.pdf-modal-close{background:rgba(255,255,255,.12);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:16px;color:#fff;line-height:32px;text-align:center;transition:background .18s;}
-.pdf-modal-close:hover{background:var(--rust);}
-.pdf-iframe{width:100%;flex:1;border:none;display:block;}
 @media(max-width:620px){.card{grid-template-columns:1fr}.card-left{min-height:120px}}
 
 /* theory modal */
@@ -895,18 +886,6 @@ h1 em{font-style:italic;color:var(--rust)}
 </div>
 
 <script>
-function openPdfModal() {
-  const iframe = document.getElementById('pdfIframe');
-  if (!iframe.src || iframe.src === window.location.href) {
-    iframe.src = iframe.dataset.src;
-  }
-  document.getElementById('pdfModal').classList.add('open');
-}
-function closePdfModal(e) {
-  if (e.target === document.getElementById('pdfModal')) {
-    document.getElementById('pdfModal').classList.remove('open');
-  }
-}
 function openTheoryModal(e) {
   e.stopPropagation();
   document.getElementById('theoryModal').classList.add('open');
@@ -1231,29 +1210,9 @@ function finishQuestion(ok,q,container){
 }
 </script>
 <!-- ══════ FLOATING PDF BUTTON ══════ -->
-<button class="pdf-fab" onclick="openPdfModal()">
+<button class="pdf-fab" onclick="window.open('https://drive.google.com/file/d/17_ovI7pD0kr-kiRLIotijgnEshLtuq8x/view','_blank')">
   <span class="fab-icon">📖</span> Βιβλίο Θεωρίας
 </button>
-
-<!-- ══════ PDF VIEWER MODAL ══════ -->
-<div class="pdf-modal-overlay" id="pdfModal" onclick="closePdfModal(event)">
-  <div class="pdf-modal-box">
-    <div class="pdf-modal-header">
-      <div class="pdf-modal-title">
-        📖 Θεωρία Νέας Ελληνικής
-        <span>Γ΄ Λυκείου · Α &amp; Σ Μητσέλος</span>
-      </div>
-      <button class="pdf-modal-close" onclick="document.getElementById('pdfModal').classList.remove('open')">✕</button>
-    </div>
-    <iframe
-      class="pdf-iframe"
-      id="pdfIframe"
-      src=""
-      data-src="https://drive.google.com/file/d/17_ovI7pD0kr-kiRLIotijgnEshLtuq8x/preview"
-      allowfullscreen>
-    </iframe>
-  </div>
-</div>
 
 </body>
 </html>
