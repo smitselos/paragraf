@@ -3,729 +3,1211 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Αθλητισμός — Κριτήριο Αξιολόγησης</title>
+<title>1η Διδακτική πρόταση</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
+/* ══════════════════════════════════════════════
+   SHARED TOKENS
+   ══════════════════════════════════════════════ */
 :root{
   --cream:#f5f0e8;--ink:#1a1610;--rust:#c4622d;--sage:#4a6741;
-  --gold:#b8973a;--muted:#7a7060;--blue:#2b5fa0;--violet:#6b3fa0;
-  --correct:#2d8e4e;--paper:#ede8dc;
-  --shadow:4px 8px 28px rgba(26,22,16,.15);
-  --shadow-lg:6px 14px 40px rgba(26,22,16,.22);
+  --gold:#b8973a;--muted:#7a7060;--paper:#ede8dc;
+  --shadow:4px 6px 20px rgba(26,22,16,0.15);
+  --blue:#3a6ea8;--blue-l:rgba(58,110,168,.1);
+  --correct:#2d8e4e;--wrong:#c44a3d;
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{
-  background:var(--cream);
-  background-image:radial-gradient(ellipse at 15% 10%,rgba(184,151,58,.08) 0%,transparent 60%),
-                   radial-gradient(ellipse at 85% 90%,rgba(43,95,160,.06) 0%,transparent 55%);
-  font-family:'Source Sans 3',sans-serif;
-  color:var(--ink);
-  min-height:100vh;
-}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;}
+body{background-color:var(--cream);background-image:radial-gradient(ellipse at 20% 10%,rgba(184,151,58,.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 90%,rgba(74,103,65,.07) 0%,transparent 50%);font-family:'Source Sans 3',sans-serif;color:var(--ink);}
 
-/* ══ TOPBAR ══ */
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 28px;border-bottom:1px solid rgba(26,22,16,.09);
-  background:var(--cream);position:sticky;top:0;z-index:100;
-}
-.tb-left{display:flex;flex-direction:column;gap:2px;}
-.tb-eyebrow{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:600;}
-.tb-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;}
-.tb-title em{font-style:italic;color:var(--rust);}
-.tb-right{display:flex;align-items:center;gap:10px;}
-.progress-pill{
-  background:rgba(26,22,16,.07);border-radius:20px;
-  padding:5px 14px;font-size:12px;font-weight:700;color:var(--muted);
-}
-.progress-pill span{color:var(--ink);}
+/* ══════════════════════════════════════════════
+   SCREENS
+   ══════════════════════════════════════════════ */
+.screen{display:none;}
+.screen.active{display:block;}
+#quizScreen.active{display:flex;}
+#resultsScreen.active{display:flex;}
 
-/* ══ SECTION TABS ══ */
-.section-tabs{
-  display:flex;gap:6px;padding:16px 28px 0;flex-wrap:wrap;
-}
-.stab{
-  padding:8px 16px;border-radius:20px;
-  border:1.5px solid rgba(26,22,16,.15);
-  font-size:12px;font-weight:700;cursor:pointer;
-  background:#fff;color:var(--muted);
-  transition:all .2s;letter-spacing:.3px;
-}
-.stab:hover{border-color:var(--gold);color:var(--ink);}
-.stab.active{color:#fff;border-color:transparent;}
-.stab.sa{background:var(--rust);}
-.stab.sb{background:var(--sage);}
-.stab.sc{background:var(--blue);}
-.stab.sd{background:var(--violet);}
+/* ══════════════════════════════════════════════
+   CARDS APP
+   ══════════════════════════════════════════════ */
+#cardsScreen{padding:40px 20px 60px;}
+header{text-align:center;margin-bottom:52px}
+header::after{content:'';display:block;width:80px;height:2px;background:var(--gold);margin:18px auto 0}
+.eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:12px}
+h1{font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,40px);font-weight:700;line-height:1.2}
+h1 em{font-style:italic;color:var(--rust)}
+.subtitle{margin-top:12px;color:var(--muted);font-size:15px;font-weight:300;max-width:480px;margin-left:auto;margin-right:auto}
 
-/* ══ CARDS GRID ══ */
-.cards-section{padding:20px 28px 40px;}
-.section-header{
-  display:flex;align-items:baseline;gap:10px;margin-bottom:18px;
-  padding-bottom:10px;border-bottom:1px solid rgba(26,22,16,.08);
-}
-.sh-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:700;}
-.sh-title{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;}
-.sh-mono{font-size:11px;color:var(--muted);}
+/* tab bar */
+.tab-bar{display:flex;justify-content:center;margin-bottom:40px;border:1.5px solid var(--gold);border-radius:4px;width:fit-content;margin-left:auto;margin-right:auto;overflow:hidden}
+.tab-btn{background:transparent;border:none;padding:11px 28px;font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--muted);transition:all .25s}
+.tab-btn:first-child{border-right:1.5px solid var(--gold)}
+.tab-btn.active{background:var(--gold);color:#fff}
+.tab-btn:not(.active):hover{background:rgba(184,151,58,.1);color:var(--ink)}
 
-.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;}
+.deck{display:none;max-width:960px;margin:0 auto}
+.deck.visible{display:block}
+.deck-header{display:flex;align-items:baseline;gap:16px;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid rgba(26,22,16,.1)}
+.deck-number{font-family:'Playfair Display',serif;font-size:48px;font-weight:700;line-height:1;opacity:.08;user-select:none}
+.deck-title{font-family:'Playfair Display',serif;font-size:21px;font-weight:400}
+.deck-desc{font-size:13.5px;color:var(--muted);margin-top:2px}
 
-/* ══ FLIP CARD ══ */
-.flip-card{
-  height:420px;cursor:pointer;perspective:1200px;
+/* ── QUIZ CTA CARD ── */
+.quiz-cta-card{
+  border-radius:6px;box-shadow:var(--shadow);overflow:hidden;
+  display:grid;grid-template-columns:220px 1fr;min-height:120px;
+  cursor:pointer;transition:transform .2s,box-shadow .2s;
+  animation:slideIn .4s ease both;animation-delay:.26s;
+  text-decoration:none;
 }
-.flip-card.tall{height:520px;}
-.flip-card.xtall{height:640px;}
-.flip-inner{
-  position:relative;width:100%;height:100%;
-  transform-style:preserve-3d;
-  transition:transform .55s cubic-bezier(.4,0,.2,1);
-}
-.flip-card.flipped .flip-inner{transform:rotateY(180deg);}
+.quiz-cta-card:hover{transform:translateY(-3px);box-shadow:6px 10px 28px rgba(26,22,16,.2);}
+.deck-1 .quiz-cta-card .qcc-left{background:var(--rust);}
+.deck-2 .quiz-cta-card .qcc-left{background:var(--sage);}
+.qcc-left{padding:26px 22px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden;}
+.qcc-left::after{content:'';position:absolute;bottom:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.12);}
+.qcc-icon{font-size:36px;line-height:1;color:#fff;opacity:.9;}
+.qcc-right{padding:24px 28px;display:flex;flex-direction:column;justify-content:center;gap:8px;background:#fff;border-left:1px solid rgba(26,22,16,.06);}
 
-.flip-front,.flip-back{
-  position:absolute;inset:0;border-radius:14px;
-  backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  overflow:hidden;
+/* ── QCC TYPOGRAPHY — MOBILE FIRST ── */
+.qcc-label{
+  font-size:11px;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:600;
 }
-
-/* FRONT */
-.flip-front{
-  display:flex;flex-direction:column;
-  box-shadow:var(--shadow);
-}
-.ff-top{
-  flex:1;display:flex;flex-direction:column;justify-content:center;
-  padding:32px 36px;position:relative;overflow:hidden;
-}
-.ff-top::after{
-  content:'';position:absolute;bottom:-50px;right:-50px;
-  width:180px;height:180px;border-radius:50%;
-  background:rgba(255,255,255,.09);
-}
-.ff-sec{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.55);font-weight:700;margin-bottom:12px;}
-.ff-q{
+.qcc-title{
   font-family:'Playfair Display',serif;
-  font-size:clamp(14px,1.6vw,18px);
-  font-style:italic;color:#fff;line-height:1.65;
+  font-size:22px;
+  font-weight:700;
+  letter-spacing:.2px;
+  line-height:1.25;
 }
-.ff-mono{
-  font-size:10px;letter-spacing:1px;text-transform:uppercase;
-  color:rgba(255,255,255,.35);font-weight:600;margin-top:14px;
+.deck-1 .qcc-title{color:var(--rust);}
+.deck-2 .qcc-title{color:var(--sage);}
+.qcc-sub{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.6;
+  letter-spacing:.1px;
 }
-.ff-bottom{
-  background:#fff;padding:12px 36px;
-  display:flex;align-items:center;justify-content:space-between;
+.qcc-btn{
+  align-self:flex-start;
+  margin-top:6px;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:9px 22px;
+  border:none;
+  border-radius:5px;
+  font-family:'Source Sans 3',sans-serif;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  transition:all .2s;
+  letter-spacing:.4px;
+  pointer-events:none;
 }
-.ff-tap{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;}
-.ff-tap svg{opacity:.5;}
-.ff-pts{font-size:11px;font-weight:700;color:var(--gold);}
+.deck-1 .qcc-btn{background:var(--rust);color:#fff;}
+.deck-2 .qcc-btn{background:var(--sage);color:#fff;}
 
-/* front colors per section */
-.sec-a .ff-top{background:var(--rust);}
-.sec-b1 .ff-top{background:var(--sage);}
-.sec-b2 .ff-top{background:var(--blue);}
-.sec-b3 .ff-top{background:#7a5c2a;}
-.sec-c .ff-top{background:var(--violet);}
-.sec-d .ff-top{background:#1a5c4a;}
-
-/* BACK */
-.flip-back{
-  background:#fff;
-  transform:rotateY(180deg);
-  box-shadow:var(--shadow-lg);
-  display:flex;flex-direction:column;
-  overflow-y:auto;
-}
-.fb-header{
-  padding:14px 22px 10px;
-  border-bottom:1px solid rgba(26,22,16,.07);
-  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
-}
-.fb-hq{font-size:11px;font-weight:700;color:var(--muted);}
-.fb-hpts{font-size:11px;font-weight:700;color:var(--gold);}
-.fb-body{flex:1;padding:18px 22px;overflow-y:auto;}
-
-/* ── SCHEMA ELEMENTS ── */
-.schema-block{margin-bottom:14px;}
-.schema-block:last-child{margin-bottom:0;}
-
-/* Title row */
-.sch-title{
-  font-size:10px;letter-spacing:2px;text-transform:uppercase;
-  font-weight:700;color:var(--muted);margin-bottom:6px;
+@media(max-width:620px){
+  .quiz-cta-card{grid-template-columns:1fr;}
+  .qcc-left{min-height:80px;padding:18px;}
 }
 
-/* Answer text */
-.sch-text{font-size:13.5px;line-height:1.65;color:var(--ink);}
-.sch-text strong{color:var(--rust);}
-.sch-text em{color:var(--sage);font-style:italic;}
-
-/* Tag badge */
-.sch-tag{
-  display:inline-block;padding:3px 10px;border-radius:20px;
-  font-size:11px;font-weight:700;margin-bottom:8px;
-}
-.tag-q{background:rgba(196,98,45,.1);color:var(--rust);}
-.tag-a{background:rgba(74,103,65,.1);color:var(--sage);}
-.tag-key{background:rgba(184,151,58,.12);color:#8a6b1a;}
-.tag-blue{background:rgba(43,95,160,.1);color:var(--blue);}
-
-/* Arrow list */
-.sch-list{list-style:none;display:flex;flex-direction:column;gap:6px;}
-.sch-list li{
-  display:flex;gap:8px;align-items:flex-start;
-  font-size:13px;line-height:1.55;
-}
-.sch-list li::before{
-  content:'→';color:var(--gold);font-weight:700;flex-shrink:0;margin-top:1px;
-}
-
-/* Comparison table */
-.sch-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px;}
-.sch-table th{
-  background:rgba(26,22,16,.06);padding:7px 10px;
-  font-weight:700;text-align:left;border-bottom:1.5px solid rgba(26,22,16,.1);
-  font-size:10px;letter-spacing:1px;text-transform:uppercase;
-}
-.sch-table td{padding:8px 10px;border-bottom:1px solid rgba(26,22,16,.06);vertical-align:top;line-height:1.5;}
-.sch-table tr:last-child td{border-bottom:none;}
-.sch-table .td-k{font-weight:700;color:var(--rust);white-space:nowrap;}
-
-/* Divider */
-.sch-divider{height:1px;background:rgba(26,22,16,.07);margin:12px 0;}
-
-/* Quote block */
-.sch-quote{
-  border-left:3px solid var(--gold);padding:8px 14px;
-  background:rgba(184,151,58,.07);border-radius:0 6px 6px 0;
-  font-size:12.5px;line-height:1.6;font-style:italic;color:var(--ink);
-  margin:6px 0;
-}
-.sch-quote cite{display:block;margin-top:4px;font-size:11px;color:var(--muted);font-style:normal;font-weight:700;}
-
-/* Box */
-.sch-box{
-  background:rgba(26,22,16,.04);border-radius:8px;
-  padding:10px 14px;margin:6px 0;font-size:13px;line-height:1.6;
-}
-.sch-box.ok{background:rgba(45,142,78,.08);border-left:3px solid var(--correct);}
-.sch-box.warn{background:rgba(184,151,58,.1);border-left:3px solid var(--gold);}
-
-/* Back close hint */
-.fb-footer{
-  padding:8px 22px;border-top:1px solid rgba(26,22,16,.06);
-  font-size:10px;color:var(--muted);text-align:center;flex-shrink:0;
+/* ── QCC TYPOGRAPHY — DESKTOP / INTERACTIVE BOARD ── */
+@media(min-width:641px){
+  .qcc-label{
+    font-size:12.5px;
+    letter-spacing:3px;
+  }
+  .qcc-title{
+    font-size:28px;
+    letter-spacing:.4px;
+    line-height:1.2;
+  }
+  .qcc-sub{
+    font-size:16.5px;
+    line-height:1.7;
+    letter-spacing:.15px;
+  }
+  .qcc-btn{
+    font-size:16px;
+    padding:11px 28px;
+    letter-spacing:.5px;
+    margin-top:10px;
+    gap:9px;
+    border-radius:6px;
+  }
+  .qcc-icon{font-size:44px;}
+  .quiz-cta-card{min-height:150px;}
+  .qcc-right{gap:11px;padding:28px 36px;}
 }
 
+.cards-grid{display:grid;grid-template-columns:1fr;gap:20px;margin-top:20px;}
+.card{background:#fff;border-radius:6px;box-shadow:var(--shadow);overflow:hidden;display:grid;grid-template-columns:220px 1fr;min-height:160px;transition:transform .2s,box-shadow .2s;animation:slideIn .4s ease both;cursor:pointer;}
+.card:hover{transform:translateY(-3px);box-shadow:6px 10px 28px rgba(26,22,16,.2)}
+@keyframes slideIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.card:nth-child(1){animation-delay:.05s}.card:nth-child(2){animation-delay:.12s}.card:nth-child(3){animation-delay:.19s}
+.card-left{padding:26px 22px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.card-left::after{content:'';position:absolute;bottom:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.12)}
+.deck-1 .card-left{background:var(--rust)}
+.deck-2 .card-left{background:var(--sage)}
+.card-index{font-family:'Playfair Display',serif;font-size:12px;font-style:italic;color:rgba(255,255,255,.6);letter-spacing:1px}
+.card-question{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:#fff;line-height:1.45;margin:10px 0}
+.card-topic-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);font-weight:600}
+.card-right{padding:24px 28px;display:flex;flex-direction:column;justify-content:space-between;background:#fff;border-left:1px solid rgba(26,22,16,.06)}
+.card-answer-label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:5px}
+.card-answer{font-family:'Playfair Display',serif;font-size:19px;font-weight:700;margin-bottom:9px}
+.deck-1 .card-answer{color:var(--rust)}.deck-2 .card-answer{color:var(--sage)}
+.card-body{font-size:14px;line-height:1.65;color:#3a3428;flex:1;margin-bottom:14px}
+.card-ref{font-size:11px;color:var(--muted);border-top:1px solid rgba(26,22,16,.08);padding-top:9px}
+.card-ref::before{content:'☞ ';opacity:.5}
+.detail-toggle{display:inline-block;margin-top:8px;font-size:12px;color:var(--muted);cursor:pointer;border:none;background:none;font-family:'Source Sans 3',sans-serif;padding:0;text-decoration:underline;text-underline-offset:3px}
+.detail-toggle:hover{color:var(--ink)}
+.detail-content{display:none;margin-top:9px;padding:11px 13px;background:var(--paper);border-radius:4px;font-size:13px;line-height:1.6;color:#4a4030;border-left:3px solid var(--gold)}
+.detail-content.open{display:block}
+.para-section-header{font-size:10.5px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:14px 0 7px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;padding:7px 11px;background:#fff;border-radius:4px;border:1px solid rgba(26,22,16,.08);font-size:12px}
+.legend-item{display:flex;align-items:center;gap:5px}
+.legend-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+.dot-tp{background:var(--rust)}.dot-sc{background:var(--gold)}.dot-ka{background:var(--sage)}.dot-m{background:var(--blue)}.dot-pt{background:#8b4fa8}
+.para-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.para-tab{padding:4px 13px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;background:#fff;transition:all .2s;font-family:'Source Sans 3',sans-serif}
+.ptabs-domi .para-tab{border:1.5px solid var(--rust);color:var(--rust)}
+.ptabs-domi .para-tab:hover,.ptabs-domi .para-tab.active{background:var(--rust);color:#fff}
+.ptabs-tropoi .para-tab{border:1.5px solid var(--blue);color:var(--blue)}
+.ptabs-tropoi .para-tab:hover,.ptabs-tropoi .para-tab.active{background:var(--blue);color:#fff}
+.ptabs-platio .para-tab{border:1.5px solid #8b4fa8;color:#8b4fa8}
+.ptabs-platio .para-tab:hover,.ptabs-platio .para-tab.active{background:#8b4fa8;color:#fff}
+.ptabs-prosopa-v .para-tab,.ptabs-prosopa-d .para-tab,.ptabs-topos .para-tab,.ptabs-ploki .para-tab{border:1.5px solid var(--sage);color:var(--sage)}
+.ptabs-prosopa-v .para-tab:hover,.ptabs-prosopa-v .para-tab.active,.ptabs-prosopa-d .para-tab:hover,.ptabs-prosopa-d .para-tab.active,.ptabs-topos .para-tab:hover,.ptabs-topos .para-tab.active,.ptabs-ploki .para-tab:hover,.ptabs-ploki .para-tab.active{background:var(--sage);color:#fff}
+.para-block{display:none}.para-block.visible{display:block}
+.seg{padding:7px 10px;border-radius:3px;font-size:13px;line-height:1.55;margin-bottom:5px}
+.seg-tp{background:rgba(196,98,45,.1);border-left:3px solid var(--rust);color:#2a1810}
+.seg-sc{background:rgba(184,151,58,.09);border-left:3px solid var(--gold);color:#2a2010}
+.seg-ka{background:rgba(74,103,65,.1);border-left:3px solid var(--sage);color:#0f2a10}
+.seg-m{background:var(--blue-l);border-left:3px solid var(--blue);color:#0f1e2a;font-size:13.5px;padding:9px 12px}
+.seg-pt{background:rgba(139,79,168,.09);border-left:3px solid #8b4fa8;color:#200f2a;font-size:14px;padding:10px 12px;font-family:'Playfair Display',serif;font-style:italic}
+.seg-note{background:rgba(26,22,16,.04);border-radius:3px;padding:6px 10px;font-size:12px;color:var(--muted);font-style:italic;margin-bottom:5px}
+.badge{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:2px 7px;border-radius:9px;margin-right:5px;vertical-align:middle}
+.b-tp{background:var(--rust);color:#fff}.b-sc{background:var(--gold);color:#fff}.b-ka{background:var(--sage);color:#fff}.b-m{background:var(--blue);color:#fff}.b-pt{background:#8b4fa8;color:#fff}
+.tags-row{margin-top:7px}
+.tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:.5px;margin-right:5px;margin-bottom:3px}
+.deck-1 .tag{background:rgba(196,98,45,.12);color:var(--rust)}
+.deck-2 .tag{background:rgba(74,103,65,.12);color:var(--sage)}
+.footnote{text-align:center;margin-top:48px;font-size:12px;color:var(--muted);font-style:italic}
+@media(max-width:620px){.card{grid-template-columns:1fr}.card-left{min-height:120px}}
 
-/* ══ FULLSCREEN OVERLAY ══ */
-#cardOverlay{
-  display:none;
-  position:fixed;inset:0;z-index:500;
-  background:rgba(20,16,10,.55);
-  backdrop-filter:blur(4px);
-  -webkit-backdrop-filter:blur(4px);
-  align-items:center;justify-content:center;
-  padding:20px;
-  animation:overlayIn .25s ease;
+/* theory modal */
+.theory-modal-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(20,16,10,.7);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:24px;}
+.theory-modal-overlay.open{display:flex;animation:fadeIn .2s ease;}
+.theory-modal-box{background:#fff;border-radius:10px;box-shadow:0 20px 60px rgba(20,16,10,.45);width:100%;max-width:1680px;height:94vh;overflow:hidden;display:grid;grid-template-columns:340px 1fr;animation:scaleIn .25s ease;position:relative;}
+.theory-modal-header{background:var(--rust);padding:40px 32px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;overflow-y:auto;}
+.theory-modal-header::after{content:'';position:absolute;bottom:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.1);}
+.theory-modal-header h2{font-family:'Playfair Display',serif;font-size:26px;color:#fff;font-weight:700;line-height:1.3;margin-top:12px;}
+.theory-modal-header .th-sub{font-size:11px;color:rgba(255,255,255,.6);letter-spacing:3px;text-transform:uppercase;}
+.theory-modal-header .th-header-desc{font-size:14px;color:rgba(255,255,255,.75);line-height:1.65;margin-top:16px;}
+.theory-modal-close{position:absolute;top:14px;right:16px;z-index:10;background:rgba(255,255,255,.2);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:17px;color:#fff;transition:background .18s;line-height:32px;text-align:center;}
+.theory-modal-close:hover{background:rgba(255,255,255,.35);}
+.theory-modal-body{padding:36px 44px;overflow-y:auto;}
+.th-section{margin-bottom:28px;}
+.th-label{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+@media(min-width:1400px){
+  .theory-modal-box{grid-template-columns:400px 1fr;}
+  .theory-modal-header{padding:52px 44px;}
+  .theory-modal-header h2{font-size:32px;}
+  .theory-modal-header .th-header-desc{font-size:15.5px;}
+  .theory-modal-body{padding:48px 60px;}
+  .th-part-name{font-size:16px;}
+  .th-part-desc{font-size:15.5px;line-height:1.75;}
+  .th-rules{font-size:15px;line-height:1.8;}
+  .th-example-box .seg{font-size:15.5px!important;line-height:1.8;padding:16px 20px!important;}
+  .th-label{font-size:12px;letter-spacing:3px;}
 }
-#cardOverlay.visible{display:flex;}
-@keyframes overlayIn{from{opacity:0}to{opacity:1}}
+.th-part{display:grid;grid-template-columns:160px 1fr;gap:0;border-radius:6px;overflow:hidden;margin-bottom:8px;}
+.th-part-name{padding:12px 16px;font-weight:700;font-size:13.5px;color:#fff;display:flex;align-items:center;}
+.th-part-name.tp{background:var(--rust);}
+.th-part-name.sc{background:var(--gold);}
+.th-part-name.ka{background:var(--sage);}
+.th-part-desc{padding:12px 16px;font-size:13.5px;line-height:1.6;background:var(--paper);color:#3a3428;border-left:1px solid rgba(26,22,16,.08);}
+.th-rules{background:var(--paper);border-radius:6px;padding:14px 16px;font-size:13px;line-height:1.7;color:#3a3428;border-left:3px solid var(--gold);}
+.th-rules li{margin-bottom:4px;}
+.th-example-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--rust);margin-bottom:6px;}
+.th-example-box{border:1.5px solid rgba(196,98,45,.2);border-radius:6px;overflow:hidden;}
+.th-example-box .seg{margin-bottom:0;border-radius:0;font-size:13px;}
+.th-example-box .seg:last-child{margin-bottom:0;}
+.th-ref{font-size:11px;color:var(--muted);margin-top:14px;font-style:italic;}
+.th-ref::before{content:'☞ ';}
+/* method tags */
+.method-tags-section{margin:14px 0 4px}
+.method-tags-row{display:flex;flex-wrap:wrap;gap:6px;position:relative}
+.method-tag{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.3px;cursor:pointer;border:1.5px solid var(--blue);color:var(--blue);background:#fff;transition:all .2s;font-family:'Source Sans 3',sans-serif;position:relative;user-select:none}
+.method-tag:hover{background:rgba(58,110,168,.08)}
+.method-tag.active{background:var(--blue);color:#fff}
+.method-tag .mt-icon{font-size:11px;font-weight:700;opacity:.7;transition:transform .2s;line-height:1}
+.method-tag.active .mt-icon{transform:rotate(45deg);opacity:1}
+.method-popover{display:none;position:absolute;top:calc(100% + 8px);left:0;z-index:300;background:#fff;border:1.5px solid var(--blue);border-radius:7px;box-shadow:0 8px 28px rgba(26,22,16,.18);padding:13px 16px;min-width:240px;max-width:310px;font-size:13px;line-height:1.65;color:#2a3040;animation:popIn .18s ease}
+.method-popover.open{display:block}
+@keyframes popIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+.method-popover .pop-title{color:var(--blue);display:block;margin-bottom:5px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.method-popover p{margin:0;color:#2a3040}
 
-#overlayPanel{
-  background:#fff;
-  border-radius:18px;
-  box-shadow:0 24px 80px rgba(20,16,10,.35);
-  width:100%;max-width:860px;
-  max-height:92vh;
-  display:flex;flex-direction:column;
-  animation:panelIn .3s cubic-bezier(.22,1,.36,1);
-  overflow:hidden;
+/* modal */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(20,16,10,.65);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:24px}
+.modal-overlay.open{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box{background:#fff;border-radius:10px;box-shadow:0 20px 60px rgba(20,16,10,.4);width:100%;max-width:1680px;height:94vh;display:grid;grid-template-columns:320px 1fr;overflow:hidden;animation:scaleIn .25s ease;position:relative}
+@keyframes scaleIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.modal-close{position:absolute;top:14px;right:16px;z-index:10;background:rgba(255,255,255,.85);border:1px solid rgba(26,22,16,.15);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:17px;line-height:32px;text-align:center;color:var(--muted);transition:all .18s}
+.modal-close:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.modal-left{padding:36px 28px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;overflow-y:auto}
+.modal-left::after{content:'';position:absolute;bottom:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.1)}
+.deck-1-modal .modal-left{background:var(--rust)}
+.deck-2-modal .modal-left{background:var(--sage)}
+.modal-index{font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.6);letter-spacing:1px;margin-bottom:10px}
+.modal-question{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:#fff;line-height:1.4;margin-bottom:14px}
+.modal-topic{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);font-weight:600}
+.modal-right{padding:32px 36px;overflow-y:auto;display:flex;flex-direction:column;background:#fff;border-left:1px solid rgba(26,22,16,.06)}
+.modal-answer-label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
+.modal-answer{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;margin-bottom:12px}
+.deck-1-modal .modal-answer{color:var(--rust)}.deck-2-modal .modal-answer{color:var(--sage)}
+.modal-body{font-size:15px;line-height:1.7;color:#3a3428;flex:1}
+.modal-tags{margin-top:20px;padding-top:14px;border-top:1px solid rgba(26,22,16,.08)}
+.modal-ref{font-size:12px;color:var(--muted);margin-top:8px}
+.modal-ref::before{content:'☞ ';opacity:.5}
+@media(min-width:701px){
+  .modal-right .modal-body{font-size:16.5px;line-height:1.85}
+  .modal-right .para-section-header{font-size:12.5px;letter-spacing:2px;margin:22px 0 10px}
+  .modal-right .para-tab{font-size:14px;padding:7px 20px}
+  .modal-right .legend{font-size:14px;padding:10px 16px;margin-bottom:14px}
+  .modal-right .seg{font-size:15.5px;line-height:1.8;padding:14px 18px;margin-bottom:10px;border-radius:5px;border-left-width:4px}
+  .modal-right .seg-m{font-size:16px;padding:16px 20px}
+  .modal-right .seg-pt{font-size:18px;padding:16px 20px}
+  .modal-right .seg-note{font-size:14px;padding:10px 16px;margin-bottom:10px}
+  .modal-right .badge{font-size:10.5px;padding:3px 9px;margin-right:8px}
+  .modal-right .detail-toggle{font-size:14px;margin-top:12px}
+  .modal-right .detail-content{font-size:15px;line-height:1.75;padding:16px 20px;margin-top:12px;border-left-width:4px}
+  .modal-tags .tag{font-size:12.5px;padding:4px 12px}
+  .modal-ref{font-size:13px}
+  .modal-answer{font-size:30px}
+  .modal-right .method-tag{font-size:13px;padding:6px 16px}
+  .modal-right .method-popover{font-size:14.5px;min-width:260px;max-width:360px;padding:16px 20px}
 }
-@keyframes panelIn{from{transform:scale(.93);opacity:0}to{transform:scale(1);opacity:1}}
+@media(min-width:1400px){
+  .modal-box{grid-template-columns:380px 1fr;}
+  .modal-left{padding:48px 40px;}
+  .modal-question{font-size:28px;line-height:1.35;}
+  .modal-right{padding:44px 52px;}
+  .modal-answer{font-size:36px;}
+  .modal-answer-label{font-size:11.5px;letter-spacing:3px;margin-bottom:8px;}
+  .modal-right .modal-body{font-size:18px;line-height:1.9;}
+  .modal-right .seg{font-size:17px;line-height:1.85;padding:16px 22px;margin-bottom:12px;}
+  .modal-right .seg-m{font-size:18px;padding:18px 24px;}
+  .modal-right .seg-pt{font-size:20px;padding:18px 24px;}
+  .modal-right .seg-note{font-size:15.5px;padding:12px 18px;}
+  .modal-right .para-tab{font-size:15px;padding:9px 24px;}
+  .modal-right .legend{font-size:15px;padding:12px 18px;}
+  .modal-right .para-section-header{font-size:13.5px;margin:26px 0 12px;}
+  .modal-right .badge{font-size:11.5px;padding:3px 11px;margin-right:10px;}
+  .modal-right .detail-toggle{font-size:15px;margin-top:14px;}
+  .modal-right .detail-content{font-size:16px;line-height:1.8;padding:18px 22px;}
+  .modal-tags .tag{font-size:13.5px;padding:5px 14px;}
+  .modal-ref{font-size:14px;}
+  .modal-right .method-tag{font-size:14px;padding:8px 20px;}
+}
+@media(max-width:700px){.modal-box{grid-template-columns:1fr}.modal-left{min-height:130px}}
 
-#overlayHeader{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 28px 14px;
-  border-bottom:1px solid rgba(26,22,16,.07);
-  flex-shrink:0;
+/* ══════════════════════════════════════════════
+   QUIZ APP
+   ══════════════════════════════════════════════ */
+#quizScreen{min-height:100vh;flex-direction:column;}
+.quiz-topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid rgba(26,22,16,.09);background:var(--cream);}
+.qt-left{display:flex;align-items:center;gap:12px;}
+.btn-quit{background:none;border:1px solid rgba(26,22,16,.18);border-radius:4px;padding:5px 12px;font-size:12px;font-family:'Source Sans 3',sans-serif;cursor:pointer;color:var(--muted);transition:all .18s;}
+.btn-quit:hover{border-color:var(--ink);color:var(--ink);}
+.qt-deck-lbl{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.dk1-lbl{color:var(--rust);}.dk2-lbl{color:var(--sage);}
+.qt-right{display:flex;align-items:center;gap:12px;}
+.qt-score{font-size:13px;color:var(--muted);}
+.qt-score strong{font-family:'Playfair Display',serif;font-size:17px;}
+.s-c{color:var(--correct);}.s-w{color:var(--wrong);}
+.progress-wrap{flex-shrink:0;height:4px;background:rgba(26,22,16,.08);}
+.progress-bar{height:100%;background:var(--gold);transition:width .4s ease;}
+.card-stage{flex:1;display:flex;align-items:stretch;padding:16px;gap:0;min-height:0;}
+.big-card{width:100%;background:#fff;border-radius:9px;box-shadow:var(--shadow);display:grid;grid-template-columns:260px 1fr;overflow:hidden;animation:cardIn .3s ease both;}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.bc-left{padding:30px 26px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden;}
+.bc-left::after{content:'';position:absolute;bottom:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.1);}
+.dk1 .bc-left{background:var(--rust);}.dk2 .bc-left{background:var(--sage);}
+.bc-left.answered-ok{background:var(--correct);}.bc-left.answered-ko{background:var(--wrong);}
+.bc-qnum{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.55);font-weight:600;}
+.bc-qtext{font-family:'Playfair Display',serif;font-size:clamp(15px,2vw,19px);font-style:italic;color:#fff;line-height:1.5;flex:1;}
+.bc-qtype{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.4);font-weight:600;}
+.bc-result{font-size:26px;color:#fff;}
+.bc-right{padding:24px 28px;display:flex;flex-direction:column;gap:9px;overflow-y:auto;position:relative;}
+.dk1 .bc-right{background:rgba(196,98,45,.07);}.dk2 .bc-right{background:rgba(74,103,65,.07);}
+.opt-btn{display:flex;align-items:flex-start;gap:10px;padding:12px 15px;border:1.5px solid rgba(26,22,16,.13);border-radius:6px;background:#fff;cursor:pointer;transition:all .18s;font-family:'Source Sans 3',sans-serif;font-size:clamp(13px,1.7vw,15px);line-height:1.45;text-align:left;width:100%;}
+.opt-btn:hover:not(.disabled){border-color:var(--gold);background:rgba(184,151,58,.07);}
+.opt-btn.disabled{pointer-events:none;}
+.opt-lbl{font-weight:700;flex-shrink:0;font-size:12px;}
+.dk1 .opt-lbl{color:var(--rust);}.dk2 .opt-lbl{color:var(--sage);}
+.opt-btn.chosen.correct{border-color:var(--correct);background:rgba(45,142,78,.09);}
+.opt-btn.chosen.correct .opt-lbl{color:var(--correct);}
+.opt-btn.chosen.wrong{border-color:var(--wrong);background:rgba(196,74,61,.06);opacity:.6;text-decoration:line-through;}
+.opt-btn.reveal{border-color:var(--correct);background:rgba(45,142,78,.06);}
+.opt-btn.reveal .opt-lbl{color:var(--correct);}
+.drag-instr{font-size:12px;color:var(--muted);line-height:1.4;padding:6px 0;}
+.drag-bank{display:flex;flex-wrap:wrap;gap:7px;padding:10px 12px;background:rgba(255,255,255,.65);border-radius:6px;min-height:46px;}
+.drag-chip{padding:7px 14px;background:#fff;border:1.5px solid var(--gold);border-radius:18px;font-size:12.5px;font-weight:600;cursor:grab;transition:background .15s,transform .15s;color:var(--ink);user-select:none;touch-action:none;}
+.drag-chip:hover{background:rgba(184,151,58,.1);}
+.drag-chip.dragging{opacity:.45;cursor:grabbing;}
+.drag-chip.sel-tap{background:var(--gold);color:#fff;transform:scale(1.04);cursor:pointer;}
+.drag-slots{display:flex;flex-direction:column;gap:7px;margin-top:4px;}
+.slot-row{display:flex;align-items:center;gap:10px;}
+.slot-lbl{font-size:12.5px;font-weight:700;flex-shrink:0;line-height:1.3;color:var(--ink);}
+.slot-zone{flex:1;min-height:40px;border:1.5px dashed rgba(26,22,16,.2);border-radius:6px;display:flex;align-items:center;justify-content:center;padding:7px 11px;transition:all .18s;background:rgba(255,255,255,.7);font-size:12.5px;color:var(--muted);text-align:center;line-height:1.3;cursor:pointer;}
+.slot-zone.drag-over{border-color:var(--gold);background:rgba(184,151,58,.1);border-style:solid;}
+.slot-zone.filled{border-style:solid;border-color:var(--gold);background:rgba(184,151,58,.08);color:var(--ink);font-weight:700;}
+.slot-zone.ok-slot{border-color:var(--correct)!important;background:rgba(45,142,78,.1)!important;color:var(--correct)!important;font-weight:700;}
+.slot-zone.ko-slot{border-color:var(--wrong)!important;background:rgba(196,74,61,.07)!important;color:var(--wrong)!important;}
+.fb-box{padding:12px 15px;border-radius:6px;font-size:13.5px;line-height:1.6;display:none;border-left:3px solid transparent;margin-top:4px;}
+.fb-box.show{display:block;}
+.fb-box.ok{background:rgba(45,142,78,.09);border-left-color:var(--correct);}
+.fb-box.ko{background:rgba(196,74,61,.07);border-left-color:var(--wrong);}
+.fb-ref{display:block;margin-top:5px;font-size:11.5px;color:var(--muted);font-style:italic;}
+.btn-submit{align-self:flex-start;margin-top:4px;padding:10px 24px;background:var(--gold);color:#fff;border:none;border-radius:5px;font-size:13.5px;font-weight:700;font-family:'Source Sans 3',sans-serif;cursor:pointer;transition:all .2s;}
+.btn-submit:disabled{opacity:.38;cursor:not-allowed;}
+.btn-submit:not(:disabled):hover{background:#9e7b2a;}
+.quiz-bottom{flex-shrink:0;padding:14px 20px;border-top:1px solid rgba(26,22,16,.09);background:var(--cream);display:flex;align-items:center;justify-content:space-between;}
+.qb-info{font-size:12px;color:var(--muted);}
+.btn-next{padding:13px 36px;background:var(--ink);color:#fff;border:none;border-radius:6px;font-size:15px;font-weight:700;font-family:'Source Sans 3',sans-serif;cursor:pointer;transition:all .2s;display:none;}
+.btn-next.show{display:block;}
+.btn-next:hover{opacity:.82;}
+@media(min-width:641px){
+  .slot-lbl{width:160px;}
+  .bc-left{padding:38px 32px;gap:20px;}
+  .bc-qnum{font-size:11.5px;letter-spacing:3px;}
+  .bc-qtext{font-size:clamp(17px,2.2vw,22px);line-height:1.55;}
+  .bc-result{font-size:32px;}
+  .bc-right{padding:32px 36px;gap:13px;}
+  .opt-btn{padding:15px 20px;font-size:15.5px;line-height:1.55;border-radius:7px;gap:13px;}
+  .opt-lbl{font-size:13.5px;}
+  .drag-instr{font-size:13px;padding:8px 0;}
+  .drag-bank{gap:10px;padding:13px 15px;min-height:56px;}
+  .drag-chip{font-size:14px;padding:9px 18px;}
+  .drag-slots{gap:10px;margin-top:8px;}
+  .slot-row{gap:14px;}
+  .slot-lbl{font-size:14px;width:175px;}
+  .slot-zone{min-height:48px;font-size:14px;padding:9px 14px;border-radius:7px;}
+  .fb-box{font-size:15px;line-height:1.7;padding:16px 20px;margin-top:10px;border-left-width:4px;border-radius:7px;}
+  .fb-ref{font-size:13px;margin-top:7px;}
+  .btn-submit{padding:12px 30px;font-size:15px;border-radius:6px;margin-top:8px;}
 }
-#overlayLabel{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.5px;}
-#overlayPts{font-size:12px;font-weight:700;color:var(--gold);}
-#overlayClose{
-  background:rgba(26,22,16,.07);border:none;border-radius:50%;
-  width:34px;height:34px;cursor:pointer;font-size:18px;
-  display:flex;align-items:center;justify-content:center;
-  color:var(--ink);transition:background .15s;flex-shrink:0;
-  line-height:1;
+@media(max-width:640px){
+  .big-card{grid-template-columns:1fr;grid-template-rows:auto 1fr;}
+  .bc-left{min-height:130px;padding:20px 18px;}
+  .bc-right{padding:16px 16px;}
+  .slot-lbl{font-size:11.5px;width:90px;}
+  .drag-chip{font-size:12px;padding:6px 11px;}
 }
-#overlayClose:hover{background:rgba(26,22,16,.14);}
 
-#overlayBody{
-  flex:1;overflow-y:auto;
-  padding:28px 36px;
-}
-#overlayBody .sch-title{font-size:11px;letter-spacing:2px;margin-bottom:8px;}
-#overlayBody .sch-text{font-size:15px;line-height:1.7;}
-#overlayBody .sch-table{font-size:14px;}
-#overlayBody .sch-table th{font-size:11px;padding:9px 12px;}
-#overlayBody .sch-table td{padding:10px 12px;line-height:1.6;}
-#overlayBody .sch-list li{font-size:14.5px;line-height:1.6;}
-#overlayBody .sch-quote{font-size:14px;line-height:1.7;padding:10px 18px;}
-#overlayBody .sch-quote cite{font-size:12px;}
-#overlayBody .sch-box{font-size:14px;line-height:1.65;padding:12px 18px;}
-#overlayBody .sch-divider{margin:16px 0;}
-#overlayBody .schema-block{margin-bottom:18px;}
+/* results */
+#resultsScreen{min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;}
+.res-score{font-family:'Playfair Display',serif;font-size:72px;font-weight:700;line-height:1;}
+.res-denom{font-size:28px;opacity:.5;margin-left:4px;}
+.res-label{font-size:14px;color:var(--muted);margin-top:6px;}
+.res-msg{font-size:16px;line-height:1.65;margin-top:18px;max-width:420px;}
+.res-gold{width:70px;height:2px;background:var(--gold);margin:20px auto;}
+.res-btns{display:flex;flex-direction:column;gap:12px;align-items:center;margin-top:14px;}
+.btn-res{padding:13px 32px;border:none;border-radius:6px;font-size:14px;font-weight:700;font-family:'Source Sans 3',sans-serif;cursor:pointer;transition:all .2s;min-width:280px;}
+.btn-res.primary{background:var(--gold);color:#fff;}
+.btn-res.primary:hover{background:#9e7b2a;}
+.btn-res.secondary{background:transparent;border:2px solid rgba(26,22,16,.2);color:var(--ink);}
+.btn-res.secondary:hover{border-color:var(--ink);}
 
-#overlayFooter{
-  padding:10px 28px;border-top:1px solid rgba(26,22,16,.06);
-  font-size:11px;color:var(--muted);text-align:center;flex-shrink:0;
-}
-
-/* ══ RESPONSIVE ══ */
-@media(max-width:600px){
-  .topbar{padding:12px 16px;}
-  .section-tabs{padding:12px 16px 0;}
-  .cards-section{padding:16px 12px 36px;}
-  .cards-grid{grid-template-columns:1fr;}
-  .flip-card{height:380px;}
-  .flip-card.tall{height:460px;}
-  .flip-card.xtall{height:560px;}
-  .ff-top{padding:24px 22px;}
-  .ff-bottom{padding:10px 22px;}
-}
-@media(min-width:1200px){
-  .cards-grid{grid-template-columns:repeat(3,1fr);}
-}
+#dragGhost{position:fixed;z-index:999;pointer-events:none;padding:7px 14px;background:var(--gold);color:#fff;border-radius:18px;font-size:12.5px;font-weight:700;font-family:'Source Sans 3',sans-serif;box-shadow:0 4px 16px rgba(26,22,16,.25);white-space:nowrap;opacity:.9;display:none;transform:translate(-50%,-50%);}
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="tb-left">
-    <div class="tb-eyebrow">Κριτήριο Αξιολόγησης</div>
-    <div class="tb-title">Αθλητισμός — <em>Κείμενα & Θέματα</em></div>
-  </div>
-  <div class="tb-right">
-    <div class="progress-pill"><span id="openCount">0</span> / <span id="totalCount">0</span> ανοιχτές</div>
-  </div>
+<!-- ══════════════════════════════════════════════
+     SCREEN 1 — CARDS
+     ══════════════════════════════════════════════ -->
+<div id="cardsScreen" class="screen active">
+<header>
+  <div class="eyebrow">Νεοελληνική Γλώσσα — Α΄ Λυκείου</div>
+  <h1>Διδακτική πρόταση <em>1η</em></h1>
+  <p class="subtitle">Σημεία εστίασης: η αρχιτεκτονική της παραγράφου· ο κόσμος του λογοτεχνικού κειμένου: πρόσωπα, χρόνος, τόπος &amp; ειρωνεία</p>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchDeck(1,this)">Μη λογοτεχνικό κείμενο</button>
+  <button class="tab-btn" onclick="switchDeck(2,this)">Λογοτεχνικό κείμενο</button>
 </div>
 
-<div class="section-tabs">
-  <div class="stab sa active" data-sec="all">Όλα</div>
-  <div class="stab sa" data-sec="a">Θέμα Α</div>
-  <div class="stab sb" data-sec="b">Θέμα Β</div>
-  <div class="stab sc" data-sec="c">Θέμα Γ</div>
-  <div class="stab sd" data-sec="d">Θέμα Δ</div>
-</div>
-
-<div class="cards-section" id="cardsContainer"></div>
-
-
-<!-- FULLSCREEN OVERLAY -->
-<div id="cardOverlay">
-  <div id="overlayPanel">
-    <div id="overlayHeader">
-      <div id="overlayLabel"></div>
-      <div id="overlayPts"></div>
-      <button id="overlayClose" aria-label="Κλείσιμο">&#x2715;</button>
+<!-- DECK 1 -->
+<div class="deck deck-1 visible" id="deck1">
+  <div class="deck-header">
+    <div class="deck-number">01</div>
+    <div>
+      <div class="deck-title">Η αρχιτεκτονική της παραγράφου</div>
+      <div class="deck-desc">Εισαγωγή στη δομή, τους τρόπους ανάπτυξης και τον πλαγιότιτλο</div>
     </div>
-    <div id="overlayBody"></div>
-    <div id="overlayFooter">Πάτα ✕ ή έξω από την κάρτα για κλείσιμο</div>
+  </div>
+  <div class="cards-grid">
+
+    <!-- ΚΑΡΤΑ α — ΔΟΜΗ -->
+    <div class="card" onclick="openModal(this)">
+      <div class="card-left">
+        <div class="card-index">Κάρτα α΄</div>
+        <div class="card-question">«Πώς είναι χτισμένη μια παράγραφος;»</div>
+        <div class="card-topic-label">Δομή</div>
+      </div>
+      <div class="card-right">
+        <div>
+          <div class="card-answer-label">Απάντηση</div>
+          <div class="card-answer">Δομή παραγράφου</div>
+          <div class="card-body">
+            Κάθε παράγραφος αποτελείται από δύο (διμερής) ή τρία μέρη (τριμερής): τη <strong>θεματική περίοδο</strong> (κεντρική ιδέα), τα <strong>σχόλια</strong> (ανάπτυξη-τεκμηρίωση) και την <strong>κατακλείδα</strong> (συμπέρασμα, προαιρετικά).
+            <button class="detail-toggle" onclick="toggleDetail(event,this)">+ Διδακτικός στόχος</button>
+            <div class="detail-content">Οι μαθητές να αποτυπώνουν το διάγραμμα κάθε παραγράφου και να συντάσσουν δικά τους κείμενα με λογική δόμηση.</div>
+            <div class="para-section-header">Ανάλυση παραγράφων κειμένου</div>
+            <div class="legend">
+              <div class="legend-item"><div class="legend-dot dot-tp"></div><span>Θεματική περίοδος</span></div>
+              <div class="legend-item"><div class="legend-dot dot-sc"></div><span>Σχόλια</span></div>
+              <div class="legend-item"><div class="legend-dot dot-ka"></div><span>Κατακλείδα</span></div>
+            </div>
+            <div class="para-tabs ptabs-domi">
+              <button class="para-tab" onclick="showPara(event,'d1',this)">1η παράγραφος</button>
+              <button class="para-tab" onclick="showPara(event,'d2',this)">2η παράγραφος</button>
+              <button class="para-tab" onclick="showPara(event,'d3',this)">3η παράγραφος</button>
+              <button class="para-tab" onclick="showPara(event,'d4',this)">4η παράγραφος</button>
+            </div>
+            <div id="d1" class="para-block">
+              <div class="seg seg-tp"><span class="badge b-tp">Θ.Π.</span>Αν κάποιος αμφιβάλλει για τη σημασία της γλώσσας στη ζωή του, αρκεί να σκεφτεί για μια στιγμή πόσο απίστευτα περιορισμένος θα ήταν χωρίς τη γλώσσα.</div>
+              <div class="seg seg-sc"><span class="badge b-sc">Σχόλια</span>Οι κοινωνικές αλληλεπιδράσεις με φίλους και γνωστούς εξαρτώνται σε πολύ μεγάλο βαθμό από τη γλώσσα. Εξάλλου, οι άνθρωποι σήμερα γνωρίζουν πολύ περισσότερα πράγματα από τους ανθρώπους των προηγούμενων γενεών. Αυτό συμβαίνει γιατί η γλώσσα βοήθησε το μεγαλύτερο μέρος της γνώσης να περάσει από τη μια γενιά στην άλλη.</div>
+              <div class="seg seg-ka"><span class="badge b-ka">Κατακλείδα</span>Επομένως, το να γνωρίζει κανείς καλά τη γλώσσα είναι απολύτως απαραίτητο.</div>
+            </div>
+            <div id="d2" class="para-block">
+              <div class="seg seg-tp"><span class="badge b-tp">Θ.Π.</span>Τι είναι, όμως, η γλώσσα;</div>
+              <div class="seg seg-sc"><span class="badge b-sc">Σχόλια</span>Διατυπώθηκε ο ορισμός ότι η γλώσσα είναι «ένα συμβατικό σύστημα επικοινωνιακών ήχων και μερικές φορές (αν και όχι απαραίτητα) γραπτών συμβόλων». Σ' αυτόν τον ορισμό η κρίσιμη λέξη είναι το επίθετο «επικοινωνιακών», επειδή η πρωταρχική λειτουργία της γλώσσας είναι η επικοινωνία. Βέβαια, με τη γλώσσα επιτελούνται και άλλες λειτουργίες. Για παράδειγμα, οι άνθρωποι χρησιμοποιούμε τη γλώσσα, για να σκεφτόμαστε, να καταγράφουμε πληροφορίες, να συνειδητοποιούμε και να εκφράζουμε συναισθήματα, να εκφράζουμε την ταύτισή μας με μια ομάδα κ.λπ.</div>
+              <div class="seg-note">ℹ️ Χωρίς κατακλείδα — η παράγραφος τελειώνει με σχόλια (παραδείγματα λειτουργιών).</div>
+            </div>
+            <div id="d3" class="para-block">
+              <div class="seg seg-tp"><span class="badge b-tp">Θ.Π.</span>Αναμφίβολα, η γλώσσα είναι ένα εντυπωσιακό επίτευγμα των ανθρώπων.</div>
+              <div class="seg seg-sc"><span class="badge b-sc">Σχόλια</span>Υπάρχουν όμως άλλα είδη που κάνουν χρήση της γλώσσας; Ίσως κάποιος να έδινε καταφατική απάντηση σκεπτόμενος για παράδειγμα τους παπαγάλους που λένε μερικές λέξεις. Ωστόσο, οι παπαγάλοι, ακόμα και αν προσπαθούν να επικοινωνήσουν, δεν χρησιμοποιούν γλώσσα με την πλήρη σημασία της έννοιας, επειδή δεν ακολουθούν κανόνες ούτε δείχνουν την ευελιξία στη χρήση της γλώσσας που δείχνουν οι άνθρωποι.</div>
+              <div class="seg-note">ℹ️ Χωρίς κατακλείδα.</div>
+            </div>
+            <div id="d4" class="para-block">
+              <div class="seg seg-tp"><span class="badge b-tp">Θ.Π.</span>Στην καθημερινή μας ζωή οι περισσότεροι από εμάς κάνουμε εκτεταμένη χρήση τεσσάρων βασικών γλωσσικών δεξιοτήτων.</div>
+              <div class="seg seg-sc"><span class="badge b-sc">Σχόλια</span>Αυτές είναι οι ακόλουθες: ακούμε την ομιλία, διαβάζουμε, μιλάμε και γράφουμε. Είναι ίσως φυσικό να υποθέσουμε πως οι τέσσερις κεντρικές γλωσσικές δεξιότητες κάθε ανθρώπου μπορούν να είναι συνολικά ισχυρές ή αδύναμες.</div>
+              <div class="seg-note">ℹ️ Χωρίς κατακλείδα — η τελευταία περίοδος δεν περιέχει συμπέρασμα, αλλά επιφύλαξη.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="tags-row"><span class="tag">Θ.Π.</span><span class="tag">Σχόλια</span><span class="tag">Κατακλείδα</span></div>
+          <div class="card-ref" onclick="openTheoryModal(event)" style="cursor:pointer;color:var(--rust);text-decoration:underline;text-underline-offset:3px;" title="Άνοιξε τη θεωρία">📖 Θεωρία Δομής Παραγράφου · ΔΟΜΗ_ΠΑΡΑΓΡΑΦΟΥ.pdf</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ΚΑΡΤΑ β — ΠΛΑΓΙΟΤΙΤΛΟΣ -->
+    <div class="card" onclick="openModal(this)">
+      <div class="card-left">
+        <div class="card-index">Κάρτα β΄</div>
+        <div class="card-question">«Τι "λέει" μια παράγραφος σε μία φράση;»</div>
+        <div class="card-topic-label">Πλαγιότιτλος</div>
+      </div>
+      <div class="card-right">
+        <div>
+          <div class="card-answer-label">Απάντηση / Έννοια-κλειδί</div>
+          <div class="card-answer">Πλαγιότιτλος</div>
+          <div class="card-body">
+            Σύντομη ονοματική φράση (έως 10 λέξεις) που αποδίδει <strong>το συνολικό νόημα</strong> της παραγράφου — λιτά, πυκνά, ελλειπτικά. Δεν επαναλαμβάνει τη θεματική περίοδο, αλλά συμπυκνώνει όλη την παράγραφο.
+            <button class="detail-toggle" onclick="toggleDetail(event,this)">+ Διδακτικός στόχος</button>
+            <div class="detail-content">Οι μαθητές να αποδίδουν συνοπτικά το βασικό νόημα κάθε παραγράφου, ώστε να παρακολουθούν τη νοηματική διάρθρωση του κειμένου στο σύνολό του.</div>
+            <div class="para-section-header">Πλαγιότιτλοι παραγράφων κειμένου</div>
+            <div class="para-tabs ptabs-platio">
+              <button class="para-tab" onclick="showPara(event,'pl1',this)">1η παράγραφος</button>
+              <button class="para-tab" onclick="showPara(event,'pl2',this)">2η παράγραφος</button>
+              <button class="para-tab" onclick="showPara(event,'pl3',this)">3η παράγραφος</button>
+              <button class="para-tab" onclick="showPara(event,'pl4',this)">4η παράγραφος</button>
+            </div>
+            <div id="pl1" class="para-block"><div class="seg seg-pt"><span class="badge b-pt">Πλαγιότιτλος 1</span>Αναγκαιότητα της γνώσης της γλώσσας</div></div>
+            <div id="pl2" class="para-block"><div class="seg seg-pt"><span class="badge b-pt">Πλαγιότιτλος 2</span>Ορισμός και λειτουργίες της γλώσσας</div></div>
+            <div id="pl3" class="para-block"><div class="seg seg-pt"><span class="badge b-pt">Πλαγιότιτλος 3</span>Γλώσσα: αποκλειστικό ανθρώπινο επίτευγμα</div></div>
+            <div id="pl4" class="para-block"><div class="seg seg-pt"><span class="badge b-pt">Πλαγιότιτλος 4</span>Τέσσερις βασικές γλωσσικές δεξιότητες</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="tags-row"><span class="tag">Ονοματική φράση</span><span class="tag">Πύκνωση</span></div>
+          <div class="card-ref">Θεωρία σελ. 0–0 · ΠΛΑΓΙΟΤΙΤΛΟΣ.pdf</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ΚΑΡΤΑ γ — ΤΡΟΠΟΙ ΑΝΑΠΤΥΞΗΣ -->
+    <div class="card" onclick="openModal(this)">
+      <div class="card-left">
+        <div class="card-index">Κάρτα γ΄</div>
+        <div class="card-question">«Με ποιους τρόπους αναπτύσσεται η κεντρική ιδέα;»</div>
+        <div class="card-topic-label">Τρόποι Ανάπτυξης</div>
+      </div>
+      <div class="card-right">
+        <div>
+          <div class="card-answer-label">Απάντηση / Έννοια-κλειδί</div>
+          <div class="card-answer">Τρόποι ανάπτυξης</div>
+          <div class="card-body">
+            Σε αυτή την ενότητα παρουσιάζονται <strong>συνοπτικά</strong> οι κυριότεροι τρόποι ανάπτυξης. Πατήστε σε κάθε τρόπο για σύντομο ορισμό.
+            <button class="detail-toggle" onclick="toggleDetail(event,this)">+ Διδακτικός στόχος</button>
+            <div class="detail-content">Πρώτη, ολιστική γνωριμία με τις μεθόδους ανάπτυξης, ώστε οι μαθητές να μπορούν να τις αναγνωρίζουν στα κείμενα.</div>
+            <div class="method-tags-section">
+              <div class="para-section-header" style="margin-top:4px;">Τρόποι ανάπτυξης — κλικ για ορισμό</div>
+              <div class="method-tags-row">
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-paradei')">Παραδείγματα <span class="mt-icon">+</span></button>
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-aitiolo')">Αιτιολόγηση <span class="mt-icon">+</span></button>
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-aitioap')">Αίτιο-αποτέλεσμα <span class="mt-icon">+</span></button>
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-diaire')">Διαίρεση <span class="mt-icon">+</span></button>
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-sygkris')">Σύγκριση-αντίθεση <span class="mt-icon">+</span></button>
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-orismos')">Ορισμός <span class="mt-icon">+</span></button>
+                <button class="method-tag" onclick="toggleMethodTag(event,this,'mc-analogi')">Αναλογία <span class="mt-icon">+</span></button>
+                <div class="method-popover" id="mc-paradei"><span class="pop-title">Παραδείγματα</span><p>Ο συντάκτης παραθέτει συγκεκριμένες, αντιπροσωπευτικές περιπτώσεις για να <em>τεκμηριώσει, επεξηγήσει ή διασαφηνίσει</em> τη θέση του.</p></div>
+                <div class="method-popover" id="mc-aitiolo"><span class="pop-title">Αιτιολόγηση</span><p>Ο συντάκτης διατυπώνει μια θέση και παραθέτει επιχειρήματα που την <em>αποδεικνύουν</em>, με σκοπό να πείσει τον αναγνώστη.</p></div>
+                <div class="method-popover" id="mc-aitioap"><span class="pop-title">Αίτιο-αποτέλεσμα</span><p>Ο συντάκτης παρουσιάζει τα αίτια ή τα αποτελέσματα ενός φαινομένου, με σκοπό να το <em>εξηγήσει / ερμηνεύσει</em>.</p></div>
+                <div class="method-popover" id="mc-diaire"><span class="pop-title">Διαίρεση</span><p>Ο συντάκτης <em>διαιρεί</em> μια έννοια σε επιμέρους είδη ή μέρη, ώστε να τη φωτίσει από διάφορες πτυχές της.</p></div>
+                <div class="method-popover" id="mc-sygkris"><span class="pop-title">Σύγκριση-αντίθεση</span><p>Ο συντάκτης <em>αναδεικνύει ομοιότητες ή/και διαφορές</em> μεταξύ δύο όρων του ίδιου είδους.</p></div>
+                <div class="method-popover" id="mc-orismos"><span class="pop-title">Ορισμός</span><p>Ο συντάκτης <em>προσδιορίζει επακριβώς</em> μια έννοια: Οριστέα έννοια = Γένος + Ειδοποιός διαφορά.</p></div>
+                <div class="method-popover" id="mc-analogi"><span class="pop-title">Αναλογία</span><p>Ο συντάκτης <em>παραλληλίζει</em> μια άγνωστη / σύνθετη έννοια με κάτι οικείο για να γίνει πιο κατανοητή.</p></div>
+              </div>
+            </div>
+            <div class="para-section-header">Τρόπος ανάπτυξης ανά παράγραφο</div>
+            <div class="para-tabs ptabs-tropoi">
+              <button class="para-tab" onclick="showPara(event,'t1',this)">1η παράγραφος</button>
+              <button class="para-tab" onclick="showPara(event,'t2',this)">2η παράγραφος</button>
+              <button class="para-tab" onclick="showPara(event,'t3',this)">3η παράγραφος</button>
+              <button class="para-tab" onclick="showPara(event,'t4',this)">4η παράγραφος</button>
+            </div>
+            <div id="t1" class="para-block"><div class="seg seg-m"><span class="badge b-m">Αιτιολόγηση</span>Ο συντάκτης θέτει τη θέση (αναγκαιότητα γνώσης της γλώσσας) και την αποδεικνύει με επιχειρήματα. Κειμενικοί δείκτες: <em>«γιατί»</em>.</div></div>
+            <div id="t2" class="para-block"><div class="seg seg-m"><span class="badge b-m">Ορισμός + Παραδείγματα</span>Πρώτα δίνεται ο επιστημονικός ορισμός της γλώσσας. Στη συνέχεια παρατίθενται παραδείγματα λειτουργιών. Κειμενικός δείκτης: <em>«για παράδειγμα»</em>.</div></div>
+            <div id="t3" class="para-block"><div class="seg seg-m"><span class="badge b-m">Παράδειγμα</span>Ο συντάκτης ανασκευάζει την αντίθετη άποψη χρησιμοποιώντας ως αντιπαράδειγμα τους παπαγάλους. Κειμενικός δείκτης: <em>«για παράδειγμα»</em>.</div></div>
+            <div id="t4" class="para-block"><div class="seg seg-m"><span class="badge b-m">Διαίρεση</span>Η έννοια «γλωσσικές δεξιότητες» διαιρείται σε τέσσερα είδη: ακρόαση, ανάγνωση, ομιλία, γραφή.</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="card-ref">Θεωρία σελ. 0–0 · ΤΡΟΠΟΣ_ΑΝΑΠΤΥΞΗΣ.pdf</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ΚΑΡΤΑ ΑΣΚΗΣΕΩΝ — DECK 1 -->
+    <div class="quiz-cta-card" onclick="launchQuiz(1)">
+      <div class="qcc-left"><div class="qcc-icon">✏️</div></div>
+      <div class="qcc-right">
+        <div class="qcc-label">Αυτοαξιολόγηση</div>
+        <div class="qcc-title">Ασκήσεις Κειμένου 1</div>
+        <div class="qcc-sub">Δομή παραγράφου · Πλαγιότιτλος · Τρόποι ανάπτυξης — 8 ερωτήσεις πολλαπλής επιλογής &amp; αντιστοίχισης</div>
+        <button class="qcc-btn">Έναρξη ασκήσεων →</button>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /deck1 -->
+
+<!-- DECK 2 -->
+<div class="deck deck-2" id="deck2">
+  <div class="deck-header">
+    <div class="deck-number">02</div>
+    <div>
+      <div class="deck-title">Ο κόσμος του λογοτεχνικού κειμένου</div>
+      <div class="deck-desc">«Στου Χατζηφράγκου» — Κοσμάς Πολίτης · απόσπασμα</div>
+    </div>
+  </div>
+  <div class="cards-grid">
+
+    <!-- ΚΑΡΤΑ α — ΠΡΟΣΩΠΑ -->
+    <div class="card" onclick="openModal(this)">
+      <div class="card-left">
+        <div class="card-index">Κάρτα α΄</div>
+        <div class="card-question">«Ποιοι ζουν μέσα στην ιστορία και ποιο ρόλος έχει ο καθένας;»</div>
+        <div class="card-topic-label">Πρόσωπα</div>
+      </div>
+      <div class="card-right">
+        <div>
+          <div class="card-answer-label">Απάντηση</div>
+          <div class="card-answer">Πρόσωπα ιστορίας</div>
+          <div class="card-body">
+            Διάκριση <strong>βασικών</strong> από <strong>δευτερεύοντα</strong> πρόσωπα · εντοπισμός πληροφοριών για το ήθος, τις σχέσεις και τον ρόλο καθενός στην εξέλιξη της πλοκής.
+            <button class="detail-toggle" onclick="toggleDetail(event,this)">+ Διδακτικός στόχος</button>
+            <div class="detail-content">Οι μαθητές να διακρίνουν τα πρόσωπα της αφήγησης και να κατανοούν τη λειτουργία τους.</div>
+            <div class="para-section-header">Πρόσωπα στο απόσπασμα</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--sage);margin:6px 0 5px;">Βασικά πρόσωπα <span style="font-size:9px;color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400;">(τρεις γυναίκες που αγωνίζονται για καταξίωση)</span></div>
+            <div class="para-tabs ptabs-prosopa-v">
+              <button class="para-tab" onclick="showPara(event,'pr-chrysa',this)">Κυρία Χρύσα</button>
+              <button class="para-tab" onclick="showPara(event,'pr-eromfili',this)">Κώνα Ερωμφίλη</button>
+              <button class="para-tab" onclick="showPara(event,'pr-sofia',this)">Κώνα Σοφία</button>
+            </div>
+            <div id="pr-chrysa" class="para-block"><div class="seg seg-sc"><span class="badge b-sc">Κυρία Χρύσα</span>Γεροντοκόρη που αναζητά την κοινωνική καταξίωση μέσα από δύο δρόμους: την οικονομική ανεξαρτησία (σπιτικό σχολείο) και την αναγνώριση που της εξασφαλίζει η μόρφωσή της.</div></div>
+            <div id="pr-sofia" class="para-block"><div class="seg seg-sc"><span class="badge b-sc">Κώνα Σοφία η Αιβαλιώτισσα</span>Αναζητά κοινωνική αναγνώριση επικαλούμενη την καταγωγή της και αγωνιά για την έλλειψη προίκας για τη «μεγαλοκοπέλα» κόρη της.</div></div>
+            <div id="pr-eromfili" class="para-block"><div class="seg seg-sc"><span class="badge b-sc">Κώνα Ερωμφίλη</span>Παραδουλεύτρα σε πλουσιόσπιτα, αναζητά καταξίωση μέσα από τη σχέση με τη νονά-«πριγκηπέσσα» του γιου της.</div></div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:12px 0 5px;">Δευτερεύοντα πρόσωπα</div>
+            <div class="para-tabs ptabs-prosopa-d">
+              <button class="para-tab" onclick="showPara(event,'pr-anthippi',this)">Ανθίππη</button>
+              <button class="para-tab" onclick="showPara(event,'pr-amana',this)">Αμανατζής</button>
+              <button class="para-tab" onclick="showPara(event,'pr-kimon',this)">Κίμωνας</button>
+            </div>
+            <div id="pr-anthippi" class="para-block"><div class="seg seg-tp"><span class="badge b-tp">Ανθίππη</span>Κόρη της Σοφίας, ανύπαντρη. Λειτουργεί ως <em>καταλύτης</em> που αναδεικνύει την αγωνία της μητέρας.</div></div>
+            <div id="pr-amana" class="para-block"><div class="seg seg-tp"><span class="badge b-tp">Αμανατζής</span>Σύζυγος της Σοφίας. Επεμβαίνει ειρωνικά: <em>«Τα δυο λαγήνια λάδι;»</em></div></div>
+            <div id="pr-kimon" class="para-block"><div class="seg seg-tp"><span class="badge b-tp">Κίμωνας</span>Γιος της Ερωμφίλης. Σύμβολο της κοινωνικής ανέλιξης που επιδιώκει η μητέρα.</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="tags-row"><span class="tag">Αγώνας καταξίωσης</span><span class="tag">Γυναικείοι χαρακτήρες</span></div>
+          <div class="card-ref">Θεωρία σελ. 0–0 · _Ι_ΕΡΜΗΝΕΥΤΙΚΟ.pdf</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ΚΑΡΤΑ β — ΤΟΠΟΣ & ΧΡΟΝΟΣ -->
+    <div class="card" onclick="openModal(this)">
+      <div class="card-left">
+        <div class="card-index">Κάρτα β΄</div>
+        <div class="card-question">«Πού και πότε εκτυλίσσεται η ιστορία — και τι σημαίνει αυτό για τους ήρωες;»</div>
+        <div class="card-topic-label">Τόπος &amp; Χρόνος</div>
+      </div>
+      <div class="card-right">
+        <div>
+          <div class="card-answer-label">Απάντηση</div>
+          <div class="card-answer">Τόπος &amp; Χρόνος</div>
+          <div class="card-body">
+            Το <strong>χωροχρονικό πλαίσιο</strong> (ιστορικό, κοινωνικό, πολιτισμικό) καθορίζει τις συμπεριφορές και τις επιλογές των προσώπων.
+            <button class="detail-toggle" onclick="toggleDetail(event,this)">+ Διδακτικός στόχος</button>
+            <div class="detail-content">Οι μαθητές να κατανοούν πώς ο τόπος και ο χρόνος ερμηνεύουν τις πράξεις των ηρώων.</div>
+            <div class="para-section-header">Χωροχρονικό πλαίσιο κειμένου</div>
+            <div class="para-tabs ptabs-topos">
+              <button class="para-tab" onclick="showPara(event,'tx-topos',this)">Τόπος</button>
+              <button class="para-tab" onclick="showPara(event,'tx-chronos',this)">Χρόνος</button>
+              <button class="para-tab" onclick="showPara(event,'tx-plaisio',this)">Ιστορικό πλαίσιο</button>
+            </div>
+            <div id="tx-topos" class="para-block"><div class="seg seg-sc"><span class="badge b-sc">Τόπος</span><strong>Σμύρνη</strong> — η λαϊκή συνοικία «Στου Χατζηφράγκου». Ο τόπος σηματοδοτεί ταξικές διακρίσεις και αγωνίες κοινωνικής ανόδου.</div></div>
+            <div id="tx-chronos" class="para-block"><div class="seg seg-sc"><span class="badge b-sc">Χρόνος</span>Ο <strong>αφηγηματικός χρόνος</strong> είναι <em>γραμμικός</em>. Ο <strong>ιστορικός χρόνος</strong>: πριν τη Μικρασιατική Καταστροφή (1922). Γράφτηκε 1962-3 — χαρακτήρας <em>νοσταλγικής ανάμνησης</em>.</div></div>
+            <div id="tx-plaisio" class="para-block"><div class="seg seg-sc"><span class="badge b-sc">Ιστορικό &amp; κοινωνικό πλαίσιο</span>Σμύρνη αρχών 20ού αιώνα: <strong>πολυπολιτισμική πόλη</strong>. Η κοινωνική ιεραρχία αναπαράγεται ακόμη και εντός της φτώχειας.</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="tags-row"><span class="tag">Σμύρνη</span><span class="tag">Χρονικά επίπεδα</span><span class="tag">Κοινωνικό πλαίσιο</span></div>
+          <div class="card-ref">Θεωρία σελ. 0–0 · _Ι_ΕΡΜΗΝΕΥΤΙΚΟ.pdf</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ΚΑΡΤΑ γ — ΕΙΡΩΝΕΙΑ -->
+    <div class="card" onclick="openModal(this)">
+      <div class="card-left">
+        <div class="card-index">Κάρτα γ΄</div>
+        <div class="card-question">«Από τι δημιουργείται η ειρωνεία στο κείμενο;»</div>
+        <div class="card-topic-label">Ειρωνεία</div>
+      </div>
+      <div class="card-right">
+        <div>
+          <div class="card-answer-label">Απάντηση</div>
+          <div class="card-answer">Ειρωνεία (σχήμα λόγου)</div>
+          <div class="card-body">
+            Σχήμα λόγου ή κατάσταση όπου το <strong>φαινομενικό</strong> έρχεται σε πλήρη αντίθεση με το <strong>πραγματικό</strong>. Χρησιμοποιείται για να τονίσει μια αλήθεια με δηκτικό, σκωπτικό τρόπο.
+            <button class="detail-toggle" onclick="toggleDetail(event,this)">+ Διδακτικός στόχος</button>
+            <div class="detail-content">Οι μαθητές να αναγνωρίζουν τα σημεία ειρωνείας και να κατανοούν από τι δημιουργούνται.</div>
+            <div class="para-section-header">Πηγές ειρωνείας στο απόσπασμα</div>
+            <div class="para-tabs ptabs-ploki">
+              <button class="para-tab" onclick="showPara(event,'eir-simeia',this)">Σημεία ειρωνείας</button>
+              <button class="para-tab" onclick="showPara(event,'eir-tragiki',this)">Τραγική ειρωνεία</button>
+            </div>
+            <div id="eir-simeia" class="para-block">
+              <div class="seg seg-sc"><span class="badge b-sc">①</span><strong>«αριστοκρατία» του μαχαλά</strong> → Μεγαλοπρεπής χαρακτηρισμός σε φτωχογειτονιά.</div>
+              <div class="seg seg-sc"><span class="badge b-sc">②</span><strong>«Πριγκηπέσσα»</strong> → Υπερβολικός τίτλος σε χήρα επαρχιώτη γιατρού.</div>
+              <div class="seg seg-sc"><span class="badge b-sc">③</span><strong>«Τα δυο λαγήνια λάδι;»</strong> → Η πραγματικότητα αποδομεί τον ισχυρισμό για «εκατό λίρες».</div>
+            </div>
+            <div id="eir-tragiki" class="para-block">
+              <div class="seg seg-ka"><span class="badge b-ka">Τραγική ειρωνεία</span>Ο <strong>αναγνώστης γνωρίζει</strong> το τραγικό τέλος, ενώ ο ήρωας το αγνοεί.</div>
+              <div class="seg-note" style="margin-top:8px;">ℹ️ <strong>Εξωκειμενική ανάγνωση:</strong> Ο αναγνώστης που γνωρίζει τη Μικρασιατική Καταστροφή (1922) διαβάζει τους αγώνες των ηρώων ως μάταιους.</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="tags-row"><span class="tag">Αντίφαση</span><span class="tag">Δηκτικότητα</span><span class="tag">Τραγική ειρωνεία</span></div>
+          <div class="card-ref">Θεωρία: Ι. ΕΡΜΗΝΕΥΤΙΚΟ.pdf · ΛΟΓΟΤΕΧΝΙΑ_Α_Η_ΘΕΩΡΙΑ.pdf</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ΚΑΡΤΑ ΑΣΚΗΣΕΩΝ — DECK 2 -->
+    <div class="quiz-cta-card" onclick="launchQuiz(2)">
+      <div class="qcc-left"><div class="qcc-icon">✏️</div></div>
+      <div class="qcc-right">
+        <div class="qcc-label">Αυτοαξιολόγηση</div>
+        <div class="qcc-title">Ασκήσεις Κειμένου 2</div>
+        <div class="qcc-sub">Πρόσωπα · Τόπος &amp; Χρόνος · Ειρωνεία — 9 ερωτήσεις πολλαπλής επιλογής &amp; αντιστοίχισης</div>
+        <button class="qcc-btn">Έναρξη ασκήσεων →</button>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /deck2 -->
+
+<p class="footnote">Α &amp; Σ Μητσέλος - Νέα Ελληνικά για την Α΄Λυκείου, 2026</p>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBg(event)">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-left" id="modalLeft">
+      <div>
+        <div class="modal-index" id="modalIndex"></div>
+        <div class="modal-question" id="modalQuestion"></div>
+      </div>
+      <div class="modal-topic" id="modalTopic"></div>
+    </div>
+    <div class="modal-right" id="modalRight">
+      <div class="modal-answer-label">Απάντηση / Έννοια-κλειδί</div>
+      <div class="modal-answer" id="modalAnswer"></div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-tags" id="modalTags"></div>
+      <div class="modal-ref" id="modalRef"></div>
+    </div>
+  </div>
+</div>
+</div><!-- /cardsScreen -->
+
+<!-- ══════════════════════════════════════════════
+     SCREEN 2 — QUIZ
+     ══════════════════════════════════════════════ -->
+<div id="quizScreen" class="screen">
+  <div class="quiz-topbar">
+    <div class="qt-left">
+      <button class="btn-quit" onclick="goCards()">← Πίσω στις κάρτες</button>
+      <div class="qt-deck-lbl" id="qdLabel"></div>
+    </div>
+    <div class="qt-right">
+      <div class="qt-score">✓ <strong class="s-c" id="qsc">0</strong> &nbsp; ✗ <strong class="s-w" id="qsw">0</strong></div>
+      <div class="qt-score" id="qsn" style="opacity:.6"></div>
+    </div>
+  </div>
+  <div class="progress-wrap"><div class="progress-bar" id="progBar" style="width:0%"></div></div>
+  <div class="card-stage" id="cardStage"></div>
+  <div class="quiz-bottom">
+    <div class="qb-info" id="qbInfo"></div>
+    <button class="btn-next" id="btnNext" onclick="nextCard()">Επόμενη →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SCREEN 3 — RESULTS
+     ══════════════════════════════════════════════ -->
+<div id="resultsScreen" class="screen">
+  <div class="res-score" id="resScore"></div>
+  <div class="res-label">σωστές απαντήσεις</div>
+  <div class="res-gold"></div>
+  <div class="res-msg" id="resMsg"></div>
+  <div class="res-btns">
+    <button class="btn-res primary" onclick="startQuiz()">↺ Ξανά (ίδια ενότητα)</button>
+    <button class="btn-res primary" id="btnRetryWrong" onclick="retryWrong()" style="background:var(--wrong);display:none;">✗ Επανάληψη λανθασμένων</button>
+    <button class="btn-res secondary" onclick="goCards()">← Πίσω στις κάρτες</button>
+  </div>
+</div>
+
+<!-- ══════ THEORY MODAL — ΔΟΜΗ ΠΑΡΑΓΡΑΦΟΥ ══════ -->
+<div class="theory-modal-overlay" id="theoryModal" onclick="closeTheoryModal(event)">
+  <div class="theory-modal-box">
+
+    <!-- LEFT PANEL -->
+    <div class="theory-modal-header">
+      <button class="theory-modal-close" onclick="document.getElementById('theoryModal').classList.remove('open')">✕</button>
+      <div>
+        <div class="th-sub">Θεωρητικό πλαίσιο · Παράγραφος</div>
+        <h2>Δομή της παραγράφου</h2>
+        <p class="th-header-desc">Κάθε παράγραφος αποτελείται από δύο (διμερής) ή τρία μέρη (τριμερής): τη <strong style="color:#fff;">θεματική περίοδο</strong>, τα <strong style="color:#fff;">σχόλια</strong> και την <strong style="color:#fff;">κατακλείδα</strong> (προαιρετική).</p>
+      </div>
+      <div style="font-size:12px;color:rgba(255,255,255,.45);font-style:italic;position:relative;z-index:1;">☞ ΔΟΜΗ_ΠΑΡΑΓΡΑΦΟΥ.pdf<br>Α &amp; Σ Μητσέλος, 2026</div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="theory-modal-body">
+
+      <div class="th-section">
+        <div class="th-label">Δομικά μέρη</div>
+        <div class="th-part">
+          <div class="th-part-name tp">Θεματική περίοδος</div>
+          <div class="th-part-desc">Το <strong>θέμα</strong> της παραγράφου· εκφράζει την κεντρική ιδέα. Αποτελείται από (α) τη γνωστή πληροφορία (θέμα κειμένου) και (β) την <em>κατευθυντήρια ιδέα</em> — ένα νέο σχόλιο που διαφοροποιεί νοηματικά τη συγκεκριμένη παράγραφο. Βρίσκεται συνήθως <em>στην αρχή</em>.</div>
+        </div>
+        <div class="th-part">
+          <div class="th-part-name sc">Σχόλια / λεπτομέρειες</div>
+          <div class="th-part-desc"><strong>Αναπτύσσουν, εξηγούν ή αποδεικνύουν</strong> τη θεματική περίοδο. Διακρίνονται σε <em>μείζονες</em> (κύριες πληροφορίες) και <em>ελάσσονες</em> (δευτερεύουσες λεπτομέρειες). Αποτελούν το μεγαλύτερο τμήμα της παραγράφου.</div>
+        </div>
+        <div class="th-part">
+          <div class="th-part-name ka">Κατακλείδα</div>
+          <div class="th-part-desc"><strong>Προαιρετική.</strong> Γενική κρίση που συνοψίζει το νόημα· συχνά επαναδιατυπώνει τη θεματική περίοδο ή εξάγει συμπέρασμα. Κειμενικοί δείκτες: <em>«επομένως», «έτσι», «λοιπόν»</em> κ.ά. <strong>Δεν εξετάζεται</strong> κατά τον εντοπισμό τρόπων ανάπτυξης.</div>
+        </div>
+      </div>
+
+      <div class="th-section">
+        <div class="th-label">Κανόνες υψηλής προτεραιότητας</div>
+        <div class="th-rules">
+          <ul style="margin-left:16px;">
+            <li style="margin-bottom:8px;"><strong>Κατακλείδα ≠ νέο επιχείρημα.</strong> Αν η τελευταία πρόταση τεκμηριώνει επιπλέον → ανήκει στα σχόλια.</li>
+            <li style="margin-bottom:8px;"><strong>Τελευταία πρόταση ≠ αυτόματα κατακλείδα.</strong> Απαιτείται λειτουργία συνολικού συμπεράσματος.</li>
+            <li style="margin-bottom:8px;">Η παράγραφος μπορεί να είναι <strong>διμερής</strong> (χωρίς κατακλείδα) ή <strong>τριμερής</strong> (με κατακλείδα).</li>
+            <li>Η θεματική περίοδος μπορεί να <strong>απουσιάζει</strong> ή να βρίσκεται στο τέλος της προηγούμενης παραγράφου.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="th-section">
+        <div class="th-label">Παράδειγμα — Τριμερής παράγραφος</div>
+        <div class="th-example-box">
+          <div class="seg seg-tp" style="border-radius:0;margin-bottom:0;"><span class="badge b-tp">Θ.Π.</span>Η διαδικτυακή επαφή συχνά λειτουργεί ως υποκατάστατο της πραγματικής ανθρώπινης επικοινωνίας και δεν εμφανίζει τα συναισθηματικά οφέλη μιας συνάντησης από κοντά.</div>
+          <div class="seg seg-sc" style="border-radius:0;margin-bottom:0;"><span class="badge b-sc">Σχόλια</span>Στις ιστοσελίδες κοινωνικής δικτύωσης οι νέοι προωθούν μια εικονική ταυτότητα —όπως θα ήθελαν να είναι— και όχι πραγματική, καθίστανται πιο ατομικιστές και καλλιεργούν εικονικές φιλίες.</div>
+          <div class="seg seg-ka" style="border-radius:0;margin-bottom:0;"><span class="badge b-ka">Κατακλείδα</span>Επομένως, η εικονική επικοινωνία απέχει από την έννοια της αληθινής συναναστροφής και αποτελεί «παράσταση» σε εικονικό κοινό.</div>
+        </div>
+      </div>
+
+      <div class="th-section">
+        <div class="th-label">Παράδειγμα — Διμερής παράγραφος (χωρίς κατακλείδα)</div>
+        <div class="th-example-box">
+          <div class="seg seg-tp" style="border-radius:0;margin-bottom:0;"><span class="badge b-tp">Θ.Π.</span>Στο θέμα της παραβατικής συμπεριφοράς, η παρέμβαση του σχολείου είναι αποφασιστικής σημασίας.</div>
+          <div class="seg seg-sc" style="border-radius:0;margin-bottom:0;"><span class="badge b-sc">Σχόλια</span>Και αυτό, γιατί το σχολείο ως θεσμός κοινωνικοποίησης μπορεί να επισημάνει έγκαιρα μορφές συμπεριφοράς που ενδέχεται να οδηγήσουν στην παραβατικότητα και να δράσει διορθωτικά σε πρώιμα στάδια.</div>
+          <div class="seg-note" style="border-radius:0;margin-bottom:0;">ℹ️ Χωρίς κατακλείδα — διμερής δομή.</div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
 <script>
-const CARDS = [
-  // ══ ΘΕΜΑ Α ══
-  {
-    id:'a1', sec:'a', secLabel:'Θέμα Α · Α1', pts:'20 μον.',
-    size:'tall',
-    q:'Να παρουσιάσεις συνοπτικά, σε 70 περίπου λέξεις, τα οφέλη της γυμναστικής και της άθλησης, σύμφωνα με το Κείμενο 1.',
-    color:'sec-a',
-    ans:`
-<div class="schema-block">
-  <div class="sch-title">Δομή απάντησης</div>
-  <div class="sch-box ok">Εισαγωγική περίοδος + ανάπτυξη ≈ 70 λέξεις · χωρίς αναφορά πηγής πάνω από 1 φορά</div>
-</div>
-<div class="schema-block">
-  <div class="sch-title">Περιεχόμενο — 4 κατηγορίες οφελών</div>
-  <ul class="sch-list">
-    <li><strong>Σωματικά:</strong> εξασφάλιση υγείας, αρμονική σωματική ανάπτυξη</li>
-    <li><strong>Ψυχοπνευματικά:</strong> θέληση, θάρρος, αυτοπεποίθηση, πειθαρχία, αρμονία</li>
-    <li><strong>Κοινωνικά (ομαδικά αθλήματα):</strong> συνεργασία, ομαδικότητα, σεβασμός, υποταγή «εγώ» στο σύνολο</li>
-    <li><strong>Αγωγή — χαλάρωση:</strong> χαλάρωση από το καθημερινό άγχος · απαραίτητο στοιχείο της σχολικής αγωγής (Rousseau)</li>
-  </ul>
-</div>
-<div class="schema-block">
-  <div class="sch-title">Υπόδειγμα</div>
-  <div class="sch-quote">Σύμφωνα με το Κείμενο 1, η γυμναστική και η άθληση προσφέρουν πλούσια οφέλη. Σωματικά, εξασφαλίζουν υγεία και αρμονική ανάπτυξη του κορμιού. Ψυχοπνευματικά, καλλιεργούν θέληση, θάρρος, αυτοπεποίθηση και πειθαρχία. Τα ομαδικά αθλήματα ειδικά ενισχύουν τη συνεργασία, την ομαδικότητα και τον σεβασμό, αρετές ζωτικές για την κοινωνική συμβίωση. Τέλος, η γυμναστική χαλαρώνει τους μαθητές από το καθημερινό άγχος και αποτελεί απαραίτητο στοιχείο της σχολικής αγωγής. <cite>(70 λέξεις)</cite></div>
-</div>`
-  },
-
-  // ══ ΘΕΜΑ Β ══
-  {
-    id:'b1', sec:'b', secLabel:'Θέμα Β · Β1', pts:'10 μον.',
-    size:'xtall',
-    q:'Να παρουσιάσεις δύο κοινές θέσεις / αναφορές στις οποίες συγκλίνουν οι συντάκτες των Κειμένων 1 και 2, καταγράφοντας και τα σχετικά χωρία.',
-    color:'sec-b1',
-    ans:`
-<div class="schema-block">
-  <div class="sch-title">Μεθοδολογία</div>
-  <ul class="sch-list">
-    <li>Εντοπισμός θεματικής σύγκλισης</li>
-    <li>Διατύπωση κοινής θέσης με δικά μου λόγια</li>
-    <li>Παράθεση χωρίου από κάθε κείμενο</li>
-  </ul>
-</div>
-<div class="sch-divider"></div>
-<div class="schema-block">
-  <div class="sch-title">Σύγκλιση 1 — Ενότητα σώματος & πνεύματος</div>
-  <div class="sch-box">Και οι δύο συντάκτες υποστηρίζουν ότι η άσκηση δεν ωφελεί μόνο το σώμα αλλά καλλιεργεί και πνευματικές / ηθικές αξίες.</div>
-  <div class="sch-quote">«Από την ενότητα ψυχής και σώματος πηγάζει ένα υπέρτατο χρέος, η παράλληλη άσκηση του σώματος και του πνεύματος» <cite>— Κείμενο 1</cite></div>
-  <div class="sch-quote">«Στα σπορτ δε γυμνάζεις το σώμα σου μονάχα· γυμνάζεις, πάνω απ&rsquo; όλα, την ψυχή σου» <cite>— Κείμενο 2</cite></div>
-</div>
-<div class="sch-divider"></div>
-<div class="schema-block">
-  <div class="sch-title">Σύγκλιση 2 — Αξία ομαδικών αθλημάτων για την κοινωνικότητα</div>
-  <div class="sch-box">Αμφότεροι τονίζουν ότι τα ομαδικά αθλήματα διδάσκουν υποταγή του ατομικού στο συλλογικό.</div>
-  <div class="sch-quote">«…την υποταγή του «εγώ» στη συνολική βούληση και στόχευση, αρετές απαραίτητες για την κοινωνική συμβίωση» <cite>— Κείμενο 1</cite></div>
-  <div class="sch-quote">«Τα ομαδικά παιχνίδια υπηρετούν μεγάλο ηθικό σκοπό: σε συνηθίζουν να υποτάξεις την ατομικότητά σου σε μια γενική ενέργεια» <cite>— Κείμενο 2</cite></div>
-</div>`
-  },
-  {
-    id:'b2a', sec:'b', secLabel:'Θέμα Β · Β2α — Ύφος & Πρόθεση', pts:'10 μον.',
-    size:'xtall',
-    q:'Να αντιστοιχίσεις κάθε κείμενο με το ύφος (ΣΤΗΛΗ Β) και να αιτιολογήσεις: α) 2 γλωσσικές επιλογές με χωρίο, β) επακριβής πρόθεση κάθε συντάκτη.',
-    color:'sec-b2',
-    ans:`
-<div class="schema-block">
-  <div class="sch-title">Αντιστοίχιση</div>
-  <table class="sch-table">
-    <tr><th>Κείμενο</th><th>Ύφος</th><th>Πρόθεση</th></tr>
-    <tr><td class="td-k">Κείμενο 1</td><td>επίσημο / απρόσωπο</td><td>Να πείσει τον αναγνώστη για την αξία της γυμναστικής και της άθλησης</td></tr>
-    <tr><td class="td-k">Κείμενο 2</td><td>λογοτεχνικό / βιωματικό</td><td>Να μοιραστεί σκέψεις και προβληματισμούς για τον ρόλο των ομαδικών αθλημάτων στην αγωγή</td></tr>
-  </table>
-</div>
-<div class="sch-divider"></div>
-<div class="schema-block">
-  <div class="sch-title">Γλωσσικές επιλογές — Κείμενο 1 (επίσημο)</div>
-  <ul class="sch-list">
-    <li><strong>Γ΄ πρόσωπο / αναφορική λειτουργία:</strong> «Η γυμναστική και η άθληση εξασφαλίζουν…» → αντικειμενικότητα, επιστημονικό ύφος</li>
-    <li><strong>Ονοματικός λόγος / αφηρημένο λεξιλόγιο:</strong> «συναδέλφωση», «ψυχοπνευματική ζωή», «κοινωνική συμβίωση» → πυκνό, επίσημο ύφος</li>
-  </ul>
-</div>
-<div class="sch-divider"></div>
-<div class="schema-block">
-  <div class="sch-title">Γλωσσικές επιλογές — Κείμενο 2 (λογοτεχνικό)</div>
-  <ul class="sch-list">
-    <li><strong>Α΄ / Β΄ πρόσωπο / ποιητική λειτουργία:</strong> «Νιώθεις πως εδώ…», «Περνώ ένα μικρό γιοφυράκι» → βιωματική αφήγηση, συναισθηματική εμπλοκή</li>
-    <li><strong>Λαϊκό / δημοτικό λεξιλόγιο & εικόνες:</strong> «γιοφυράκι», «αγιάτρευτη νοσταλγία», «αψηλές κορυφές» → ποιητικό, εκφραστικό ύφος</li>
-  </ul>
-</div>`
-  },
-  {
-    id:'b2b', sec:'b', secLabel:'Θέμα Β · Β2β — Δομή τελ. παρ. Κειμένου 2', pts:'5 μον.',
-    size:'tall',
-    q:'Να εξετάσεις αν η τελευταία παράγραφος του Κειμένου 2 έχει ολοκληρωμένη / τριμερή δομή. Να αιτιολογήσεις με αναφορά στο περιεχόμενο.',
-    color:'sec-b2',
-    ans:`
-<div class="schema-block">
-  <div class="sch-title">Απάντηση</div>
-  <div class="sch-box ok"><strong>ΝΑΙ</strong> — η παράγραφος έχει τριμερή (ολοκληρωμένη) δομή.</div>
-</div>
-<div class="schema-block">
-  <div class="sch-title">Δομικά μέρη</div>
-  <table class="sch-table">
-    <tr><th>Μέρος</th><th>Περιεχόμενο</th></tr>
-    <tr><td class="td-k">Θεματική περίοδος</td><td>«Τα ομαδικά παιχνίδια υπηρετούν μεγάλο ηθικό σκοπό» → θέση / κεντρική ιδέα</td></tr>
-    <tr><td class="td-k">Σχόλια</td><td>Ανάπτυξη: υποταγή ατομικότητας, υπεράσπιση τιμής ομάδας, γυμνασία ψυχής</td></tr>
-    <tr><td class="td-k">Κατακλείδα</td><td>«Έτσι, από σκαλοπάτι σε σκαλοπάτι, το παιχνίδι μπορεί να σε ανεβάσει…» → συνολικό συμπέρασμα (δείκτης: «Έτσι»)</td></tr>
-  </table>
-</div>
-<div class="schema-block">
-  <div class="sch-box warn">Η κατακλείδα αναγνωρίζεται από τον δείκτη «Έτσι» + συνολικό συμπέρασμα, ΟΧΙ επιπλέον επιχείρημα.</div>
-</div>`
-  },
-  {
-    id:'b3_1', sec:'b', secLabel:'Θέμα Β · Β3 (1) — Εισαγωγικά «εγώ»', pts:'2 μον.',
-    size:'',
-    q:'Τι δηλώνουν τα εισαγωγικά στο: «…την υποταγή του «εγώ» στη συνολική βούληση και στόχευση» (Κείμενο 1);',
-    color:'sec-b3',
-    ans:`
-<div class="schema-block">
-  <div class="sch-title">Λειτουργία εισαγωγικών</div>
-  <div class="sch-box ok"><strong>Μεταφορική / ειδική σημασία λέξης</strong></div>
-</div>
-<div class="schema-block">
-  <div class="sch-title">Ερμηνεία</div>
-  <div class="sch-text">Το «εγώ» δεν χρησιμοποιείται ως αντωνυμία αλλά ως <strong>ουσιαστικό με μεταφορική σημασία</strong>: δηλώνει την ατομικιστική, εγωκεντρική συμπεριφορά του αθλητή. Τα εισαγωγικά επισημαίνουν ότι ο όρος χρησιμοποιείται με ειδική / αποκλίνουσα σημασία από τη συνηθισμένη.</div>
-</div>`
-  },
-  {
-    id:'b3_2', sec:'b', secLabel:'Θέμα Β · Β3 (2) — Εισαγωγικά Rousseau', pts:'2 μον.',
-    size:'',
-    q:'Τι δηλώνουν τα εισαγωγικά στο: «…ότι: «η σωματική αγωγή αποτελεί τη βάση…» (Κείμενο 1);',
-    color:'sec-b3',
-    ans:`
-<div class="schema-block">
-  <div class="sch-title">Λειτουργία εισαγωγικών</div>
-  <div class="sch-box ok"><strong>Παράθεμα — Ευθύς λόγος</strong> (αυτούσιο απόσπασμα από τα λόγια / έργα τρίτου)</div>
-</div>
-<div class="schema-block">
-  <div class="sch-title">Ερμηνεία</div>
-  <div class="sch-text">Τα εισαγωγικά δηλώνουν ότι ακολουθεί <strong>αυτούσια η άποψη του Rousseau</strong>, ως τεκμήριο που ενισχύει τη θέση του συντάκτη. Παράλληλα, η προηγούμενη διπλή στιγμή (:) προαναγγέλλει το παράθεμα.</div>
-</div>`
-  },
-  {
-    id:'b3_3', sec:'b', secLabel:'Θέμα Β · Β3 (3) — Άνω τελεία', pts:'2 μον.',
-    size:'',
-    q:'Τι δηλώνει η άνω τελεία στο: «Στα σπορτ δε γυμνάζεις το σώμα σου μονάχα· γυμνάζεις, πάνω απ&rsquo; όλα, την ψυχή σου.» (Κείμενο 2);',
-    color:'sec-b3',
-    ans:`
-<div class="schema-block">
-  <div class="sch-title">Λειτουργία άνω τελείας (·)</div>
-  <div class="sch-box ok"><strong>Αντίθεση</strong> μεταξύ δύο ημιπεριόδων με στενή νοηματική συνάφεια</div>
-</div>
-<div class="schema-block">
-  <div class="sch-title">Ερμηνεία</div>
-  <div class="sch-text">Η άνω τελεία <strong>διαχωρίζει αντιθετικά</strong> τις δύο ημιπεριόδους: η πρώτη («σώμα μονάχα») αρνείται μια μονομερή άποψη, η δεύτερη («ψυχή — πάνω απ&rsquo; όλα») αντιπαρατίθεται και αποκαθιστά την αλήθεια. Η παύση δίνει <em>ρυθμό και έμφαση</em> στο δεύτερο σκέλος.</div>
-</div>`
-  },
-  {
-    id:'b3_4', sec:'b', secLabel:'Θέμα Β · Β3 (4) — Διπλή παύλα', pts:'2 μον.',
-    size:'',
-    q:'Τι δηλώνει η διπλή παύλα στο: «Όχι όμως σπορτ ατομικά — ακόντιο, πήδημα, δίσκος— παρά σπορτ ομαδικά» (Κείμενο 2);',
-    color:'sec-b3',
-    ans:`
-<div class="schema-block">
-  <div class="sch-title">Λειτουργία διπλής παύλας</div>
-  <div class="sch-box ok"><strong>Επεξήγηση / Παρεμβολή</strong> — αναλύει με παραδείγματα την αμέσως προηγούμενη αναφορά</div>
-</div>
-<div class="schema-block">
-  <div class="sch-title">Ερμηνεία</div>
-  <div class="sch-text">Η διπλή παύλα περικλείει <strong>παράδειγμα</strong> που εξηγεί τι εννοεί με «ατομικά σπορτ»: ακόντιο, πήδημα, δίσκος. Διακόπτει τη ροή του λόγου για να παρεμβάλει σημαντική πληροφορία, η οποία διαφοροποιεί (αντιπαρατίθεται στα ομαδικά).</div>
-</div>`
-  },
-  {
-    id:'b3_5', sec:'b', secLabel:'Θέμα Β · Β3 (5) — Διπλή στιγμή', pts:'2 μον.',
-    size:'',
-    q:'Τι δηλώνει η διπλή στιγμή στο: «…παρά σπορτ ομαδικά: λεμβοδρομίες, κρίκετ, τένις, φουτμπόλ» (Κείμενο 2);',
-    color:'sec-b3',
-    ans:`
-<div class="schema-block">
-  <div class="sch-title">Λειτουργία διπλής στιγμής (:)</div>
-  <div class="sch-box ok"><strong>Προαναγγελία καταλόγου</strong> — εισάγει απαρίθμηση συγκεκριμένων παραδειγμάτων</div>
-</div>
-<div class="schema-block">
-  <div class="sch-title">Ερμηνεία</div>
-  <div class="sch-text">Η διπλή στιγμή <strong>προετοιμάζει τον αναγνώστη</strong> ότι ακολουθεί κατάλογος: εξειδικεύει τα «ομαδικά σπορτ» με τέσσερα συγκεκριμένα παραδείγματα (λεμβοδρομίες, κρίκετ, τένις, φουτμπόλ), επεξηγώντας την αόριστη κατηγορία.</div>
-</div>`
-  },
-
-  // ══ ΘΕΜΑ Γ ══
-  {
-    id:'c1', sec:'c', secLabel:'Θέμα Γ · Γ1', pts:'15 μον.',
-    size:'xtall',
-    q:'Ποιο είναι κατά τη γνώμη σου το σημαντικότερο θέμα που αναδεικνύει η ανάγνωση του αφηγήματος; Να το παρουσιάσεις με τρεις τουλάχιστον κειμενικούς δείκτες. Ποιες σκέψεις σου προκάλεσε η ανάγνωση του αφηγήματος; (150-200 λέξεις)',
-    color:'sec-c',
-    ans:`
-<div class="schema-block">
-  <div class="sch-title">Κεντρικό θέμα (επιλογή & αιτιολόγηση)</div>
-  <div class="sch-box ok"><strong>Το αδάμαστο όνειρο και η ηθική δικαίωση του «χαμένου»</strong><br>Ο Μίγγας αφηγείται τη ζωή ενός ανθρώπου που δεν πέτυχε ποτέ αυτό που ονειρευόταν, αλλά δεν έπαψε να πιστεύει σε αυτό — και τελικά δικαιώνεται, έστω έμμεσα.</div>
-</div>
-<div class="sch-divider"></div>
-<div class="schema-block">
-  <div class="sch-title">3 Κειμενικοί Δείκτες</div>
-  <table class="sch-table">
-    <tr><th>#</th><th>Χωρίο</th><th>Λειτουργία ως δείκτης θέματος</th></tr>
-    <tr><td class="td-k">1</td><td>«ουδέποτε κατάφερε να την υλοποιήσει μες στα γήπεδα»</td><td>Καθιερώνει τη σχέση ονείρου–αποτυχίας ως βασικό θεματικό άξονα</td></tr>
-    <tr><td class="td-k">2</td><td>«Κανένας πια δεν ασχολήθηκε μ&apos; αυτόν κι η τρίπλα του ξεχάστηκε αλλά εκείνος δε λησμόνησε»</td><td>Η αντίθεση «ξεχάστηκε / δε λησμόνησε» αναδεικνύει την πίστη του ήρωα ως αξία από μόνη της</td></tr>
-    <tr><td class="td-k">3</td><td>«Τελικά ένας μικροκαμωμένος Μεξικάνος πραγματοποίησε την τρίπλα των ονείρων του Αρούκατου»</td><td>Ο τίτλος «τρίπλα των ονείρων» + «του Αρούκατου» παραχωρεί ηθικά στον ήρωα την πατρότητα της ιδέας — έμμεση δικαίωση</td></tr>
-  </table>
-</div>
-<div class="sch-divider"></div>
-<div class="schema-block">
-  <div class="sch-title">Σκέψεις — Θεματικοί άξονες για ανάπτυξη</div>
-  <ul class="sch-list">
-    <li><strong>Αποτυχία ≠ ήττα:</strong> ο Μίμης χάνει αθλητικά αλλά κερδίζει ηθικά· η επιμονή στο όνειρο αποκτά αξία καθεαυτή</li>
-    <li><strong>Αδιαφορία κοινωνίας:</strong> το περιβάλλον κοροϊδεύει («περίγελος») και αδιαφορεί — αντίθετα, οι «μεγαλύτεροι» κατανοούν και χειροκροτούν: η κατανόηση είναι προνόμιο της εμπειρίας</li>
-    <li><strong>Ειρωνεία ιστορίας:</strong> αυτό που δεν πραγματοποίησε ποτέ ο ίδιος, το πραγματοποιεί ένας άγνωστος σε άλλη ήπειρο — σχόλιο για τη σχέση ιδέας και εκτέλεσης</li>
-    <li><strong>Ανθρώπινη ανάγκη αναγνώρισης:</strong> η στιγμή του «γύρου θριάμβου» δείχνει ότι ο Μίμης δεν χρειάζεται πια εξωτερική επιβεβαίωση — η ιδέα του επιβεβαιώνεται και αυτό αρκεί</li>
-  </ul>
-</div>`
-  },
-
-  // ══ ΘΕΜΑ Δ ══
-  {
-    id:'d1_plan', sec:'d', secLabel:'Θέμα Δ · Δ1 — Σχεδιάγραμμα Άρθρου', pts:'30 μον.',
-    size:'xtall',
-    q:'Σχεδιάγραμμα για άρθρο (350-400 λέξ.) στο σχολικό ηλεκτρονικό περιοδικό: σημαντικότεροι στόχοι του μαθήματος της Φυσικής Αγωγής + συγκεκριμένες προτάσεις για την προώθησή τους.',
-    color:'sec-d',
-    ans:`
-<div class="schema-block">
-  <div class="sch-title">Επικοινωνιακό πλαίσιο</div>
-  <table class="sch-table">
-    <tr><td class="td-k">Είδος</td><td>Άρθρο γνώμης σε σχολικό ηλεκτρονικό περιοδικό</td></tr>
-    <tr><td class="td-k">Ύφος</td><td>Επίσημο αλλά ζωντανό · αποδέκτες = μαθητές/εκπαιδευτικοί</td></tr>
-    <tr><td class="td-k">Πρόθεση</td><td>Πειθώ + προτάσεις δράσης</td></tr>
-  </table>
-</div>
-<div class="sch-divider"></div>
-<div class="schema-block">
-  <div class="sch-title">Δομή Άρθρου</div>
-  <ul class="sch-list">
-    <li><strong>Τίτλος:</strong> π.χ. «Φυσική Αγωγή: πολύ παραπάνω από τρέξιμο»</li>
-    <li><strong>Εισαγωγή (1 παρ.):</strong> Αφορμή (πανελλήνιοι αγώνες) → ερώτημα: τι πρέπει να υπηρετεί η ΦΑ;</li>
-    <li><strong>Κύριο μέρος — Στόχος 1:</strong> Σωματική υγεία & αντιστάθμιση καθιστικής ζωής → Πρόταση: τακτικότερες ώρες ΦΑ, εξοπλισμός</li>
-    <li><strong>Κύριο μέρος — Στόχος 2:</strong> Ψυχοπνευματικές αρετές (θάρρος, πειθαρχία, αυτοπεποίθηση) → Πρόταση: ποικιλία αθλημάτων, ατομικά & ομαδικά</li>
-    <li><strong>Κύριο μέρος — Στόχος 3:</strong> Κοινωνικοποίηση & ομαδικότητα → Πρόταση: διασχολικοί αγώνες, συνεργατικές δράσεις</li>
-    <li><strong>Επίλογος (1 παρ.):</strong> Σύνθεση — κάλεσμα σε μαθητές & διοίκηση να επενδύσουν στη ΦΑ</li>
-  </ul>
-</div>
-<div class="sch-divider"></div>
-<div class="schema-block">
-  <div class="sch-title">Μέσα πειθούς</div>
-  <ul class="sch-list">
-    <li>Λογική: επιχειρήματα + στατιστικά / παραδείγματα από κείμενα</li>
-    <li>Ήθος: αξιόπιστο προφίλ μαθητή-αρθρογράφου</li>
-    <li>Συναίσθημα: αναφορά στην εμπειρία αγώνων, στο χαμόγελο νίκης</li>
-  </ul>
-</div>`
+function openTheoryModal(e) {
+  e.stopPropagation();
+  document.getElementById('theoryModal').classList.add('open');
+}
+function closeTheoryModal(e) {
+  if (e.target === document.getElementById('theoryModal')) {
+    document.getElementById('theoryModal').classList.remove('open');
   }
-];
-
-let openCards = new Set();
-let currentFilter = 'all';
-
-function filterSec(sec, tabEl){
-  currentFilter = sec;
-  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active','sa','sb','sc','sd'));
-  tabEl.classList.add('active');
-  const colorMap = {all:'sa', a:'sa', b:'sb', c:'sc', d:'sd'};
-  tabEl.classList.add(colorMap[sec]||'sa');
-  renderCards();
 }
 
-function renderCards(){
-  const container = document.getElementById('cardsContainer');
-  const filtered = currentFilter==='all'
-    ? CARDS
-    : CARDS.filter(c=>c.sec===currentFilter);
+/* ═══════════════════════════════════════
+   SCREEN NAVIGATION
+   ═══════════════════════════════════════ */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function goCards() {
+  showScreen('cardsScreen');
+}
 
-  // Group by section
-  const sections = {
-    a:{label:'Θέμα Α', sub:'Περίληψη', color:'rust'},
-    b:{label:'Θέμα Β', sub:'Σύγκριση · Ύφος · Σημεία στίξης', color:'sage'},
-    c:{label:'Θέμα Γ', sub:'Λογοτεχνικό κείμενο · Ερμηνεία', color:'blue'},
-    d:{label:'Θέμα Δ', sub:'Παραγωγή λόγου — Άρθρο', color:'violet'}
-  };
+/* ═══════════════════════════════════════
+   CARDS APP LOGIC
+   ═══════════════════════════════════════ */
+function switchDeck(num, btn) {
+  document.querySelectorAll('.deck').forEach(d => d.classList.remove('visible'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('deck' + num).classList.add('visible');
+  btn.classList.add('active');
+}
 
-  const grouped = {};
-  filtered.forEach(c=>{
-    if(!grouped[c.sec]) grouped[c.sec]=[];
-    grouped[c.sec].push(c);
+function toggleDetail(e, btn) {
+  e.stopPropagation();
+  const d = btn.nextElementSibling;
+  const open = d.classList.contains('open');
+  d.classList.toggle('open');
+  btn.textContent = open ? '+ Διδακτικός στόχος' : '− Διδακτικός στόχος';
+}
+
+function toggleMethodTag(e, btn, popId) {
+  e.stopPropagation();
+  const row = btn.closest('.method-tags-row');
+  const pop = row.querySelector('#' + popId);
+  if (!pop) return;
+  const isOpen = pop.classList.contains('open');
+  row.querySelectorAll('.method-popover').forEach(p => p.classList.remove('open'));
+  row.querySelectorAll('.method-tag').forEach(t => t.classList.remove('active'));
+  if (!isOpen) {
+    pop.classList.add('open');
+    btn.classList.add('active');
+    const rect = btn.getBoundingClientRect();
+    if (rect.left + 310 > window.innerWidth - 10) { pop.style.left = 'auto'; pop.style.right = '0'; }
+    else { pop.style.left = '0'; pop.style.right = 'auto'; }
+  }
+}
+
+document.addEventListener('click', function () {
+  document.querySelectorAll('.method-popover.open').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.method-tag.active').forEach(t => t.classList.remove('active'));
+});
+
+function showPara(e, id, btn) {
+  e.stopPropagation();
+  const tabsContainer = btn.closest('.para-tabs');
+  const allTabs = tabsContainer.querySelectorAll('.para-tab');
+  const container = btn.closest('.card-body, .modal-body');
+  allTabs.forEach(t => {
+    const oc = t.getAttribute('onclick') || '';
+    const m = oc.match(/showPara\([^,]+,\s*'([^']+)'/);
+    if (m) {
+      const blk = container ? container.querySelector('#' + m[1]) : document.getElementById(m[1]);
+      if (blk) blk.classList.remove('visible');
+    }
   });
+  allTabs.forEach(b => { b.classList.remove('active'); b.dataset.wasActive = 'false'; });
+  if (btn.dataset.wasActive === 'true') { btn.dataset.wasActive = 'false'; return; }
+  const block = container ? container.querySelector('#' + id) : document.getElementById(id);
+  if (block) { block.classList.add('visible'); btn.classList.add('active'); btn.dataset.wasActive = 'true'; }
+}
 
-  container.innerHTML = '';
-  Object.entries(grouped).forEach(([sec, cards])=>{
-    const s = sections[sec];
-    const section = document.createElement('div');
-    section.className='section-group';
-    section.innerHTML=`<div class="section-header">
-      <div class="sh-label">${s.label}</div>
-      <div class="sh-title">${s.sub}</div>
-      <div class="sh-mono">${cards.length} ερωτήσεις</div>
-    </div>
-    <div class="cards-grid" id="grid-${sec}"></div>`;
-    container.appendChild(section);
+function openModal(cardEl) {
+  if (event.target.closest('button, a')) return;
+  const left = cardEl.querySelector('.card-left');
+  const right = cardEl.querySelector('.card-right');
+  const isDeck1 = !!cardEl.closest('.deck-1');
+  const box = document.getElementById('modalBox');
+  box.className = 'modal-box ' + (isDeck1 ? 'deck-1-modal' : 'deck-2-modal');
+  document.getElementById('modalIndex').textContent = left.querySelector('.card-index').textContent;
+  document.getElementById('modalQuestion').innerHTML = left.querySelector('.card-question').innerHTML;
+  document.getElementById('modalTopic').textContent = left.querySelector('.card-topic-label').textContent;
+  document.getElementById('modalAnswer').innerHTML = right.querySelector('.card-answer').innerHTML;
+  const bodyClone = right.querySelector('.card-body').cloneNode(true);
+  bodyClone.querySelectorAll('.detail-content').forEach(d => d.classList.remove('open'));
+  bodyClone.querySelectorAll('.detail-toggle').forEach(b => b.textContent = '+ Διδακτικός στόχος');
+  bodyClone.querySelectorAll('.para-block').forEach(b => b.classList.remove('visible'));
+  bodyClone.querySelectorAll('.para-tab').forEach(b => { b.classList.remove('active'); b.dataset.wasActive = 'false'; });
+  bodyClone.querySelectorAll('.method-popover').forEach(p => p.classList.remove('open'));
+  bodyClone.querySelectorAll('.method-tag').forEach(t => t.classList.remove('active'));
+  bodyClone.querySelectorAll('[id]').forEach(el => { el.id = 'm-' + el.id; });
+  bodyClone.querySelectorAll('.para-tab[onclick]').forEach(t => {
+    const oc = t.getAttribute('onclick');
+    t.setAttribute('onclick', oc.replace(/showPara\(([^,]+),\s*'([^']+)'/g, "showPara($1,'m-$2'"));
+  });
+  bodyClone.querySelectorAll('.method-tag[onclick]').forEach(t => {
+    const oc = t.getAttribute('onclick');
+    t.setAttribute('onclick', oc.replace(/'(mc-[^']+)'/g, "'m-$1'"));
+  });
+  document.getElementById('modalBody').innerHTML = '';
+  document.getElementById('modalBody').appendChild(bodyClone);
+  document.getElementById('modalTags').innerHTML = right.querySelector('.tags-row') ? right.querySelector('.tags-row').innerHTML : '';
+  document.getElementById('modalRef').textContent = right.querySelector('.card-ref') ? right.querySelector('.card-ref').textContent : '';
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+function closeModalOnBg(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-    const grid = section.querySelector('.cards-grid');
-    cards.forEach(card=>{
-      grid.appendChild(buildCard(card));
+/* ═══════════════════════════════════════
+   QUIZ DATA
+   ═══════════════════════════════════════ */
+const LABS = ['Α', 'Β', 'Γ', 'Δ'];
+const DATA = {
+  1: {
+    label: 'Κείμενο 1 — Ασκήσεις', cls: 'dk1',
+    qs: [
+      {t:'mcq',q:'Τι ονομάζουμε «θεματική περίοδο» μιας παραγράφου;',opts:['Το συμπέρασμα της παραγράφου','Την πρόταση που εισάγει το θέμα / κεντρική ιδέα','Τον πλαγιότιτλο','Τον τρόπο ανάπτυξης'],ans:1,ref:'Δομή παραγράφου',fbC:'Σωστά! Η θεματική περίοδος εισάγει την κεντρική ιδέα που θα αναπτυχθεί στα σχόλια.',fbW:'Η θεματική περίοδος εισάγει το θέμα / κεντρική ιδέα — δεν είναι συμπέρασμα ούτε τίτλος.'},
+      {t:'mcq',q:'Η κατακλείδα σε μια παράγραφο:',opts:['Υπάρχει πάντα','Προσθέτει ένα νέο επιχείρημα','Είναι προαιρετική και λειτουργεί ως συνολικό συμπέρασμα','Ταυτίζεται με τη θεματική περίοδο'],ans:2,ref:'Δομή παραγράφου · Κατακλείδα',fbC:'Σωστά! Η κατακλείδα είναι προαιρετική — λειτουργεί ως συνολικό συμπέρασμα.',fbW:'Η κατακλείδα δεν υπάρχει πάντα. Αν προσθέτει νέο επιχείρημα, ανήκει στα σχόλια.'},
+      {t:'drag',q:'Αντιστοίχισε κάθε παράγραφο του κειμένου με τον σωστό πλαγιότιτλο.',tgts:['Παράγραφος Α','Παράγραφος Β','Παράγραφος Γ','Παράγραφος Δ'],items:['Αναγκαιότητα γνώσης της γλώσσας','Ορισμός και λειτουργίες γλώσσας','Γλώσσα: αποκλειστικά ανθρώπινο επίτευγμα','Τέσσερις βασικές γλωσσικές δεξιότητες'],ans:[0,1,2,3],ref:'Πλαγιότιτλος',fbC:'Σωστά! Κάθε πλαγιότιτλος αποδίδει συνοπτικά το νόημα ολόκληρης της παραγράφου.',fbW:'Α→ αναγκαιότητα γλώσσας, Β→ ορισμός + λειτουργίες, Γ→ γλώσσα μόνο ανθρώπου, Δ→ τέσσερις δεξιότητες.'},
+      {t:'mcq',q:'Ο πλαγιότιτλος αποδίδει:',opts:['Το συνολικό νόημα ολόκληρης της παραγράφου','Μόνο τη θεματική περίοδο','Μόνο την κατακλείδα','Τον τρόπο ανάπτυξης'],ans:0,ref:'Πλαγιότιτλος',fbC:'Σωστά! Ο πλαγιότιτλος αποδίδει το συνολικό νόημα — θεματική + σχόλια.',fbW:'Ο πλαγιότιτλος αποδίδει το συνολικό νόημα ολόκληρης της παραγράφου.'},
+      {t:'mcq',q:'Ο πλαγιότιτλος πρέπει να διατυπώνεται:',opts:['Με πλήρη πρόταση και ρήμα','Με λεπτομέρειες και παραδείγματα','Σε περισσότερες από 15 λέξεις','Με σύντομη ονοματική φράση (λιτή, πυκνή, ελλειπτική)'],ans:3,ref:'Πλαγιότιτλος',fbC:'Σωστά! Ο πλαγιότιτλος: σύντομη ονοματική φράση, λιτή, πυκνή, χωρίς ρήμα.',fbW:'Ο πλαγιότιτλος: σύντομη ονοματική φράση — λιτή, πυκνή, ελλειπτική, χωρίς ρήμα.'},
+      {t:'drag',q:'Αντιστοίχισε κάθε παράγραφο με τον τρόπο ανάπτυξής της.',tgts:['Παράγραφος Α','Παράγραφος Β','Παράγραφος Γ','Παράγραφος Δ'],items:['Αιτιολόγηση','Ορισμός με παραδείγματα','Παραδείγματα & Σύγκριση–αντίθεση','Διαίρεση'],ans:[0,1,2,3],ref:'Τρόποι ανάπτυξης παραγράφου',fbC:'Σωστά! Α: αιτιολόγηση, Β: ορισμός + παραδείγματα, Γ: παραδείγματα & σύγκριση–αντίθεση, Δ: διαίρεση.',fbW:'Α→ αιτιολόγηση, Β→ ορισμός + παραδείγματα, Γ→ παραδείγματα & σύγκριση–αντίθεση, Δ→ διαίρεση.'},
+      {t:'mcq',q:'Ποιο από τα παρακάτω ΔΕΝ αποτελεί τρόπο ανάπτυξης παραγράφου;',opts:['Αιτιολόγηση','Σύγκριση – αντίθεση','Κατακλείδα','Παραδείγματα'],ans:2,ref:'Τρόποι ανάπτυξης · Δομή παραγράφου',fbC:'Σωστά! Η κατακλείδα είναι δομικό στοιχείο — ΔΕΝ αποτελεί τρόπο ανάπτυξης.',fbW:'Η κατακλείδα είναι δομικό στοιχείο, ΔΕΝ αποτελεί τρόπο ανάπτυξης.'},
+      {t:'mcq',q:'Αν η τελευταία περίοδος μιας παραγράφου προσθέτει ακόμη ένα επιχείρημα, τότε:',opts:['Αποτελεί κατακλείδα','Αποτελεί νέα θεματική περίοδο','Αποτελεί πλαγιότιτλο','Ανήκει στα σχόλια — ΔΕΝ είναι κατακλείδα'],ans:3,ref:'Δομή παραγράφου · Κατακλείδα',fbC:'Σωστά! Τελευταία πρόταση ≠ αυτόματα κατακλείδα. Κατακλείδα = μόνο συνολικό συμπέρασμα.',fbW:'Αν η τελευταία πρόταση προσθέτει νέο επιχείρημα, ανήκει στα σχόλια.'}
+    ]
+  },
+  2: {
+    label: 'Κείμενο 2 — Ασκήσεις', cls: 'dk2',
+    qs: [
+      {t:'drag',q:'Αντιστοίχισε κάθε γυναικείο πρόσωπο με το βασικό χαρακτηριστικό του.',tgts:['Κυρία Χρύσα','Κώνα Ερωμφίλη','Κώνα Σοφία'],items:['Γεροντοκόρη — κρατά σπιτικό σχολείο','Παραδουλεύτρα — νονά-«Πριγκηπέσσα» στον γιο της','Αιβαλιώτισσα — γυναίκα του Αμανατζή'],ans:[0,1,2],ref:'Πρόσωπα αφήγησης',fbC:'Σωστά! Και οι τρεις παρουσιάζονται ειρωνικά ως «αριστοκρατία» του μαχαλά.',fbW:'Ξαναδές: κάθε γυναίκα εισάγεται με τα δικά της χαρακτηριστικά.'},
+      {t:'mcq',q:'Η ειρωνεία είναι:',opts:['Η επανάληψη μιας λέξης για έμφαση','Η χρήση μεταφοράς για να δημιουργηθεί εικόνα','Σχήμα λόγου όπου το φαινομενικό αντιτίθεται στο πραγματικό, με δηκτικό τρόπο','Η σύγκριση δύο προσώπων'],ans:2,ref:'Ειρωνεία (σχήματα λόγου)',fbC:'Σωστά! Ειρωνεία = αυτό που λέγεται αντιτίθεται σε αυτό που εννοείται ή συμβαίνει.',fbW:'Ειρωνεία = σχήμα λόγου όπου το φαινομενικό αντιτίθεται στο πραγματικό.'},
+      {t:'mcq',q:'Η φράση «αριστοκρατία του μαχαλά» δημιουργεί ειρωνεία επειδή:',opts:['Ο μεγαλοπρεπής χαρακτηρισμός αντιφάσκει με τη φτώχεια της γειτονιάς','Αποτελεί παρομοίωση','Πρόκειται για υπερβατό','Είναι ευθύς λόγος'],ans:0,ref:'Ειρωνεία · Σχήματα λόγου',fbC:'Σωστά! Μεγαλοπρεπής χαρακτηρισμός σε φτωχογειτονιά = αντίφαση φαινομενικού–πραγματικού.',fbW:'Η ειρωνεία: «αριστοκρατία» αντιφάσκει με την πραγματικότητα της φτωχογειτονιάς.'},
+      {t:'mcq',q:'Ο Αμανατζής λέει «Τα δυο λαγήνια λάδι;». Τι πετυχαίνει;',opts:['Περιγράφει το εμπόριο της εποχής','Κάνει πλάκα χωρίς σκοπό','Εκφράζει θαυμασμό για την προίκα','Ειρωνεύεται τη γυναίκα του: η «προίκα» ήταν ελάχιστη'],ans:3,ref:'Ειρωνεία · Πρόσωπα αφήγησης',fbC:'Σωστά! Η πραγματικότητα (λαγήνια λάδι) αποδομεί τον ισχυρισμό για «εκατό λίρες».',fbW:'Ο Αμανατζής ειρωνεύεται: η πραγματικότητα αποδομεί τον ισχυρισμό για μεγάλη προίκα.'},
+      {t:'mcq',q:'Σε ποια πόλη και ποια εποχή τοποθετείται η αφήγηση;',opts:['Αθήνα, μέσα 19ου αιώνα','Σμύρνη, αρχές 20ού αιώνα (πριν τη Μικρασιατική Καταστροφή)','Θεσσαλονίκη, μεταπολεμικά','Κωνσταντινούπολη, 18ος αιώνας'],ans:1,ref:'Χρόνος & τόπος αφήγησης',fbC:'Σωστά! Σμύρνη, αρχές 20ού αιώνα — πριν τη Μικρασιατική Καταστροφή του 1922.',fbW:'Η αφήγηση: Σμύρνη, αρχές 20ού αιώνα, πριν την Καταστροφή.'},
+      {t:'drag',q:'Αντιστοίχισε κάθε γυναίκα με τον τρόπο που επιδιώκει κοινωνική αναγνώριση.',tgts:['Κυρία Χρύσα','Κώνα Ερωμφίλη','Κώνα Σοφία'],items:['Μόρφωση (σπιτικό σχολείο)','Κοινωνικές διασυνδέσεις (νονά-«Πριγκηπέσσα»)','Επίκληση στην αριστοκρατική καταγωγή'],ans:[0,1,2],ref:'Πρόσωπα αφήγησης · Ειρωνεία',fbC:'Σωστά! Κάθε γυναίκα αξιοποιεί διαφορετικό «κεφάλαιο» — ειρωνικά σχολιαζόμενο.',fbW:'Χρύσα→ μόρφωση, Ερωμφίλη→ διασυνδέσεις, Σοφία→ καταγωγή από Αϊβαλί.'},
+      {t:'mcq',q:'Η «τραγική ειρωνεία» προϋποθέτει ότι:',opts:['Ο αναγνώστης γνωρίζει το τραγικό τέλος, ενώ ο ήρωας το αγνοεί','Κάποιος λέει ψέματα','Ο ήρωας κάνει αστεία','Ο αφηγητής σχολιάζει με χιούμορ'],ans:0,ref:'Τραγική ειρωνεία',fbC:'Σωστά! Τραγική ειρωνεία: ο αναγνώστης γνωρίζει το τέλος — ο ήρωας το αγνοεί.',fbW:'Τραγική ειρωνεία: ο αναγνώστης γνωρίζει — ο ήρωας κάνει σχέδια αγνοώντας το.'},
+      {t:'mcq',q:'Τι κοινό έχουν οι τρεις γυναίκες (Χρύσα, Ερωμφίλη, Σοφία);',opts:['Είναι πλούσιες','Αγωνίζονται για κοινωνική καταξίωση με διαφορετικά μέσα','Είναι συγγενείς','Δεν έχουν τίποτα κοινό'],ans:1,ref:'Πρόσωπα αφήγησης',fbC:'Σωστά! Κοινός στόχος, διαφορετικά μέσα: μόρφωση / διασυνδέσεις / καταγωγή.',fbW:'Και οι τρεις αγωνίζονται για κοινωνική καταξίωση με διαφορετικό τρόπο.'},
+      {t:'mcq',q:'Γιατί ο χαρακτηρισμός «Πριγκηπέσσα» αποτελεί ειρωνεία;',opts:['Η νονά είναι πραγματικά πριγκίπισσα','Είναι απλή μεταφορά','Ο υπερβολικός τίτλος αποδίδεται σε χήρα επαρχιώτη γιατρού — αντίφαση φαινομενικού–πραγματικού','Η Ερωμφίλη δεν τη γνωρίζει καλά'],ans:2,ref:'Ειρωνεία · Σχήματα λόγου',fbC:'Σωστά! Υπερβολικός τίτλος σε χήρα γιατρού: αντίφαση φαινομενικού–πραγματικού.',fbW:'Η «Πριγκηπέσσα» είναι χήρα επαρχιώτη γιατρού — ο τίτλος αντιφάσκει με την πραγματικότητα.'}
+    ]
+  }
+};
+
+/* ═══════════════════════════════════════
+   QUIZ STATE & LOGIC
+   ═══════════════════════════════════════ */
+let curDk = 1, curQi = 0, score = {c:0,w:0}, wrongQs = [], retryMode = false, retryList = [];
+
+function launchQuiz(dk) {
+  curDk = dk;
+  startQuiz();
+}
+
+function startQuiz() {
+  curQi = 0; score = {c:0,w:0}; wrongQs = []; retryMode = false; retryList = [];
+  const dk = DATA[curDk];
+  showScreen('quizScreen');
+  const lbl = document.getElementById('qdLabel');
+  lbl.textContent = dk.label;
+  lbl.className = 'qt-deck-lbl ' + (curDk === 1 ? 'dk1-lbl' : 'dk2-lbl');
+  updateScoreBar();
+  renderCard();
+}
+
+function showResults() {
+  showScreen('resultsScreen');
+  const s = score.c, total = retryMode ? retryList.length : DATA[curDk].qs.length;
+  document.getElementById('resScore').innerHTML = `${s}<span class="res-denom">/${total}</span>`;
+  document.getElementById('resMsg').textContent =
+    s >= total ? 'Εξαιρετικά! Όλες σωστές!' :
+    s >= Math.ceil(total * .8) ? 'Πολύ καλά! Ξαναδές τα σημεία που δυσκολεύτηκες.' :
+    s >= Math.ceil(total * .5) ? 'Καλή προσπάθεια. Μελέτησε ξανά τη θεωρία και δοκίμασε πάλι.' :
+    'Χρειάζεται λίγη παραπάνω μελέτη. Ξαναδιάβασε και δοκίμασε ξανά!';
+  document.getElementById('btnRetryWrong').style.display = wrongQs.length > 0 ? 'block' : 'none';
+}
+
+function retryWrong() {
+  retryMode = true; retryList = [...wrongQs];
+  curQi = 0; score = {c:0,w:0}; wrongQs = [];
+  showScreen('quizScreen');
+  const lbl = document.getElementById('qdLabel');
+  lbl.textContent = DATA[curDk].label + ' — Επανάληψη λαθών';
+  lbl.className = 'qt-deck-lbl ' + (curDk === 1 ? 'dk1-lbl' : 'dk2-lbl');
+  updateScoreBar(); renderCard();
+}
+
+function nextCard() {
+  curQi++;
+  const total = retryMode ? retryList.length : DATA[curDk].qs.length;
+  if (curQi >= total) showResults(); else renderCard();
+}
+
+function updateScoreBar() {
+  const total = (retryMode ? retryList : DATA[curDk].qs).length;
+  document.getElementById('qsc').textContent = score.c;
+  document.getElementById('qsw').textContent = score.w;
+  document.getElementById('qsn').textContent = `${curQi + 1} / ${total}`;
+  document.getElementById('progBar').style.width = ((curQi / total) * 100) + '%';
+  document.getElementById('qbInfo').textContent = `Ερώτηση ${curQi + 1} από ${total}`;
+}
+
+function renderCard() {
+  updateScoreBar();
+  document.getElementById('btnNext').classList.remove('show');
+  const qList = retryMode ? retryList : DATA[curDk].qs;
+  const q = qList[curQi];
+  const stage = document.getElementById('cardStage');
+  stage.innerHTML = '';
+  const card = document.createElement('div');
+  card.className = 'big-card ' + DATA[curDk].cls;
+  const left = document.createElement('div');
+  left.className = 'bc-left'; left.id = 'bcLeft';
+  left.innerHTML = `<div class="bc-qnum">Ερώτηση ${curQi+1} / ${qList.length}</div><div class="bc-qtext">${q.q}</div><div class="bc-qtype">${q.t==='drag'?'⇄ Αντιστοίχιση':'● Πολλαπλής επιλογής'}</div><div class="bc-result" id="bcResult"></div>`;
+  const right = document.createElement('div');
+  right.className = 'bc-right'; right.id = 'bcRight';
+  if (q.t === 'mcq') buildMCQ(q, right); else buildDrag(q, right);
+  card.appendChild(left); card.appendChild(right);
+  stage.appendChild(card);
+}
+
+function buildMCQ(q, container) {
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<span class="opt-lbl">${LABS[i]}.</span><span>${opt}</span>`;
+    btn.addEventListener('click', () => {
+      const ok = i === q.ans;
+      container.querySelectorAll('.opt-btn').forEach(b => b.classList.add('disabled'));
+      btn.classList.add('chosen', ok ? 'correct' : 'wrong');
+      if (!ok) container.querySelectorAll('.opt-btn')[q.ans].classList.add('reveal');
+      finishQuestion(ok, q, container);
     });
+    container.appendChild(btn);
+  });
+  addFB(container);
+}
+
+function shuffle(a) { const r=[...a]; for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];} return r; }
+
+function buildDrag(q, container) {
+  const order = shuffle(q.items.map((_,i)=>i));
+  const slotVal = new Array(q.tgts.length).fill(null);
+  const chips = {}, zones = [];
+  let tapSel = null;
+
+  const instr = document.createElement('div');
+  instr.className = 'drag-instr';
+  instr.innerHTML = '<strong>Υπολογιστής:</strong> σύρε · <strong>Κινητό:</strong> πάτα chip → πάτα θέση';
+  container.appendChild(instr);
+
+  const bank = document.createElement('div');
+  bank.className = 'drag-bank';
+  container.appendChild(bank);
+
+  order.forEach(orig => {
+    const chip = document.createElement('div');
+    chip.className = 'drag-chip'; chip.textContent = q.items[orig]; chip.dataset.orig = orig; chip.draggable = true;
+    chip.addEventListener('dragstart', e => { e.dataTransfer.setData('orig', orig); setTimeout(()=>chip.classList.add('dragging'),0); clearTapSel(); });
+    chip.addEventListener('dragend', () => chip.classList.remove('dragging'));
+    chip.addEventListener('click', e => { e.stopPropagation(); if(tapSel===orig){clearTapSel();}else{clearTapSel();tapSel=orig;chip.classList.add('sel-tap');} });
+    bank.appendChild(chip); chips[orig] = chip;
   });
 
-  updateCounter();
-}
+  const slotsWrap = document.createElement('div'); slotsWrap.className = 'drag-slots'; container.appendChild(slotsWrap);
 
-function buildCard(c){
-  const wrap = document.createElement('div');
-  wrap.className = `flip-card ${c.size||''} ${openCards.has(c.id)?'flipped':''}`;
-  wrap.id = 'card-'+c.id;
-  wrap.onclick = ()=>toggleCard(c.id);
-
-  wrap.innerHTML = `
-  <div class="flip-inner">
-    <div class="flip-front ${c.color}">
-      <div class="ff-top">
-        <div class="ff-sec">${c.secLabel}</div>
-        <div class="ff-q">${c.q}</div>
-        <div class="ff-mono">● Κάρτα ερώτησης</div>
-      </div>
-      <div class="ff-bottom">
-        <div class="ff-tap">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/></svg>
-          Πάτα για απάντηση
-        </div>
-        <div class="ff-pts">${c.pts}</div>
-      </div>
-    </div>
-    <div class="flip-back">
-      <div class="fb-header">
-        <div class="fb-hq">${c.secLabel}</div>
-        <div class="fb-hpts">${c.pts}</div>
-      </div>
-      <div class="fb-body">${c.ans}</div>
-      <div class="fb-footer">↩ Πάτα για επιστροφή στην ερώτηση</div>
-    </div>
-  </div>`;
-  return wrap;
-}
-
-function toggleCard(id){
-  const card = CARDS.find(c=>c.id===id);
-  if(!card) return;
-  openOverlay(card);
-}
-
-function openOverlay(card){
-  const overlay = document.getElementById('cardOverlay');
-  document.getElementById('overlayLabel').textContent = card.secLabel;
-  document.getElementById('overlayPts').textContent = card.pts;
-  document.getElementById('overlayBody').innerHTML = card.ans;
-  overlay.classList.add('visible');
-  openCards.add(card.id);
-  updateCounter();
-}
-
-function closeOverlay(){
-  document.getElementById('cardOverlay').classList.remove('visible');
-}
-
-document.getElementById('cardOverlay').addEventListener('click', e=>{
-  if(e.target === document.getElementById('cardOverlay')) closeOverlay();
-});
-document.getElementById('overlayClose').addEventListener('click', closeOverlay);
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeOverlay(); });
-
-function updateCounter(){
-  const filtered = currentFilter==='all' ? CARDS : CARDS.filter(c=>c.sec===currentFilter);
-  const open = filtered.filter(c=>openCards.has(c.id)).length;
-  document.getElementById('openCount').textContent = open;
-  document.getElementById('totalCount').textContent = filtered.length;
-}
-
-// Tab event listeners
-document.querySelectorAll('.stab').forEach(tab=>{
-  tab.addEventListener('click', ()=>{
-    filterSec(tab.dataset.sec, tab);
+  q.tgts.forEach((tgt, ti) => {
+    const row=document.createElement('div'); row.className='slot-row';
+    const lbl=document.createElement('div'); lbl.className='slot-lbl'; lbl.textContent=tgt;
+    const zone=document.createElement('div'); zone.className='slot-zone'; zone.textContent='Τοποθέτησε εδώ';
+    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+    zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+    zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag-over');const orig=parseInt(e.dataTransfer.getData('orig'));placeInSlot(orig,ti,zone,slotVal,chips);sub.disabled=(countPlaced(slotVal)<q.tgts.length);});
+    zone.addEventListener('click',e=>{e.stopPropagation();if(tapSel!==null){placeInSlot(tapSel,ti,zone,slotVal,chips);clearTapSel();sub.disabled=(countPlaced(slotVal)<q.tgts.length);}else if(slotVal[ti]!==null){const old=slotVal[ti];chips[old].style.display='';slotVal[ti]=null;zone.textContent='Τοποθέτησε εδώ';zone.classList.remove('filled');sub.disabled=true;}});
+    row.appendChild(lbl); row.appendChild(zone); slotsWrap.appendChild(row); zones.push(zone);
   });
-});
 
-// Init
-renderCards();
+  addFB(container);
+  const sub=document.createElement('button'); sub.className='btn-submit'; sub.textContent='Υποβολή'; sub.disabled=true; container.appendChild(sub);
+  sub.addEventListener('click',()=>{
+    let allOk=true;
+    zones.forEach((z,ti)=>{if(slotVal[ti]===q.ans[ti])z.classList.add('ok-slot');else{z.classList.add('ko-slot');allOk=false;}});
+    sub.style.display='none'; bank.style.display='none'; instr.style.display='none';
+    finishQuestion(allOk,q,container);
+  });
+
+  function clearTapSel(){if(tapSel!==null&&chips[tapSel])chips[tapSel].classList.remove('sel-tap');tapSel=null;}
+  function countPlaced(sv){return sv.filter(v=>v!==null).length;}
+}
+
+function placeInSlot(orig,ti,zone,slotVal,chips){
+  const old=slotVal[ti]; if(old!==null)chips[old].style.display='';
+  slotVal[ti]=orig; zone.textContent=chips[orig].textContent; zone.classList.add('filled'); chips[orig].style.display='none'; chips[orig].classList.remove('sel-tap');
+}
+
+function addFB(container){const fb=document.createElement('div');fb.className='fb-box';fb.id='currentFB';container.appendChild(fb);}
+
+function finishQuestion(ok,q,container){
+  if(ok)score.c++;else{score.w++;wrongQs.push(q);}
+  document.getElementById('qsc').textContent=score.c;
+  document.getElementById('qsw').textContent=score.w;
+  document.getElementById('bcLeft').classList.add(ok?'answered-ok':'answered-ko');
+  document.getElementById('bcResult').textContent=ok?'✓':'✗';
+  const fb=document.getElementById('currentFB');
+  fb.className='fb-box show '+(ok?'ok':'ko');
+  fb.innerHTML=`<strong>${ok?'✓':'✗'}</strong> ${ok?q.fbC:q.fbW}<span class="fb-ref">→ Βιβλίο: ${q.ref}</span>`;
+  const done=curQi+1,total=DATA[curDk].qs.length;
+  document.getElementById('progBar').style.width=((done/total)*100)+'%';
+  const btnNext=document.getElementById('btnNext');
+  btnNext.textContent=done<total?'Επόμενη →':'Αποτελέσματα →';
+  btnNext.classList.add('show');
+  setTimeout(()=>fb.scrollIntoView({behavior:'smooth',block:'nearest'}),150);
+}
 </script>
 </body>
 </html>
