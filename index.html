@@ -210,29 +210,28 @@ h1 em{font-style:italic;color:var(--rust)}
 .theory-modal-header .th-sub{font-size:13px;color:rgba(255,255,255,.6);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;}
 .theory-modal-close{background:rgba(255,255,255,.2);border:none;border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:20px;color:#fff;flex-shrink:0;transition:background .18s;line-height:38px;text-align:center;}
 .theory-modal-close:hover{background:rgba(255,255,255,.35);}
-.theory-modal-body{padding:40px 70px;overflow-y:auto;flex:1;display:grid;grid-template-columns:1fr 1fr;gap:36px 56px;align-content:start;}
+.theory-modal-body{padding:48px 100px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:40px;}
 .th-section{margin-bottom:0;}
-.th-section.full-width{grid-column:1/-1;}
-.th-label{font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.th-label{font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
 @media(min-width:1400px){
-  .theory-modal-header{padding:28px 56px;}
-  .theory-modal-header h2{font-size:38px;}
-  .theory-modal-header .th-sub{font-size:14px;}
-  .theory-modal-body{padding:48px 90px;gap:44px 72px;}
+  .theory-modal-header{padding:30px 60px;}
+  .theory-modal-header h2{font-size:42px;}
+  .theory-modal-header .th-sub{font-size:15px;}
+  .theory-modal-body{padding:56px 130px;gap:48px;}
+  .th-label{font-size:15px;}
 }
-.th-part{display:grid;grid-template-columns:200px 1fr;gap:0;border-radius:8px;overflow:hidden;margin-bottom:10px;}
-.th-part-name{padding:18px 20px;font-weight:700;font-size:17px;color:#fff;display:flex;align-items:center;}
+.th-part{display:grid;grid-template-columns:240px 1fr;gap:0;border-radius:8px;overflow:hidden;margin-bottom:14px;}
+.th-part-name{padding:22px 24px;font-weight:700;font-size:22px;color:#fff;display:flex;align-items:center;}
 .th-part-name.tp{background:var(--rust);}
 .th-part-name.sc{background:var(--gold);}
 .th-part-name.ka{background:var(--sage);}
-.th-part-desc{padding:18px 22px;font-size:17px;line-height:1.7;background:var(--paper);color:#3a3428;border-left:1px solid rgba(26,22,16,.08);}
-.th-rules{background:var(--paper);border-radius:8px;padding:20px 24px;font-size:17px;line-height:1.8;color:#3a3428;border-left:4px solid var(--gold);}
-.th-rules li{margin-bottom:8px;}
-.th-example-label{font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--rust);margin-bottom:8px;}
-.th-example-box{border:1.5px solid rgba(196,98,45,.2);border-radius:8px;overflow:hidden;}
-.th-example-box .seg{margin-bottom:0;border-radius:0;font-size:17px!important;line-height:1.75;padding:16px 20px!important;}
+.th-part-desc{padding:22px 28px;font-size:21px;line-height:1.7;background:var(--paper);color:#3a3428;border-left:1px solid rgba(26,22,16,.08);}
+.th-example-label{font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--rust);margin-bottom:10px;}
+.th-example-box{border:2px solid rgba(196,98,45,.2);border-radius:8px;overflow:hidden;}
+.th-example-box .seg{margin-bottom:0;border-radius:0;font-size:20px!important;line-height:1.8;padding:20px 26px!important;}
 .th-example-box .seg:last-child{margin-bottom:0;}
-.th-ref{font-size:14px;color:var(--muted);margin-top:14px;font-style:italic;}
+.th-example-box .seg-note{font-size:17px!important;padding:14px 20px!important;}
+.th-ref{font-size:15px;color:var(--muted);margin-top:8px;font-style:italic;}
 .th-ref::before{content:'☞ ';}
 /* method tags */
 .method-tags-section{margin:14px 0 4px}
@@ -814,45 +813,30 @@ h1 em{font-style:italic;color:var(--rust)}
 <div class="theory-modal-overlay" id="theoryModal" onclick="closeTheoryModal(event)">
   <div class="theory-modal-box">
 
-    <!-- LEFT PANEL -->
     <div class="theory-modal-header">
-      <button class="theory-modal-close" onclick="document.getElementById('theoryModal').classList.remove('open')">✕</button>
       <div>
         <div class="th-sub">Θεωρητικό πλαίσιο · Παράγραφος</div>
         <h2>Δομή της παραγράφου</h2>
-        <p class="th-header-desc">Κάθε παράγραφος αποτελείται από δύο (διμερής) ή τρία μέρη (τριμερής): τη <strong style="color:#fff;">θεματική περίοδο</strong>, τα <strong style="color:#fff;">σχόλια</strong> και την <strong style="color:#fff;">κατακλείδα</strong> (προαιρετική).</p>
       </div>
-      <div style="font-size:12px;color:rgba(255,255,255,.45);font-style:italic;position:relative;z-index:1;">☞ ΔΟΜΗ_ΠΑΡΑΓΡΑΦΟΥ.pdf<br>Α &amp; Σ Μητσέλος, 2026</div>
+      <button class="theory-modal-close" onclick="document.getElementById('theoryModal').classList.remove('open')">✕</button>
     </div>
 
-    <!-- RIGHT PANEL -->
+    <!-- BODY -->
     <div class="theory-modal-body">
 
       <div class="th-section">
         <div class="th-label">Δομικά μέρη</div>
         <div class="th-part">
           <div class="th-part-name tp">Θεματική περίοδος</div>
-          <div class="th-part-desc">Το <strong>θέμα</strong> της παραγράφου· εκφράζει την κεντρική ιδέα. Αποτελείται από (α) τη γνωστή πληροφορία (θέμα κειμένου) και (β) την <em>κατευθυντήρια ιδέα</em> — ένα νέο σχόλιο που διαφοροποιεί νοηματικά τη συγκεκριμένη παράγραφο. Βρίσκεται συνήθως <em>στην αρχή</em>.</div>
+          <div class="th-part-desc">Το <strong>θέμα</strong> της παραγράφου· εκφράζει την κεντρική ιδέα. Αποτελείται από (α) τη γνωστή πληροφορία (θέμα κειμένου) και (β) την <em>κατευθυντήρια ιδέα</em> — νέο σχόλιο που διαφοροποιεί νοηματικά τη συγκεκριμένη παράγραφο. Βρίσκεται συνήθως <em>στην αρχή</em>.</div>
         </div>
         <div class="th-part">
-          <div class="th-part-name sc">Σχόλια / λεπτομέρειες</div>
-          <div class="th-part-desc"><strong>Αναπτύσσουν, εξηγούν ή αποδεικνύουν</strong> τη θεματική περίοδο. Διακρίνονται σε <em>μείζονες</em> (κύριες πληροφορίες) και <em>ελάσσονες</em> (δευτερεύουσες λεπτομέρειες). Αποτελούν το μεγαλύτερο τμήμα της παραγράφου.</div>
+          <div class="th-part-name sc">Σχόλια</div>
+          <div class="th-part-desc"><strong>Αναπτύσσουν, εξηγούν ή αποδεικνύουν</strong> τη θεματική περίοδο. Διακρίνονται σε <em>μείζονες</em> (κύριες πληροφορίες) και <em>ελάσσονες</em> (δευτερεύουσες). Αποτελούν το μεγαλύτερο τμήμα της παραγράφου.</div>
         </div>
         <div class="th-part">
           <div class="th-part-name ka">Κατακλείδα</div>
-          <div class="th-part-desc"><strong>Προαιρετική.</strong> Γενική κρίση που συνοψίζει το νόημα· συχνά επαναδιατυπώνει τη θεματική περίοδο ή εξάγει συμπέρασμα. Κειμενικοί δείκτες: <em>«επομένως», «έτσι», «λοιπόν»</em> κ.ά. <strong>Δεν εξετάζεται</strong> κατά τον εντοπισμό τρόπων ανάπτυξης.</div>
-        </div>
-      </div>
-
-      <div class="th-section">
-        <div class="th-label">Κανόνες υψηλής προτεραιότητας</div>
-        <div class="th-rules">
-          <ul style="margin-left:16px;">
-            <li style="margin-bottom:8px;"><strong>Κατακλείδα ≠ νέο επιχείρημα.</strong> Αν η τελευταία πρόταση τεκμηριώνει επιπλέον → ανήκει στα σχόλια.</li>
-            <li style="margin-bottom:8px;"><strong>Τελευταία πρόταση ≠ αυτόματα κατακλείδα.</strong> Απαιτείται λειτουργία συνολικού συμπεράσματος.</li>
-            <li style="margin-bottom:8px;">Η παράγραφος μπορεί να είναι <strong>διμερής</strong> (χωρίς κατακλείδα) ή <strong>τριμερής</strong> (με κατακλείδα).</li>
-            <li>Η θεματική περίοδος μπορεί να <strong>απουσιάζει</strong> ή να βρίσκεται στο τέλος της προηγούμενης παραγράφου.</li>
-          </ul>
+          <div class="th-part-desc"><strong>Προαιρετική.</strong> Γενική κρίση που συνοψίζει το νόημα· επαναδιατυπώνει τη θεματική περίοδο ή εξάγει συμπέρασμα. Κειμενικοί δείκτες: <em>«επομένως», «έτσι», «λοιπόν»</em> κ.ά. <strong>Δεν εξετάζεται</strong> κατά τον εντοπισμό τρόπων ανάπτυξης.</div>
         </div>
       </div>
 
@@ -870,7 +854,7 @@ h1 em{font-style:italic;color:var(--rust)}
         <div class="th-example-box">
           <div class="seg seg-tp" style="border-radius:0;margin-bottom:0;"><span class="badge b-tp">Θ.Π.</span>Στο θέμα της παραβατικής συμπεριφοράς, η παρέμβαση του σχολείου είναι αποφασιστικής σημασίας.</div>
           <div class="seg seg-sc" style="border-radius:0;margin-bottom:0;"><span class="badge b-sc">Σχόλια</span>Και αυτό, γιατί το σχολείο ως θεσμός κοινωνικοποίησης μπορεί να επισημάνει έγκαιρα μορφές συμπεριφοράς που ενδέχεται να οδηγήσουν στην παραβατικότητα και να δράσει διορθωτικά σε πρώιμα στάδια.</div>
-          <div class="seg-note" style="border-radius:0;margin-bottom:0;">ℹ️ Χωρίς κατακλείδα — διμερής δομή.</div>
+          <div class="seg-note" style="border-radius:0;margin-bottom:0;padding:14px 20px;font-size:17px;">ℹ️ Χωρίς κατακλείδα — διμερής δομή.</div>
         </div>
       </div>
 
