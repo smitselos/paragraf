@@ -973,6 +973,29 @@
     font-style: italic;
     margin-right: 0.3rem;
   }
+  /* ── CLICKABLE WORDS ── */
+  .w-click {
+    cursor: pointer;
+    border-bottom: 1px dashed var(--gold-dim);
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .w-click:hover { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* ── MORPH POPUP ── */
+  .morph-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 300; align-items: center; justify-content: center; }
+  .morph-overlay.open { display: flex; }
+  .morph-box { background: var(--bg2); border: 1px solid var(--gold-dim); max-width: 480px; width: 92%; max-height: 80vh; overflow-y: auto; padding: 1.8rem 2rem; position: relative; box-shadow: 0 8px 40px rgba(0,0,0,0.3); animation: popIn 0.2s ease; }
+  .morph-close { position: absolute; top: 0.8rem; right: 0.8rem; background: none; border: 1px solid var(--border); color: var(--text-dim); width: 1.8rem; height: 1.8rem; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .morph-close:hover { border-color: var(--gold-dim); color: var(--gold); }
+  .morph-lemma { font-family: 'EB Garamond', serif; font-style: italic; font-size: 1.5rem; color: var(--gold-light); margin-bottom: 0.2rem; }
+  .morph-info { font-family: 'Source Sans 3', sans-serif; font-size: 0.78rem; color: var(--text-dim); margin-bottom: 1.2rem; letter-spacing: 0.04em; }
+  .morph-table { width: 100%; border-collapse: collapse; font-family: 'EB Garamond', serif; font-size: 1rem; }
+  .morph-table th { font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; color: var(--gold-dim); padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--gold-dim); text-align: left; font-weight: 400; text-transform: uppercase; }
+  .morph-table td { padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  .morph-table td:first-child { color: var(--text-dim); font-size: 0.85rem; font-family: 'Source Sans 3', sans-serif; width: 28%; }
+  .morph-table td.hi { color: var(--gold-light); font-style: italic; font-weight: 500; }
+  .morph-note { font-family: 'EB Garamond', serif; font-style: italic; font-size: 0.95rem; color: var(--text-dim); margin-top: 1rem; border-left: 2px solid var(--gold-dim); padding-left: 0.7rem; }
+
   @media print {
     body { background: white; color: black; }
     header, .mode-bar, .exercises-bar, .ex-header .print-btn,
@@ -1121,14 +1144,14 @@ const paragraphs = {
     rows: [
       {
         greek: 'Ἐπεὶ δὲ <strong>ἧκε</strong> τετάρτῳ μηνί,',
-        lexical: '<span class="label">ἥκω</span> = έχω έλθει, βρίσκομαι εδώ · <strong>ἧκε</strong> παρακείμενος αοριστικής σημ. <span class="arrow">→</span> νεοελλ. <em>ήκω</em> (επίσ.)<br><span class="label">μήν</span> <span class="arrow">→</span> νεοελλ. μήνας, μηνιαίος',
+        lexical: '<span class="label">ἥκω</span> = έχω έρθει, βρίσκομαι εδώ, επιστρέφω<br><span class="label">μήν</span> <span class="arrow">→</span> νεοελλ. μήνας, μηνιαίος',
         syntactic: '<strong>τετάρτῳ μηνί</strong>: δοτική χρόνου<br><strong>Ἐπεὶ ἧκε</strong>: χρονική πρόταση',
         translation: 'Αφού, λοιπόν, επέστρεψε τέσσερις μήνες μετά,',
         interpretive: 'Ο Ξενοφών τονίζει επιδεικτικά το χρονικό διάστημα: 4 μήνες αναμονής — αρκετός καιρός για να εξαντληθούν τα τρόφιμα των πολιορκημένων Αθηναίων.'
       },
       {
         greek: '<strong>ἀπήγγειλεν</strong> ἐν ἐκκλησίᾳ',
-        lexical: '<span class="label">ἀπαγγέλλω</span> αόρ. α΄ = αναγγέλλω επίσημα<br><span class="label">ἐκκλησία</span> &lt; ἐκ+καλέω <span class="arrow">→</span> νεοελλ. εκκλησία, εκκλησιαστικός',
+        lexical: '<span class="label">ἀπαγγέλλω</span> αόρ. α΄ = αναγγέλλω / αναφέρω επίσημα<br><span class="label">ἐκκλησία</span> &lt; ἐκ+καλέω <span class="arrow">→</span> νεοελλ. εκκλησία, εκκλησιαστικός',
         syntactic: '<strong>ἐν ἐκκλησίᾳ</strong>: εμπρόθ. προσδ. τόπου',
         translation: 'ανέφερε στη συνέλευση του λαού',
         interpretive: 'Δημόσια αναφορά στην εκκλησία του δήμου — η επίσημη πολιτική σκηνή. Ο Θηραμένης επιλέγει το πλέον ορατό βήμα.'
@@ -1235,12 +1258,17 @@ function renderTable() {
   if (!data) return;
   const key = modeKeys[currentMode];
   const tbody = document.getElementById('table-body');
-  tbody.innerHTML = data.rows.map(row => `
-    <tr>
-      <td class="td-greek">${row.greek}</td>
-      <td class="td-right">${row[key]}</td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = data.rows.map(row => {
+    var greek = row.greek;
+    // clickable words only in lexical mode
+    if (currentMode === 'lexical') {
+      greek = greek.replace(/μηνί/g, '<span class="w-click" onclick="openMorph(\'mhni\')">μηνί</span>');
+      greek = greek.replace(/ἀπήγγειλεν/g, '<span class="w-click" onclick="openMorph(\'apingeilen\')">ἀπήγγειλεν</span>');
+      greek = greek.replace(/ᾑρέθη/g, '<span class="w-click" onclick="openMorph(\'hireth\')">ᾑρέθη</span>');
+      greek = greek.replace(/αὐτοκράτωρ/g, '<span class="w-click" onclick="openMorph(\'autokrator_morph\')">αὐτοκράτωρ</span>');
+    }
+    return '<tr><td class="td-greek">' + greek + '</td><td class="td-right">' + row[key] + '</td></tr>';
+  }).join('');
 }
 
 // ══════════════════════════════════════════════
@@ -1856,6 +1884,120 @@ function closeFocusOutside(e) {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFocus(); });
 
+</script>
+
+<!-- MORPH POPUP -->
+<div class="morph-overlay" id="morph-overlay" onclick="closeMorphOutside(event)">
+  <div class="morph-box" id="morph-box">
+    <button class="morph-close" onclick="closeMorph()">✕</button>
+    <div class="morph-lemma" id="morph-lemma"></div>
+    <div class="morph-info" id="morph-info"></div>
+    <div id="morph-content"></div>
+  </div>
+</div>
+
+<script>
+const morphData = {
+
+  mhni: {
+    lemma: 'μήν, μηνός',
+    info: 'Ουσιαστικό · 3η κλίση · αρσενικό',
+    type: 'noun3',
+    rows: [
+      ['Ονομ.', 'μήν', 'μῆνες'],
+      ['Γεν.',  'μηνός', 'μηνῶν'],
+      ['Δοτ.',  'μηνί', 'μησί(ν)'],
+      ['Αιτ.',  'μῆνα', 'μῆνας'],
+      ['Κλητ.', 'μήν', 'μῆνες']
+    ],
+    highlight: 'μηνί',
+    note: 'Στο κείμενο: «τετάρτῳ μηνί» — δοτική χρόνου (την τέταρτη μήνα)'
+  },
+
+  apingeilen: {
+    lemma: 'ἀπαγγέλλω',
+    info: 'Ρήμα · αόριστος α΄ ενεργητικός',
+    type: 'verb',
+    rows: [
+      ['α΄ εν.',  'ἀπήγγειλα'],
+      ['β΄ εν.',  'ἀπήγγειλας'],
+      ['γ΄ εν.',  'ἀπήγγειλε(ν)'],
+      ['α΄ πλ.', 'ἀπηγγείλαμεν'],
+      ['β΄ πλ.', 'ἀπηγγείλατε'],
+      ['γ΄ πλ.', 'ἀπήγγειλαν']
+    ],
+    highlight: 'ἀπήγγειλε(ν)',
+    note: 'ἀπό + ἀγγέλλω · αόρ. α΄: ἀπ-ήγγειλ-ε(ν) · σημαίνει αναφέρω επίσημα, αναγγέλλω'
+  },
+
+  hireth: {
+    lemma: 'αἱρέω / αἱρέομαι',
+    info: 'Ρήμα · αόριστος β΄ παθητικός',
+    type: 'verb',
+    rows: [
+      ['α΄ εν.',  'ᾑρέθην'],
+      ['β΄ εν.',  'ᾑρέθης'],
+      ['γ΄ εν.',  'ᾑρέθη'],
+      ['α΄ πλ.', 'ᾑρέθημεν'],
+      ['β΄ πλ.', 'ᾑρέθητε'],
+      ['γ΄ πλ.', 'ᾑρέθησαν']
+    ],
+    highlight: 'ᾑρέθη',
+    note: 'Παθητική φωνή = εκλέγομαι · ενεργητική αἱρέω = κυριεύω, παίρνω'
+  },
+
+  autokrator_morph: {
+    lemma: 'αὐτοκράτωρ, -ορος',
+    info: 'Ουσιαστικό · 3η κλίση · αρσενικό/θηλυκό',
+    type: 'noun3',
+    rows: [
+      ['Ονομ.', 'αὐτοκράτωρ', 'αὐτοκράτορες'],
+      ['Γεν.',  'αὐτοκράτορος', 'αὐτοκρατόρων'],
+      ['Δοτ.',  'αὐτοκράτορι', 'αὐτοκράτορσι(ν)'],
+      ['Αιτ.',  'αὐτοκράτορα', 'αὐτοκράτορας'],
+      ['Κλητ.', 'αὐτόκρατορ', 'αὐτοκράτορες']
+    ],
+    highlight: 'αὐτοκράτωρ',
+    note: 'αὐτός + κράτος · στο κείμενο = πληρεξούσιος με απόλυτη εξουσία διαπραγμάτευσης'
+  }
+
+};
+
+function openMorph(key) {
+  const d = morphData[key];
+  if (!d) return;
+  document.getElementById('morph-lemma').textContent = d.lemma;
+  document.getElementById('morph-info').textContent = d.info;
+  var html = '<table class="morph-table">';
+  if (d.type === 'noun3') {
+    html += '<tr><th>Πτώση</th><th>Ενικός</th><th>Πληθυντικός</th></tr>';
+    d.rows.forEach(function(r) {
+      html += '<tr><td>' + r[0] + '</td>' +
+        '<td class="' + (r[1] === d.highlight ? 'hi' : '') + '">' + r[1] + '</td>' +
+        '<td class="' + (r[2] === d.highlight ? 'hi' : '') + '">' + (r[2]||'') + '</td></tr>';
+    });
+  } else {
+    html += '<tr><th>Πρόσωπο</th><th>Τύπος</th></tr>';
+    d.rows.forEach(function(r) {
+      html += '<tr><td>' + r[0] + '</td>' +
+        '<td class="' + (r[1] === d.highlight ? 'hi' : '') + '">' + r[1] + '</td></tr>';
+    });
+  }
+  html += '</table>';
+  if (d.note) html += '<div class="morph-note">' + d.note + '</div>';
+  document.getElementById('morph-content').innerHTML = html;
+  document.getElementById('morph-overlay').classList.add('open');
+}
+
+function closeMorph() {
+  document.getElementById('morph-overlay').classList.remove('open');
+}
+
+function closeMorphOutside(e) {
+  if (e.target === document.getElementById('morph-overlay')) closeMorph();
+}
+
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeMorph(); closeFocus(); } });
 </script>
 
 </body>
