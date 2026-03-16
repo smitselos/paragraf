@@ -3,2380 +3,709 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ξενοφῶντος Ἑλληνικά — Β΄ 2.16–23</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<title>📝 Το Δοκίμιο — Βώρος & Σεφέρης</title>
 <style>
-  /* ── DAY THEME (Claude.ai style) ── */
-  :root {
-    --bg: #f9f7f4;
-    --bg2: #ffffff;
-    --bg3: #f0ece6;
-    --border: #ddd8d0;
-    --gold: #9a6a1a;
-    --gold-light: #7a5010;
-    --gold-dim: #b8903a;
-    --parchment: #2d2520;
-    --parchment-dim: #5a4a38;
-    --text: #1a1510;
-    --text-dim: #7a6a58;
-    --red: #8b2a1a;
-    --red-light: #c84030;
-    --accent: #2a4a6a;
-    --accent-light: #4a7aaa;
-    --shadow: rgba(0,0,0,0.08);
-  }
-
-  /* ── NIGHT THEME ── */
-  [data-theme="night"] {
-    --bg: #0f0e0b;
-    --bg2: #1a1812;
-    --bg3: #242018;
-    --border: #3a3420;
-    --gold: #c8952a;
-    --gold-light: #e8c870;
-    --gold-dim: #7a5a18;
-    --parchment: #f0e8d0;
-    --parchment-dim: #c8b890;
-    --text: #e8dfc8;
-    --text-dim: #9a8f78;
-    --red: #8b2a1a;
-    --red-light: #c84030;
-    --accent: #2a4a6a;
-    --accent-light: #4a7aaa;
-    --shadow: rgba(0,0,0,0.3);
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Source Sans 3', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    line-height: 1.6;
-  }
-
-  /* ── HEADER ── */
-  header {
-    background: var(--bg2);
-    box-shadow: 0 1px 4px var(--shadow);
-    border-bottom: 1px solid var(--border);
-    padding: 1.5rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .header-title {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(0.75rem, 1.2vw, 1rem);
-    color: var(--gold);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    line-height: 1.5;
-  }
-
-  .header-title span {
-    color: var(--text-dim);
-    font-size: clamp(0.7rem, 1vw, 0.85rem);
-    font-family: 'Cinzel', serif;
-    font-style: normal;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    display: block;
-    margin-top: 0.2rem;
-  }
-
-  .home-btn {
-    font-family: 'Cinzel', serif;
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    background: none;
-    border: 1px solid var(--border);
-    padding: 0.4rem 1rem;
-    cursor: pointer;
-    letter-spacing: 0.1em;
-    transition: all 0.2s;
-    text-decoration: none;
-  }
-
-  .home-btn:hover {
-    color: var(--gold);
-    border-color: var(--gold-dim);
-    background: rgba(154,106,26,0.06);
-  }
-
-  /* ── PAGES ── */
-  .page { display: none; }
-  .page.active { display: block; }
-
-  /* ── HOME PAGE ── */
-  .home-hero {
-    min-height: 60vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 4rem 2rem;
-    background: radial-gradient(ellipse at 50% 0%, rgba(154,106,26,0.06) 0%, transparent 70%);
-  }
-
-  .home-hero h1 {
-    font-family: 'Cinzel', serif;
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    color: var(--gold);
-    letter-spacing: 0.1em;
-    line-height: 1.3;
-    margin-bottom: 0.5rem;
-  }
-
-  .home-hero h2 {
-    font-family: 'EB Garamond', serif;
-    font-style: italic;
-    font-size: clamp(1rem, 2vw, 1.4rem);
-    color: var(--parchment-dim);
-    margin-bottom: 3rem;
-  }
-
-  .home-divider {
-    width: 120px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    margin: 1.5rem auto;
-  }
-
-  .para-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-    justify-content: center;
-    max-width: 600px;
-    margin: 0 auto 3rem;
-  }
-
-  .para-btn {
-    font-family: 'Cinzel', serif;
-    font-size: 0.9rem;
-    padding: 0.7rem 1.4rem;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    cursor: pointer;
-    transition: all 0.25s;
-    letter-spacing: 0.05em;
-    position: relative;
-  }
-
-  .para-btn:hover {
-    border-color: var(--gold);
-    color: var(--gold);
-    background: rgba(200,149,42,0.06);
-    transform: translateY(-2px);
-  }
-
-  .para-btn.available {
-    border-color: var(--gold-dim);
-    color: var(--parchment-dim);
-  }
-
-  .para-btn.available:hover {
-    border-color: var(--gold);
-    color: var(--gold);
-  }
-
-  .para-btn .badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background: var(--gold);
-    color: var(--bg);
-    font-size: 0.55rem;
-    padding: 1px 4px;
-    font-family: 'Source Sans 3', sans-serif;
-    letter-spacing: 0.05em;
-  }
-
-  .home-info {
-    font-family: 'EB Garamond', serif;
-    font-size: 1rem;
-    color: var(--text-dim);
-    max-width: 480px;
-    line-height: 1.7;
-  }
-
-  /* ── TEXT PAGE ── */
-  .text-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-  }
-
-  .text-page-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-    flex-wrap: gap;
-    gap: 1rem;
-  }
-
-  .para-title {
-    font-family: 'Cinzel', serif;
-    font-size: 1.2rem;
-    color: var(--gold);
-    letter-spacing: 0.08em;
-  }
-
-  .para-nav {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-  }
-
-  .nav-arrow {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    padding: 0.4rem 0.8rem;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.2s;
-  }
-
-  .nav-arrow:hover:not(:disabled) {
-    border-color: var(--gold);
-    color: var(--gold);
-  }
-
-  .nav-arrow:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-
-  /* ── MODE SELECTOR ── */
-  .mode-bar {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .mode-btn {
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 0.5rem 1.1rem;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .mode-btn:hover {
-    border-color: var(--gold-dim);
-    color: var(--parchment-dim);
-  }
-
-  .mode-btn.active {
-    background: rgba(200,149,42,0.12);
-    border-color: var(--gold);
-    color: var(--gold);
-  }
-
-  /* ── TWO-COLUMN TABLE ── */
-  .bilingual-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'EB Garamond', serif;
-    font-size: 1.08rem;
-  }
-
-  .bilingual-table thead tr {
-    background: var(--bg3);
-    border-bottom: 1px solid var(--gold-dim);
-  }
-
-  .bilingual-table thead th {
-    font-family: 'Cinzel', serif;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    color: var(--gold);
-    padding: 0.8rem 1.2rem;
-    text-align: left;
-    font-weight: 400;
-  }
-
-  .bilingual-table tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background 0.15s;
-  }
-
-  .bilingual-table tbody tr:hover {
-    background: rgba(200,149,42,0.04);
-  }
-
-  .bilingual-table td {
-    padding: 1.1rem 1.4rem;
-    vertical-align: top;
-    line-height: 1.85;
-  }
-
-  .td-greek {
-    width: 45%;
-    color: var(--parchment);
-    font-style: italic;
-    border-right: 1px solid var(--border);
-    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
-    line-height: 1.9;
-  }
-
-  .td-greek strong {
-    font-style: normal;
-    color: var(--gold-light);
-  }
-
-  .td-right {
-    width: 55%;
-    color: var(--text);
-    font-style: normal;
-    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
-    line-height: 1.85;
-    font-family: 'EB Garamond', serif;
-  }
-
-  .td-right .label {
-    font-family: 'EB Garamond', serif;
-    font-size: clamp(1.05rem, 1.4vw, 1.25rem);
-    font-weight: 500;
-    font-style: italic;
-    letter-spacing: 0;
-    text-transform: none;
-    color: var(--gold-dim);
-    display: inline-block;
-    margin-right: 0.3rem;
-  }
-
-  .td-right strong {
-    font-family: 'EB Garamond', serif;
-    font-style: italic;
-    font-weight: 500;
-    color: var(--parchment-dim);
-  }
-
-  .td-right em {
-    font-family: 'EB Garamond', serif;
-    font-style: italic;
-  }
-
-  .td-right .arrow {
-    color: var(--gold-dim);
-    margin: 0 0.2rem;
-  }
-    color: var(--gold-dim);
-    margin: 0 0.2rem;
-  }
-
-  /* ── EXERCISES BTN ── */
-  .exercises-bar {
-    margin-top: 2rem;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .ex-btn {
-    font-family: 'Cinzel', serif;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    color: var(--bg);
-    background: var(--gold);
-    border: none;
-    padding: 0.7rem 2rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .ex-btn:hover {
-    background: var(--gold-light);
-    transform: translateY(-2px);
-  }
-
-  /* ── EXERCISES PAGE ── */
-  /* ── FLASHCARD SHELL ── */
-  .card-shell {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    max-height: 100vh;
-    overflow: hidden;
-    background: var(--bg);
-  }
-
-  .card-topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.8rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg2);
-    flex-shrink: 0;
-  }
-
-  .card-counter {
-    font-family: 'Cinzel', serif;
-    font-size: 0.9rem;
-    color: var(--gold);
-    letter-spacing: 0.1em;
-  }
-
-  .card-progress-wrap {
-    height: 3px;
-    background: var(--border);
-    flex-shrink: 0;
-  }
-
-  .card-progress-bar {
-    height: 100%;
-    background: var(--gold);
-    transition: width 0.35s ease;
-  }
-
-  .card-area {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 1.5rem;
-  }
-
-  .card-inner {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-top: 3px solid var(--gold-dim);
-    max-width: 860px;
-    width: 100%;
-    padding: 3rem 3.5rem 2.5rem;
-    animation: cardIn 0.25s ease;
-  }
-
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .card-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.9rem 1.5rem;
-    border-top: 1px solid var(--border);
-    background: var(--bg2);
-    flex-shrink: 0;
-  }
-
-  .card-nav-btn {
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    color: var(--text-dim);
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    padding: 0.5rem 1.2rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .card-nav-btn:hover:not(:disabled) {
-    border-color: var(--gold-dim);
-    color: var(--parchment-dim);
-  }
-
-  .card-nav-btn:disabled {
-    opacity: 0.3;
-    cursor: default;
-  }
-
-  .card-dots {
-    display: flex;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: 60%;
-  }
-
-  .card-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--border);
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .card-dot.active { background: var(--gold); }
-  .card-dot.done   { background: var(--gold-dim); }
-
-  /* keep exercise block styles for inside cards */
-  .exercise-block {
-    background: transparent;
-    border: none;
-    border-left: none;
-    padding: 0;
-    margin-bottom: 0;
-  }
-
-  .exercise-block:hover { border-left-color: transparent; }
-
-  .print-btn {
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    padding: 0.45rem 1rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .print-btn:hover {
-    border-color: var(--gold-dim);
-    color: var(--parchment-dim);
-  }
-
-  .exercise-block {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--gold-dim);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    transition: border-left-color 0.2s;
-  }
-
-  .exercise-block:hover {
-    border-left-color: var(--gold);
-  }
-
-  .ex-num {
-    font-family: 'Cinzel', serif;
-    font-size: 0.85rem;
-    letter-spacing: 0.12em;
-    color: var(--gold);
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-  }
-
-  .ex-question {
-    font-family: 'EB Garamond', serif;
-    font-size: clamp(1.2rem, 2vw, 1.5rem);
-    color: var(--parchment);
-    margin-bottom: 1.6rem;
-    line-height: 1.75;
-  }
-
-  .ex-question em {
-    color: var(--gold-light);
-    font-style: italic;
-  }
-
-  /* Multiple choice */
-  .mc-options {
-    display: flex;
-    flex-direction: column;
-    gap: 0.7rem;
-  }
-
-  .mc-opt {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.9rem;
-    padding: 0.85rem 1.2rem;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'EB Garamond', serif;
-    font-size: clamp(1.1rem, 1.8vw, 1.3rem);
-    color: var(--text);
-    text-align: left;
-    width: 100%;
-  }
-
-  .mc-opt:hover {
-    border-color: var(--gold-dim);
-    background: rgba(200,149,42,0.06);
-  }
-
-  .mc-opt.correct {
-    border-color: #4a8a4a;
-    background: rgba(74,138,74,0.12);
-    color: #90d090;
-  }
-
-  .mc-opt.wrong {
-    border-color: var(--red-light);
-    background: rgba(139,42,26,0.15);
-    color: #d07070;
-  }
-
-  .mc-letter {
-    font-family: 'Cinzel', serif;
-    font-size: 0.8rem;
-    color: var(--gold-dim);
-    min-width: 1.2rem;
-    margin-top: 0.1rem;
-  }
-
-  /* True/False */
-  .tf-options {
-    display: flex;
-    gap: 0.8rem;
-    flex-direction: column;
-  }
-
-  .tf-row {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--border);
-    font-family: 'EB Garamond', serif;
-    font-size: 1rem;
-    color: var(--text);
-  }
-
-  .tf-row:last-child { border-bottom: none; }
-
-  .tf-btns { display: flex; gap: 0.4rem; }
-
-  .tf-btn {
-    font-family: 'Cinzel', serif;
-    font-size: 0.7rem;
-    padding: 0.3rem 0.7rem;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    cursor: pointer;
-    letter-spacing: 0.05em;
-    transition: all 0.2s;
-  }
-
-  .tf-btn:hover { border-color: var(--gold-dim); color: var(--parchment-dim); }
-  .tf-btn.correct { border-color: #4a8a4a; color: #90d090; background: rgba(74,138,74,0.12); }
-  .tf-btn.wrong { border-color: var(--red-light); color: #d07070; background: rgba(139,42,26,0.15); }
-
-  /* Match */
-  .match-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
-
-  .match-col { display: flex; flex-direction: column; gap: 0.5rem; }
-
-  .match-item {
-    padding: 0.6rem 1rem;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    font-family: 'EB Garamond', serif;
-    font-size: 1rem;
-    color: var(--text);
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-  }
-
-  .match-item:hover { border-color: var(--gold-dim); }
-  .match-item.selected { border-color: var(--gold); color: var(--gold); background: rgba(200,149,42,0.1); }
-  .match-item.matched { border-color: #4a8a4a; color: #90d090; background: rgba(74,138,74,0.1); cursor: default; }
-  .match-item.wrong-match { border-color: var(--red-light); color: #d07070; background: rgba(139,42,26,0.1); }
-
-  /* Fill blanks */
-  .fill-text {
-    font-family: 'EB Garamond', serif;
-    font-size: clamp(1.2rem, 1.8vw, 1.4rem);
-    color: var(--parchment);
-    line-height: 2.2;
-    margin-bottom: 0.8rem;
-  }
-
-  .blank-input {
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid var(--gold-dim);
-    color: var(--gold-light);
-    font-family: 'EB Garamond', serif;
-    font-style: italic;
-    font-size: clamp(1.2rem, 1.8vw, 1.4rem);
-    padding: 0 0.4rem;
-    width: 160px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .blank-input::placeholder { color: transparent; }
-  .blank-input:focus { border-color: var(--gold); }
-  .blank-input:focus::placeholder { color: var(--text-dim); font-size: 0.85rem; }
-  .blank-input.correct { border-color: #4a8a4a; color: #90d090; }
-  .blank-input.wrong { border-color: var(--red-light); color: #d07070; }
-
-  /* Check button */
-  .check-btn {
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--bg);
-    background: var(--gold-dim);
-    border: none;
-    padding: 0.65rem 1.8rem;
-    cursor: pointer;
-    margin-top: 1.2rem;
-    transition: all 0.2s;
-  }
-
-  .check-btn:hover { background: var(--gold); }
-
-  /* Open question */
-  .open-textarea {
-    width: 100%;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    color: var(--text);
-    font-family: 'EB Garamond', serif;
-    font-size: clamp(1.1rem, 1.6vw, 1.25rem);
-    padding: 1rem 1.2rem;
-    resize: vertical;
-    min-height: 120px;
-    outline: none;
-    transition: border-color 0.2s;
-    line-height: 1.7;
-  }
-
-  .open-textarea:focus { border-color: var(--gold-dim); }
-
-  /* Feedback */
-  .feedback {
-    margin-top: 0.6rem;
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 0.82rem;
-    padding: 0.5rem 0.8rem;
-    display: none;
-  }
-
-  .feedback.show { display: block; }
-  .feedback.ok { background: rgba(74,138,74,0.1); color: #90d090; border-left: 2px solid #4a8a4a; }
-  .feedback.err { background: rgba(139,42,26,0.1); color: #d07070; border-left: 2px solid var(--red-light); }
-
-  /* Vocabulary exercise */
-  .vocab-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'EB Garamond', serif;
-    font-size: 1rem;
-  }
-
-  .vocab-table td {
-    padding: 0.6rem 0.8rem;
-    border-bottom: 1px solid var(--border);
-    color: var(--text);
-    vertical-align: middle;
-  }
-
-  .vocab-table td:first-child {
-    color: var(--gold-light);
-    font-style: italic;
-    width: 35%;
-  }
-
-  .theme-toggle {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    font-size: 1rem;
-    width: 2rem;
-    height: 2rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 0.5rem;
-  }
-
-  .theme-toggle:hover {
-    border-color: var(--gold-dim);
-    color: var(--gold);
-  }
-
-  .focus-link {
-    display: inline-block;
-    font-family: 'Source Sans 3', sans-serif;
-    font-style: normal;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    color: var(--gold);
-    border: 1px solid var(--gold-dim);
-    padding: 0.1rem 0.5rem;
-    cursor: pointer;
-    margin-left: 0.4rem;
-    transition: all 0.2s;
-    vertical-align: middle;
-  }
-
-  .focus-link:hover {
-    background: rgba(154,106,26,0.1);
-    border-color: var(--gold);
-  }
-
-  /* ── POPUP ── */
-  .popup-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.45);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .popup-overlay.open {
-    display: flex;
-  }
-
-  .popup-box {
-    background: var(--bg2);
-    border: 1px solid var(--gold-dim);
-    max-width: 560px;
-    width: 92%;
-    max-height: 80vh;
-    overflow-y: auto;
-    padding: 2rem;
-    position: relative;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.25);
-    animation: popIn 0.2s ease;
-  }
-
-  @keyframes popIn {
-    from { transform: scale(0.94); opacity: 0; }
-    to   { transform: scale(1);    opacity: 1; }
-  }
-
-  .popup-label {
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 0.3rem;
-  }
-
-  .popup-title {
-    font-family: 'Cinzel', serif;
-    font-size: 1.3rem;
-    color: var(--text);
-    margin-bottom: 1.2rem;
-    padding-bottom: 0.8rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .popup-close {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    width: 1.8rem;
-    height: 1.8rem;
-    cursor: pointer;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-  }
-
-  .popup-close:hover {
-    border-color: var(--gold-dim);
-    color: var(--gold);
-  }
-
-  .popup-section {
-    margin-bottom: 1.2rem;
-  }
-
-  .popup-section-title {
-    font-family: 'EB Garamond', serif;
-    font-style: italic;
-    font-size: 0.95rem;
-    color: var(--gold-dim);
-    margin-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 0.3rem;
-  }
-
-  .popup-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'EB Garamond', serif;
-    font-size: 1rem;
-  }
-
-  .popup-table td {
-    padding: 0.5rem 0.6rem;
-    border-bottom: 1px solid var(--border);
-    color: var(--text);
-    vertical-align: top;
-    line-height: 1.6;
-  }
-
-  .popup-table td:first-child {
-    font-style: italic;
-    color: var(--gold-light);
-    width: 38%;
-  }
-
-  .popup-note {
-    font-family: 'EB Garamond', serif;
-    font-size: 0.98rem;
-    color: var(--text-dim);
-    line-height: 1.7;
-    font-style: italic;
-    border-left: 2px solid var(--gold-dim);
-    padding-left: 0.8rem;
-    margin-top: 0.5rem;
-  }
-
-  .popup-deriv {
-    font-family: 'EB Garamond', serif;
-    font-size: 1rem;
-    color: var(--text);
-    line-height: 1.8;
-  }
-
-  .popup-deriv span {
-    color: var(--gold-light);
-    font-style: italic;
-    margin-right: 0.3rem;
-  }
-  /* ── CLICKABLE WORDS ── */
-  .w-click {
-    cursor: pointer;
-    border-bottom: 1px dashed var(--gold-dim);
-    transition: color 0.15s, border-color 0.15s;
-  }
-  .w-click:hover { color: var(--gold); border-bottom-color: var(--gold); }
-
-  /* ── MORPH POPUP ── */
-  .morph-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 300; align-items: center; justify-content: center; }
-  .morph-overlay.open { display: flex; }
-  .morph-box { background: var(--bg2); border: 1px solid var(--gold-dim); max-width: 480px; width: 92%; max-height: 80vh; overflow-y: auto; padding: 1.8rem 2rem; position: relative; box-shadow: 0 8px 40px rgba(0,0,0,0.3); animation: popIn 0.2s ease; }
-  .morph-close { position: absolute; top: 0.8rem; right: 0.8rem; background: none; border: 1px solid var(--border); color: var(--text-dim); width: 1.8rem; height: 1.8rem; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-  .morph-close:hover { border-color: var(--gold-dim); color: var(--gold); }
-  .morph-lemma { font-family: 'EB Garamond', serif; font-style: italic; font-size: 1.5rem; color: var(--gold-light); margin-bottom: 0.2rem; }
-  .morph-info { font-family: 'Source Sans 3', sans-serif; font-size: 0.78rem; color: var(--text-dim); margin-bottom: 1.2rem; letter-spacing: 0.04em; }
-  .morph-table { width: 100%; border-collapse: collapse; font-family: 'EB Garamond', serif; font-size: 1rem; }
-  .morph-table th { font-family: 'Cinzel', serif; font-size: 0.68rem; letter-spacing: 0.1em; color: var(--gold-dim); padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--gold-dim); text-align: left; font-weight: 400; text-transform: uppercase; }
-  .morph-table td { padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
-  .morph-table td:first-child { color: var(--text-dim); font-size: 0.85rem; font-family: 'Source Sans 3', sans-serif; width: 28%; }
-  .morph-table td.hi { color: var(--gold-light); font-style: italic; font-weight: 500; }
-  .morph-note { font-family: 'EB Garamond', serif; font-style: italic; font-size: 0.95rem; color: var(--text-dim); margin-top: 1rem; border-left: 2px solid var(--gold-dim); padding-left: 0.7rem; }
-
-  @media print {
-    body { background: white; color: black; }
-    header, .mode-bar, .exercises-bar, .ex-header .print-btn,
-    .nav-arrow, .para-nav, .home-btn, .check-btn { display: none !important; }
-    .exercise-block {
-      background: white;
-      border: 1px solid #ccc;
-      border-left: 3px solid #888;
-      break-inside: avoid;
-      page-break-inside: avoid;
-    }
-    .ex-num { color: #555; }
-    .ex-question { color: #111; }
-    .mc-opt { background: white; border-color: #ccc; color: #111; }
-    .blank-input { color: #111; border-bottom-color: #888; }
-    .open-textarea { background: white; border-color: #ccc; color: #111; min-height: 60px; }
-    .tf-row { color: #111; }
-    .match-item { background: white; border-color: #ccc; color: #111; }
-    .feedback { display: none !important; }
-    .mc-opt.correct, .mc-opt.wrong,
-    .tf-btn.correct, .tf-btn.wrong,
-    .match-item.matched, .match-item.wrong-match { background: white; color: #111; border-color: #ccc; }
-    .exercises-page { padding: 0; }
-  }
-
-  /* ── ORNAMENT ── */
-  .ornament {
-    text-align: center;
-    color: var(--gold-dim);
-    font-size: 1.2rem;
-    margin: 0.5rem 0;
-    letter-spacing: 0.3em;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#1C1B2E; --ink-mid:#3B3650; --ink-light:#5A5470;
+  --parchment:#FAF7F0; --parchment-dark:#EFE8D8; --parchment-darker:#DDD3BE;
+  --purple:#5B4E8C; --purple-light:#7B6AAC; --purple-dark:#3D3460;
+  --gold:#C8952A; --gold-light:#E8B84A;
+  --green:#059669; --red:#DC2626; --shadow:rgba(28,27,46,0.13);
+}
+body{font-family:'Source Sans 3',sans-serif;background:var(--parchment);min-height:100vh;font-size:17px;color:var(--ink);}
+
+/* HEADER */
+.header{background:linear-gradient(150deg,var(--ink) 0%,var(--purple-dark) 65%,var(--ink-mid) 100%);color:white;box-shadow:0 6px 28px rgba(0,0,0,0.32);overflow:hidden;position:relative;}
+.header::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,0.025) 0,rgba(255,255,255,0.025) 1px,transparent 1px,transparent 30px);}
+.header-inner{max-width:1200px;margin:0 auto;padding:26px 28px 20px;position:relative;}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;}
+.badge{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-light);background:rgba(200,149,42,0.15);border:1px solid rgba(200,149,42,0.4);padding:5px 13px;border-radius:2px;display:inline-block;margin-bottom:9px;}
+.header h1{font-family:'Playfair Display',serif;font-size:34px;font-weight:900;line-height:1.15;}
+.header h1 span{color:var(--gold-light);font-style:italic;}
+.header-sub{font-size:16px;color:rgba(255,255,255,0.78);margin-top:5px;font-weight:300;}
+.pts-box{background:rgba(0,0,0,0.22);border:1px solid rgba(200,149,42,0.4);border-radius:8px;padding:11px 18px;min-width:120px;text-align:right;}
+.pts-lbl{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);}
+.pts-val{font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--gold-light);line-height:1;}
+.prog-bar{width:100%;height:5px;background:rgba(255,255,255,0.12);border-radius:10px;margin-top:16px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:10px;transition:width .6s ease;}
+
+/* NAV */
+.nav{background:var(--purple-dark);border-bottom:3px solid var(--gold);}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 20px;display:flex;gap:2px;overflow-x:auto;}
+.nav-btn{padding:13px 24px;border:none;font-family:'Source Sans 3',sans-serif;font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;background:transparent;color:rgba(255,255,255,0.58);border-bottom:3px solid transparent;margin-bottom:-3px;white-space:nowrap;transition:all .2s;}
+.nav-btn:hover{color:var(--gold-light);background:rgba(255,255,255,0.05);}
+.nav-btn.active{color:var(--gold-light);border-bottom-color:var(--gold);background:rgba(200,149,42,0.1);}
+
+/* MAIN */
+.main{max-width:1200px;margin:0 auto;padding:22px 18px;}
+
+/* CARD */
+.card{background:white;border-radius:10px;padding:28px;box-shadow:0 4px 20px var(--shadow);border:1px solid var(--parchment-darker);margin-bottom:18px;}
+
+/* SECTION TABS */
+.sec-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.sec-tab{flex:1;min-width:130px;padding:11px 14px;border-radius:6px;border:2px solid var(--parchment-darker);font-size:13px;font-weight:600;letter-spacing:.5px;cursor:pointer;background:var(--parchment);color:var(--ink-mid);transition:all .2s;}
+.sec-tab:hover{border-color:var(--purple);color:var(--purple);}
+.sec-tab.active{background:linear-gradient(135deg,var(--purple),var(--purple-dark));color:white;border-color:var(--purple-dark);box-shadow:0 4px 12px rgba(91,78,140,0.3);}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:15.5px;}
+thead tr{background:linear-gradient(135deg,var(--purple),var(--purple-dark));color:white;}
+thead th{padding:12px 16px;text-align:left;font-weight:700;font-size:14px;letter-spacing:.5px;}
+tbody tr:nth-child(even){background:var(--parchment);}
+tbody tr:hover{background:#F0EAF8;}
+tbody td{padding:11px 16px;border-bottom:1px solid var(--parchment-darker);vertical-align:top;line-height:1.55;}
+tbody td:first-child{font-weight:700;color:var(--purple);white-space:nowrap;}
+.tbl-label{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700;letter-spacing:.5px;}
+.lbl-k1{background:#EDE9FB;color:var(--purple-dark);}
+.lbl-k2{background:#FFF3DC;color:#7A5500;}
+
+/* SCHEMA BOX */
+.schema{display:grid;gap:10px;margin:14px 0;}
+.schema-2{grid-template-columns:1fr 1fr;}
+.schema-3{grid-template-columns:1fr 1fr 1fr;}
+.schema-item{background:var(--parchment);border-radius:8px;padding:14px 16px;border-left:4px solid var(--purple);box-shadow:0 2px 6px var(--shadow);}
+.schema-item.gold-border{border-left-color:var(--gold);}
+.schema-item.green-border{border-left-color:var(--green);}
+.schema-item h4{font-family:'Playfair Display',serif;font-size:14px;color:var(--purple);margin-bottom:6px;}
+.schema-item.gold-border h4{color:var(--gold);}
+.schema-item ul{padding-left:18px;}
+.schema-item li{font-size:15px;margin-bottom:5px;line-height:1.5;}
+
+/* ARROW DIAGRAM */
+.arrow-flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0;}
+.arrow-box{background:linear-gradient(135deg,var(--purple),var(--purple-dark));color:white;padding:10px 16px;border-radius:6px;font-weight:600;font-size:14px;text-align:center;flex:1;min-width:120px;}
+.arrow-box.gold{background:linear-gradient(135deg,var(--gold),#A07010);}
+.arrow{font-size:22px;color:var(--ink-light);}
+
+/* QUOTE */
+.quote{background:linear-gradient(135deg,#F5F0FF,#EDE9FB);border-left:4px solid var(--purple);border-radius:6px;padding:16px 20px;margin:14px 0;font-style:italic;font-size:16px;line-height:1.7;}
+.quote small{font-style:normal;font-weight:700;color:var(--purple);display:block;margin-top:6px;}
+
+/* BUTTON GROUP */
+.btn-group{display:flex;justify-content:space-between;margin-top:24px;padding-top:18px;border-top:1px solid var(--parchment-darker);}
+.btn{padding:11px 24px;border-radius:6px;border:none;font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:all .22s;}
+.btn-prev{background:var(--parchment-dark);color:var(--ink-mid);}
+.btn-prev:hover:not(:disabled){background:var(--parchment-darker);}
+.btn-prev:disabled{opacity:.35;cursor:not-allowed;}
+.btn-next{background:linear-gradient(135deg,var(--purple),var(--purple-dark));color:white;box-shadow:0 4px 12px rgba(91,78,140,0.28);}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(91,78,140,0.38);}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#A07010);color:white;box-shadow:0 4px 12px rgba(200,149,42,0.3);}
+.continue-btn{margin-top:13px;padding:12px 28px;border-radius:6px;border:none;background:linear-gradient(135deg,var(--purple),var(--purple-dark));color:white;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:14px;font-weight:700;transition:all .22s;box-shadow:0 4px 12px rgba(91,78,140,0.28);}
+.continue-btn:hover{transform:translateY(-2px);}
+
+/* SUCCESS */
+.success-box{background:linear-gradient(135deg,#E8F5E9,#C8E6C9);border:2px solid #4CAF50;border-radius:8px;padding:20px;text-align:center;margin-top:20px;}
+.success-box p{font-weight:700;font-size:17px;color:#1B5E20;}
+
+/* EXERCISES */
+.ex-nums{display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap;}
+.ex-num{width:40px;height:40px;border-radius:50%;border:2px solid var(--parchment-darker);font-weight:700;font-size:14px;cursor:pointer;background:var(--parchment);color:var(--ink-mid);transition:all .18s;}
+.ex-num:hover{border-color:var(--purple);color:var(--purple);}
+.ex-num.active{background:var(--purple);color:white;border-color:var(--purple-dark);}
+.ex-num.done{background:var(--green);color:white;border-color:#047857;}
+.ex-tag{display:inline-block;padding:4px 13px;background:var(--purple);color:white;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px;margin-bottom:16px;}
+.question{font-size:20px;font-weight:700;color:var(--purple-dark);line-height:1.5;margin:18px 0;}
+
+/* OPTIONS */
+.options{display:flex;flex-direction:column;gap:11px;margin-top:16px;}
+.opt-btn{padding:16px 20px;border-radius:8px;border:2px solid var(--parchment-darker);background:var(--parchment);cursor:pointer;text-align:left;font-size:16px;transition:all .22s;color:var(--ink);font-family:'Source Sans 3',sans-serif;}
+.opt-btn:hover{border-color:var(--purple-light);background:#F5F0FF;transform:translateX(4px);}
+.opt-btn.sel{border-color:var(--purple);background:#F0EAF8;font-weight:700;}
+.opt-btn.correct{border-color:var(--green);background:#D1FAE5;font-weight:700;}
+.opt-btn.wrong{border-color:var(--red);background:#FEE2E2;}
+
+.submit-btn{margin-top:18px;padding:14px 30px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--green),#047857);color:white;cursor:pointer;font-family:'Source Sans 3',sans-serif;font-size:16px;font-weight:700;transition:all .22s;box-shadow:0 4px 12px rgba(5,150,105,0.3);}
+.submit-btn:hover{transform:translateY(-2px);}
+.submit-btn:disabled{background:#D1D5DB;cursor:not-allowed;transform:none;box-shadow:none;}
+
+.result-box{margin-top:16px;padding:16px;border-radius:8px;font-size:17px;font-weight:700;text-align:center;}
+.result-box.correct{background:#D1FAE5;border:2px solid var(--green);color:#065F46;}
+.result-box.incorrect{background:#FEF3C7;border:2px solid var(--gold);color:#7A5500;}
+
+/* TRUE/FALSE */
+.tf-item{background:var(--parchment);border-radius:8px;padding:16px 18px;margin-bottom:12px;border:1px solid var(--parchment-darker);}
+.tf-text{font-weight:600;font-size:16px;margin-bottom:10px;}
+.tf-btns{display:flex;gap:10px;}
+.tf-btn{flex:1;padding:10px;border-radius:6px;border:2px solid var(--parchment-darker);background:white;cursor:pointer;font-weight:700;font-size:15px;transition:all .18s;font-family:'Source Sans 3',sans-serif;}
+.tf-btn:hover{border-color:var(--purple);}
+.tf-btn.sel{border-color:var(--purple);background:#F0EAF8;color:var(--purple);}
+.tf-btn.correct-ans{border-color:var(--green);background:#D1FAE5;color:#065F46;}
+
+/* FILL BLANKS */
+.fill-area{background:var(--parchment);padding:20px;border-radius:8px;line-height:3;font-size:17px;}
+.blank-inp{display:inline-block;min-width:140px;padding:4px 10px;border:2px solid var(--purple);border-radius:5px;font-weight:700;margin:0 5px;font-size:15px;background:white;font-family:'Source Sans 3',sans-serif;}
+.blank-inp.ok{background:#D1FAE5;border-color:var(--green);}
+.blank-inp.err{background:#FEE2E2;border-color:var(--red);}
+
+/* MATCHING */
+.match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:18px 0;}
+.match-col h4{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--purple);margin-bottom:10px;text-align:center;}
+.match-item{padding:13px 16px;background:var(--parchment);border:2px solid var(--parchment-darker);border-radius:8px;cursor:pointer;font-weight:600;text-align:center;margin-bottom:9px;transition:all .22s;font-size:15px;}
+.match-item:hover{border-color:var(--purple);background:#F5F0FF;}
+.match-item.sel-l{border-color:var(--purple);background:#F0EAF8;}
+.match-item.matched{border-color:var(--green);background:#D1FAE5;cursor:default;}
+.match-item.wrong-m{border-color:var(--red);background:#FEE2E2;}
+
+/* DRAG */
+.drag-box{background:var(--parchment);border-radius:8px;padding:16px;margin:18px 0;border:1px solid var(--parchment-darker);}
+.drag-flex{display:flex;flex-wrap:wrap;gap:9px;margin-top:9px;}
+.drag-item{padding:9px 15px;background:linear-gradient(135deg,var(--purple),var(--purple-dark));color:white;border-radius:6px;cursor:grab;font-weight:700;font-size:14px;box-shadow:0 2px 6px rgba(91,78,140,0.28);user-select:none;transition:all .18s;}
+.drag-item:hover{transform:translateY(-2px);}
+.slot{min-height:54px;background:var(--parchment);border:2px dashed var(--parchment-darker);border-radius:8px;padding:12px 16px;margin-bottom:10px;display:flex;align-items:center;font-size:14px;font-weight:700;color:#aaa;transition:all .18s;}
+.slot:hover{border-color:var(--purple);background:#F5F0FF;}
+.slot.filled{background:#F0EAF8;border:2px solid var(--purple);color:var(--ink);}
+
+/* QUIZ */
+.quiz-card{background:white;border-radius:10px;padding:36px;text-align:center;box-shadow:0 4px 20px var(--shadow);}
+.quiz-score-box{background:var(--parchment);padding:26px;border-radius:10px;margin:18px 0;border:3px solid var(--gold);}
+.quiz-score{font-family:'Playfair Display',serif;font-size:48px;color:var(--gold);font-weight:700;}
+
+/* GLOSSARY */
+.glos-item{margin-bottom:14px;padding:16px 20px;background:var(--parchment);border-left:4px solid var(--purple);border-radius:6px;box-shadow:0 2px 6px var(--shadow);transition:all .22s;}
+.glos-item:hover{transform:translateX(4px);}
+.glos-hd{display:flex;align-items:center;margin-bottom:7px;}
+.glos-icon{font-size:24px;margin-right:11px;}
+.glos-term{font-family:'Playfair Display',serif;font-weight:700;font-size:16px;color:var(--purple);}
+.glos-def{font-size:15px;line-height:1.6;color:var(--ink);padding-left:35px;}
+
+footer{background:var(--ink);color:rgba(255,255,255,0.65);padding:18px;text-align:center;margin-top:36px;}
+footer p{font-size:13px;margin:3px 0;}
+footer strong{color:var(--gold-light);}
+.hidden{display:none;}
+h2{font-family:'Playfair Display',serif;font-size:20px;color:var(--purple-dark);margin-bottom:16px;}
+@media(max-width:768px){
+  .schema-2,.schema-3,.match-wrap{grid-template-columns:1fr;}
+  .header h1{font-size:24px;}
+  .header-top{flex-direction:column;}
+}
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
-<header>
-  <div class="header-title">
-    Ξενοφῶντος Ἑλληνικά
-    <span>Βιβλίο Β΄ · Κεφάλαιο 2 · §§ 16–23</span>
+<header class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div>
+        <div class="badge">Νεοελληνική Γλώσσα | Α΄ Λυκείου</div>
+        <h1>📝 Το <span>Δοκίμιο</span></h1>
+        <div class="header-sub" style="font-size:15px;color:rgba(255,255,255,0.75);margin-top:5px;">Φ.Κ. Βώρος • Γ. Σεφέρης — Παράδοση και αλλαγή</div>
+      </div>
+      <div class="pts-box">
+        <div class="pts-lbl">Πόντοι</div>
+        <div class="pts-val">⭐ <span id="pts">0</span></div>
+      </div>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
   </div>
-  <button class="home-btn" onclick="showPage('home')">⌂ Αρχική</button>
-  <button class="theme-toggle" onclick="toggleTheme()" id="theme-btn" title="Εναλλαγή ημέρας/νύχτας">☀</button>
 </header>
 
-<!-- HOME PAGE -->
-<div id="page-home" class="page active">
-  <div class="home-hero">
-    <h1>Ξενοφῶντος Ἑλληνικά</h1>
-    <h2>Βιβλίο Β΄ · Κεφάλαιο 2 · §§ 16–23</h2>
-    <div class="home-divider"></div>
-
-    <div class="para-grid">
-      <button class="para-btn" onclick="showPage('text')" disabled title="Σύντομα">§ 16</button>
-      <button class="para-btn available" onclick="loadParagraph(17); showPage('text')">
-        § 17
-        <span class="badge">✓</span>
-      </button>
-      <button class="para-btn available" onclick="loadParagraph(18); showPage('text')">
-        § 18
-        <span class="badge">✓</span>
-      </button>
-      <button class="para-btn available" onclick="loadParagraph(19); showPage('text')">
-        § 19
-        <span class="badge">✓</span>
-      </button>
-      <button class="para-btn" disabled title="Σύντομα">§ 20</button>
-      <button class="para-btn" disabled title="Σύντομα">§ 21</button>
-      <button class="para-btn" disabled title="Σύντομα">§ 22</button>
-      <button class="para-btn" disabled title="Σύντομα">§ 23</button>
-    </div>
-
-    <p class="home-info">
-      Επιλέξτε παράγραφο για να δείτε το κείμενο με λεξιλογικά,
-      γραμματικά, συντακτικά και ερμηνευτικά σχόλια,
-      καθώς και ασκήσεις.
-    </p>
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" id="navTh" onclick="switchTab('th')">📋 ΘΕΩΡΙΑ</button>
+    <button class="nav-btn" id="navCmp" onclick="switchTab('cmp')">⚖️ ΣΥΓΚΡΙΣΗ</button>
+    <button class="nav-btn" id="navEx" onclick="switchTab('ex')">✏️ ΑΣΚΗΣΕΙΣ</button>
+    <button class="nav-btn" id="navGl" onclick="switchTab('gl')">📖 ΓΛΩΣΣΑΡΙΟ</button>
   </div>
+</nav>
+
+<div class="main">
+
+  <!-- ΘΕΩΡΙΑ -->
+  <div id="thTab" class="card">
+    <div class="sec-tabs">
+      <button class="sec-tab active" onclick="switchTh(0)">📝 Τι είναι Δοκίμιο</button>
+      <button class="sec-tab" onclick="switchTh(1)">🔀 Είδη Δοκιμίου</button>
+    </div>
+    <div id="thContent"></div>
+  </div>
+
+  <!-- ΣΥΓΚΡΙΣΗ -->
+  <div id="cmpTab" class="card hidden">
+    <div id="cmpContent"></div>
+  </div>
+
+  <!-- ΑΣΚΗΣΕΙΣ -->
+  <div id="exTab" class="hidden">
+    <div class="ex-nums" id="exNums"></div>
+    <div class="card" id="exContent"></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quizTab" class="hidden">
+    <div id="quizContent"></div>
+  </div>
+
+  <!-- ΓΛΩΣΣΑΡΙΟ -->
+  <div id="glTab" class="card hidden">
+    <h2>📖 Γλωσσάριο</h2>
+    <div id="glContent"></div>
+  </div>
+
 </div>
 
-<!-- TEXT PAGE -->
-<div id="page-text" class="page">
-  <div class="text-page">
-    <div class="text-page-header">
-      <div class="para-title" id="para-title">§ 17</div>
-      <div class="para-nav">
-        <button class="nav-arrow" id="btn-prev" onclick="navigatePara(-1)">← Προηγ.</button>
-        <button class="nav-arrow" id="btn-next" onclick="navigatePara(1)">Επόμ. →</button>
-      </div>
+<footer>
+  <p>📚 <strong>Νεοελληνική Γλώσσα Α΄ Λυκείου</strong> — Κ. Βώρος, Γ. Σεφέρης</p>
+  <p>© 2ο ΓΕΛ, 2026</p>
+</footer>
+
+<script>
+// ══ STATE ══════════════════════════════════════════════════════
+const S = {
+  tab:'th', thSec:0, exIdx:0, pts:0,
+  done:{th:false,cmp:false,ex:false},
+  ans:{}, shown:{}, kwHl:[], fillBlanks:{},
+  slots:[null,null,null,null], dragged:null,
+  matchSel:null, matchPairs:{}, quizAns:[], quizDone:false
+};
+
+// ══ GLOSSARY DATA ══════════════════════════════════════════════
+const glossary = [
+  {icon:'📝',term:'ΔΟΚΙΜΙΟ',def:'Κειμενικό είδος που κινείται ανάμεσα στον επιστημονικό και λογοτεχνικό λόγο. Σοβαρός συγγραφέας απευθύνεται σε μέσο μορφωμένο κοινό για ένα θέμα γενικού ενδιαφέροντος.'},
+  {icon:'⚖️',term:'ΔΟΚΙΜΙΟ ΠΕΙΘΟΥΣ',def:'Εστιάζει στην εξήγηση, επιχειρηματολογία και πειθώ. Οργανωμένο λογικά, κοντά στον επιστημονικό λόγο. Χαρακτηρίζεται από αντικειμενικότητα, ορθολογική δομή, παραδείγματα. Παράδειγμα: κείμενο Βώρου.'},
+  {icon:'💭',term:'ΔΟΚΙΜΙΟ ΣΤΟΧΑΣΜΟΥ',def:'Εστιάζει στην έκφραση προσωπικών σκέψεων και συναισθημάτων. Κοντά στον λογοτεχνικό λόγο, με ποιητικές εικόνες, βιωματικό χαρακτήρα, α΄ ενικό πρόσωπο. Παράδειγμα: κείμενο Σεφέρη.'},
+  {icon:'📖',term:'ΕΘΙΜΙΚΟΣ ΛΟΓΟΣ',def:'Ο λόγος που χαρακτηρίζεται από υψηλό επίπεδο, επιμελημένο λεξιλόγιο, ποικιλία εκφραστικών σχημάτων και προσεγμένη στίξη — γνώρισμα του δοκιμίου.'},
+  {icon:'🎯',term:'ΠΡΟΘΕΣΗ ΣΥΝΤΑΚΤΗ',def:'Ο σκοπός που επιδιώκει ο συγγραφέας: να εξηγήσει, να πείσει, να εκφράσει, να προβληματίσει ή να ευαισθητοποιήσει τον αναγνώστη.'},
+  {icon:'🔗',term:'ΕΠΙΚΟΙΝΩΝΙΑΚΗ ΛΕΙΤΟΥΡΓΙΑ',def:'Η λειτουργία που επιτελεί ο λόγος: περιγραφή, αφήγηση, εξήγηση, επιχειρηματολογία, οδηγίες. Στο δοκίμιο συνδυάζονται συχνά περισσότερες από μία.'},
+  {icon:'🌊',term:'ΠΟΙΗΤΙΚΗ ΛΕΙΤΟΥΡΓΙΑ',def:'Η χρήση εκφραστικών μέσων (μεταφορές, εικόνες, παρομοιώσεις) που μεταμορφώνει τη γλώσσα σε λογοτεχνική. Κυρίαρχο στοιχείο στο δοκίμιο στοχασμού (Σεφέρης).'},
+  {icon:'💡',term:'ΠΑΡΑΔΟΞΟΛΟΓΙΑ',def:'Διατύπωση που φαίνεται αντιφατική αλλά περιέχει αλήθεια. Ο Βώρος αρχίζει με παραδοξολογία: &#171;το μονιμότερο γνώρισμα της παράδοσης είναι ότι αυτή βεβαιώνει την ασταμάτητη αλλαγή&#187;.'}
+];
+
+// ══ THEORY DATA ════════════════════════════════════════════════
+const thSections = [
+  // 0 — Τι είναι δοκίμιο
+  () => `
+    <h2>📝 Τι είναι το Δοκίμιο</h2>
+    <div class="arrow-flow" style="margin-bottom:20px;">
+      <div class="arrow-box" style="background:linear-gradient(135deg,#3B3650,#1C1B2E);">Επιστημονικός Λόγος</div>
+      <div class="arrow">⟷</div>
+      <div class="arrow-box">ΔΟΚΙΜΙΟ<br><small style="font-weight:300;font-size:12px;">ανάμεσα και στους δύο</small></div>
+      <div class="arrow">⟷</div>
+      <div class="arrow-box gold">Λογοτεχνικός Λόγος</div>
     </div>
 
-    <!-- MODE SELECTOR -->
-    <div class="mode-bar">
-      <button class="mode-btn active" onclick="setMode('lexical')">Λεξιλογικά · Γραμματικά</button>
-      <button class="mode-btn" onclick="setMode('syntactic')">Συντακτικά</button>
-      <button class="mode-btn" onclick="setMode('translation')">Μετάφραση</button>
-      <button class="mode-btn" onclick="setMode('interpretive')">Ερμηνευτικά</button>
-    </div>
-
-    <!-- TABLE -->
-    <table class="bilingual-table" id="main-table">
-      <thead>
-        <tr>
-          <th>Αρχαίο Κείμενο</th>
-          <th id="col-header">Λεξιλογικά · Γραμματικά</th>
-        </tr>
-      </thead>
-      <tbody id="table-body"></tbody>
+    <table>
+      <thead><tr><th>Στοιχείο</th><th>Περιγραφή</th></tr></thead>
+      <tbody>
+        <tr><td>Συγγραφέας</td><td>Άνθρωπος πνεύματος (όχι ειδικός)</td></tr>
+        <tr><td>Αναγνώστης</td><td>Μέσο μορφωμένο κοινό</td></tr>
+        <tr><td>Θέμα</td><td>Διαχρονικό — γενικού ενδιαφέροντος</td></tr>
+        <tr><td>Γλώσσα</td><td>Υψηλό επίπεδο, επιμελημένο λεξιλόγιο, ποικιλία σχημάτων</td></tr>
+        <tr><td>Ύφος</td><td>Προσωπικό, χωρίς επιστημονική ορολογία</td></tr>
+        <tr><td>Μέσα</td><td>Γέφυρα επικοινωνίας ενός μορφωτικού επιπέδου με απλούστερους αναγνώστες</td></tr>
+        <tr><td>Σκοπός</td><td>
+          <span class="tbl-label lbl-k1">να πείσει και να εξηγήσει</span> &nbsp;/&nbsp;
+          <span class="tbl-label lbl-k2">να εκφράσει ελεύθερα προσωπικές σκέψεις</span> &nbsp;/&nbsp;
+          <span style="display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700;background:#E8F5E9;color:#1B5E20;">να τέρψει και να διδάξει</span>
+        </td></tr>
+      </tbody>
     </table>
 
-    <div class="exercises-bar">
-      <button class="ex-btn" onclick="showPage('exercises')">Ασκήσεις →</button>
+    <div class="btn-group">
+      <button class="btn btn-prev" disabled>← Προηγ.</button>
+      <button class="btn btn-next" onclick="nextTh()">Επόμενο →</button>
     </div>
-  </div>
-</div>
+  `,
 
-<!-- EXERCISES PAGE -->
-<div id="page-exercises" class="page">
-  <div class="card-shell">
-    <!-- top bar -->
-    <div class="card-topbar">
-      <button class="home-btn" onclick="showPage('text')">← Κείμενο</button>
-      <div style="text-align:center">
-        <div class="card-counter"><span id="card-current">1</span> / <span id="card-total">1</span></div>
-        <div style="font-family:'EB Garamond',serif;font-style:italic;font-size:0.85rem;color:var(--text-dim);margin-top:0.15rem" id="card-para-label">Ξενοφῶντος Ἑλληνικά Β΄ 2.17</div>
-      </div>
-      <button class="print-btn" onclick="window.print()" style="display:none">⎙</button>
+  // 1 — Είδη δοκιμίου
+  () => `
+    <h2>🔀 Είδη Δοκιμίου</h2>
+    <table>
+      <thead><tr><th></th><th>📘 Δοκίμιο Πειθούς</th><th>💭 Δοκίμιο Στοχασμού</th></tr></thead>
+      <tbody>
+        <tr><td>Παράδειγμα</td><td><span class="tbl-label lbl-k1">Κείμενο 1 — Βώρος</span></td><td><span class="tbl-label lbl-k2">Κείμενο 2 — Σεφέρης</span></td></tr>
+        <tr><td>Πρόθεση</td><td>Εξηγεί, επιχειρηματολογεί, πείθει</td><td>Εκφράζει, προβληματίζει, ευαισθητοποιεί</td></tr>
+        <tr><td>Δομή</td><td>Λογική, οργανωμένη σε ερωτήματα</td><td>Ελεύθερη, βιωματική</td></tr>
+        <tr><td>Πρόσωπο</td><td>Ποικιλία (α΄, β΄, γ΄)</td><td>Κυρίως α΄ ενικό / πληθυντικό</td></tr>
+        <tr><td>Γλώσσα</td><td>Κοντά στον επιστημονικό λόγο</td><td>Κοντά στον λογοτεχνικό λόγο</td></tr>
+        <tr><td>Εκφρ. μέσα</td><td>Παραδείγματα, ορισμοί, επιχειρήματα</td><td>Μεταφορές, εικόνες, ποιητικές παρομοιώσεις</td></tr>
+        <tr><td>Χαρακτήρας</td><td>Αντικειμενικός / λογικός</td><td>Υποκειμενικός / βιωματικός</td></tr>
+      </tbody>
+    </table>
+
+    <div class="btn-group">
+      <button class="btn btn-prev" onclick="switchTh(0)">← Προηγ.</button>
+      <button class="btn btn-next" onclick="finishTh()">✅ Ολοκλήρωση</button>
     </div>
-    <!-- progress bar -->
-    <div class="card-progress-wrap"><div class="card-progress-bar" id="card-progress"></div></div>
-    <!-- card area -->
-    <div class="card-area" id="card-area"></div>
-    <!-- navigation -->
-    <div class="card-nav">
-      <button class="card-nav-btn" id="card-prev" onclick="cardNav(-1)">← Προηγ.</button>
-      <div class="card-dots" id="card-dots"></div>
-      <button class="card-nav-btn" id="card-next" onclick="cardNav(1)">Επόμ. →</button>
+    <div class="success-box hidden" id="thSuccess">
+      <p>✅ Ολοκλήρωσες τη Θεωρία! (+15 ⭐)</p>
+      <button class="continue-btn" onclick="completeTh()">Συνέχεια στη Σύγκριση →</button>
     </div>
-  </div>
-</div>
-
-<script>
-// ══════════════════════════════════════════════
-// DATA
-// ══════════════════════════════════════════════
-
-const paragraphs = {
-  17: {
-    title: '§ 17',
-    rows: [
-      {
-        greek: 'Ἐπεὶ δὲ <strong>ἧκε</strong> τετάρτῳ μηνί,',
-        lexical: '<span class="label">ἥκω</span> = έχω έρθει, βρίσκομαι εδώ, επιστρέφω<br><span class="label">μήν</span> <span class="arrow">→</span> νεοελλ. μήνας, μηνιαίος',
-        syntactic: '<strong>τετάρτῳ μηνί</strong>: δοτική χρόνου<br><strong>Ἐπεὶ ἧκε</strong>: χρονική πρόταση',
-        translation: 'Αφού, λοιπόν, επέστρεψε τέσσερις μήνες μετά,',
-        interpretive: 'Ο Ξενοφών τονίζει επιδεικτικά το χρονικό διάστημα: 4 μήνες αναμονής — αρκετός καιρός για να εξαντληθούν τα τρόφιμα των πολιορκημένων Αθηναίων.'
-      },
-      {
-        greek: '<strong>ἀπήγγειλεν</strong> ἐν ἐκκλησίᾳ',
-        lexical: '<span class="label">ἀπαγγέλλω</span> αόρ. α΄ = αναγγέλλω / αναφέρω επίσημα<br><span class="label">ἐκκλησία</span> &lt; ἐκ+καλέω <span class="arrow">→</span> νεοελλ. εκκλησία, εκκλησιαστικός',
-        syntactic: '<strong>ἐν ἐκκλησίᾳ</strong>: εμπρόθ. προσδ. τόπου',
-        translation: 'ανέφερε στη συνέλευση του λαού',
-        interpretive: 'Δημόσια αναφορά στην εκκλησία του δήμου — η επίσημη πολιτική σκηνή. Ο Θηραμένης επιλέγει το πλέον ορατό βήμα.'
-      },
-      {
-        greek: 'ὅτι αὐτὸν Λύσανδρος <strong>τέως μὲν κατέχοι</strong>,<br>εἶτα <strong>κελεύοι</strong> εἰς Λακεδαίμονα ἰέναι·',
-        lexical: '<span class="label">τέως μέν... εἶτα</span> = αρχικά... και στη συνέχεια<br><span class="label">κατέχω</span> &lt; κατά+ἔχω <span class="arrow">→</span> νεοελλ. κατοχή<br><span class="label">κελεύω</span> <span class="arrow">→</span> νεοελλ. κέλευσμα<br><strong>κατέχοι / κελεύοι</strong>: <span class="focus-link" onclick="openFocus(\'euktiki\')">⊕ ευκτική πλαγίου λόγου</span>',
-        syntactic: '<strong>ὅτι + ευκτική</strong>: ειδική πρόταση πλαγίου λόγου, αντικ. του ἀπήγγειλεν · <span class="focus-link" onclick="openFocus(\'euktiki\')">⊕ ευκτική πλαγίου λόγου</span><br><strong>ἰέναι</strong>: απαρέμφατο του εἶμι, αντικ. του κελεύοι',
-        translation: 'ότι τάχα τον κρατούσε αρχικά ο Λύσανδρος, και στη συνέχεια τον διέταξε να πάει στη Λακεδαίμονα·',
-        interpretive: 'Το <em>τάχα</em> της μετάφρασης αποκαλύπτει την αμφιβολία του Ξενοφώντα: ο Θηραμένης δικαιολογείται προβάλλοντας ότι δεν ήταν δική του απόφαση η καθυστέρηση.'
-      },
-      {
-        greek: 'οὐ γὰρ εἶναι <strong>κύριος</strong> ὧν <strong>ἐρωτῷτο</strong> ὑπ\' αὐτοῦ,<br>ἀλλὰ τοὺς <strong>ἐφόρους</strong>.',
-        lexical: '<span class="label">κύριος</span> = αρμόδιος, έχων εξουσία <span class="arrow">→</span> νεοελλ. κυριαρχία, ακύρωση<br><span class="label">ἔφοροι</span> &lt; ἐπί+ὁράω = επόπτες <span class="arrow">→</span> νεοελλ. έφορος, εφορεία<br><strong>ἐρωτῷτο</strong>: ευκτ. παθ. πλαγίου λόγου',
-        syntactic: '<strong>ὧν ἐρωτῷτο</strong>: αναφορ. πρόταση, γεν. αντικειμενική του κύριος<br><strong>οὐ... ἀλλά</strong>: αντίθεση',
-        translation: 'γιατί δεν ήταν ο ίδιος αρμόδιος να δώσει απαντήσεις στα ζητήματα για τα οποία τον ρωτούσε, αλλά οι έφοροι.',
-        interpretive: 'Η αντίθεση <em>οὐ... ἀλλά</em> ρίχνει σκόπιμα την ευθύνη στους εφόρους. Κλασική διπλωματική αποποίηση αρμοδιότητας.'
-      },
-      {
-        greek: 'Μετὰ ταῦτα <strong>ᾑρέθη</strong> <strong>πρεσβευτὴς</strong> εἰς Λακεδαίμονα<br><strong>αὐτοκράτωρ</strong> <strong>δέκατος αὐτός</strong>.',
-        lexical: '<span class="label">αἱρέω / αἱρέομαι</span> = (ενεργ.) κυριεύω · (μέση/παθ.) εκλέγομαι · <strong>ᾑρέθη</strong> αόρ. παθ. <span class="focus-link" onclick="openFocus(\'haireo\')">⊕ Εστίαση</span><br><span class="label">αὐτοκράτωρ</span> &lt; αὐτός+κράτος = με πλήρη πληρεξουσιότητα <span class="focus-link" onclick="openFocus(\'autokrator\')">⊕ Εστίαση</span>',
-        syntactic: '<strong>ᾑρέθη</strong>: <span class="focus-link" onclick="openFocus(\'syndeto\')">⊕ συνδετικό ρήμα</span><br><strong>αὐτοκράτωρ</strong>: <span class="focus-link" onclick="openFocus(\'kategoroumeno\')">⊕ επιρρηματικό κατηγορούμενο</span>',
-        translation: 'Μετά από αυτά εκλέχτηκε για να σταλεί ως πρεσβευτής στη Λακεδαίμονα με απόλυτη πληρεξουσιότητα, μαζί με άλλους εννέα.',
-        interpretive: 'Η εκλογή του επιβεβαιώνει την πολιτική του επιτηδειότητα: ο λαός εμπιστεύεται τον άνδρα που τους έχει ήδη εξαπατήσει — τραγική ειρωνεία που ο Ξενοφών αφήνει ανείπωτη.'
-      }
-    ]
-  },
-
-  18: {
-    title: '§ 18',
-    rows: [
-      {
-        greek: 'Λύσανδρος δὲ τοῖς ἐφόροις<br><strong>ἔπεμψεν</strong>',
-        lexical: '<span class="label">πέμπω</span> αόρ. α΄ = στέλνω · <strong>ἔπεμψεν</strong> γ΄ εν.<br><span class="label">ἔφοροι</span> &lt; ἐπί+ὁράω = επόπτες <span class="arrow">→</span> νεοελλ. έφορος, εφορεία',
-        syntactic: '<strong>τοῖς ἐφόροις</strong>: έμμεσο αντικείμενο (δοτ.) του ἔπεμψεν<br><strong>Λύσανδρος</strong>: υποκείμενο',
-        translation: 'Ο Λύσανδρος έστειλε στους εφόρους',
-        interpretive: 'Ο Λύσανδρος προχωρά δυναμικά: δεν αναμένει παθητικά αλλά δρομολογεί ο ίδιος τις διαπραγματεύσεις, ελέγχοντας τόσο τον αθηναϊκό απεσταλμένο όσο και τους εφόρους.'
-      },
-      {
-        greek: '<strong>ἀγγελοῦντα</strong> μετ\' ἄλλων Λακεδαιμονίων<br><strong>Ἀριστοτέλην</strong>, φυγάδα Ἀθηναῖον ὄντα,',
-        lexical: '<span class="label">ἀγγελοῦντα</span> &lt; ἀγγέλλω, μτχ. μέλλ. ενεργ. <span class="focus-link" onclick="openFocus(\'teliki_metochi\')">⊕ τελική μετοχή</span><br><span class="label">φυγάς, -άδος</span> = εξόριστος <span class="arrow">→</span> νεοελλ. φυγάς, φυγαδεύω',
-        syntactic: '<strong>ἀγγελοῦντα</strong>: τελική μετοχή, σκοπός του ἔπεμψεν <span class="focus-link" onclick="openFocus(\'teliki_metochi\')">⊕ Εστίαση</span><br><strong>Ἀριστοτέλην</strong>: άμεσο αντικείμενο του ἔπεμψεν<br><strong>φυγάδα Ἀθηναῖον ὄντα</strong>: επιθετική μετοχή — προσδιορισμός του Ἀριστοτέλην',
-        translation: 'μαζί με άλλους Λακεδαιμονίους, τον Αριστοτέλη, ο οποίος ήταν Αθηναίος εξόριστος, για να τους ενημερώσει ότι...',
-        interpretive: 'Οι έφοροι ήταν πέντε αιρετοί αξιωματικοί της Σπάρτης με ετήσια θητεία και ευρύτατες δικαιοδοσίες — η «Κυβέρνηση» της Σπάρτης. Ο Λύσανδρος, στην εμπιστευτική αποστολή προς την κυβέρνηση της χώρας του, συμπεριλαμβάνει και έναν Αθηναίο εξόριστο ολιγαρχικό. Ο Αριστοτέλης θα εξυπηρετούσε με μεγαλύτερη προθυμία τα συμφέροντα της Σπάρτης παρά της πατρίδας του.'
-      },
-      {
-        greek: 'ὅτι <strong>ἀποκρίναιτο</strong> Θηραμένει<br><strong>ἐκείνους κυρίους εἶναι</strong><br><strong>εἰρήνης καὶ πολέμου</strong>.',
-        lexical: '<span class="label">ἀποκρίνομαι</span> = απαντώ · <strong>ἀποκρίναιτο</strong> ευκτ. πλαγίου λόγου<br><span class="label">κύριος</span> = αρμόδιος, εκείνος που έχει εξουσία',
-        syntactic: '<strong>ὅτι + ευκτική</strong>: ειδική πρόταση πλαγίου λόγου, αντικ. του ἔπεμψεν<br><strong>ἀποκρίναιτο</strong>: ευκτ. πλαγίου λόγου (ρ. ἱστορικού χρόνου: ἔπεμψεν)<br><strong>κυρίους εἶναι</strong>: <span class="focus-link" onclick="openFocus(\'eteroprosopia\')">⊕ ετεροπροσωπία</span> — απαρέμφατο με υποκ. σε αιτ.<br><strong>εἰρήνης καὶ πολέμου</strong>: γενική αντικειμενική του κυρίους <span class="focus-link" onclick="openFocus(\'gen_antikeimeniki\')">⊕ Εστίαση</span>',
-        translation: 'ότι απάντησε στο Θηραμένη πως αυτοί είχαν την εξουσία να αποφασίζουν για ειρήνη και πόλεμο.',
-        interpretive: 'Η απάντηση του Λυσάνδρου αποκαλύπτει τη σπαρτιατική στρατηγική: οι έφοροι κρατούν τη διαπραγματευτική εξουσία, ενώ ο ίδιος απλώς εκτελεί. Η λέξη «κύριος» επανέρχεται από τη §17 (όπου δήλωνε ανικανότητα του Λυσάνδρου) — τώρα δηλώνει απόλυτη αρμοδιότητα των εφόρων.'
-      }
-    ]
-  }
-  // Εδώ θα προστεθούν §16, §20–§23
-
-  ,19: {
-    title: '§ 19',
-    rows: [
-      {
-        greek: 'Θηραμένης δὲ καὶ οἱ ἄλλοι πρέσβεις<br>ἐπεὶ ἦσαν ἐν <strong>Σελλασίᾳ</strong>,',
-        lexical: '<span class="label">Σελλασία</span>: μεθοριακή πόλη στα βόρεια της Λακωνικής — σημείο ελέγχου της εισόδου στη Σπάρτη',
-        syntactic: '<strong>ἐπεὶ ἦσαν ἐν Σελλασίᾳ</strong>: χρονική πρόταση (ἐπεὶ + οριστ. παρατ.)<br><strong>Θηραμένης καὶ οἱ ἄλλοι πρέσβεις</strong>: υποκείμενο',
-        translation: 'Όταν ο Θηραμένης και οι άλλοι πρέσβεις έφτασαν στη Σελλασία,',
-        interpretive: 'Η Σελλασία ήταν μεθοριακή πόλη με μεγάλη στρατηγική σημασία, στα βόρεια της Λακωνικής. Εκεί γινόταν ο πρώτος έλεγχος από τους εφόρους — κανείς δεν έμπαινε στη Σπάρτη χωρίς άδεια.'
-      },
-      {
-        greek: '<strong>ἐρωτώμενοι</strong> δὲ ἐπὶ τίνι λόγῳ <strong>ἥκοιεν</strong><br>εἶπον ὅτι <strong>αὐτοκράτορες περὶ εἰρήνης</strong>',
-        lexical: '<span class="label">ἐρωτώμενοι</span>: μτχ. παρακ. παθ. &lt; ἐρωτάω = ρωτώ<br><span class="label">ἐπὶ τίνι λόγῳ</span> = με ποιες προτάσεις / για ποιον σκοπό<br><span class="label">αὐτοκράτορες περὶ εἰρήνης</span> = πληρεξούσιοι για ειρήνη',
-        syntactic: '<strong>ἐρωτώμενοι</strong>: χρονική/αιτιολογική μετοχή, αναφέρεται στο υποκ.<br><strong>ἐπὶ τίνι λόγῳ ἥκοιεν</strong>: πλάγια ερώτηση, ευκτική πλαγίου λόγου (ρ. ἱστορ. χρόνου: εἶπον)<br><strong>αὐτοκράτορες</strong>: επιρρηματικό κατηγορούμενο στο υποκ. της ειδικής πρότασης',
-        translation: 'ενώ τους ρωτούσαν με ποιες προτάσεις ήρθαν, είπαν ότι είναι πληρεξούσιοι για ειρήνη·',
-        interpretive: 'Η λέξη «αὐτοκράτορες» επανέρχεται από τη §17 — τώρα οι ίδιοι οι πρέσβεις τη χρησιμοποιούν για να δηλώσουν την πληρεξουσιότητά τους. Είναι σημαντικό: δεν χρειάζονται νέες οδηγίες από την Αθήνα, μπορούν να συμφωνήσουν επί τόπου.'
-      },
-      {
-        greek: 'μετὰ ταῦτα οἱ ἔφοροι<br><strong>καλεῖν ἐκέλευον</strong> αὐτούς.',
-        lexical: '<span class="label">κελεύω</span> = διατάζω · + απαρέμφατο<br><span class="label">καλεῖν</span>: απαρέμφατο του καλῶ = καλώ, προσκαλώ',
-        syntactic: '<strong>καλεῖν ἐκέλευον</strong>: ρήμα + απαρέμφατο<br><strong>αὐτούς</strong>: αντικείμενο του καλεῖν',
-        translation: 'Έπειτα οι έφοροι διέταξαν να τους καλέσουν στη Σπάρτη.',
-        interpretive: 'Οι έφοροι αποφασίζουν: δέχονται τους πρέσβεις. Η σύντομη αυτή πρόταση κρύβει τη σπαρτιατική αποφασιστικότητα — δεν διαπραγματεύονται στα σύνορα, τους καλούν στην καρδιά της εξουσίας τους.'
-      },
-      {
-        greek: 'Ἐπεὶ δ\' ἧκον, <strong>ἐκκλησίαν ἐποίησαν</strong>,<br>ἐν ᾗ <strong>ἀντέλεγον</strong> Κορίνθιοι καὶ Θηβαῖοι μάλιστα,<br>πολλοὶ δὲ καὶ ἄλλοι τῶν Ἑλλήνων,',
-        lexical: '<span class="label">ἐκκλησίαν ποιοῦμαι</span> = συγκαλώ συνέλευση<br><span class="label">ἀντιλέγω</span> = αντιπροτείνω, αντιτίθεμαι · &lt; ἀντί + λέγω<br><span class="label">μάλιστα</span> = κυρίως, προπάντων',
-        syntactic: '<strong>ἐπεὶ δ\' ἧκον</strong>: χρονική πρόταση<br><strong>ἐν ᾗ</strong>: αναφορική πρόταση, αναφέρεται στο ἐκκλησίαν<br><strong>Κορίνθιοι καὶ Θηβαῖοι μάλιστα</strong>: υποκείμενο του ἀντέλεγον — επιτατικό μάλιστα',
-        translation: 'Όταν έφτασαν, συγκάλεσαν συνέλευση, στην οποία αντιπρότειναν κυρίως οι Κορίνθιοι και οι Θηβαίοι, αλλά και πολλοί άλλοι Έλληνες,',
-        interpretive: 'Χαρακτηριστικό το πολιτικό σκηνικό: δεν είναι μόνο νικητές-νικημένοι. Οι πρώην σύμμαχοι των Σπαρτιατών, Κορίνθιοι και Θηβαίοι, είναι οι πιο σκληροί. Το βιβλίο υπογραμμίζει ότι η κατάσταση είναι «περίπλοκο πολιτικό σκηνικό»: μέσα στους νικητές υπάρχουν διαφωνίες για το τι θα γίνει με την Αθήνα.'
-      },
-      {
-        greek: '<strong>μὴ σπένδεσθαι</strong> Ἀθηναίοις,<br>ἀλλ\' <strong>ἐξαιρεῖν</strong>.',
-        lexical: '<span class="label">σπένδομαι</span> <span class="focus-link" onclick="openFocus(\'spendesthai\')">⊕ Εστίαση</span> · <span class="label">σπονδή</span> = θυσία · σπονδαί = συνθήκες ειρήνης<br><span class="label">ἐξαιρῶ τινα</span> = αφανίζω, καταστρέφω κάποιον ολοσχερώς',
-        syntactic: '<strong>μὴ σπένδεσθαι / ἐξαιρεῖν</strong>: απαρέμφατα, αντικείμενα του ἀντέλεγον<br><strong>μὴ</strong>: άρνηση απαρεμφάτου<br><strong>Ἀθηναίοις</strong>: αντικείμενο του σπένδεσθαι (σπένδομαι + δοτ.)',
-        translation: 'να μην κάνουν συνθήκη με τους Αθηναίους, αλλά να τους καταστρέψουν ολοσχερώς.',
-        interpretive: 'Η πρόταση για ολοκληρωτική καταστροφή της Αθήνας ήταν πραγματική και σοβαρή. Στο στρατόπεδο των νικητών υπήρχαν εκείνοι που ήθελαν την πλήρη συντριβή και άλλοι που είχαν λόγους να είναι μετριοπαθέστεροι. Η αντίθεση «μὴ σπένδεσθαι / ἐξαιρεῖν» είναι ρητορικά ισχυρή: δύο απαρέμφατα — το ένα αρνητικό, το άλλο καταδικαστικό.'
-      }
-    ]
-  }
-};
-
-// ══════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════
-
-let currentPara = 17;
-let currentMode = 'lexical';
-
-const modeLabels = {
-  lexical: 'Λεξιλογικά · Γραμματικά',
-  syntactic: 'Συντακτικά',
-  translation: 'Μετάφραση',
-  interpretive: 'Ερμηνευτικά'
-};
-
-const modeKeys = {
-  lexical: 'lexical',
-  syntactic: 'syntactic',
-  translation: 'translation',
-  interpretive: 'interpretive'
-};
-
-// ══════════════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════════════
-
-function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  window.scrollTo(0, 0);
-  if (name === 'exercises') {
-    var lbl = document.getElementById('card-para-label');
-    if (lbl) lbl.textContent = 'Ξενοφῶντος Ἑλληνικά Β΄ 2.' + currentPara;
-    renderExercises();
-  }
-}
-
-function loadParagraph(num) {
-  currentPara = num;
-  renderTable();
-  document.getElementById('para-title').textContent = '§ ' + num;
-  updateNavArrows();
-}
-
-function navigatePara(dir) {
-  const available = [17, 18, 19]; // expand as paragraphs added
-  const idx = available.indexOf(currentPara);
-  const newIdx = idx + dir;
-  if (newIdx >= 0 && newIdx < available.length) {
-    loadParagraph(available[newIdx]);
-  }
-}
-
-function updateNavArrows() {
-  const available = [17, 18, 19];
-  const idx = available.indexOf(currentPara);
-  document.getElementById('btn-prev').disabled = idx <= 0;
-  document.getElementById('btn-next').disabled = idx >= available.length - 1;
-}
-
-// ══════════════════════════════════════════════
-// MODE
-// ══════════════════════════════════════════════
-
-function setMode(mode) {
-  currentMode = mode;
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById('col-header').textContent = modeLabels[mode];
-  renderTable();
-}
-
-// ══════════════════════════════════════════════
-// TABLE
-// ══════════════════════════════════════════════
-
-function renderTable() {
-  const data = paragraphs[currentPara];
-  if (!data) return;
-  const key = modeKeys[currentMode];
-  const tbody = document.getElementById('table-body');
-  tbody.innerHTML = data.rows.map(row => {
-    var greek = row.greek;
-    // clickable words only in lexical mode
-    if (currentMode === 'lexical') {
-      // §17 words
-      greek = greek.replace(/μηνί/g, '<span class="w-click" onclick="openMorph(\'mhni\')">μηνί</span>');
-      greek = greek.replace(/ἀπήγγειλεν/g, '<span class="w-click" onclick="openMorph(\'apingeilen\')">ἀπήγγειλεν</span>');
-      greek = greek.replace(/ᾑρέθη/g, '<span class="w-click" onclick="openMorph(\'hireth\')">ᾑρέθη</span>');
-      greek = greek.replace(/αὐτοκράτωρ/g, '<span class="w-click" onclick="openMorph(\'autokrator_morph\')">αὐτοκράτωρ</span>');
-      // §18 words
-      greek = greek.replace(/ἀγγελοῦντα/g, '<span class="w-click" onclick="openMorph(\'angelounta\')">ἀγγελοῦντα</span>');
-      greek = greek.replace(/ἀποκρίναιτο/g, '<span class="w-click" onclick="openMorph(\'apokrinaito\')">ἀποκρίναιτο</span>');
-    }
-    return '<tr><td class="td-greek">' + greek + '</td><td class="td-right">' + row[key] + '</td></tr>';
-  }).join('');
-}
-
-// ══════════════════════════════════════════════
-// EXERCISES
-// ══════════════════════════════════════════════
-
-const exercises17 = [
-  // 1. MC
-  {
-    type: 'mc',
-    num: 'Άσκηση 1 · Πολλαπλής Επιλογής',
-    question: 'Η λέξη <em>αὐτοκράτωρ</em> στο κείμενο σημαίνει:',
-    options: ['ο απόλυτος μονάρχης', 'ο πρεσβευτής με πλήρη πληρεξουσιότητα', 'ο στρατηγός με απόλυτη εξουσία', 'ο εκλεγμένος βουλευτής'],
-    correct: 1
-  },
-  // 2. MC
-  {
-    type: 'mc',
-    num: 'Άσκηση 2 · Πολλαπλής Επιλογής',
-    question: 'Πόσο χρόνο παρέμεινε ο Θηραμένης κοντά στον Λύσανδρο;',
-    options: ['Δύο μήνες', 'Τρεις μήνες ακριβώς', 'Περισσότερο από τρεις μήνες', 'Τέσσερις ολόκληρους μήνες'],
-    correct: 2
-  },
-  // 3. TF
-  {
-    type: 'tf',
-    num: 'Άσκηση 3 · Σωστό / Λάθος',
-    question: 'Να χαρακτηρίσετε τις προτάσεις ως Σ (Σωστό) ή Λ (Λάθος):',
-    statements: [
-      { text: 'Ο Θηραμένης επέστρεψε τον τρίτο μήνα.', correct: false },
-      { text: 'Ο Λύσανδρος δήλωσε ότι δεν ήταν αρμόδιος να αποφασίσει.', correct: true },
-      { text: 'Ο Θηραμένης εκλέχτηκε μαζί με άλλους δέκα πρεσβευτές.', correct: false },
-      { text: 'Οι έφοροι ήταν οι ανώτατοι άρχοντες της Σπάρτης.', correct: true }
-    ]
-  },
-  // 4. Match
-  {
-    type: 'match',
-    num: 'Άσκηση 4 · Αντιστοίχιση',
-    question: 'Να αντιστοιχίσετε κάθε λέξη με τη σημασία της:',
-    pairs: [
-      { left: 'κύριος', right: 'αρμόδιος, αυτός που έχει εξουσία' },
-      { left: 'ἔφοροι', right: 'επόπτες, ανώτατοι άρχοντες Σπάρτης' },
-      { left: 'τέως', right: 'αρχικά, ως τότε' },
-      { left: 'αὐτοκράτωρ', right: 'με πλήρη πληρεξουσιότητα' }
-    ]
-  },
-  // 5. Fill blanks
-  {
-    type: 'fill',
-    num: 'Άσκηση 5 · Συμπλήρωση Κενών',
-    question: 'Συμπληρώστε τη νεοελληνική λέξη που λείπει:',
-    sentences: [
-      { before: 'Ανέφερε στη ', blank: 'συνέλευση', after: ' ότι ο Λύσανδρος τον κρατούσε αρχικά.' },
-      { before: 'Ο Λύσανδρος δεν ήταν ', blank: 'αρμόδιος', after: ' να απαντήσει στα ζητήματα.' },
-      { before: 'Εκλέχτηκε ', blank: 'πρεσβευτής', after: ' στη Λακεδαίμονα με πλήρη πληρεξουσιότητα, μαζί με άλλους εννέα.' }
-    ]
-  },
-  // 6. Lexical
-  {
-    type: 'vocab',
-    num: 'Άσκηση 6 · Λεξιλόγιο — Παραγωγή Λέξεων',
-    question: 'Ποια νεοελληνική λέξη προέρχεται από την αρχαία; Επιλέξτε τη σωστή:',
-    items: [
-      { ancient: 'ἐκκλησία', correct: 'εκκλησιαστικός', wrong: ['εκλεκτός', 'εκστρατεία'] },
-      { ancient: 'κύριος', correct: 'ακύρωση', wrong: ['κυνηγός', 'κερδοφόρος'] },
-      { ancient: 'πρεσβευτής', correct: 'πρεσβύτερος', wrong: ['πρόσβαση', 'πρεμιέρα'] },
-      { ancient: 'κράτος (< αὐτοκράτωρ)', correct: 'δημοκρατία', wrong: ['αυτοκίνητο', 'κρατήρας'] },
-      { ancient: 'ἔφορος', correct: 'εφορευτική', wrong: ['εφόδιο', 'έφεση'] }
-    ]
-  },
-  // 7. Translation
-  {
-    type: 'mc',
-    num: 'Άσκηση 7α · αἱρέω / αἱρέομαι — σημασία',
-    question: 'Η πρόταση <em>«ᾑρέθη πρεσβευτής»</em> σημαίνει:',
-    options: ['κυρίευσε τον πρεσβευτή', 'εκλέχτηκε πρεσβευτής', 'αιχμαλώτισε τον πρεσβευτή', 'επέλεξε πρεσβευτή'],
-    correct: 1
-  },
-  {
-    type: 'mc',
-    num: 'Άσκηση 7β · αἱρέω / αἱρέομαι — φωνή',
-    question: 'Στη φράση <em>«αἱρεῖ τὴν πόλιν»</em> το ρήμα είναι ενεργητικής φωνής. Τι σημαίνει;',
-    options: ['εκλέγει την πόλη', 'κυριεύει, καταλαμβάνει την πόλη', 'εκλέγεται από την πόλη', 'φεύγει από την πόλη'],
-    correct: 1
-  },
-  // 8. MC grammar
-  {
-    type: 'mc',
-    num: 'Άσκηση 8 · Γραμματική',
-    question: 'Ο ρηματικός τύπος <em>ᾑρέθη</em> είναι:',
-    options: ['Αόριστος ενεργητικός του αἱρέω', 'Αόριστος παθητικός του αἱρέω', 'Παρακείμενος παθητικός του αἱρέω', 'Παρατατικός παθητικός του αἱρέω'],
-    correct: 1
-  },
-  // 9. Syntactic open
-  {
-    type: 'open',
-    num: 'Άσκηση 9 · Συντακτική Ανάλυση',
-    question: 'Να εντοπίσετε στην πρόταση <em>«ἀπήγγειλεν ἐν ἐκκλησίᾳ ὅτι... κατέχοι»</em> το είδος της δευτερεύουσας πρότασης και τη συντακτική της λειτουργία.',
-    answer: 'Η πρόταση <em>«ὅτι... κατέχοι»</em> είναι <strong>ειδική δευτερεύουσα πρόταση</strong>, εισάγεται με τον ειδικό σύνδεσμο <em>ὅτι</em>. Εκφέρεται με <strong>ευκτική πλαγίου λόγου</strong> (<em>κατέχοι, κελεύοι</em>), γιατί το εξαρτώμενο ρήμα <em>ἀπήγγειλεν</em> είναι ιστορικού χρόνου. Συντακτικά λειτουργεί ως <strong>αντικείμενο</strong> του <em>ἀπήγγειλεν</em>.'
-  },
-  // 10. Interpretive essay
-  {
-    type: 'open',
-    num: 'Άσκηση 10 · Ερμηνευτική Ερώτηση',
-    question: 'Με βάση την παράγραφο §17, σε 4–5 γραμμές: αξιολογήστε τη συμπεριφορά του Θηραμένη. Ενήργησε ως πατριώτης ή για δικό του όφελος;',
-    answer: 'Ο Θηραμένης παρουσιάζεται να ενεργεί με πολιτική εξυπνάδα: αναφέρει στην εκκλησία ότι ο Λύσανδρος τον κρατούσε, αποφεύγοντας να αναλάβει ο ίδιος ευθύνες. Στη συνέχεια εκλέγεται πληρεξούσιος πρεσβευτής — θέση που του δίνει απόλυτη εξουσία διαπραγμάτευσης. Η συμπεριφορά του μπορεί να ερμηνευτεί διττά: ως υπεύθυνη αντιμετώπιση μιας απελπιστικής κατάστασης <em>ή</em> ως επιδέξια πολιτική κίνηση για δικό του όφελος.'
-  }
+  `
 ];
 
-const exercises18 = [
-  {
-    type: 'mc',
-    num: 'Άσκηση 1 · Λεξιλόγιο — φυγάς',
-    question: 'Τι δηλώνει η λέξη <em>φυγάς</em> στο κείμενο;',
-    options: ['ο δειλός', 'ο εξόριστος', 'ο αιχμάλωτος', 'ο λιποτάκτης'],
-    correct: 1
-  },
-  {
-    type: 'mc',
-    num: 'Άσκηση 2 · Γραμματική — ἀγγελοῦντα',
-    question: 'Σε ποιον χρόνο βρίσκεται η μετοχή <em>ἀγγελοῦντα</em> και γιατί;',
-    options: ['αόριστος — γιατί δηλώνει προτερόχρονο', 'μέλλοντας — γιατί δηλώνει σκοπό (τελική μετοχή)', 'παρακείμενος — γιατί δηλώνει αποτέλεσμα', 'ενεστώτας — γιατί δηλώνει ταυτόχρονο'],
-    correct: 1
-  },
-  {
-    type: 'mc',
-    num: 'Άσκηση 3 · Σύνταξη — τελική μετοχή',
-    question: 'Τι εκφράζει η τελική μετοχή <em>ἀγγελοῦντα</em> στη §18;',
-    options: ['τον τρόπο της αποστολής', 'τον σκοπό για τον οποίο έστειλε ο Λύσανδρος', 'το αποτέλεσμα της ενέργειας', 'την αιτία της αποστολής'],
-    correct: 1
-  },
-  {
-    type: 'mc',
-    num: 'Άσκηση 4 · Σύνταξη — γενική αντικειμενική',
-    question: 'Ποιος ο συντακτικός ρόλος του <em>«εἰρήνης καὶ πολέμου»</em>;',
-    options: ['γενική κτητική', 'γενική αντικειμενική του κυρίους', 'γενική υποκειμενική', 'γενική διαιρετική'],
-    correct: 1
-  },
-  {
-    type: 'mc',
-    num: 'Άσκηση 5 · Σύνταξη — ετεροπροσωπία',
-    question: 'Ποιο είναι το υποκείμενο του απαρεμφάτου <em>εἶναι</em> στη φράση <em>«ἐκείνους κυρίους εἶναι»</em>;',
-    options: ['ο Λύσανδρος', 'ο Θηραμένης', 'ἐκείνους (οι έφοροι)', 'ο Αριστοτέλης'],
-    correct: 2
-  },
-  {
-    type: 'tf',
-    num: 'Άσκηση 6 · Σωστό / Λάθος',
-    statements: [
-      { text: 'Ο Αριστοτέλης ήταν Σπαρτιάτης πρεσβευτής.', correct: false },
-      { text: 'Η μετοχή ἀγγελοῦντα εκφράζει σκοπό.', correct: true },
-      { text: 'Οι έφοροι ήταν οι αρμόδιοι για ειρήνη και πόλεμο.', correct: true },
-      { text: 'Ο Λύσανδρος απάντησε ο ίδιος στον Θηραμένη χωρίς να εμπλέξει άλλους.', correct: false }
-    ]
-  },
-  {
-    type: 'match',
-    num: 'Άσκηση 7 · Αντιστοίχιση',
-    pairs: [
-      { left: 'ἀγγελοῦντα', right: 'τελική μετοχή μέλλοντα' },
-      { left: 'εἰρήνης καὶ πολέμου', right: 'γενική αντικειμενική' },
-      { left: 'φυγάς', right: 'εξόριστος' },
-      { left: 'κύριος', right: 'αρμόδιος, εξουσιοδοτημένος' }
-    ]
-  },
-  {
-    type: 'fill',
-    num: 'Άσκηση 8 · Συμπλήρωση κενών',
-    sentences: [
-      { before: 'Ο Λύσανδρος έστειλε τον Αριστοτέλη ', after: ' να ενημερώσει τους εφόρους.', blank: 'για να' },
-      { before: 'Ο Αριστοτέλης ήταν ', after: ' Αθηναίος.', blank: 'εξόριστος' },
-      { before: 'Οι έφοροι ήταν ', after: ' για ειρήνη και πόλεμο.', blank: 'αρμόδιοι' }
-    ]
-  },
-  {
-    type: 'open',
-    num: 'Άσκηση 9 · Συντακτική ανάλυση',
-    question: 'Να αναλύσετε τη σύνταξη: <em>«ὅτι ἀποκρίναιτο Θηραμένει ἐκείνους κυρίους εἶναι εἰρήνης καὶ πολέμου»</em>.',
-    answer: '<strong>ὅτι</strong>: εισάγει ειδική πρόταση (αντικείμενο του ἀγγελοῦντα). <strong>ἀποκρίναιτο</strong>: ευκτική πλαγίου λόγου (ρ. ιστορικού χρόνου: ἔπεμψεν). <strong>Θηραμένει</strong>: αντικείμενο του ἀποκρίναιτο (δοτ.). <strong>ἐκείνους κυρίους εἶναι</strong>: ετεροπροσωπία — ἐκείνους = υποκ. απαρεμφάτου σε αιτ., κυρίους = κατηγορούμενο. <strong>εἰρήνης καὶ πολέμου</strong>: γενική αντικειμενική του κυρίους.'
-  },
-  {
-    type: 'open',
-    num: 'Άσκηση 10 · Ερμηνευτική ερώτηση',
-    question: 'Γιατί ο Λύσανδρος συμπεριλαμβάνει τον Αριστοτέλη, «φυγάδα Ἀθηναῖον ὄντα», στην αποστολή προς τους εφόρους;',
-    answer: 'Ο Αριστοτέλης ήταν Αθηναίος εξόριστος ολιγαρχικός. Ο Λύσανδρος τον επέλεξε γιατί θα εξυπηρετούσε με μεγαλύτερη προθυμία τα συμφέροντα της Σπάρτης παρά της πατρίδας του. Η επισήμανση από τον Ξενοφώντα δεν είναι τυχαία: αποκαλύπτει το κλίμα της εποχής, όπου εξόριστοι ολιγαρχικοί συνεργάζονταν με τους Σπαρτιάτες εναντίον της Αθήνας.'
-  }
-];
-
-const exercises19 = [
-  {
-    type: 'mc',
-    num: 'Άσκηση 1 · Λεξιλόγιο',
-    question: 'Τι σημαίνει η φράση <em>«ἐπὶ τίνι λόγῳ»</em>;',
-    options: ['για ποιον λόγο αρνήθηκαν', 'με ποιες προτάσεις / για ποιον σκοπό', 'τι λόγο εκφώνησαν', 'ποιο σχέδιο είχαν'],
-    correct: 1
-  },
-  {
-    type: 'mc',
-    num: 'Άσκηση 2 · Λεξιλόγιο — σπένδομαι',
-    question: 'Τι σημαίνει <em>«μὴ σπένδεσθαι Ἀθηναίοις»</em>;',
-    options: ['να μην πολεμήσουν τους Αθηναίους', 'να μην κάνουν συνθήκη με τους Αθηναίους', 'να μην στείλουν πρεσβευτές στην Αθήνα', 'να μην εξανδραποδίσουν τους Αθηναίους'],
-    correct: 1
-  },
-  {
-    type: 'mc',
-    num: 'Άσκηση 3 · Ετυμολογία — σπονδή',
-    question: 'Από ποια αρχική σημασία προέρχεται η λέξη <em>σπονδή</em>;',
-    options: ['η ειρηνική συμφωνία μεταξύ στρατών', 'η ιερή χοή κρασιού/νερού που πλαισίωνε κάθε συνθήκη', 'η επίσημη ανακοίνωση της εκεχειρίας', 'η τελετή παράδοσης όπλων'],
-    correct: 1
-  },
-  {
-    type: 'mc',
-    num: 'Άσκηση 4 · Γραμματική — ἐρωτώμενοι',
-    question: 'Ο τύπος <em>«ἐρωτώμενοι»</em> είναι:',
-    options: ['μετοχή ενεστώτα ενεργητικού', 'μετοχή παρακειμένου παθητικού', 'μετοχή ενεστώτα παθητικού/μέσου', 'απαρέμφατο παρακειμένου'],
-    correct: 2
-  },
-  {
-    type: 'mc',
-    num: 'Άσκηση 5 · Σύνταξη — πλάγια ερώτηση',
-    question: 'Γιατί το ρήμα <em>«ἥκοιεν»</em> είναι σε ευκτική;',
-    options: ['γιατί εκφράζει επιθυμία', 'γιατί είναι πλάγια ερώτηση εξαρτημένη από ιστορικό χρόνο (εἶπον)', 'γιατί εκφράζει υπόθεση', 'γιατί είναι δευτερεύουσα αιτιολογική'],
-    correct: 1
-  },
-  {
-    type: 'tf',
-    num: 'Άσκηση 6 · Σωστό / Λάθος',
-    statements: [
-      { text: 'Η Σελλασία βρισκόταν στα βόρεια της Λακωνικής, στα σύνορα.', correct: true },
-      { text: 'Οι πρέσβεις είπαν ότι ήρθαν ως απλοί αντιπρόσωποι χωρίς εξουσία.', correct: false },
-      { text: 'Κορίνθιοι και Θηβαίοι ήταν οι πιο σκληροί απέναντι στην Αθήνα.', correct: true },
-      { text: 'Η λέξη «σπονδή» σήμαινε αρχικά μια γραπτή συμφωνία.', correct: false }
-    ]
-  },
-  {
-    type: 'match',
-    num: 'Άσκηση 7 · Αντιστοίχιση',
-    pairs: [
-      { left: 'σπένδομαι', right: 'συνθηκολογώ' },
-      { left: 'ἐξαιρῶ', right: 'αφανίζω ολοσχερώς' },
-      { left: 'ἀντιλέγω', right: 'αντιπροτείνω, αντιτίθεμαι' },
-      { left: 'αὐτοκράτωρ', right: 'πληρεξούσιος με απόλυτη εξουσία' }
-    ]
-  },
-  {
-    type: 'fill',
-    num: 'Άσκηση 8 · Συμπλήρωση κενών',
-    sentences: [
-      { before: 'Οι πρέσβεις είπαν ότι ήρθαν ', after: ' για να διαπραγματευτούν την ειρήνη.', blank: 'πληρεξούσιοι' },
-      { before: 'Κορίνθιοι και Θηβαίοι πρότειναν να ', after: ' τους Αθηναίους.', blank: 'καταστρέψουν' },
-      { before: 'Η Σελλασία ήταν ', after: ' πόλη στα βόρεια της Λακωνικής.', blank: 'μεθοριακή' }
-    ]
-  },
-  {
-    type: 'open',
-    num: 'Άσκηση 9 · Συντακτική ανάλυση',
-    question: 'Να αναλύσετε τη σύνταξη: <em>«ἐρωτώμενοι δὲ ἐπὶ τίνι λόγῳ ἥκοιεν εἶπον ὅτι αὐτοκράτορες περὶ εἰρήνης»</em>.',
-    answer: '<strong>ἐρωτώμενοι</strong>: χρονική/αιτιολογική μετοχή, αναφέρεται στο υποκείμενο (πρέσβεις). <strong>ἐπὶ τίνι λόγῳ ἥκοιεν</strong>: πλάγια ερώτηση σε ευκτική πλαγίου λόγου — εξαρτάται από το εἶπον (ιστορικός χρόνος). <strong>εἶπον ὅτι</strong>: εισάγει ειδική πρόταση. <strong>αὐτοκράτορες</strong>: επιρρηματικό κατηγορούμενο στο υποκείμενο της ειδικής πρότασης.'
-  },
-  {
-    type: 'open',
-    num: 'Άσκηση 10 · Ερμηνευτική ερώτηση',
-    question: 'Ποιο «περίπλοκο πολιτικό σκηνικό» αποκαλύπτει η §19; Ποιοι θέλουν την καταστροφή της Αθήνας και γιατί;',
-    answer: 'Η §19 αποκαλύπτει ότι η Αθήνα αντιμετωπίζει κίνδυνο όχι μόνο από τους Σπαρτιάτες, αλλά και από τους άλλους Έλληνες. Κορίνθιοι και Θηβαίοι — πρώην σύμμαχοι των Σπαρτιατών — είναι οι πιο φανατικοί, με εμπορικές-οικονομικές αντιζηλίες (Κόρινθος) και ιστορικές αντιπαλότητες (Θήβα). Στο στρατόπεδο των νικητών υπάρχουν διαφορετικές επιδιώξεις: άλλοι θέλουν πλήρη εξαφάνιση, άλλοι (Σπαρτιάτες) έχουν τους λόγους τους να είναι μετριοπαθέστεροι.'
-  }
-];
-
-let currentCard = 0;
-
-function getExercises() {
-  if (currentPara === 19) return exercises19;
-  if (currentPara === 18) return exercises18;
-  return exercises17;
-}
-
-function renderExercises() {
-  const exs = getExercises();
-  const total = exs.length;
-  document.getElementById('card-total').textContent = total;
-  const dotsEl = document.getElementById('card-dots');
-  dotsEl.innerHTML = exs.map((_, i) =>
-    '<div class="card-dot" onclick="goCard(' + i + ')"></div>'
-  ).join('');
-  goCard(0);
-}
-
-function goCard(idx) {
-  const exs = getExercises();
-  const total = exs.length;
-  currentCard = idx;
-  document.getElementById('card-area').innerHTML =
-    '<div class="card-inner">' + renderExercise(exs[idx], idx) + '</div>';
-  initMatchExercises();
-  document.getElementById('card-current').textContent = idx + 1;
-  document.getElementById('card-progress').style.width = ((idx + 1) / total * 100) + '%';
-  document.querySelectorAll('.card-dot').forEach(function(d, i) {
-    d.className = 'card-dot' + (i === idx ? ' active' : '');
-  });
-  document.getElementById('card-prev').disabled = idx <= 0;
-  document.getElementById('card-next').disabled = idx >= total - 1;
-  document.getElementById('card-area').scrollTop = 0;
-}
-
-function cardNav(dir) {
-  const exs = getExercises();
-  const next = currentCard + dir;
-  if (next >= 0 && next < exs.length) goCard(next);
-}
-
-
-function renderExercise(ex, idx) {
-  let content = '';
-
-  if (ex.type === 'mc') {
-    content = `<div class="mc-options">
-      ${ex.options.map((opt, oi) => `
-        <button class="mc-opt" onclick="checkMC(this, ${oi}, ${ex.correct}, 'fb-${idx}')">
-          <span class="mc-letter">${['α','β','γ','δ'][oi]}.</span> ${opt}
-        </button>`).join('')}
-    </div>
-    <div class="feedback" id="fb-${idx}"></div>`;
-  }
-
-  else if (ex.type === 'tf') {
-    content = `<div class="tf-options">
-      ${ex.statements.map((st, si) => `
-        <div class="tf-row">
-          <span style="flex:1">${st.text}</span>
-          <div class="tf-btns">
-            <button class="tf-btn" onclick="checkTF(this, true, ${st.correct}, 'tf-fb-${idx}-${si}')">Σ</button>
-            <button class="tf-btn" onclick="checkTF(this, false, ${st.correct}, 'tf-fb-${idx}-${si}')">Λ</button>
-          </div>
-          <span id="tf-fb-${idx}-${si}" style="font-size:0.8rem;min-width:60px;"></span>
-        </div>`).join('')}
-    </div>`;
-  }
-
-  else if (ex.type === 'match') {
-    const shuffled = [...ex.pairs].sort(() => Math.random() - 0.5);
-    content = `<div class="match-grid" id="match-${idx}">
-      <div class="match-col" id="match-left-${idx}">
-        ${ex.pairs.map((p, pi) => `<div class="match-item" data-val="${pi}" data-side="left" onclick="matchClick(this, ${idx})">${p.left}</div>`).join('')}
-      </div>
-      <div class="match-col" id="match-right-${idx}">
-        ${shuffled.map((p, pi) => {
-          const orig = ex.pairs.findIndex(op => op.right === p.right);
-          return `<div class="match-item" data-val="${orig}" data-side="right" onclick="matchClick(this, ${idx})">${p.right}</div>`;
-        }).join('')}
-      </div>
-    </div>
-    <div class="feedback" id="fb-${idx}"></div>`;
-  }
-
-  else if (ex.type === 'fill') {
-    const blanksAttr = ex.sentences.map(s => s.blank).join('||');
-    content = ex.sentences.map((s, si) => `
-      <div class="fill-text" style="margin-bottom:0.8rem">
-        ${s.before}<input class="blank-input" id="fill-${idx}-${si}" placeholder="νεοελληνική λέξη" autocomplete="off" spellcheck="false"><span>${s.after}</span>
-      </div>`).join('') +
-      `<button class="check-btn" onclick="checkFill(${idx})" data-blanks="${blanksAttr}" data-count="${ex.sentences.length}" id="fillbtn-${idx}">Έλεγχος</button>
-      <button class="check-btn" onclick="revealFill(${idx})" style="background:var(--border);color:var(--text-dim);margin-left:0.5rem">Απάντηση</button>
-      <div class="feedback" id="fb-${idx}"></div>`;
-  }
-
-  else if (ex.type === 'vocab') {
-    var vocabRows = ex.items.map(function(item, i) {
-      var opts = [item.correct, item.wrong[0], item.wrong[1]].sort(function(){ return Math.random()-0.5; });
-      var btns = opts.map(function(o) {
-        var isCorrect = (o === item.correct) ? 'true' : 'false';
-        return '<button class="mc-opt vocab-opt" onclick="checkVocabOpt(this,' + isCorrect + ',' + idx + ')" style="font-size:0.95rem;padding:0.35rem 0.8rem;margin:0.2rem">' + o + '</button>';
-      }).join('');
-      return '<tr><td style="font-style:italic;color:var(--gold-light);padding-right:1rem">' + item.ancient + '</td>' +
-             '<td>' + btns + '</td></tr>';
-    }).join('');
-    content = '<table class="vocab-table">' + vocabRows + '</table>' +
-              '<div class="feedback" id="fb-' + idx + '"></div>';
-  }
-
-  else if (ex.type === 'open') {
-    var answerHtml = ex.answer
-      ? '<button class="check-btn" onclick="toggleAnswer(this)" data-answer="' + ex.answer.replace(/"/g, '&quot;') + '" style="margin-top:0.8rem;background:var(--bg3);color:var(--text-dim);border:1px solid var(--border)">Προτεινόμενη απάντηση ▾</button>' +
-        '<div class="open-answer" style="display:none;margin-top:0.8rem;padding:0.8rem 1rem;border-left:2px solid var(--gold-dim);font-family:\'EB Garamond\',serif;font-size:1rem;line-height:1.7;color:var(--text)"></div>'
-      : '';
-    content = '<textarea class="open-textarea" placeholder="Γράψτε εδώ την απάντησή σας..."></textarea>' + answerHtml;
-  }
-
+// ══ COMPARISON DATA ════════════════════════════════════════════
+function renderCmp() {
   return `
-    <div class="exercise-block">
-      <div class="ex-num">${ex.num}</div>
-      <div class="ex-question">${ex.question}</div>
-      ${content}
+    <h2>⚖️ Σύγκριση Κειμένων — Βώρος vs Σεφέρης</h2>
+    <table>
+      <thead><tr><th>Κριτήριο</th><th><span class="tbl-label lbl-k1">Κείμενο 1 — Βώρος</span></th><th><span class="tbl-label lbl-k2">Κείμενο 2 — Σεφέρης</span></th></tr></thead>
+      <tbody>
+        <tr><td>Τίτλος</td><td>&#171;Παράδοση και αλλαγή (Είναι ο νόμος της ζωής)&#187;</td><td>&#171;Δοκιμές&#187;</td></tr>
+        <tr><td>Είδος</td><td>Δοκίμιο πειθούς (αποδεικτικό)</td><td>Δοκίμιο στοχασμού</td></tr>
+        <tr><td>Θέμα</td><td>Λειτουργία, αξία και τρόπος μελέτης της παράδοσης</td><td>Προσωπική βίωση της παράδοσης ως ψυχική αγκυρά</td></tr>
+        <tr><td>Κεντρική ιδέα</td><td>Παράδοση = βεβαιώνει την αέναη αλλαγή</td><td>Παράδοση = δύναμη για να &#171;κρατηθεί&#187; κανείς</td></tr>
+        <tr><td>Δομή</td><td>Λογική, 3 ερωτήματα προεξαγγελμένα</td><td>Ελεύθερη, ροή σκέψης</td></tr>
+        <tr><td>Πρόθεση</td><td>Εξηγεί + πείθει + οδηγίες</td><td>Εκφράζει + προβληματίζει</td></tr>
+        <tr><td>Ρηματικό πρόσωπο</td><td>Ποικιλία (α΄, β΄, γ΄ πληθ.)</td><td>Κυρίως α΄ ενικό (&#171;εγώ&#187;)</td></tr>
+        <tr><td>Εκφρ. μέσα</td><td>Παράδειγμα τροχού, ορισμοί, κατάλογοι</td><td>Μεταφορές: &#171;σταυροδρόμι&#187;, &#171;καλαμιά στον κάμπο&#187;, &#171;ρίζες&#187;</td></tr>
+        <tr><td>Τόνος</td><td>Αντικειμενικός, ήρεμος, διδακτικός</td><td>Συναισθηματικός, βιωματικός, ποιητικός</td></tr>
+        <tr><td>Λόγος που πλησιάζει</td><td>Επιστημονικός</td><td>Λογοτεχνικός</td></tr>
+        <tr><td>Επικοινωνία με απλούστερους αναγνώστες</td>
+          <td>
+            <ul style="margin-left:16px;line-height:1.8;">
+              <li><strong>Προεξαγγελία ερωτημάτων</strong> στον πρόλογο (ο αναγνώστης ξέρει τι ακολουθεί)</li>
+              <li><strong>Συγκεκριμένο παράδειγμα</strong> (ο τροχός) για αφηρημένη έννοια</li>
+              <li><strong>Απλές επεξηγήσεις</strong> χωρίς επιστημονική ορολογία</li>
+              <li><strong>Ερωτηματική διατύπωση</strong> που εμπλέκει τον αναγνώστη</li>
+              <li><strong>Ποικιλία ρηματικών προσώπων</strong> (α΄, β΄, γ΄)</li>
+            </ul>
+          </td>
+          <td>
+            <ul style="margin-left:16px;line-height:1.8;">
+              <li><strong>Α΄ πληθυντικό πρόσωπο</strong> («βρισκόμαστε», «συνταραζόμαστε») — ο αναγνώστης νιώθει συμμέτοχος</li>
+              <li><strong>Οικείες μεταφορικές φράσεις</strong> («σταυροδρόμι», «καλαμιά στον κάμπο», «ρίζες», «χαλασμοί») — εικόνες από την καθημερινή εμπειρία</li>
+              <li><strong>Προσωπική εξομολόγηση</strong> («δεν έχω άλλο πειραματόζωο από εμένα») — δημιουργεί εγγύτητα</li>
+            </ul>
+          </td>
+        </tr>
+        <tr><td>Κοινό σημείο</td><td colspan="2" style="color:#3D3460;font-weight:600;">Και τα δύο πραγματεύονται την αξία της παράδοσης — από διαφορετικές οπτικές (λογική vs συναίσθημα)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="success-box" style="margin-top:20px;">
+      <p>✅ Ολοκλήρωσες τη Σύγκριση! (+15 ⭐)</p>
+      <button class="continue-btn" onclick="completeCmp()">Συνέχεια στις Ασκήσεις →</button>
+    </div>
+  `;
+}
+
+// ══ EXERCISES ══════════════════════════════════════════════════
+const exercises = [
+  // 1 — Β1 Σωστό/Λάθος
+  {
+    id:1, type:'tf', pts:10,
+    question:'Β1 — Σωστό ή Λάθος; (Αφορούν και τα δύο κείμενα)',
+    items:[
+      {text:'Η σχέση με την παράδοση δεν επηρεάζεται από ηλικιακούς παράγοντες. (Κ1)', ok:false},
+      {text:'Η αντιδικία ανάμεσα στο παλιό και το νέο οδηγεί σε καταστροφή της παράδοσης. (Κ1)', ok:false},
+      {text:'Η παράδοση μας βοηθά να οικοδομήσουμε το μέλλον, όχι να αντιγράψουμε το παρελθόν. (Κ1)', ok:true},
+      {text:'Ο ελλαδικός χώρος υπήρξε κέντρο πολιτιστικών αλληλεπιδράσεων. (Κ2)', ok:true},
+      {text:'Ο Σεφέρης δεν αναγνωρίζει ψεγάδια στον εαυτό του / το έθνος του. (Κ2)', ok:false}
+    ]
+  },
+  // 2 — Β2α: μέσα επικοινωνίας
+  {
+    id:2, type:'mc', pts:10,
+    question:'Β2α — Ποιο μέσο χρησιμοποιεί ο Βώρος για να ΔΙΕΥΚΟΛΥΝΕΙ τον αναγνώστη να κατανοήσει την οργάνωση του θέματος;',
+    opts:['Χρήση μεταφορών και ποιητικών εικόνων','Προεξαγγελία 3 ερωτημάτων στον πρόλογο','Αποφυγή ρηματικής ποικιλίας','Χρήση επιστημονικής ορολογίας'],
+    correct:1
+  },
+  // 3 — Β2α: σαφήνεια
+  {
+    id:3, type:'mc', pts:10,
+    question:'Β2α — Ποιο μέσο χρησιμοποιεί ο Βώρος για να γίνει ΣΑΦΗΣ;',
+    opts:['Χρήση δύσκολης φιλοσοφικής ορολογίας','Ποιητικές παρομοιώσεις','Συγκεκριμένο παράδειγμα (ο τροχός)','Απαρίθμηση μόνο αφηρημένων εννοιών'],
+    correct:2
+  },
+  // 4 — Β2α: επικοινωνία
+  {
+    id:4, type:'mc', pts:10,
+    question:'Β2α — Ποιο μέσο δημιουργεί ΚΛΙΜΑ ΕΠΙΚΟΙΝΩΝΙΑΣ με τον αναγνώστη;',
+    opts:['Χρήση γ΄ πληθυντικού αποκλειστικά','Απευθυντικές εκφράσεις (π.χ. &#171;Επιθυμώ να επισημάνω&#187;, ερωτήματα)','Αποφυγή παραδειγμάτων','Επιστημονικές παραπομπές'],
+    correct:1
+  },
+  // 5 — Β2β: Επίλογος
+  {
+    id:5, type:'mc', pts:10,
+    question:'Β2β — Πώς συνδέεται ο επίλογος (&#171;Ανέβηκα στους ώμους…&#187;) με την πρόθεση του Βώρου;',
+    opts:['Εισάγει νέο ερώτημα άσχετο με το κείμενο','Αντιφάσκει με τον τίτλο','Συνοψίζει και επιβεβαιώνει τη βασική θέση: παράδοση + αλλαγή = πρόοδος','Κλείνει με επιστημονική πρόταση'],
+    correct:2
+  },
+  // 6 — Β3: στοιχεία βιωματικού χαρακτήρα
+  {
+    id:6, type:'mc', pts:10,
+    question:'Β3 — Ποιο χωρίο από τον Σεφέρη αποδεικνύει τον ΒΙΩΜΑΤΙΚΟ χαρακτήρα του κειμένου;',
+    opts:[
+      '&#171;Βρισκόμαστε σ&#39; ένα σταυροδρόμι&#187;',
+      '&#171;Σας παρακαλώ να με συγχωρήσετε που μνημονεύω εδώ προσωπικές εμπειρίες· δεν έχω άλλο πειραματόζωο από εμένα&#187;',
+      '&#171;δεν ήμασταν ποτέ απομονωμένοι&#187;',
+      '&#171;Ανατολή και Δύση&#187;'
+    ],
+    correct:1
+  },
+  // 7 — Β3: ποιητική λειτουργία
+  {
+    id:7, type:'mc', pts:10,
+    question:'Β3 — Ποια από τις εξής εκφράσεις του Σεφέρη αποτελεί ΠΟΙΗΤΙΚΗ ΕΙΚΟΝΑ (μεταφορά/παρομοίωση);',
+    opts:[
+      '&#171;Και τ&#39; αφομοιώναμε θαυμάσια&#187;',
+      '&#171;σαν την καλαμιά στον κάμπο&#187;',
+      '&#171;δεν ήμασταν ποτέ απομονωμένοι&#187;',
+      '&#171;Συνταραζόμαστε κι εμείς&#187;'
+    ],
+    correct:1
+  },
+  // 8 — Σύγκριση πρόθεσης (drag-and-drop αντιστοίχιση θέσεων)
+  {
+    id:8, type:'matching', pts:12,
+    question:'Αντιστοίχισε κάθε στοιχείο με το σωστό κείμενο:',
+    left:['Λογική οργάνωση σε 3 ερωτήματα','Ποιητικές μεταφορές (&#171;ρίζες&#187;, &#171;καλαμιά&#187;)','Χρήση παραδείγματος (τροχός)','Α΄ ενικό πρόσωπο ως κυρίαρχο'],
+    right:['Κείμενο 1 — Βώρος','Κείμενο 2 — Σεφέρης'],
+    // 0→0,1→1,2→0,3→1
+    correctPairs:{0:0,1:1,2:0,3:1}
+  },
+  // 9 — Συμπλήρωση κενών
+  {
+    id:9, type:'fill', pts:12,
+    question:'Συμπλήρωσε τα κενά (Σύγκριση δύο κειμένων):',
+    text:'Το κείμενο του Βώρου ανήκει στο δοκίμιο {b1}, ενώ το κείμενο του Σεφέρη ανήκει στο δοκίμιο {b2}. Ο Βώρος χρησιμοποιεί {b3} για να γίνει σαφής, ενώ ο Σεφέρης αξιοποιεί {b4} για να εκφραστεί.',
+    blanks:{b1:'πειθούς',b2:'στοχασμού',b3:'παραδείγματα',b4:'μεταφορές'}
+  },
+  // 10 — Σωστό/Λάθος θεωρία δοκιμίου
+  {
+    id:10, type:'tf', pts:12,
+    question:'Σωστό ή Λάθος; (Θεωρία Δοκιμίου)',
+    items:[
+      {text:'Ο συντάκτης ενός δοκιμίου είναι πάντα επιστημονικός ειδικός στο θέμα του.', ok:false},
+      {text:'Το δοκίμιο αναλύει θέματα διαχρονικού ενδιαφέροντος.', ok:true},
+      {text:'Το δοκίμιο πειθούς χαρακτηρίζεται από λογική οργάνωση ιδεών.', ok:true},
+      {text:'Το δοκίμιο στοχασμού αποφεύγει κάθε προσωπικό στοιχείο.', ok:false}
+    ]
+  }
+];
+
+const finalQuiz = [
+  {q:'Σε ποιο είδος δοκιμίου ανήκει το κείμενο του Βώρου;',opts:['Στοχασμού','Πειθούς','Ιστορικό','Ποιητικό'],correct:1},
+  {q:'Τι παράδειγμα χρησιμοποιεί ο Βώρος για να δείξει πώς επιζεί μια παράδοση;',opts:['Η νομοθεσία του Σόλωνα','Ο τροχός','Η Ακρόπολη','Το ρολόι'],correct:1},
+  {q:'Ποιο είναι το &#171;μονιμότερο γνώρισμα&#187; της παράδοσης για τον Βώρο;',opts:['Η αμετάβλητη μορφή της','Η ασταμάτητη αλλαγή','Η συντήρηση του παρελθόντος','Η νοσταλγία'],correct:1},
+  {q:'Η εκφραστική εικόνα &#171;σαν την καλαμιά στον κάμπο&#187; ανήκει σε ποιον;',opts:['Βώρο','Σεφέρη','Αριστοτέλη','Σόλωνα'],correct:1},
+  {q:'Ποια κοινωνική λειτουργία κυριαρχεί στον επίλογο του Βώρου (&#171;Ανέβηκα στους ώμους…&#187;);',opts:['Αφήγηση','Περιγραφή','Επιχειρηματολογία / σύνοψη θέσης','Οδηγίες'],correct:2}
+];
+
+// ══ INIT ═══════════════════════════════════════════════════════
+function init(){
+  renderGlossary();
+  renderTh();
+  renderExNums();
+  renderCmpTab();
+  updPts(); updProg();
+}
+
+function renderGlossary(){
+  document.getElementById('glContent').innerHTML=glossary.map(g=>`
+    <div class="glos-item">
+      <div class="glos-hd"><span class="glos-icon">${g.icon}</span><strong class="glos-term">${g.term}</strong></div>
+      <p class="glos-def">${g.def}</p>
+    </div>`).join('');
+}
+
+function renderCmpTab(){
+  document.getElementById('cmpContent').innerHTML=renderCmp();
+}
+
+// ══ TAB SWITCHING ══════════════════════════════════════════════
+function switchTab(t){
+  S.tab=t;
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  ['thTab','cmpTab','exTab','quizTab','glTab'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  if(t==='th'){document.getElementById('navTh').classList.add('active');document.getElementById('thTab').classList.remove('hidden');}
+  else if(t==='cmp'){document.getElementById('navCmp').classList.add('active');document.getElementById('cmpTab').classList.remove('hidden');}
+  else if(t==='ex'){document.getElementById('navEx').classList.add('active');document.getElementById('exTab').classList.remove('hidden');renderEx();}
+  else if(t==='gl'){document.getElementById('navGl').classList.add('active');document.getElementById('glTab').classList.remove('hidden');}
+}
+
+// ══ THEORY ═════════════════════════════════════════════════════
+function switchTh(i){
+  S.thSec=i;
+  document.querySelectorAll('.sec-tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  renderTh();
+}
+function renderTh(){document.getElementById('thContent').innerHTML=thSections[S.thSec]();}
+function nextTh(){addPts(5);switchTh(1);}
+function finishTh(){document.getElementById('thSuccess').classList.remove('hidden');}
+function completeTh(){S.done.th=true;addPts(15);updProg();switchTab('cmp');}
+function completeCmp(){S.done.cmp=true;addPts(15);updProg();switchTab('ex');}
+
+// ══ EXERCISES ══════════════════════════════════════════════════
+function renderExNums(){
+  document.getElementById('exNums').innerHTML=exercises.map((e,i)=>`
+    <button class="ex-num ${i===S.exIdx?'active':''} ${S.shown[e.id]?'done':''}"
+      onclick="goEx(${i})">${i+1}</button>`).join('');
+}
+function goEx(i){S.exIdx=i;S.slots=[null,null,null,null];S.matchSel=null;renderExNums();renderEx();}
+
+function renderEx(){
+  const ex=exercises[S.exIdx];
+  let h=`<span class="ex-tag">ΑΣΚΗΣΗ ${ex.id} | ${ex.pts} Πόντοι</span>`;
+  h+=`<p class="question">❓ ${ex.question}</p>`;
+
+  if(ex.type==='mc'){
+    h+='<div class="options">';
+    ex.opts.forEach((o,i)=>{
+      const sel=S.ans[ex.id]===i, show=S.shown[ex.id];
+      const cor=i===ex.correct, wr=sel&&!cor;
+      h+=`<button class="opt-btn ${sel?'sel':''} ${show&&cor?'correct':''} ${show&&wr?'wrong':''}"
+        onclick="selAns(${ex.id},${i})">${['Α','Β','Γ','Δ'][i]}. ${o}</button>`;
+    });
+    h+='</div>';
+    if(!S.shown[ex.id]){
+      h+=`<button class="submit-btn" ${S.ans[ex.id]===undefined?'disabled':''} onclick="checkMc(${ex.id})">Υποβολή</button>`;
+    } else {
+      const ok=S.ans[ex.id]===ex.correct;
+      h+=`<div class="result-box ${ok?'correct':'incorrect'}"><p>${ok?`✓ Σωστό! (+${ex.pts} ⭐)`:`✗ Λάθος! Σωστό: ${['Α','Β','Γ','Δ'][ex.correct]}. ${ex.opts[ex.correct]}`}</p></div>`;
+    }
+  }
+
+  else if(ex.type==='tf'){
+    ex.items.forEach((q,i)=>{
+      const a=S.ans[ex.id]?S.ans[ex.id][i]:undefined, show=S.shown[ex.id];
+      h+=`<div class="tf-item">
+        <p class="tf-text">${i+1}. ${q.text}</p>
+        <div class="tf-btns">
+          <button class="tf-btn ${a===true?'sel':''} ${show&&q.ok?'correct-ans':''}" onclick="selTf(${ex.id},${i},true)">✓ Σωστό</button>
+          <button class="tf-btn ${a===false?'sel':''} ${show&&!q.ok?'correct-ans':''}" onclick="selTf(${ex.id},${i},false)">✗ Λάθος</button>
+        </div>
+      </div>`;
+    });
+    if(!S.shown[ex.id]){
+      const full=S.ans[ex.id]&&S.ans[ex.id].filter(x=>x!==undefined).length===ex.items.length;
+      h+=`<button class="submit-btn" ${!full?'disabled':''} onclick="checkTf(${ex.id})">Υποβολή</button>`;
+    } else {
+      const ok=ex.items.every((q,i)=>S.ans[ex.id][i]===q.ok);
+      h+=`<div class="result-box ${ok?'correct':'incorrect'}"><p>${ok?`✓ Όλες σωστές! (+${ex.pts} ⭐)`:'✗ Κάποιες λάθος — δες τις πράσινες!'}</p></div>`;
+    }
+  }
+
+  else if(ex.type==='fill'){
+    let txt=ex.text;
+    Object.keys(ex.blanks).forEach(k=>{
+      const v=S.fillBlanks[k]||'', show=S.shown[ex.id];
+      const ok2=show&&v.trim().toLowerCase()===ex.blanks[k].toLowerCase();
+      const er=show&&v&&!ok2;
+      txt=txt.replace(`{${k}}`,`<input type="text" class="blank-inp ${ok2?'ok':''} ${er?'err':''}"
+        value="${v}" onchange="updFill('${k}',this.value)" ${show?'disabled':''} placeholder="...">`);
+    });
+    h+=`<div class="fill-area">${txt}</div>`;
+    if(!S.shown[ex.id]){
+      const all=Object.keys(ex.blanks).every(k=>S.fillBlanks[k]);
+      h+=`<button class="submit-btn" ${!all?'disabled':''} onclick="checkFill(${ex.id})">Υποβολή</button>`;
+    } else {
+      const ok=Object.keys(ex.blanks).every(k=>S.fillBlanks[k]&&S.fillBlanks[k].trim().toLowerCase()===ex.blanks[k].toLowerCase());
+      h+=`<div class="result-box ${ok?'correct':'incorrect'}"><p>${ok?`✓ Όλες σωστές! (+${ex.pts} ⭐)`:'✗ Κάποιες λάθος!'}</p></div>`;
+      if(!ok){
+        h+='<div style="margin-top:10px;padding:14px;background:var(--parchment);border-radius:8px;"><strong>Σωστές:</strong><ul style="margin-left:18px;margin-top:8px;">';
+        Object.keys(ex.blanks).forEach(k=>{h+=`<li>${k}: <strong>${ex.blanks[k]}</strong></li>`;});
+        h+='</ul></div>';
+      }
+    }
+  }
+
+  else if(ex.type==='matching'){
+    const pairs=S.matchPairs[ex.id]||{};
+    h+=`<div class="match-wrap">
+      <div class="match-col">
+        <h4>📋 Στοιχείο</h4>
+        ${ex.left.map((item,i)=>`
+          <div class="match-item ${S.matchSel===i?'sel-l':''} ${Object.values(pairs).includes(i)?'':''}
+            ${S.shown[ex.id]&&pairs[i]!==undefined&&pairs[i]===ex.correctPairs[i]?'matched':''}
+            ${S.shown[ex.id]&&pairs[i]!==undefined&&pairs[i]!==ex.correctPairs[i]?'wrong-m':''}"
+            onclick="selLeft(${ex.id},${i})">${item}</div>`).join('')}
+      </div>
+      <div class="match-col">
+        <h4>📚 Κείμενο</h4>
+        ${ex.right.map((item,ri)=>`
+          <div class="match-item ${Object.entries(pairs).some(([k,v])=>v===ri)?'matched':''}"
+            onclick="selRight(${ex.id},${ri})">${item}</div>`).join('')}
+      </div>
     </div>`;
-}
-
-// ── CHECK FUNCTIONS ──
-
-function checkMC(btn, chosen, correct, fbId) {
-  const parent = btn.closest('.mc-options');
-  parent.querySelectorAll('.mc-opt').forEach(b => b.style.pointerEvents = 'none');
-  const fb = document.getElementById(fbId);
-  if (chosen === correct) {
-    btn.classList.add('correct');
-    fb.textContent = '✓ Σωστό!';
-    fb.className = 'feedback show ok';
-  } else {
-    btn.classList.add('wrong');
-    parent.querySelectorAll('.mc-opt')[correct].classList.add('correct');
-    fb.textContent = '✗ Λάθος. Σωστή: ' + ['α','β','γ','δ'][correct];
-    fb.className = 'feedback show err';
-  }
-}
-
-function checkTF(btn, answer, correct, fbId) {
-  const row = btn.closest('.tf-row');
-  row.querySelectorAll('.tf-btn').forEach(b => b.style.pointerEvents = 'none');
-  const fb = document.getElementById(fbId);
-  if (answer === correct) {
-    btn.classList.add('correct');
-    fb.innerHTML = '<span style="color:#90d090">✓</span>';
-  } else {
-    btn.classList.add('wrong');
-    fb.innerHTML = '<span style="color:#d07070">✗</span>';
-  }
-}
-
-let matchState = {};
-
-function initMatchExercises() {
-  matchState = {};
-}
-
-function matchClick(el, idx) {
-  if (el.classList.contains('matched')) return;
-  const side = el.dataset.side;
-  const val = el.dataset.val;
-
-  if (!matchState[idx]) matchState[idx] = {};
-
-  if (side === 'left') {
-    document.querySelectorAll(`#match-left-${idx} .match-item`).forEach(i => i.classList.remove('selected'));
-    el.classList.add('selected');
-    matchState[idx].left = val;
-  } else {
-    matchState[idx].right = val;
-  }
-
-  if (matchState[idx].left !== undefined && matchState[idx].right !== undefined) {
-    const leftEl = document.querySelector(`#match-left-${idx} [data-val="${matchState[idx].left}"]`);
-    const rightEl = document.querySelector(`#match-right-${idx} [data-val="${matchState[idx].right}"]`);
-    if (matchState[idx].left === matchState[idx].right) {
-      leftEl.classList.remove('selected'); leftEl.classList.add('matched');
-      rightEl.classList.add('matched');
+    const allDone=Object.keys(pairs).length===ex.left.length;
+    if(!S.shown[ex.id]){
+      h+=`<button class="submit-btn" ${!allDone?'disabled':''} onclick="checkMatch(${ex.id})">Έλεγχος</button>
+          <button class="btn btn-prev" style="margin-left:10px;margin-top:10px;" onclick="resetMatch(${ex.id})">↺ Επαναφορά</button>`;
     } else {
-      leftEl.classList.remove('selected'); leftEl.classList.add('wrong-match');
-      rightEl.classList.add('wrong-match');
-      setTimeout(() => {
-        leftEl.classList.remove('wrong-match');
-        rightEl.classList.remove('wrong-match');
-      }, 800);
-    }
-    matchState[idx].left = undefined;
-    matchState[idx].right = undefined;
-  }
-}
-
-function checkVocab(idx) {
-  const btn = document.getElementById('vocabbtn-' + idx);
-  const answers = btn.getAttribute('data-answers').split('||');
-  const count = parseInt(btn.getAttribute('data-count'));
-  let allOk = true;
-  for (let i = 0; i < count; i++) {
-    const sel = document.getElementById(`vocab-${idx}-${i}`);
-    if (sel.value === answers[i]) {
-      sel.style.borderColor = '#4a8a4a';
-      sel.style.color = '#90d090';
-    } else {
-      sel.style.borderColor = 'var(--red-light)';
-      sel.style.color = '#d07070';
-      allOk = false;
+      const ok=Object.keys(ex.correctPairs).every(k=>pairs[k]===ex.correctPairs[k]);
+      h+=`<div class="result-box ${ok?'correct':'incorrect'}"><p>${ok?`✓ Σωστά! (+${ex.pts} ⭐)`:'✗ Κάποιες λάθος!'}</p></div>`;
     }
   }
-  const fb = document.getElementById('fb-' + idx);
-  if (allOk) { fb.textContent = '✓ Όλες οι αντιστοιχίσεις σωστές!'; fb.className = 'feedback show ok'; }
-  else { fb.textContent = '✗ Κάποιες αντιστοιχίσεις είναι λανθασμένες.'; fb.className = 'feedback show err'; }
+
+  h+=`<div class="btn-group">
+    <button class="btn btn-prev" ${S.exIdx===0?'disabled':''} onclick="goEx(${S.exIdx-1})">← Προηγ.</button>
+    ${S.exIdx===exercises.length-1
+      ?`<button class="btn btn-gold" onclick="startQuiz()">🏆 Τελικό Quiz</button>`
+      :`<button class="btn btn-next" onclick="goEx(${S.exIdx+1})">Επόμ. →</button>`}
+  </div>`;
+  document.getElementById('exContent').innerHTML=h;
 }
 
+// ── exercise helpers ──
+function selAns(id,i){if(!S.shown[id]){S.ans[id]=i;renderEx();}}
+function checkMc(id){const ex=exercises.find(e=>e.id===id);S.shown[id]=true;if(S.ans[id]===ex.correct)addPts(ex.pts);renderExNums();renderEx();}
+function selTf(id,i,v){if(!S.shown[id]){if(!S.ans[id])S.ans[id]=[];S.ans[id][i]=v;renderEx();}}
+function checkTf(id){const ex=exercises.find(e=>e.id===id);S.shown[id]=true;if(ex.items.every((q,i)=>S.ans[id][i]===q.ok))addPts(ex.pts);renderExNums();renderEx();}
+function updFill(k,v){S.fillBlanks[k]=v;}
+function checkFill(id){const ex=exercises.find(e=>e.id===id);S.shown[id]=true;if(Object.keys(ex.blanks).every(k=>S.fillBlanks[k]&&S.fillBlanks[k].trim().toLowerCase()===ex.blanks[k].toLowerCase()))addPts(ex.pts);renderExNums();renderEx();}
+function selLeft(id,i){if(!S.shown[id]){S.matchSel=i;renderEx();}}
+function selRight(id,ri){
+  if(S.matchSel===null||S.shown[id])return;
+  if(!S.matchPairs[id])S.matchPairs[id]={};
+  S.matchPairs[id][S.matchSel]=ri;
+  S.matchSel=null;renderEx();
+}
+function resetMatch(id){S.matchPairs[id]={};S.matchSel=null;delete S.shown[id];renderEx();}
+function checkMatch(id){const ex=exercises.find(e=>e.id===id);S.shown[id]=true;const p=S.matchPairs[id]||{};if(Object.keys(ex.correctPairs).every(k=>p[k]===ex.correctPairs[k]))addPts(ex.pts);renderExNums();renderEx();}
 
-function toggleAnswer(btn) {
-  var box = btn.nextElementSibling;
-  if (box.style.display === 'none') {
-    box.innerHTML = btn.getAttribute('data-answer');
-    box.style.display = 'block';
-    btn.textContent = 'Προτεινόμενη απάντηση ▴';
+// ══ QUIZ ═══════════════════════════════════════════════════════
+function startQuiz(){
+  S.done.ex=true;updProg();
+  document.getElementById('exTab').classList.add('hidden');
+  document.getElementById('quizTab').classList.remove('hidden');
+  renderQuiz();
+}
+function renderQuiz(){
+  if(S.quizDone){
+    const cor=finalQuiz.filter((q,i)=>S.quizAns[i]===q.correct).length;
+    const sc=Math.round(cor/finalQuiz.length*100);
+    document.getElementById('quizContent').innerHTML=`
+      <div class="quiz-card">
+        <div style="font-size:64px;margin-bottom:18px;">${sc>=80?'🏆':sc>=60?'⭐':'📚'}</div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:24px;color:var(--purple-dark);">Αποτέλεσμα Quiz</h2>
+        <div class="quiz-score-box">
+          <div class="quiz-score">${sc}/100</div>
+          <p>Σωστές: <strong>${cor}/${finalQuiz.length}</strong></p>
+          <p>Σύνολο πόντων: <strong>⭐ ${S.pts}</strong></p>
+          <p style="margin-top:10px;font-size:18px;">${sc>=80?'🏆 Εξαιρετικό!':sc>=60?'⭐ Καλή δουλειά!':'📚 Μελέτησε ξανά!'}</p>
+        </div>
+        <button class="continue-btn" onclick="location.reload()">🔄 Νέα Προσπάθεια</button>
+      </div>`;
   } else {
-    box.style.display = 'none';
-    btn.textContent = 'Προτεινόμενη απάντηση ▾';
-  }
-}
-
-function checkVocabOpt(btn, isCorrect, idx) {
-  var row = btn.closest('tr');
-  var btns = row.querySelectorAll('.vocab-opt');
-  btns.forEach(function(b) { b.disabled = true; b.style.opacity = '0.6'; });
-  if (isCorrect) {
-    btn.style.borderColor = '#4a8a4a';
-    btn.style.color = '#90d090';
-    btn.style.opacity = '1';
-  } else {
-    btn.style.borderColor = 'var(--red-light)';
-    btn.style.color = '#d07070';
-    btn.style.opacity = '1';
-  }
-}
-
-function normalizeGreek(s) {
-  // strips accents for loose comparison
-  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-}
-
-function checkFill(idx) {
-  const btn = document.getElementById('fillbtn-' + idx);
-  const answers = btn.getAttribute('data-blanks').split('||');
-  let allOk = true;
-  answers.forEach((ans, si) => {
-    const inp = document.getElementById(`fill-${idx}-${si}`);
-    const val = inp.value.trim();
-    if (normalizeGreek(val) === normalizeGreek(ans)) {
-      inp.classList.remove('wrong'); inp.classList.add('correct');
-    } else {
-      inp.classList.remove('correct'); inp.classList.add('wrong');
-      allOk = false;
-    }
-  });
-  const fb = document.getElementById(`fb-${idx}`);
-  if (allOk) { fb.textContent = '✓ Όλες οι απαντήσεις σωστές!'; fb.className = 'feedback show ok'; }
-  else { fb.textContent = '✗ Κάποιες απαντήσεις είναι λανθασμένες.'; fb.className = 'feedback show err'; }
-}
-
-function revealFill(idx) {
-  const btn = document.getElementById('fillbtn-' + idx);
-  const answers = btn.getAttribute('data-blanks').split('||');
-  answers.forEach((ans, si) => {
-    const inp = document.getElementById(`fill-${idx}-${si}`);
-    inp.value = ans;
-    inp.classList.remove('wrong'); inp.classList.add('correct');
-  });
-  const fb = document.getElementById(`fb-${idx}`);
-  fb.textContent = 'Οι σωστές απαντήσεις εμφανίστηκαν.';
-  fb.className = 'feedback show ok';
-}
-
-// ══════════════════════════════════════════════
-// THEME
-// ══════════════════════════════════════════════
-
-function toggleTheme() {
-  const html = document.documentElement;
-  const btn = document.getElementById('theme-btn');
-  if (html.dataset.theme === 'night') {
-    delete html.dataset.theme;
-    btn.textContent = '☀';
-    btn.title = 'Νυχτερινό θέμα';
-  } else {
-    html.dataset.theme = 'night';
-    btn.textContent = '☾';
-    btn.title = 'Ημερήσιο θέμα';
-  }
-}
-
-// Auto night mode after 20:00
-const hour = new Date().getHours();
-if (hour >= 20 || hour < 7) {
-  document.documentElement.dataset.theme = 'night';
-  document.getElementById('theme-btn').textContent = '☾';
-}
-
-// ══════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════
-
-loadParagraph(17);
-</script>
-<!-- FOCUS POPUP -->
-<div class="popup-overlay" id="focus-overlay" onclick="closeFocusOutside(event)">
-  <div class="popup-box" id="focus-box">
-    <button class="popup-close" onclick="closeFocus()">✕</button>
-    <div class="popup-label">Εστίαση</div>
-    <div class="popup-title" id="focus-title"></div>
-    <div id="focus-content"></div>
-  </div>
-</div>
-
-<script>
-
-const focusData = {
-
-  haireo: {
-    title: 'αἱρέω / αἱρέομαι',
-    sections: [
-      {
-        heading: 'Διαφορά φωνής — σημασία',
-        type: 'table',
-        rows: [
-          ['αἱρέω (ενεργητική)', 'παίρνω, κυριεύω, καταλαμβάνω · «αἱρεῖ τὴν πόλιν» = κυριεύει την πόλη'],
-          ['αἱρέομαι (μέση)', 'εκλέγω για τον εαυτό μου, προτιμώ · «ᾑρέθη πρεσβευτής» = εκλέχτηκε'],
-          ['αἱρέομαι (παθητική)', 'εκλέγομαι — η σημασία της παρούσας παραγράφου']
-        ]
-      },
-      {
-        heading: 'Νεοελληνικά παράγωγα',
-        type: 'deriv',
-        items: [
-          ['αίρεση', 'θρησκευτική ομάδα που «αιρεί» (επιλέγει) διαφορετική άποψη'],
-          ['αιρετός / αιρετικός', 'αυτός που έχει εκλεγεί · αυτός που παρεκκλίνει'],
-          ['αφαίρεση', 'το αφαιρώ (αφ- + αἱρέω)'],
-          ['διαίρεση', 'το διαιρώ, μοιράζω'],
-          ['καθαίρεση', 'παύση από αξίωμα (καθ- + αἱρέω)'],
-          ['εξαίρεση / εξαιρετικός', 'αυτό που εξαιρείται, αφαιρείται από τον κανόνα'],
-          ['προαίρεση / προαιρετικός', 'ελεύθερη βούληση, επιλογή εκ των προτέρων'],
-          ['αναίρεση', 'ακύρωση, κατάργηση']
-        ]
-      }
-    ]
-  },
-
-  euktiki: {
-    title: 'Ευκτική πλαγίου λόγου',
-    sections: [
-      {
-        heading: 'Τι είναι;',
-        type: 'note',
-        text: 'Όταν ρήμα <em>ιστορικού χρόνου</em> (π.χ. αόριστος, παρατατικός) εισάγει πλάγιο λόγο, οι εγκλίσεις της ευθείας ομιλίας <em>μπορούν</em> να τραπούν σε ευκτική. Αυτή λέγεται <strong>ευκτική πλαγίου λόγου</strong> ή <em>ευκτική ετεροπροσωπίας</em>.'
-      },
-      {
-        heading: 'Στο κείμενό μας',
-        type: 'table',
-        rows: [
-          ['ἀπήγγειλεν (αόρ.)', 'ρήμα ιστορικού χρόνου — εισάγει πλάγιο λόγο'],
-          ['κατέχοι / κελεύοι', 'ευκτικές πλαγίου λόγου αντί οριστικής ευθέος λόγου'],
-          ['Ευθύς λόγος (;)', '«κατέχει... κελεύει» → τράπηκαν σε ευκτική']
-        ]
-      },
-      {
-        heading: 'Παράδειγμα',
-        type: 'table',
-        rows: [
-          ['«εἶπεν ὅτι ἔλθοι»', 'είπε ότι ήρθε — ευκτική πλαγίου λόγου αντί «ἦλθεν»']
-        ]
-      }
-    ]
-  },
-
-  syndeto: {
-    title: 'Συνδετικά ρήματα',
-    sections: [
-      {
-        heading: 'Τι είναι συνδετικό ρήμα;',
-        type: 'note',
-        text: 'Συνδετικό λέγεται το ρήμα που δεν έχει πλήρες νόημα από μόνο του, αλλά <em>συνδέει</em> το υποκείμενο με ένα κατηγορούμενο, το οποίο το προσδιορίζει ή το ταυτίζει με κάτι. Το πιο κοινό συνδετικό ρήμα είναι το «εἰμί» (= είμαι).'
-      },
-      {
-        heading: 'Τα κυριότερα συνδετικά ρήματα',
-        type: 'table',
-        rows: [
-          ['εἰμί', 'είμαι — «ὁ Θηραμένης κύριος οὐκ ἦν»'],
-          ['γίγνομαι', 'γίνομαι — «πρεσβευτὴς ἐγένετο»'],
-          ['αἱρέομαι (παθ.)', 'εκλέγομαι — «ᾑρέθη αὐτοκράτωρ»'],
-          ['ὀνομάζομαι / καλοῦμαι', 'ονομάζομαι — «Κῦρος ἐκαλεῖτο βασιλεύς»'],
-          ['ἀποδείκνυμαι', 'αναδεικνύομαι — «στρατηγὸς ἀπεδείχθη»'],
-          ['φαίνομαι', 'φαίνομαι, δείχνω — «σοφὸς ἐφαίνετο»'],
-          ['εὑρίσκομαι', 'αποδεικνύομαι — «ψευδὴς εὑρέθη»']
-        ]
-      },
-      {
-        heading: 'Σημείωση',
-        type: 'note',
-        text: 'Μετά από συνδετικό ρήμα το κατηγορούμενο συμφωνεί με το υποκείμενο σε <em>πτώση, γένος και αριθμό</em>.'
-      }
-    ]
-  },
-
-  kategoroumeno: {
-    title: 'Επιρρηματικό κατηγορούμενο',
-    sections: [
-      {
-        heading: 'Ορισμός',
-        type: 'note',
-        text: 'Κατηγορούμενο που <em>ταυτόχρονα</em> προσδιορίζει το υποκείμενο/αντικείμενο <em>και</em> εκφράζει επιρρηματική σχέση (τρόπο, σκοπό, χρόνο). Αποδίδεται συχνά με «<em>ως</em>», «<em>για να</em>» ή «<em>την τάδε μέρα</em>» στη νέα ελληνική.'
-      },
-      {
-        heading: 'Παραδείγματα',
-        type: 'table',
-        rows: [
-          ['«σκηνοῦμεν ὑπαίθροι»', 'κατασκηνώνουμε <em>στην ύπαιθρο</em> — τόπος/τρόπος'],
-          ['«αἱ νῆες ἦλθον βοηθοί»', 'τα πλοία ήρθαν <em>για να βοηθήσουν</em> — σκοπός'],
-          ['«ἧκεν τριταῖος»', 'έφτασε <em>την τρίτη μέρα</em> — χρόνος']
-        ]
-      }
-    ]
-  },
-
-  autokrator: {
-    title: 'αὐτοκράτωρ — τότε και σήμερα',
-    sections: [
-      {
-        heading: 'Σημασιολογική μετατόπιση',
-        type: 'table',
-        rows: [
-          ['Στον Ξενοφώντα', 'ο πληρεξούσιος πρεσβευτής με απόλυτη εξουσία διαπραγμάτευσης — προσωρινός λειτουργικός τίτλος αποστολής'],
-          ['Σήμερα', 'ο απόλυτος μονάρχης κράτους — μόνιμος τίτλος εξουσίας'],
-          ['Ετυμολογία', 'αὐτός + κράτος = αυτός που κρατά μόνος του την εξουσία']
-        ]
-      },
-      {
-        heading: 'Σχόλιο',
-        type: 'note',
-        text: 'Η λέξη στον Ξενοφώντα δεν έχει τη σημερινή της αίγλη· είναι απλώς ο «εξουσιοδοτημένος να αποφασίζει επί τόπου». Η επέκταση της σημασίας σε απόλυτο μονάρχη έγινε στη ρωμαϊκή και βυζαντινή εποχή.'
-      },
-      {
-        heading: 'Νεοελληνικά παράγωγα (< κράτος)',
-        type: 'deriv',
-        items: [
-          ['κράτος / κρατώ', 'εξουσία, κατοχή'],
-          ['αυτοκράτορας', 'η σημερινή σημασία'],
-          ['δημοκρατία', 'κράτος του δήμου (δῆμος + κράτος)'],
-          ['αριστοκρατία', 'κράτος των αρίστων'],
-          ['γραφειοκρατία', 'εξουσία της γραφειακής τάξης'],
-          ['κράτηση / κατακράτηση', 'συγκράτηση, φυλάκιση']
-        ]
-      }
-    ]
-  },
-
-  teliki_metochi: {
-    title: 'Τελική μετοχή — ἀγγελοῦντα',
-    sections: [
-      {
-        heading: 'Ορισμός',
-        type: 'text',
-        content: '<strong>Τελική μετοχή</strong> είναι η μετοχή σε <strong>χρόνο μέλλοντα</strong> που δηλώνει <strong>σκοπό (τελικό αίτιο)</strong> — εκφράζει για ποιον λόγο γίνεται η πράξη του κύριου ρήματος. Μεταφράζεται με <strong>τελική πρόταση</strong> («για να…»). Βρίσκεται συνήθως ύστερα από ρήματα <strong>κίνησης</strong> (ἔρχομαι, πέμπω, ἄγω…) ή <strong>σκόπιμης ενέργειας</strong> (ἀποστέλλω, τάσσω…). Συνήθως δεν συνοδεύεται από άρθρο.'
-      },
-      {
-        heading: 'Στο κείμενο',
-        type: 'table',
-        rows: [
-          ['τύπος', '<em>ἀγγελοῦντα</em> — μέλλοντας (< ἀγγελῶ)'],
-          ['ρήμα κίνησης', '<em>ἔπεμψεν</em> = έστειλε'],
-          ['μετάφραση', 'για να ενημερώσει (τους εφόρους)']
-        ]
-      },
-      {
-        heading: 'Παραδείγματα',
-        type: 'table',
-        rows: [
-          ['ἦλθε <em>λύσων</em> τοὺς αἰχμαλώτους', 'ήρθε για να λύσει τους αιχμαλώτους'],
-          ['ἔπεμψαν πρέσβεις <em>εἰρήνην ποιησομένους</em>', 'έστειλαν πρέσβεις για να συνάψουν ειρήνη']
-        ]
-      }
-    ]
-  },
-
-  eteroprosopia: {
-    title: 'Ετεροπροσωπία — κυρίους εἶναι',
-    sections: [
-      {
-        heading: 'Ορισμοί',
-        type: 'text',
-        content: '<strong>Ταυτοπροσωπία</strong>: το υποκείμενο του απαρεμφάτου <strong>ταυτίζεται</strong> με το υποκείμενο του κύριου ρήματος. Το απαρέμφατο δεν παίρνει δικό του υποκείμενο.<br><em>βούλεται ἰέναι</em> = θέλει να πάει (ο ίδιος)<br><br><strong>Ετεροπροσωπία</strong>: το υποκείμενο του απαρεμφάτου <strong>διαφέρει</strong> από το υποκείμενο του κύριου ρήματος. Τότε το υποκείμενο του απαρεμφάτου τίθεται σε <strong>αιτιατική</strong> και το τυχόν κατηγορούμενο συμφωνεί μαζί του.<br><em>κελεύει αὐτὸν ἰέναι</em> = διατάζει αυτόν να πάει'
-      },
-      {
-        heading: 'Στο κείμενο',
-        type: 'table',
-        rows: [
-          ['κύριο ρήμα', '<em>ἀπεκρίναιτο</em> — υποκ.: ὁ Λύσανδρος'],
-          ['απαρέμφατο', '<em>εἶναι</em>'],
-          ['υποκ. απαρεμφάτου', '<em>ἐκείνους</em> (αιτ.) = τους εφόρους'],
-          ['κατηγορούμενο', '<em>κυρίους</em> (αιτ.) — συμφωνεί με το ἐκείνους']
-        ]
-      }
-    ]
-  },
-
-  gen_antikeimeniki: {
-    title: 'Γενική αντικειμενική — εἰρήνης καὶ πολέμου',
-    sections: [
-      {
-        heading: 'Ορισμός',
-        type: 'text',
-        content: '<strong>Γενική αντικειμενική</strong> είναι η γενική που δηλώνει το <strong>αντικείμενο της ενέργειας</strong>. Εξαρτάται από ουσιαστικό ή επίθετο (όχι από ρήμα). Αν μετατρέψουμε τη λέξη που προσδιορίζει σε ρήμα, τότε η γενική νοηματικά γίνεται <strong>αντικείμενό</strong> της — και αυτό είναι ο τρόπος αναγνώρισής της.<br><br><em>πόθος τῆς ἐλευθερίας</em> → ποθῶ τὴν ἐλευθερίαν<br><em>ἐπιμέλεια τῶν νόμων</em> → ἐπιμελοῦμαι τοὺς νόμους'
-      },
-      {
-        heading: 'Στο κείμενο',
-        type: 'table',
-        rows: [
-          ['επίθετο', '<em>κύριος</em> → κυριεύω <em>τι;</em>'],
-          ['γεν. αντικειμ.', '<em>εἰρήνης καὶ πολέμου</em>'],
-          ['μτφρ.', 'αρμόδιοι για ειρήνη και πόλεμο']
-        ]
-      },
-      {
-        heading: 'Παραδείγματα',
-        type: 'table',
-        rows: [
-          ['<em>ἐπιθυμία τοῦ νικᾶν</em>', 'ἐπιθυμῶ τὸ νικᾶν = επιθυμία για νίκη'],
-          ['<em>ἐπιμέλεια τῶν νόμων</em>', 'ἐπιμελοῦμαι τοὺς νόμους = φροντίδα για τους νόμους'],
-          ['<em>πόθος τῆς πατρίδος</em>', 'ποθῶ τὴν πατρίδα = νοσταλγία για την πατρίδα']
-        ]
-      }
-    ]
-  },
-
-  spendesthai: {
-    title: 'σπένδομαι — σπονδές',
-    sections: [
-      {
-        heading: 'Ορισμός & σημασία',
-        type: 'text',
-        content: '<strong>σπένδω</strong> (ενεργ.) = κάνω σπονδή, χύνω κρασί ή νερό στη γη ως ιερή πράξη πριν από συμφωνία ή μάχη.<br><strong>σπένδομαι</strong> (μέση φωνή) = συνάπτω σπονδές, συνθηκολογώ, κάνω ανακωχή ή ειρήνη.<br><br>Στο κείμενο: <em>μὴ σπένδεσθαι Ἀθηναίοις</em> = να μην κάνουν συνθήκη με τους Αθηναίους.'
-      },
-      {
-        heading: 'Ετυμολογία & παράγωγα',
-        type: 'table',
-        rows: [
-          ['σπένδω', 'χύνω σπονδή — ιερή χοή κρασιού/νερού'],
-          ['σπονδή', 'η ιερή χοή → η συνθήκη που την πλαισίωνε'],
-          ['σπονδαί (πληθ.)', 'οι σπονδές = η ανακωχή, η ειρηνική συμφωνία'],
-          ['ἄσπονδος', 'αυτός που δεν δέχεται σπονδές = αδυσώπητος'],
-          ['νεοελλ. σπονδή', 'σήμερα = ζήλος, προθυμία (σημασιολογική μετατόπιση)']
-        ]
-      },
-      {
-        heading: 'Η τελετουργική διάσταση της σύναψης συνθηκών',
-        type: 'text',
-        content: 'Για τους αρχαίους, η σύναψη ειρήνης δεν ήταν μια απλή διπλωματική πράξη — ήταν <strong>ιερή τελετουργία με παρόντες τους θεούς</strong>. Η διαδικασία περιελάμβανε:<br><br>• <strong>Θυσία</strong> επικύρωσης: σφάζονταν ζώα και εξετάζονταν τα σπλάχνα — αν ήταν ευοίωνα, η συνθήκη γινόταν δεκτή από τους θεούς.<br>• <strong>Σπονδή</strong>: χύνονταν κρασί ή νερό στη γη, ενώ οι δύο πλευρές εκφωνούσαν επίκληση στους θεούς ως εγγυητές.<br>• <strong>Όρκος</strong>: οι αντιπρόσωποι ορκίζονταν στο όνομα θεών (Δία, Γη, Ήλιο…) να τηρήσουν τους όρους.<br><br>Η παραβίαση σπονδών θεωρούνταν <strong>ασέβεια προς τους θεούς</strong>, όχι μόνο παραβίαση πολιτικής συμφωνίας. Γι\' αυτό η πρόταση <em>«μὴ σπένδεσθαι Ἀθηναίοις»</em> είχε βαρύτατο ηθικό φορτίο: σήμαινε να αρνηθούν στην Αθήνα ακόμα και αυτή την ιερή αναγνώριση.'
-      }
-    ]
-  }
-
-};
-
-function openFocus(key) {
-  const data = focusData[key];
-  if (!data) return;
-  document.getElementById('focus-title').textContent = data.title;
-  let html = '';
-  data.sections.forEach(sec => {
-    html += `<div class="popup-section">`;
-    html += `<div class="popup-section-title">${sec.heading}</div>`;
-    if (sec.type === 'table') {
-      html += `<table class="popup-table">`;
-      sec.rows.forEach(r => {
-        html += `<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`;
-      });
-      html += `</table>`;
-    } else if (sec.type === 'deriv') {
-      html += `<div class="popup-deriv">`;
-      sec.items.forEach(it => {
-        html += `<span>${it[0]}</span>· ${it[1]}<br>`;
-      });
-      html += `</div>`;
-    } else if (sec.type === 'note') {
-      html += `<div class="popup-note">${sec.text}</div>`;
-    }
-    html += `</div>`;
-  });
-  document.getElementById('focus-content').innerHTML = html;
-  document.getElementById('focus-overlay').classList.add('open');
-}
-
-function closeFocus() {
-  document.getElementById('focus-overlay').classList.remove('open');
-}
-
-function closeFocusOutside(e) {
-  if (e.target === document.getElementById('focus-overlay')) closeFocus();
-}
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFocus(); });
-
-</script>
-
-<!-- MORPH POPUP -->
-<div class="morph-overlay" id="morph-overlay" onclick="closeMorphOutside(event)">
-  <div class="morph-box" id="morph-box">
-    <button class="morph-close" onclick="closeMorph()">✕</button>
-    <div class="morph-lemma" id="morph-lemma"></div>
-    <div class="morph-info" id="morph-info"></div>
-    <div id="morph-content"></div>
-  </div>
-</div>
-
-<script>
-const morphData = {
-
-  mhni: {
-    lemma: 'μήν, μηνός',
-    info: 'Ουσιαστικό · 3η κλίση · αρσενικό',
-    type: 'noun3',
-    rows: [
-      ['Ονομ.', 'μήν', 'μῆνες'],
-      ['Γεν.',  'μηνός', 'μηνῶν'],
-      ['Δοτ.',  'μηνί', 'μησί(ν)'],
-      ['Αιτ.',  'μῆνα', 'μῆνας'],
-      ['Κλητ.', 'μήν', 'μῆνες']
-    ],
-    highlight: 'μηνί',
-    note: 'Στο κείμενο: «τετάρτῳ μηνί» — δοτική χρόνου (την τέταρτη μήνα)'
-  },
-
-  apingeilen: {
-    lemma: 'ἀπαγγέλλω',
-    info: 'Ρήμα · αόριστος α΄ ενεργητικός',
-    type: 'verb',
-    rows: [
-      ['α΄ εν.',  'ἀπήγγειλα'],
-      ['β΄ εν.',  'ἀπήγγειλας'],
-      ['γ΄ εν.',  'ἀπήγγειλε(ν)'],
-      ['α΄ πλ.', 'ἀπηγγείλαμεν'],
-      ['β΄ πλ.', 'ἀπηγγείλατε'],
-      ['γ΄ πλ.', 'ἀπήγγειλαν']
-    ],
-    highlight: 'ἀπήγγειλε(ν)',
-    note: 'ἀπό + ἀγγέλλω · αόρ. α΄: ἀπ-ήγγειλ-ε(ν) · σημαίνει αναφέρω επίσημα, αναγγέλλω'
-  },
-
-  hireth: {
-    lemma: 'αἱρέω / αἱρέομαι',
-    info: 'Ρήμα · αόριστος β΄ παθητικός',
-    type: 'verb',
-    rows: [
-      ['α΄ εν.',  'ᾑρέθην'],
-      ['β΄ εν.',  'ᾑρέθης'],
-      ['γ΄ εν.',  'ᾑρέθη'],
-      ['α΄ πλ.', 'ᾑρέθημεν'],
-      ['β΄ πλ.', 'ᾑρέθητε'],
-      ['γ΄ πλ.', 'ᾑρέθησαν']
-    ],
-    highlight: 'ᾑρέθη',
-    note: 'Παθητική φωνή = εκλέγομαι · ενεργητική αἱρέω = κυριεύω, παίρνω'
-  },
-
-  autokrator_morph: {
-    lemma: 'αὐτοκράτωρ, -ορος',
-    info: 'Ουσιαστικό · 3η κλίση · αρσενικό/θηλυκό',
-    type: 'noun3',
-    rows: [
-      ['Ονομ.', 'αὐτοκράτωρ', 'αὐτοκράτορες'],
-      ['Γεν.',  'αὐτοκράτορος', 'αὐτοκρατόρων'],
-      ['Δοτ.',  'αὐτοκράτορι', 'αὐτοκράτορσι(ν)'],
-      ['Αιτ.',  'αὐτοκράτορα', 'αὐτοκράτορας'],
-      ['Κλητ.', 'αὐτόκρατορ', 'αὐτοκράτορες']
-    ],
-    highlight: 'αὐτοκράτωρ',
-    note: 'αὐτός + κράτος · στο κείμενο = πληρεξούσιος με απόλυτη εξουσία διαπραγμάτευσης'
-  },
-
-  angelounta: {
-    lemma: 'ἀγγέλλων, ἀγγέλλοντος',
-    info: 'Μετοχή μέλλοντα ενεργητικού · αρσενικό γένος',
-    type: 'noun3part',
-    rows: [
-      ['Ονομ.', 'ἀγγελῶν', 'ἀγγελοῦντες'],
-      ['Γεν.',  'ἀγγελοῦντος', 'ἀγγελούντων'],
-      ['Δοτ.',  'ἀγγελοῦντι', 'ἀγγελοῦσι(ν)'],
-      ['Αιτ.',  'ἀγγελοῦντα', 'ἀγγελοῦντας'],
-      ['Κλητ.', 'ἀγγελῶν', 'ἀγγελοῦντες']
-    ],
-    highlight: 'ἀγγελοῦντα',
-    note: 'Τελική μετοχή: μέλλοντας ενεργητικός του ἀγγέλλω. Στο κείμενο: αιτ. εν. αρσ. — συμφωνεί με το Ἀριστοτέλην'
-  },
-
-  apokrinaito: {
-    lemma: 'ἀποκρίνομαι',
-    info: 'Ευκτική · παρατατικός-αόριστος μέσης φωνής',
-    type: 'verb_opt',
-    cols: ['Ευκτική αορίστου μέσης'],
-    rows: [
-      ['α΄ εν.',  'ἀποκριναίμην'],
-      ['β΄ εν.',  'ἀποκρίναιο'],
-      ['γ΄ εν.',  'ἀποκρίναιτο'],
-      ['α΄ πλ.', 'ἀποκριναίμεθα'],
-      ['β΄ πλ.', 'ἀποκρίναισθε'],
-      ['γ΄ πλ.', 'ἀποκρίναιντο']
-    ],
-    highlight: 'ἀποκρίναιτο',
-    note: 'Ευκτική πλαγίου λόγου: εξαρτάται από ιστορικό χρόνο (ἔπεμψεν). Στον ευθύ λόγο: ἀπεκρίνατο (αόρ. οριστική)'
-  }
-
-};
-
-function openMorph(key) {
-  const d = morphData[key];
-  if (!d) return;
-  document.getElementById('morph-lemma').textContent = d.lemma;
-  document.getElementById('morph-info').textContent = d.info;
-  var html = '<table class="morph-table">';
-  if (d.type === 'noun3' || d.type === 'noun3part') {
-    html += '<tr><th>Πτώση</th><th>Ενικός</th><th>Πληθυντικός</th></tr>';
-    d.rows.forEach(function(r) {
-      html += '<tr><td>' + r[0] + '</td>' +
-        '<td class="' + (r[1] === d.highlight ? 'hi' : '') + '">' + r[1] + '</td>' +
-        '<td class="' + (r[2] === d.highlight ? 'hi' : '') + '">' + (r[2]||'') + '</td></tr>';
+    let h=`<div class="quiz-card"><h2 style="font-family:'Playfair Display',serif;font-size:22px;color:var(--purple-dark);margin-bottom:22px;">🏆 Τελικό Quiz</h2>`;
+    finalQuiz.forEach((q,qi)=>{
+      h+=`<div style="margin-bottom:24px;">
+        <p style="font-weight:700;font-size:17px;margin-bottom:11px;color:var(--ink);">${qi+1}. ${q.q}</p>
+        <div class="options">
+          ${q.opts.map((o,oi)=>`<button class="opt-btn ${S.quizAns[qi]===oi?'sel':''}" onclick="selQz(${qi},${oi})">${['Α','Β','Γ','Δ'][oi]}. ${o}</button>`).join('')}
+        </div></div>`;
     });
-  } else {
-    html += '<tr><th>Πρόσωπο</th><th>Τύπος</th></tr>';
-    d.rows.forEach(function(r) {
-      html += '<tr><td>' + r[0] + '</td>' +
-        '<td class="' + (r[1] === d.highlight ? 'hi' : '') + '">' + r[1] + '</td></tr>';
-    });
+    const ready=finalQuiz.every((q,i)=>S.quizAns[i]!==undefined);
+    h+=`<button class="submit-btn" ${!ready?'disabled':''} onclick="submitQz()">Ολοκλήρωση</button></div>`;
+    document.getElementById('quizContent').innerHTML=h;
   }
-  html += '</table>';
-  if (d.note) html += '<div class="morph-note">' + d.note + '</div>';
-  document.getElementById('morph-content').innerHTML = html;
-  document.getElementById('morph-overlay').classList.add('open');
 }
+function selQz(qi,oi){S.quizAns[qi]=oi;renderQuiz();}
+function submitQz(){const cor=finalQuiz.filter((q,i)=>S.quizAns[i]===q.correct).length;addPts(Math.round(cor/finalQuiz.length*100));S.quizDone=true;renderQuiz();}
 
-function closeMorph() {
-  document.getElementById('morph-overlay').classList.remove('open');
-}
+// ══ UTILS ══════════════════════════════════════════════════════
+function addPts(n){S.pts+=n;updPts();}
+function updPts(){document.getElementById('pts').textContent=S.pts;}
+function updProg(){let p=0;if(S.done.th)p+=33;if(S.done.cmp)p+=33;if(S.done.ex)p+=34;document.getElementById('progFill').style.width=p+'%';}
 
-function closeMorphOutside(e) {
-  if (e.target === document.getElementById('morph-overlay')) closeMorph();
-}
-
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeMorph(); closeFocus(); } });
-</script>
-
+init();
+</script></script>
 </body>
+</html>
