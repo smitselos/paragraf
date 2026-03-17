@@ -74,7 +74,7 @@
   .section {
     width: 100%;
     position: relative;
-    min-height: 50vw;
+    min-height: 0;
     display: flex;
   }
   #theory-view { display: flex; flex-direction: column; gap: 2vw; padding-bottom: 2vw; }
@@ -86,9 +86,9 @@
     position: relative; z-index: 1;
     flex: 1;
     display: flex;
-    padding: 4vw 4.5vw 4vw 9vw; /* left pad αρκετός για sidenav + αέρας */
+    padding: 3.5vw 4.5vw 3.5vw 9vw;
     gap: 3.5vw;
-    align-items: flex-start;
+    align-items: stretch;
   }
 
   /* ══ GRID ══ */
@@ -213,6 +213,53 @@
   .q-tag.s{background:#f5ede0;color:#5a3520}
   @keyframes q-glow{0%,100%{box-shadow:0 0 5px #4a7c55,0 0 8px #4a7c55}50%{box-shadow:0 0 8px #5a9466,0 0 16px #5a9466}}
   @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ══ FULLSCREEN TEXT OVERLAY ══ */
+  #text-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(0,0,0,.75);
+    align-items: center; justify-content: center;
+    cursor: zoom-out;
+  }
+  #text-overlay.open { display: flex; }
+  #text-overlay-inner {
+    background: white;
+    border-radius: 1.5vw;
+    padding: 5vw 6vw;
+    max-width: 80vw; max-height: 85vh;
+    overflow-y: auto;
+    display: flex; flex-direction: column; gap: 2vw;
+    box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    cursor: default;
+  }
+  #text-overlay-text {
+    font-size: 2.4vw; line-height: 1.9;
+    text-align: justify; color: #1a1a1a;
+  }
+  #text-overlay-text ol {
+    margin: 1.2vw 0 0 2vw;
+    display: flex; flex-direction: column; gap: .8vw;
+  }
+  #text-overlay-text ol li { line-height: 1.75; }
+    font-size: 1.4vw; color: #888;
+    font-style: italic; text-align: right;
+  }
+  #text-overlay-close {
+    position: absolute; top: 2vw; right: 2.5vw;
+    font-size: 3vw; color: white; cursor: pointer;
+    font-weight: 300; line-height: 1;
+    transition: opacity .2s;
+  }
+  #text-overlay-close:hover { opacity: .7; }
+  .text-card-clickable {
+    cursor: zoom-in;
+    transition: box-shadow .2s, transform .15s;
+  }
+  .text-card-clickable:hover {
+    box-shadow: 0 10px 32px rgba(0,0,0,.28);
+    transform: translateY(-2px);
+  }
 </style>
 </head>
 <body>
@@ -232,7 +279,7 @@
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-icon"><svg viewBox="0 0 24 24"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg></div>
-  <div class="topbar-title" id="topbar-title">Θέμα Α</div>
+  <div class="topbar-title" id="topbar-title">Μέθοδοι ανάπτυξης</div>
   <div class="topbar-copy">© Αλέξανδρος &amp; Σπύρος Μητσέλος</div>
   <nav class="theme-nav">
     <a href="#" class="active">Θέμα Α</a><a href="#">Θέμα Β</a><a href="#">Θέμα Γ</a><a href="#">Θέμα Δ</a>
@@ -251,96 +298,270 @@
 <!-- THEORY VIEW -->
 <div id="theory-view">
 
-<!-- SECTION 1 -->
+<!-- SECTION 1: Overview - Τρόποι ανάπτυξης παραγράφου -->
 <div class="section" id="s1">
-  <div class="section-body">
-    <div class="left-col">
-      <div class="hero-card-lg">
-        <h1>Θέμα Α</h1>
-        <div class="hero-subtitle">Συνοπτική απόδοση μέρους<br>ή απόψεων του κειμένου</div>
+  <div class="section-body" style="align-items:stretch;">
+    <div class="left-col" style="align-self:stretch;">
+      <div class="hero-card-lg" style="background:#2d2d2d; height:100%;">
+        <h1>Τρόποι ανάπτυξης<br>παραγράφου</h1>
       </div>
     </div>
-    <div class="grid-area-3row">
+    <div class="grid-area-3row" style="padding:0; flex:1;">
       <div class="grid-row-3">
-        <div class="info-card-sm"><div class="card-header"><div class="osq"></div><div class="card-title-sm">Πύκνωση</div></div><div class="card-body"><div class="vbar"></div><div class="card-text-sm">Τεχνικές πύκνωσης του περιεχομένου ενός κειμένου.</div></div></div>
-        <div class="info-card-sm"><div class="card-header"><div class="osq"></div><div class="card-title-sm">Είδη</div></div><div class="card-body"><div class="vbar"></div><div class="card-text-sm">Μορφές περίληψης που ζητούνται στο σχολείο.</div></div></div>
+        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Παραδείγματα</div></div>
+        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Αιτιολόγηση</div></div>
       </div>
       <div class="grid-row-3">
-        <div class="info-card-sm"><div class="card-header"><div class="osq"></div><div class="card-title-sm">Οδηγός</div></div><div class="card-body"><div class="vbar"></div><div class="card-text-sm">Βήματα / στάδια και οδηγίες για τη σύνταξη της περίληψης.</div></div></div>
-        <div class="info-card-sm"><div class="card-header"><div class="osq"></div><div class="card-title-sm">Αξιολόγηση</div></div><div class="card-body"><div class="vbar"></div><div class="card-text-sm">Μονάδες και κριτήρια αξιολόγησης της περίληψης.</div></div></div>
+        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Αίτιο-αποτέλεσμα</div></div>
+        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Διαίρεση</div></div>
       </div>
       <div class="grid-row-3">
-        <div class="info-card-sm"><div class="card-header"><div class="osq"></div><div class="card-title-sm">Λάθη</div></div><div class="card-body"><div class="vbar"></div><div class="card-text-sm">Συχνά λάθη στα μαθητικά περιληπτικά κείμενα.</div></div></div>
-        <div class="info-card-sm"><div class="card-header"><div class="osq"></div><div class="card-title-sm">Εφαρμογή</div></div><div class="card-body"><div class="vbar"></div><div class="card-text-sm">σε περίληψη Διαγωνίσματος των Πανελλαδικών.</div></div></div>
+        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Σύγκριση-αντίθεση</div></div>
+        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Ορισμός</div></div>
+      </div>
+      <div class="grid-row-3" style="margin-top:2.5vw;">
+        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Αναλογία</div></div>
+        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Συνδυασμός</div></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- SECTION 2 -->
+<!-- SECTION 2: Παραδείγματα -->
 <div class="section" id="s2">
-  <div class="section-body">
-    <div class="grid-area">
-      <div class="grid-row">
-        <div class="hero-card"><h1>Τεχνικές<br>πύκνωσης</h1></div>
-        <div class="info-card"><div class="card-header"><div class="osq"></div><div class="card-title">Γενίκευση</div></div><div class="card-body"><div class="vbar"></div><div class="card-text">Αντικατάσταση ομοειδών στοιχείων (υπωνύμων) από υπερώνυμο</div></div></div>
-        <div class="info-card"><div class="card-header"><div class="osq"></div><div class="card-title">Σύνθεση</div></div><div class="card-body"><div class="vbar"></div><div class="card-text">Απόδοση μιας σειράς ενεργειών με μια φράση (διαδικασία)</div></div></div>
+  <div class="section-body" style="gap:2vw; align-items:stretch;">
+    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
+      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
+        <h1 style="font-size:3vw;">Παραδείγματα</h1>
       </div>
-      <div class="grid-row">
-        <div class="info-card"><div class="card-header"><div class="osq"></div><div class="card-title">Επιλογή</div></div><div class="card-body"><div class="vbar"></div><div class="card-text">των πιο σημαντικών πληροφοριών και τονισμός τους</div></div></div>
-        <div class="info-card"><div class="card-header"><div class="osq"></div><div class="card-title">Ονοματοποίηση</div></div><div class="card-body"><div class="vbar"></div><div class="card-text">ρηματικών φράσεων / προτάσεων</div></div></div>
-        <div class="info-card"><div class="card-header"><div class="osq"></div><div class="card-title">Μονολεκτικοί / σύντομοι τύποι</div></div><div class="card-body"><div class="vbar"></div><div class="card-text">στη θέση περιφράσεων</div></div></div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Να τεκμηριώσει έναν ισχυρισμό ή/και να επεξηγήσει, να βοηθήσει τον αναγνώστη να κατανοήσει ευκρινέστερα ένα γενικό ή ασαφές νόημα.</div></div>
       </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Διαρθρωτικές φράσεις / λέξεις</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw; font-style:italic;">π.χ., για παράδειγμα, χαρακτηριστικό παράδειγμα, λόγου χάρη, ενδεικτικά, ένα δείγμα κ.λπ</div></div>
+      </div>
+    </div>
+    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
+      <div data-text="&lt;u&gt;Υπάρχουν νέοι όλων των ειδών:&lt;/u&gt; &lt;ol&gt;&lt;li&gt;οι ναζί Ες Ες, που περιφρουρούσαν τα στρατόπεδα συγκεντρώσεως του Άουσβιτς και του Μπούχενβαλντ, ήταν δεκαοχτώ δεκαεννιά χρονών·&lt;/li&gt;&lt;li&gt;την ίδια ηλικία είχαν και οι νέοι που βρέθηκαν αντιμέτωποι με τα τανκς της κινεζικής κυβέρνησης στην πλατεία Τιενανμέν ζητώντας ελευθερία&lt;/li&gt;&lt;li&gt;αυτοί που ακριβώς τώρα αφήνουν εθελουσίως τα σπίτια τους για να προσφέρουν τη βοήθειά τους σε χώρες που πλήττονται.&lt;/li&gt;&lt;/ol&gt;" style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Υπάρχουν νέοι όλων των ειδών: οι ναζί Ες Ες, που περιφρουρούσαν τα στρατόπεδα συγκεντρώσεως του Άουσβιτς και του Μπούχενβαλντ, ήταν δεκαοχτώ δεκαεννιά χρονών· την ίδια ηλικία είχαν και οι νέοι που βρέθηκαν αντιμέτωποι με τα τανκς της κινεζικής κυβέρνησης στην πλατεία Τιενανμέν ζητώντας ελευθερία ή αυτοί που ακριβώς τώρα αφήνουν εθελουσίως τα σπίτια τους για να προσφέρουν τη βοήθειά τους σε χώρες που πλήττονται.</div>
+      <div data-source="Φ. Σαβατέρ, «Μιλώντας στον γιο μου για την Πολιτική και τη Δημοκρατία»" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Φ. Σαβατέρ, «Μιλώντας στον γιο μου για την Πολιτική και τη Δημοκρατία»</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: Αιτιολόγηση -->
+<div class="section" id="s3">
+  <div class="section-body" style="gap:2vw; align-items:stretch;">
+    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
+      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
+        <h1 style="font-size:3vw;">Αιτιολόγηση</h1>
+      </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Να αποδείξει έναν ισχυρισμό και να πείσει για την ορθότητά του. Η αιτιολόγηση συνδέεται με την επιχειρηματολογία και την επίκληση στη λογική.</div></div>
+      </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Διαρθρωτικές φράσεις / λέξεις</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw; font-style:italic;">Γιατί, επειδή, διότι, εφόσον, αφού, μιας και, καθώς κ.ά.</div></div>
+      </div>
+    </div>
+    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
+      <div data-text="Αλλά και ως μέσον εκφοβισμού και συγκράτησης των πολλών από την τέλεση εγκλημάτων η θανατική ποινή είναι απολύτως ακατάλληλη ως αναποτελεσματική. Γιατί ο δράστης που τελεί τα βαριά εγκλήματα για τα οποία προβλέπεται η θανατική ποινή, είτε τα διαπράττει κάτω από καταστάσεις ακραίας συναισθηματικής υπερδιέγερσης, οπότε δεν είναι σε θέση να λάβει υπόψη του ψύχραιμα τις συνέπειες, είτε είναι πρόσωπο τόσο καθυστερημένο πνευματικά, ώστε να μην είναι σε θέση να σταθμίσει σοβαρά τις οποιεσδήποτε συνέπειες." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Αλλά και ως μέσον εκφοβισμού και συγκράτησης των πολλών από την τέλεση εγκλημάτων η θανατική ποινή είναι απολύτως ακατάλληλη ως αναποτελεσματική. Γιατί ο δράστης που τελεί τα βαριά εγκλήματα για τα οποία προβλέπεται η θανατική ποινή, είτε τα διαπράττει κάτω από καταστάσεις ακραίας συναισθηματικής υπερδιέγερσης, οπότε δεν είναι σε θέση να λάβει υπόψη του ψύχραιμα τις συνέπειες, είτε είναι πρόσωπο τόσο καθυστερημένο πνευματικά, ώστε να μην είναι σε θέση να σταθμίσει σοβαρά τις οποιεσδήποτε συνέπειες.</div>
+      <div data-source="Γ.Α. Μαγκάκης, Η εσχάτη των ποινών, έσχατη πλάνη" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Γ.Α. Μαγκάκης, Η εσχάτη των ποινών, έσχατη πλάνη</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: Αίτιο-αποτέλεσμα -->
+<div class="section" id="s4">
+  <div class="section-body" style="gap:2vw; align-items:stretch;">
+    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
+      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
+        <h1 style="font-size:3vw;">Αίτιο - αποτέλεσμα</h1>
+      </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Να εξηγήσει / ερμηνεύσει την εμφάνιση/εκδήλωση (αιτίες) ενός φαινομένου ή να αναδείξει τις συνέπειές του.</div></div>
+      </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Διαρθρωτικές λέξεις / φράσεις</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw; font-style:italic;">Λόγω, εξαιτίας, έτσι, γι' αυτόν τον λόγο, χάρη σ' αυτό, με αποτέλεσμα (οφείλεται, καταλήγει…).</div></div>
+      </div>
+    </div>
+    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
+      <div data-text="Ένα σημαντικό πρόβλημα του καιρού μας είναι η μεγάλη αύξηση της εγκληματικότητας, ιδίως των νέων. Σε σημαντικό βαθμό <strong>οφείλεται</strong> στην έλλειψη υγιούς οικογενειακού περιβάλλοντος, στην απουσία διαπαιδαγώγησης και παραδείγματος που να εμπνέει πίστη στις αξίες και να τους δίνει υγιείς στόχους και ιδανικά, στην ανεργία, στη χρήση ναρκωτικών και στην έκθεση σε μια υποκουλτούρα βίας, μέσα από τον κινηματογράφο και την τηλεόραση." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Ένα σημαντικό πρόβλημα του καιρού μας είναι η μεγάλη αύξηση της εγκληματικότητας, ιδίως των νέων. Σε σημαντικό βαθμό <strong>οφείλεται</strong> στην έλλειψη υγιούς οικογενειακού περιβάλλοντος, στην απουσία διαπαιδαγώγησης και παραδείγματος που να εμπνέει πίστη στις αξίες και να τους δίνει υγιείς στόχους και ιδανικά, στην ανεργία, στη χρήση ναρκωτικών και στην έκθεση σε μια υποκουλτούρα βίας, μέσα από τον κινηματογράφο και την τηλεόραση.</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: Διαίρεση -->
+<div class="section" id="s5">
+  <div class="section-body" style="gap:2vw; align-items:stretch;">
+    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
+      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
+        <h1 style="font-size:3vw;">Διαίρεση</h1>
+      </div>
+      <div style="display:flex; gap:1.5vw;">
+        <div class="info-card" style="flex:1;">
+          <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.5vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
+          <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.2vw;">Να φωτίσει ένα φαινόμενο / έννοια σε όλες τις πτυχές του, σε όλο του το εύρος.</div></div>
+        </div>
+        <div class="info-card text-card-clickable" style="flex:1;" onclick="openOverlay('&lt;strong style=&quot;font-size:1.1em&quot;&gt;Παράδειγμα διαίρεσης&lt;/strong&gt;&lt;br&gt;&lt;br&gt;Οι ρηματικοί χρόνοι διακρίνονται σε παρελθοντικούς, παροντικούς και μελλοντικούς.&lt;br&gt;&lt;br&gt;&lt;strong&gt;Διαιρετέα έννοια:&lt;/strong&gt; ρηματικοί χρόνοι&lt;br&gt;&lt;strong&gt;Διαιρετική βάση:&lt;/strong&gt; η χρονική βαθμίδα στην οποία αναφέρονται.&lt;br&gt;&lt;strong&gt;Μέρη / είδη:&lt;/strong&gt; παρελθοντικοί, παροντικοί, μελλοντικοί', '')">
+          <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.5vw; font-weight:800;">Μέρη διαίρεσης</div></div>
+          <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.2vw;">Διαιρετέα έννοια — είδη — διαιρετική βάση</div></div>
+        </div>
+      </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Διαρθρωτικές λέξεις / φράσεις</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw; font-style:italic;">Πρώτον, δεύτερον, μια περίπτωση, στην άλλη περίπτωση (διαιρείται, διακρίνεται…)</div></div>
+      </div>
+    </div>
+    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
+      <div data-text="Οι συλλογισμοί διακρίνονται με βάση την πορεία σκέψης σε παραγωγικούς, επαγωγικούς και αναλογικούς. Στον παραγωγικό συλλογισμό ξεκινούμε από κάτι γενικό και αφηρημένο και καταλήγουμε σε κάτι ειδικό. Στον επαγωγικό συλλογισμό ακολουθούμε πορεία αντίστροφη: ξεκινούμε από τις επιμέρους περιπτώσεις και καταλήγουμε στον κανόνα, στον νόμο που τις διέπει. Τέλος, στον αναλογικό συλλογισμό, από τα επιμέρους συμπεραίνουμε πάλι για τα επιμέρους." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Οι συλλογισμοί διακρίνονται με βάση την πορεία σκέψης σε παραγωγικούς, επαγωγικούς και αναλογικούς. Στον παραγωγικό συλλογισμό ξεκινούμε από κάτι γενικό και αφηρημένο και καταλήγουμε σε κάτι ειδικό. Στον επαγωγικό συλλογισμό ακολουθούμε πορεία αντίστροφη: ξεκινούμε από τις επιμέρους περιπτώσεις και καταλήγουμε στον κανόνα, στον νόμο που τις διέπει. Τέλος, στον αναλογικό συλλογισμό, από τα επιμέρους συμπεραίνουμε πάλι για τα επιμέρους.</div>
+      <div data-source="Έκφραση – Έκθεση Λυκείου, τεύχος Γ΄" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Έκφραση – Έκθεση Λυκείου, τεύχος Γ΄</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6: Σύγκριση-αντίθεση -->
+<div class="section" id="s6">
+  <div class="section-body" style="gap:2vw; align-items:stretch;">
+    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
+      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
+        <h1 style="font-size:3vw;">Σύγκριση-αντίθεση</h1>
+      </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Να φωτίσει το περιεχόμενο των εννοιών μέσω της αντίθεσής τους, να αναδείξει τις διαφορές και να αποτρέψει τη μεταξύ τους σύγχυση.</div></div>
+      </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Διαρθρωτικές λέξεις / φράσεις</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw; font-style:italic;">Αντίθετα, ωστόσο, από τη μια… Από την άλλη…, όμως, εννοώ, στον αντίποδα κ.ά.</div></div>
+      </div>
+    </div>
+    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
+      <div data-text="Μια διαφορά μεταξύ προφορικού και γραπτού λόγου εντοπίζεται στη δυνατότητα επαφής μεταξύ πομπού και δέκτη. Στον προφορικό συνομιλιακό λόγο το κείμενο, την ίδια στιγμή που παράγεται από τον πομπό, προσλαμβάνεται από τον δέκτη, ο οποίος συχνά είναι παρών στον ίδιο χώρο. Αντίθετα, στον γραπτό λόγο ο συγγραφέας δεν έχει άμεση επαφή με τους αναγνώστες του, απευθύνεται σε δέκτες απόντες, οι οποίοι θα προσλάβουν το κείμενό του ύστερα από κάποιο χρονικό διάστημα." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Μια διαφορά μεταξύ προφορικού και γραπτού λόγου εντοπίζεται στη δυνατότητα επαφής μεταξύ πομπού και δέκτη. Στον προφορικό συνομιλιακό λόγο το κείμενο, την ίδια στιγμή που παράγεται από τον πομπό, προσλαμβάνεται από τον δέκτη, ο οποίος συχνά είναι παρών στον ίδιο χώρο. Αντίθετα, στον γραπτό λόγο ο συγγραφέας δεν έχει άμεση επαφή με τους αναγνώστες του, απευθύνεται σε δέκτες απόντες, οι οποίοι θα προσλάβουν το κείμενό του ύστερα από κάποιο χρονικό διάστημα.</div>
+      <div data-source="Α. Αρχάκης «Γλωσσική Διδασκαλία και Σύσταση των Κειμένων»" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Α. Αρχάκης «Γλωσσική Διδασκαλία και Σύσταση των Κειμένων»</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7: Ορισμός -->
+<div class="section" id="s7">
+  <div class="section-body" style="gap:2vw; align-items:stretch;">
+    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
+      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
+        <h1 style="font-size:3vw;">Ορισμός</h1>
+      </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Να προσδιορίσει επακριβώς το περιεχόμενο ενός όρου, ο οποίος μπορεί να μην είναι γνωστός στο ευρύ κοινό, να αποτρέψει τη σύγχυση με παρεμφερείς έννοιες / όρους.</div></div>
+      </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Μέθοδος ορισμού</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Οριστέα έννοια = γένος + ειδοποιός διαφορά<br>π.χ.: Δημοκρατία = πολίτευμα + εξουσία ο λαός</div></div>
+      </div>
+    </div>
+    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
+      <div data-text="Ο όρος «στερεότυπο» ορίζεται ως «προκατασκευασμένες» πεποιθήσεις για τάξεις ατόμων, ομάδων ή αντικειμένων. Πρόκειται για ομαδικές πεποιθήσεις που είναι δυνατόν να αναφέρονται σε έναν λαό, θεσμό, ιδέα, αξία, φαινόμενο ή αντικείμενο κατά τρόπο μονόπλευρο, σχηματικό και γενικευτικό, σε βαθμό που οι «κρινόμενοι» να εμφανίζουν σημαντικές παραμορφώσεις και στρεβλώσεις ως προς την πραγματική τους εικόνα και κατάσταση." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Ο όρος «στερεότυπο» ορίζεται ως «προκατασκευασμένες» πεποιθήσεις για τάξεις ατόμων, ομάδων ή αντικειμένων. Πρόκειται για ομαδικές πεποιθήσεις που είναι δυνατόν να αναφέρονται σε έναν λαό, θεσμό, ιδέα, αξία, φαινόμενο ή αντικείμενο κατά τρόπο μονόπλευρο, σχηματικό και γενικευτικό, σε βαθμό που οι «κρινόμενοι» να εμφανίζουν σημαντικές παραμορφώσεις και στρεβλώσεις ως προς την πραγματική τους εικόνα και κατάσταση.</div>
+      <div data-source="Πώς τα ΜΜΕ ενισχύουν τα αρνητικά στερεότυπα, Τράπεζα Θεμάτων. Β΄ Λυκείου" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Πώς τα ΜΜΕ ενισχύουν τα αρνητικά στερεότυπα, Τράπεζα Θεμάτων. Β΄ Λυκείου</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 8: Αναλογία -->
+<div class="section" id="s8">
+  <div class="section-body" style="gap:2vw; align-items:stretch;">
+    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
+      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
+        <h1 style="font-size:3vw;">Αναλογία</h1>
+      </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Να καταστήσει κατανοητό ένα φαινόμενο, όρο ή κατάσταση μέσω του παραλληλισμού του με κάτι που είναι γνωστό στον αναγνώστη.</div></div>
+      </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Διαρθρωτικές λέξεις/φράσεις</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw; font-style:italic;">Σαν, όπως ακριβώς… έτσι και…, με παρόμοιο τρόπο κ.ά.</div></div>
+      </div>
+    </div>
+    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
+      <div data-text="Είναι ολοφάνερο ότι το πρώτο πράγμα που χρειαζόμαστε είναι η εξασφάλιση από την κακόβουλη χρήση των πληροφοριών. Όπως ακριβώς ο άνθρωπος ανακάλυψε τη φωτιά, η οποία είναι εξαιρετικά χρήσιμη αλλά ταυτόχρονα μπορεί να είναι πολύ καταστροφική, και στη συνέχεια δημιούργησε τα μέσα για την κατάσβεσή της, έτσι πρέπει να αντιμετωπιστεί και η διάχυση των πληροφοριών." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Είναι ολοφάνερο ότι το πρώτο πράγμα που χρειαζόμαστε είναι η εξασφάλιση από την κακόβουλη χρήση των πληροφοριών. Όπως ακριβώς ο άνθρωπος ανακάλυψε τη φωτιά, η οποία είναι εξαιρετικά χρήσιμη αλλά ταυτόχρονα μπορεί να είναι πολύ καταστροφική, και στη συνέχεια δημιούργησε τα μέσα για την κατάσβεσή της, έτσι πρέπει να αντιμετωπιστεί και η διάχυση των πληροφοριών.</div>
+      <div data-source="Η ψηφιακή εποχή έρχεται. Προετοιμαζόμαστε; Τράπεζα Θεμάτων, Β΄ Λυκείου" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Η ψηφιακή εποχή έρχεται. Προετοιμαζόμαστε; Τράπεζα Θεμάτων, Β΄ Λυκείου</div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 9: Συνδυασμός μεθόδων -->
+<div class="section" id="s9">
+  <div class="section-body" style="gap:2vw; align-items:stretch;">
+    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
+      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
+        <h1 style="font-size:2.6vw;">Συνδυασμός μεθόδων</h1>
+      </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Τι είναι</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Αξιοποιούνται περισσότερες από μία μέθοδοι ανάπτυξης.</div></div>
+      </div>
+      <div class="info-card" style="flex:1;">
+        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
+        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Συνδέεται με τις επιμέρους μεθόδους που χρησιμοποιεί.</div></div>
+      </div>
+    </div>
+    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
+      <div data-text="Ας δεχθούμε ακόμη ότι η τεχνολογία ορίζεται ως το σύνολο των μεθόδων τις οποίες οι άνθρωποι χρησιμοποιούν για να πετύχουν τους σκοπούς τους και να ικανοποιήσουν τις ανάγκες τους. Το μαχαίρι, με το οποίο κόβουμε το ψωμί, το τηλέφωνο, με το οποίο επικοινωνούμε εξ αποστάσεως, το ηλεκτρικό φως, με το οποίο φωτίζουμε το θέατρο, το πιεστήριο, με το οποίο τυπώνουμε τα βιβλία, ο ηλεκτρονικός υπολογιστής, με τον οποίο κάνουμε αριθμητικές πράξεις και το όπλο, με το οποίο σκοτώνουμε, είναι παραδείγματα των στοιχείων της τεχνολογίας." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Ας δεχθούμε ακόμη ότι η τεχνολογία ορίζεται ως το σύνολο των μεθόδων τις οποίες οι άνθρωποι χρησιμοποιούν για να πετύχουν τους σκοπούς τους και να ικανοποιήσουν τις ανάγκες τους. Το μαχαίρι, με το οποίο κόβουμε το ψωμί, το τηλέφωνο, με το οποίο επικοινωνούμε εξ αποστάσεως, το ηλεκτρικό φως, με το οποίο φωτίζουμε το θέατρο, το πιεστήριο, με το οποίο τυπώνουμε τα βιβλία, ο ηλεκτρονικός υπολογιστής, με τον οποίο κάνουμε αριθμητικές πράξεις και το όπλο, με το οποίο σκοτώνουμε, είναι παραδείγματα των στοιχείων της τεχνολογίας.</div>
+      <div data-source="Θ. Λιανός, Πολιτισμός και τεχνολογία" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Θ. Λιανός, Πολιτισμός και τεχνολογία</div>
     </div>
   </div>
 </div>
 
 </div><!-- /theory-view -->
 
-<!-- QUIZ VIEW -->
-<div id="quiz-view" style="display:none;">
-<!-- SECTION 3: QUIZ -->
-<div id="s3" style="position:relative; z-index:1; padding: 4vw 4.5vw 4vw 9vw;">
+<!-- QUIZ -->
+<div id="s-quiz" style="position:relative; z-index:1; padding: 4vw 4.5vw 4vw 9vw;">
   <div id="quiz-app">
-    <div style="background:white; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,0.08); padding:24px; text-align:center;">
-      <div style="width:50px;height:50px;border:4px solid #e2e8f0;border-top-color:#4f46e5;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px;"></div>
+    <div style="background:white; border-radius:16px; box-shadow:4px 8px 24px rgba(0,0,0,.18); padding:24px; text-align:center;">
+      <div style="width:40px;height:40px;border:4px solid #d4c4b0;border-top-color:#f5a623;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;"></div>
       <p>Φόρτωση quiz...</p>
     </div>
   </div>
 </div>
 
-</div><!-- /quiz-view -->
-
 <!-- FOOTER -->
 <div class="footer">
-  <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Θέμα Α</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Η περίληψη και η θεωρία της: Τεχνικές πύκνωσης — Είδη περίληψης — Μεθοδολογία — Αξιολόγηση — Λάθη</div></div></div>
+  <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Μέθοδοι ανάπτυξης παραγράφου</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Παραδείγματα — Αιτιολόγηση — Αίτιο-αποτέλεσμα — Διαίρεση — Σύγκριση-αντίθεση — Ορισμός — Αναλογία — Συνδυασμός</div></div></div>
   <div class="arrows"><a href="#s1" class="arrow">&#60;</a><a href="#s2" class="arrow">&#62;</a></div>
   <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Τεχνικές πύκνωσης</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Τεχνικές συνοπτικής απόδοσης: γενίκευση, σύνθεση, επιλογή, ονοματοποίηση κ.ά.</div></div></div>
   <div class="fpage">3–4</div>
 </div>
 
 <script>
-  function showView(view) {
-    const theory = document.getElementById('theory-view');
-    const quiz   = document.getElementById('quiz-view');
-    const btnA   = document.getElementById('btn-arxiki');
-    const btnX   = document.getElementById('btn-xartis');
-    const titleEl = document.getElementById('topbar-title');
 
+  function openOverlay(text, source) {
+    document.getElementById('text-overlay-text').innerHTML = text;
+    document.getElementById('text-overlay-source').textContent = source || '';
+    document.getElementById('text-overlay-source').style.display = source ? 'block' : 'none';
+    document.getElementById('text-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeOverlay() {
+    document.getElementById('text-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeOverlay(); });
+
+  function showView(view) {
+    const btnA = document.getElementById('btn-arxiki');
+    const btnX = document.getElementById('btn-xartis');
     if (view === 'theory') {
-      theory.style.display = 'flex';
-      quiz.style.display   = 'none';
       btnA.classList.add('active');
       btnX.classList.remove('active');
-      titleEl.textContent = 'Θέμα Α';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      theory.style.display = 'none';
-      quiz.style.display   = 'block';
       btnX.classList.add('active');
       btnA.classList.remove('active');
-      titleEl.textContent = 'Quiz Παραγράφου';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.getElementById('s-quiz').scrollIntoView({ behavior: 'smooth' });
     }
   }
 
@@ -596,5 +817,15 @@ function renderQResults(){
 
 loadQuizData();
 </script>
+
+<!-- FULLSCREEN TEXT OVERLAY -->
+<div id="text-overlay" onclick="closeOverlay()">
+  <span id="text-overlay-close" onclick="closeOverlay()">&#10005;</span>
+  <div id="text-overlay-inner" onclick="event.stopPropagation()">
+    <div id="text-overlay-text"></div>
+    <div id="text-overlay-source"></div>
+  </div>
+</div>
+
 </body>
 </html>
