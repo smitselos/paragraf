@@ -155,6 +155,60 @@
   .arrow { font-size: 5vw; color: #f5a623; font-weight: 900; text-decoration: none; line-height: 1; }
   .arrow:hover { color: #e8920a; }
   .fpage { font-size: .9vw; color: #aaa; align-self: flex-end; }
+
+  /* ══ QUIZ STYLES ══ */
+  .q-card{background:white;border-radius:16px;box-shadow:4px 8px 24px rgba(0,0,0,.18);padding:24px;margin-bottom:16px}
+  .q-filter{background:#f5ede0;border-radius:12px;padding:16px;margin-bottom:12px}
+  .q-filter h3{color:#2d2d2d;font-size:.95rem;margin-bottom:10px;font-weight:700}
+  .q-fbtn{padding:8px 14px;border:2px solid #d4c4b0;border-radius:8px;background:white;cursor:pointer;font-size:.85rem;transition:all .2s;margin:3px}
+  .q-fbtn:hover{border-color:#a0826d}
+  .q-fbtn.sel{border-color:#f5a623;background:#f5a623;color:white;font-weight:600}
+  .q-start{width:100%;padding:16px;border:none;border-radius:12px;background:#2d2d2d;color:white;font-size:1.1rem;font-weight:600;cursor:pointer;margin-top:8px;letter-spacing:.03em}
+  .q-start:hover{background:#1a1a1a}
+  .q-start:disabled{background:#d4c4b0;color:#a09080;cursor:not-allowed}
+  .q-info{background:#fef3e2;color:#7a4f1e;padding:10px;border-radius:8px;margin-top:12px;font-weight:500;font-size:.875rem;border-left:3px solid #f5a623}
+  .q-prog{background:#d4c4b0;border-radius:999px;height:8px;margin-top:12px;overflow:hidden}
+  .q-prog-fill{background:#f5a623;height:100%;transition:width .3s}
+  .q-par{background:linear-gradient(135deg,#faf5ee,#f5ede0);padding:18px;border-radius:12px;border-left:4px solid #f5a623;line-height:1.9;font-size:.95rem;-webkit-user-select:none;user-select:none}
+  .q-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:14px}
+  .q-qcard{background:white;border-radius:16px;box-shadow:4px 8px 24px rgba(0,0,0,.15);padding:18px;border:2px solid transparent}
+  .q-qcard.correct{background:#e8f5eb;border-color:#4a7c55}
+  .q-qcard.incorrect{background:#f5e8e4;border-color:#a04535}
+  .q-qcard.partial{background:#fef3e2;border-color:#f5a623}
+  .q-opt{width:100%;padding:10px 14px;border:2px solid #d4c4b0;border-radius:10px;background:white;text-align:left;cursor:pointer;font-size:.9rem;margin-bottom:6px;transition:all .2s}
+  .q-opt:hover:not(:disabled){border-color:#a0826d}
+  .q-opt.sel{border-color:#f5a623;background:#fef3e2}
+  .q-opt.ok{border-color:#3d6b45;background:#4a7c55;color:white;font-weight:600;animation:q-glow 1.5s ease-in-out infinite}
+  .q-opt.bad{border-color:#8b3a2a;background:#a04535;color:white;font-weight:600}
+  .q-tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .q-tbtn{padding:9px;border:2px solid #d4c4b0;border-radius:8px;background:white;cursor:pointer;font-size:.82rem;position:relative;transition:all .2s}
+  .q-tbtn:hover:not(:disabled){border-color:#a0826d}
+  .q-tbtn.sel{border-color:#e8920a;background:#fef3e2}
+  .q-tbtn.sel-p{border-color:#f5a623;background:#fde8b8}
+  .q-tbtn.ok-p,.q-tbtn.ok{border-color:#3d6b45;background:#4a7c55;color:white;font-weight:600;animation:q-glow 1.5s ease-in-out infinite}
+  .q-tbtn.bad{border-color:#8b3a2a;background:#a04535;color:white;font-weight:600}
+  .q-order{position:absolute;top:-8px;right:-8px;background:#f5a623;color:white;width:18px;height:18px;border-radius:50%;font-size:.65rem;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .q-mainbtn{width:100%;padding:14px;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s}
+  .q-mainbtn.prim{background:#2d2d2d;color:white;letter-spacing:.03em}
+  .q-mainbtn.prim:hover{background:#1a1a1a}
+  .q-mainbtn.succ{background:#4a7c55;color:white}
+  .q-mainbtn:disabled{background:#d4c4b0;color:#a09080;cursor:not-allowed}
+  .q-fb{padding:14px;border-radius:12px;margin-bottom:12px}
+  .q-fb.blue{background:#faf5ee;border-left:3px solid #f5a623}
+  .q-fb.purple{background:#f5ede0;border-left:3px solid #a0826d}
+  .q-fb.amber{background:#fef3e2;border-left:3px solid #e8920a}
+  .q-fb.green{background:#e8f5eb;border-left:3px solid #4a7c55}
+  .q-fb h4{font-size:.9rem;margin-bottom:6px}
+  .q-fb.blue h4{color:#7a4f1e}
+  .q-fb.purple h4{color:#5a3520}
+  .q-fb.amber h4{color:#92400e}
+  .q-fb.green h4{color:#3d6b45}
+  .q-fb p{font-size:.82rem;color:#374151;margin-bottom:4px}
+  .q-tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.75rem;font-weight:600;margin-right:5px}
+  .q-tag.p{background:#fde8b8;color:#92400e}
+  .q-tag.s{background:#f5ede0;color:#5a3520}
+  @keyframes q-glow{0%,100%{box-shadow:0 0 5px #4a7c55,0 0 8px #4a7c55}50%{box-shadow:0 0 8px #5a9466,0 0 16px #5a9466}}
+  @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -344,22 +398,9 @@ function renderQuiz(){
 function renderQSelection(){
   const fc=getFilteredData().length;
   document.getElementById('quiz-app').innerHTML=`
-  <style>
-    .q-card{background:white;border-radius:16px;box-shadow:4px 8px 24px rgba(0,0,0,.18);padding:24px;margin-bottom:16px}
-    .q-filter{background:#f5ede0;border-radius:12px;padding:16px;margin-bottom:12px}
-    .q-filter h3{color:#2d2d2d;font-size:.95rem;margin-bottom:10px;font-weight:700}
-    .q-fbtn{padding:8px 14px;border:2px solid #d4c4b0;border-radius:8px;background:white;cursor:pointer;font-size:.85rem;transition:all .2s;margin:3px}
-    .q-fbtn:hover{border-color:#a0826d}
-    .q-fbtn.sel{border-color:#f5a623;background:#f5a623;color:white;font-weight:600}
-    .q-start{width:100%;padding:16px;border:none;border-radius:12px;background:#2d2d2d;color:white;font-size:1.1rem;font-weight:600;cursor:pointer;margin-top:8px;letter-spacing:.03em}
-    .q-start:hover{background:#1a1a1a}
-    .q-start:disabled{background:#d4c4b0;color:#a09080;cursor:not-allowed}
-    .q-info{background:#fef3e2;color:#7a4f1e;padding:10px;border-radius:8px;margin-top:12px;font-weight:500;font-size:.875rem;border-left:3px solid #f5a623}
-    @keyframes spin{to{transform:rotate(360deg)}}
-  </style>
   <div class="q-card" style="text-align:center">
-    <h2 style="color:#1e293b;margin-bottom:6px;font-size:1.5rem">📝 Quiz Ανάλυσης Παραγράφου</h2>
-    <p style="color:#64748b;font-size:.875rem">Νεοελληνική Γλώσσα — Α΄ Λυκείου</p>
+    <h2 style="color:#2d2d2d;margin-bottom:6px;font-size:1.5rem">📝 Quiz Ανάλυσης Παραγράφου</h2>
+    <p style="color:#a0826d;font-size:.875rem">Νεοελληνική Γλώσσα — Α΄ Λυκείου</p>
     <div class="q-filter" style="text-align:left;margin-top:16px">
       <h3>📐 Δομή</h3>
       <div>
@@ -396,72 +437,21 @@ function renderQQuiz(){
   const prog=((qstate.currentQuestion+1)/quizData.length)*100;
   const isSyn=c.deytereyon!==null;
   document.getElementById('quiz-app').innerHTML=`
-  <style>
-    .q-card{background:white;border-radius:16px;box-shadow:4px 8px 24px rgba(0,0,0,.18);padding:20px;margin-bottom:14px}
-    .q-prog{background:#d4c4b0;border-radius:999px;height:8px;margin-top:12px;overflow:hidden}
-    .q-prog-fill{background:#f5a623;height:100%;transition:width .3s}
-    .q-par{background:linear-gradient(135deg,#faf5ee,#f5ede0);padding:18px;border-radius:12px;border-left:4px solid #f5a623;line-height:1.9;font-size:.95rem;-webkit-user-select:none;user-select:none}
-    .q-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:14px}
-    .q-qcard{background:white;border-radius:16px;box-shadow:4px 8px 24px rgba(0,0,0,.15);padding:18px;border:2px solid transparent}
-    .q-qcard.correct{background:#dcfce7;border-color:#22c55e}
-    .q-qcard.incorrect{background:#fee2e2;border-color:#ef4444}
-    .q-qcard.partial{background:#fef3e2;border-color:#f5a623}
-    .q-opt{width:100%;padding:10px 14px;border:2px solid #d4c4b0;border-radius:10px;background:white;text-align:left;cursor:pointer;font-size:.9rem;margin-bottom:6px;transition:all .2s}
-    .q-opt:hover:not(:disabled){border-color:#a0826d}
-    .q-opt.sel{border-color:#f5a623;background:#fef3e2}
-    .q-opt.ok{border-color:#047857;background:#059669;color:white;font-weight:600;animation:glow 1.5s ease-in-out infinite}
-    .q-opt.bad{border-color:#b91c1c;background:#dc2626;color:white;font-weight:600}
-    .q-tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-    .q-tbtn{padding:9px;border:2px solid #d4c4b0;border-radius:8px;background:white;cursor:pointer;font-size:.82rem;position:relative;transition:all .2s}
-    .q-tbtn:hover:not(:disabled){border-color:#a0826d}
-    .q-tbtn.sel{border-color:#e8920a;background:#fef3e2}
-    .q-tbtn.sel-p{border-color:#f5a623;background:#fde8b8}
-    .q-tbtn.ok-p,.q-tbtn.ok{border-color:#047857;background:#059669;color:white;font-weight:600;animation:glow 1.5s ease-in-out infinite}
-    .q-tbtn.bad{border-color:#b91c1c;background:#dc2626;color:white;font-weight:600}
-    .q-order{position:absolute;top:-8px;right:-8px;background:#f5a623;color:white;width:18px;height:18px;border-radius:50%;font-size:.65rem;display:flex;align-items:center;justify-content:center;font-weight:700}
-    .q-mainbtn{width:100%;padding:14px;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s}
-    .q-mainbtn.prim{background:#2d2d2d;color:white;letter-spacing:.03em}
-    .q-mainbtn.prim:hover{background:#1a1a1a}
-    .q-mainbtn.succ{background:#16a34a;color:white}
-    .q-mainbtn:disabled{background:#d4c4b0;color:#a09080;cursor:not-allowed}
-    .q-fb{padding:14px;border-radius:12px;margin-bottom:12px}
-    .q-fb.blue{background:#faf5ee;border-left:3px solid #f5a623}
-    .q-fb.purple{background:#f5ede0;border-left:3px solid #a0826d}
-    .q-fb.amber{background:#fef3e2;border-left:3px solid #e8920a}
-    .q-fb.green{background:#ecfdf5;border-left:3px solid #059669}
-    .q-fb h4{font-size:.9rem;margin-bottom:6px}
-    .q-fb.blue h4{color:#7a4f1e}
-    .q-fb.purple h4{color:#5a3520}
-    .q-fb.amber h4{color:#92400e}
-    .q-fb.green h4{color:#065f46}
-    .q-fb p{font-size:.82rem;color:#374151;margin-bottom:4px}
-    .q-tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.75rem;font-weight:600;margin-right:5px}
-    .q-tag.p{background:#fde8b8;color:#92400e}
-    .q-tag.s{background:#f5ede0;color:#5a3520}
-    @keyframes glow{0%,100%{box-shadow:0 0 5px #059669,0 0 10px #059669}50%{box-shadow:0 0 10px #10b981,0 0 20px #10b981}}
-    @keyframes spin{to{transform:rotate(360deg)}}
-  </style>
-    .q-fb p{font-size:.82rem;color:#374151;margin-bottom:4px}
-    .q-tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.75rem;font-weight:600;margin-right:5px}
-    .q-tag.p{background:#ddd6fe;color:#5b21b6}.q-tag.s{background:#e0e7ff;color:#3730a3}
-    @keyframes glow{0%,100%{box-shadow:0 0 5px #059669,0 0 10px #059669}50%{box-shadow:0 0 10px #10b981,0 0 20px #10b981}}
-    @keyframes spin{to{transform:rotate(360deg)}}
-  </style>
   <div class="q-card">
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <div><strong style="color:#1e293b">📝 Ανάλυση Παραγράφου</strong><br><span style="color:#64748b;font-size:.8rem">Νεοελληνική Γλώσσα</span></div>
-      <div style="text-align:right"><span style="color:#64748b;font-size:.8rem">Ερώτηση</span><br><span style="font-size:1.6rem;font-weight:700;color:#4f46e5">${qstate.currentQuestion+1}/${quizData.length}</span></div>
+      <div><strong style="color:#2d2d2d">📝 Ανάλυση Παραγράφου</strong><br><span style="color:#a0826d;font-size:.8rem">Νεοελληνική Γλώσσα</span></div>
+      <div style="text-align:right"><span style="color:#a0826d;font-size:.8rem">Ερώτηση</span><br><span style="font-size:1.6rem;font-weight:700;color:#f5a623">${qstate.currentQuestion+1}/${quizData.length}</span></div>
     </div>
     <div class="q-prog"><div class="q-prog-fill" style="width:${prog}%"></div></div>
   </div>
   <div class="q-card">
-    <span style="display:inline-block;background:#e0e7ff;color:#3730a3;padding:3px 10px;border-radius:6px;font-size:.8rem;font-weight:600;margin-bottom:10px">Παράγραφος ${qstate.currentQuestion+1}</span>
+    <span style="display:inline-block;background:#fde8b8;color:#7a4f1e;padding:3px 10px;border-radius:6px;font-size:.8rem;font-weight:600;margin-bottom:10px">Παράγραφος ${qstate.currentQuestion+1}</span>
     ${isSyn?'<span style="display:inline-block;background:#fef3c7;color:#92400e;padding:3px 8px;border-radius:6px;font-size:.72rem;font-weight:600;margin-left:6px">⚡ Συνδυασμός</span>':''}
     <div class="q-par">${c.keimeno}</div>
   </div>
   <div class="q-grid">
     <div class="q-qcard ${qstate.showResult?(qstate.selectedDomi===c.domi?'correct':'incorrect'):''}">
-      <h3 style="color:#374151;font-size:.95rem;margin-bottom:10px">1️⃣ Δομή της παραγράφου;</h3>
+      <h3 style="color:#2d2d2d;font-size:.95rem;margin-bottom:10px">1️⃣ Δομή της παραγράφου;</h3>
       ${['Τριμερής','Διμερής'].map(d=>{
         const ok=qstate.showResult&&d===c.domi;
         const bad=qstate.showResult&&qstate.selectedDomi===d&&d!==c.domi;
@@ -472,8 +462,8 @@ function renderQQuiz(){
       }).join('')}
     </div>
     <div class="q-qcard ${qstate.showResult?getQTroposClass(c):''}">
-      <h3 style="color:#374151;font-size:.95rem;margin-bottom:6px">2️⃣ Τρόπος ανάπτυξης;</h3>
-      <p style="font-size:.72rem;color:#6b7280;margin-bottom:10px;font-style:italic">💡 1ος = κύριος, 2ος = δευτερεύων</p>
+      <h3 style="color:#2d2d2d;font-size:.95rem;margin-bottom:6px">2️⃣ Τρόπος ανάπτυξης;</h3>
+      <p style="font-size:.72rem;color:#a0826d;margin-bottom:10px;font-style:italic">💡 1ος = κύριος, 2ος = δευτερεύων</p>
       <div class="q-tgrid">
         ${tropoiAnaptyxis.map(t=>{
           const si=qstate.selectedTropoi.indexOf(t);
@@ -557,20 +547,20 @@ function renderQResults(){
   const max=maxD+maxK+maxDey;
   const pct=Math.round((total/max)*100);
   document.getElementById('quiz-app').innerHTML=`
-  <div style="background:white;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);padding:40px 24px;text-align:center">
+  <div style="background:white;border-radius:16px;box-shadow:4px 8px 24px rgba(0,0,0,.18);padding:40px 24px;text-align:center">
     <div style="font-size:3.5rem;margin-bottom:12px">${pct>=80?'🎉':pct>=60?'👍':'📚'}</div>
-    <h2 style="color:#1e293b;margin-bottom:20px">Ολοκλήρωσες το Quiz!</h2>
-    <div style="background:linear-gradient(135deg,#eef2ff,#faf5ff);border-radius:16px;padding:20px;margin-bottom:20px">
-      <div style="font-size:2.8rem;font-weight:700;color:#4f46e5">${total} / ${max}</div>
-      <div style="color:#64748b">(${pct}%)</div>
+    <h2 style="color:#2d2d2d;margin-bottom:20px">Ολοκλήρωσες το Quiz!</h2>
+    <div style="background:linear-gradient(135deg,#faf5ee,#f5ede0);border-radius:16px;padding:20px;margin-bottom:20px">
+      <div style="font-size:2.8rem;font-weight:700;color:#f5a623">${total} / ${max}</div>
+      <div style="color:#a0826d">(${pct}%)</div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px">
-      <div style="background:#eff6ff;padding:14px;border-radius:12px"><p style="font-size:.8rem;color:#2563eb">Δομή</p><p style="font-size:1.4rem;font-weight:700;color:#1d4ed8">${qstate.score.domi}/${maxD}</p></div>
-      <div style="background:#faf5ff;padding:14px;border-radius:12px"><p style="font-size:.8rem;color:#7c3aed">Κύριος</p><p style="font-size:1.4rem;font-weight:700;color:#6b21a8">${qstate.score.tropiKyrios}/${maxK}</p></div>
-      <div style="background:#ecfdf5;padding:14px;border-radius:12px"><p style="font-size:.8rem;color:#059669">Δευτερεύων</p><p style="font-size:1.4rem;font-weight:700;color:#047857">${qstate.score.tropiDeytereyon}/${maxDey}</p></div>
+      <div style="background:#faf5ee;padding:14px;border-radius:12px;border-left:3px solid #f5a623"><p style="font-size:.8rem;color:#7a4f1e">Δομή</p><p style="font-size:1.4rem;font-weight:700;color:#2d2d2d">${qstate.score.domi}/${maxD}</p></div>
+      <div style="background:#f5ede0;padding:14px;border-radius:12px;border-left:3px solid #a0826d"><p style="font-size:.8rem;color:#5a3520">Κύριος</p><p style="font-size:1.4rem;font-weight:700;color:#2d2d2d">${qstate.score.tropiKyrios}/${maxK}</p></div>
+      <div style="background:#e8f5eb;padding:14px;border-radius:12px;border-left:3px solid #4a7c55"><p style="font-size:.8rem;color:#3d6b45">Δευτερεύων</p><p style="font-size:1.4rem;font-weight:700;color:#3d6b45">${qstate.score.tropiDeytereyon}/${maxDey}</p></div>
     </div>
-    <button onclick="startQuiz()" style="width:100%;padding:14px;border:none;border-radius:12px;background:#4f46e5;color:white;font-size:1rem;font-weight:600;cursor:pointer;margin-bottom:10px">Ξεκίνα Ξανά</button>
-    <button onclick="qstate.screen='selection';renderQuiz()" style="width:100%;padding:14px;border:none;border-radius:12px;background:#64748b;color:white;font-size:1rem;font-weight:600;cursor:pointer">Νέα Επιλογή</button>
+    <button onclick="startQuiz()" style="width:100%;padding:14px;border:none;border-radius:12px;background:#2d2d2d;color:white;font-size:1rem;font-weight:600;cursor:pointer;margin-bottom:10px;letter-spacing:.03em">Ξεκίνα Ξανά</button>
+    <button onclick="qstate.screen='selection';renderQuiz()" style="width:100%;padding:14px;border:none;border-radius:12px;background:#a0826d;color:white;font-size:1rem;font-weight:600;cursor:pointer">Νέα Επιλογή</button>
   </div>`;
 }
 
