@@ -65,15 +65,19 @@
     transition: box-shadow .15s;
   }
   .sidenav-btn:hover { box-shadow: 0 4px 14px rgba(0,0,0,.28); }
+  .sidenav-btn.active { background: #f5a623; box-shadow: 0 4px 14px rgba(245,166,35,.4); }
+  .sidenav-btn.active svg { stroke: white; }
+  .sidenav-btn.active span { color: white; }
   .sidenav-btn svg { width: 44%; height: 44%; }
   .sidenav-btn span { font-size: .65vw; color: #444; font-weight: 500; text-align: center; line-height: 1.2; }
 
   .section {
     width: 100%;
     position: relative;
-    min-height: 56.25vw;
+    min-height: 50vw;
     display: flex;
   }
+  #theory-view { display: flex; flex-direction: column; gap: 2vw; padding-bottom: 2vw; }
 
   /* BG per-section αφαιρείται — χρησιμοποιούμε global bg */
 
@@ -237,12 +241,15 @@
 
 <!-- FIXED SIDENAV -->
 <div class="sidenav">
-  <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg><span>Αρχική</span></div>
+  <div class="sidenav-btn" id="btn-arxiki" onclick="showView('theory')" title="Θεωρία"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg><span>Αρχική</span></div>
   <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg><span>Εύρεση</span></div>
   <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg><span>Μπροστά</span></div>
   <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="19 12 5 12"/><polyline points="11 18 5 12 11 6"/></svg><span>Πίσω</span></div>
-  <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Χάρτης</span></div>
+  <div class="sidenav-btn" id="btn-xartis" onclick="showView('quiz')" title="Quiz"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Quiz</span></div>
 </div>
+
+<!-- THEORY VIEW -->
+<div id="theory-view">
 
 <!-- SECTION 1 -->
 <div class="section" id="s1">
@@ -288,6 +295,10 @@
   </div>
 </div>
 
+</div><!-- /theory-view -->
+
+<!-- QUIZ VIEW -->
+<div id="quiz-view" style="display:none;">
 <!-- SECTION 3: QUIZ -->
 <div id="s3" style="position:relative; z-index:1; padding: 4vw 4.5vw 4vw 9vw;">
   <div id="quiz-app">
@@ -298,6 +309,8 @@
   </div>
 </div>
 
+</div><!-- /quiz-view -->
+
 <!-- FOOTER -->
 <div class="footer">
   <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Θέμα Α</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Η περίληψη και η θεωρία της: Τεχνικές πύκνωσης — Είδη περίληψης — Μεθοδολογία — Αξιολόγηση — Λάθη</div></div></div>
@@ -307,16 +320,33 @@
 </div>
 
 <script>
-  const sections = [
-    { el: document.getElementById('s1'), title: 'Θέμα Α' },
-    { el: document.getElementById('s2'), title: 'Πύκνωση' },
-    { el: document.getElementById('s3'), title: 'Quiz Παραγράφου' },
-  ];
-  const titleEl = document.getElementById('topbar-title');
-  window.addEventListener('scroll', () => {
-    let cur = sections[0].title;
-    sections.forEach(s => { if (window.scrollY >= s.el.offsetTop - 60) cur = s.title; });
-    titleEl.textContent = cur;
+  function showView(view) {
+    const theory = document.getElementById('theory-view');
+    const quiz   = document.getElementById('quiz-view');
+    const btnA   = document.getElementById('btn-arxiki');
+    const btnX   = document.getElementById('btn-xartis');
+    const titleEl = document.getElementById('topbar-title');
+
+    if (view === 'theory') {
+      theory.style.display = 'flex';
+      quiz.style.display   = 'none';
+      btnA.classList.add('active');
+      btnX.classList.remove('active');
+      titleEl.textContent = 'Θέμα Α';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      theory.style.display = 'none';
+      quiz.style.display   = 'block';
+      btnX.classList.add('active');
+      btnA.classList.remove('active');
+      titleEl.textContent = 'Quiz Παραγράφου';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // Init — theory visible, arxiki active
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('btn-arxiki').classList.add('active');
   });
 </script>
 
