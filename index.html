@@ -345,16 +345,16 @@ function renderQSelection(){
   const fc=getFilteredData().length;
   document.getElementById('quiz-app').innerHTML=`
   <style>
-    .q-card{background:white;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);padding:24px;margin-bottom:16px}
-    .q-filter{background:#f8fafc;border-radius:12px;padding:16px;margin-bottom:12px}
-    .q-filter h3{color:#374151;font-size:.95rem;margin-bottom:10px}
-    .q-fbtn{padding:8px 14px;border:2px solid #e2e8f0;border-radius:8px;background:white;cursor:pointer;font-size:.85rem;transition:all .2s;margin:3px}
-    .q-fbtn:hover{border-color:#94a3b8}
-    .q-fbtn.sel{border-color:#4f46e5;background:#4f46e5;color:white;font-weight:600}
-    .q-start{width:100%;padding:16px;border:none;border-radius:12px;background:#4f46e5;color:white;font-size:1.1rem;font-weight:600;cursor:pointer;margin-top:8px}
-    .q-start:hover{background:#3730a3}
-    .q-start:disabled{background:#e2e8f0;color:#94a3b8;cursor:not-allowed}
-    .q-info{background:#ecfdf5;color:#065f46;padding:10px;border-radius:8px;margin-top:12px;font-weight:500;font-size:.875rem}
+    .q-card{background:white;border-radius:16px;box-shadow:4px 8px 24px rgba(0,0,0,.18);padding:24px;margin-bottom:16px}
+    .q-filter{background:#f5ede0;border-radius:12px;padding:16px;margin-bottom:12px}
+    .q-filter h3{color:#2d2d2d;font-size:.95rem;margin-bottom:10px;font-weight:700}
+    .q-fbtn{padding:8px 14px;border:2px solid #d4c4b0;border-radius:8px;background:white;cursor:pointer;font-size:.85rem;transition:all .2s;margin:3px}
+    .q-fbtn:hover{border-color:#a0826d}
+    .q-fbtn.sel{border-color:#f5a623;background:#f5a623;color:white;font-weight:600}
+    .q-start{width:100%;padding:16px;border:none;border-radius:12px;background:#2d2d2d;color:white;font-size:1.1rem;font-weight:600;cursor:pointer;margin-top:8px;letter-spacing:.03em}
+    .q-start:hover{background:#1a1a1a}
+    .q-start:disabled{background:#d4c4b0;color:#a09080;cursor:not-allowed}
+    .q-info{background:#fef3e2;color:#7a4f1e;padding:10px;border-radius:8px;margin-top:12px;font-weight:500;font-size:.875rem;border-left:3px solid #f5a623}
     @keyframes spin{to{transform:rotate(360deg)}}
   </style>
   <div class="q-card" style="text-align:center">
@@ -397,37 +397,50 @@ function renderQQuiz(){
   const isSyn=c.deytereyon!==null;
   document.getElementById('quiz-app').innerHTML=`
   <style>
-    .q-card{background:white;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);padding:20px;margin-bottom:14px}
-    .q-prog{background:#e2e8f0;border-radius:999px;height:8px;margin-top:12px;overflow:hidden}
-    .q-prog-fill{background:#4f46e5;height:100%;transition:width .3s}
-    .q-par{background:linear-gradient(135deg,#f8fafc,#f1f5f9);padding:18px;border-radius:12px;border-left:4px solid #4f46e5;line-height:1.9;font-size:.95rem;-webkit-user-select:none;user-select:none}
+    .q-card{background:white;border-radius:16px;box-shadow:4px 8px 24px rgba(0,0,0,.18);padding:20px;margin-bottom:14px}
+    .q-prog{background:#d4c4b0;border-radius:999px;height:8px;margin-top:12px;overflow:hidden}
+    .q-prog-fill{background:#f5a623;height:100%;transition:width .3s}
+    .q-par{background:linear-gradient(135deg,#faf5ee,#f5ede0);padding:18px;border-radius:12px;border-left:4px solid #f5a623;line-height:1.9;font-size:.95rem;-webkit-user-select:none;user-select:none}
     .q-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:14px}
-    .q-qcard{background:white;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);padding:18px;border:2px solid transparent}
+    .q-qcard{background:white;border-radius:16px;box-shadow:4px 8px 24px rgba(0,0,0,.15);padding:18px;border:2px solid transparent}
     .q-qcard.correct{background:#dcfce7;border-color:#22c55e}
     .q-qcard.incorrect{background:#fee2e2;border-color:#ef4444}
-    .q-qcard.partial{background:#fef9c3;border-color:#eab308}
-    .q-opt{width:100%;padding:10px 14px;border:2px solid #e2e8f0;border-radius:10px;background:white;text-align:left;cursor:pointer;font-size:.9rem;margin-bottom:6px;transition:all .2s}
-    .q-opt:hover:not(:disabled){border-color:#94a3b8}
-    .q-opt.sel{border-color:#4f46e5;background:#eef2ff}
+    .q-qcard.partial{background:#fef3e2;border-color:#f5a623}
+    .q-opt{width:100%;padding:10px 14px;border:2px solid #d4c4b0;border-radius:10px;background:white;text-align:left;cursor:pointer;font-size:.9rem;margin-bottom:6px;transition:all .2s}
+    .q-opt:hover:not(:disabled){border-color:#a0826d}
+    .q-opt.sel{border-color:#f5a623;background:#fef3e2}
     .q-opt.ok{border-color:#047857;background:#059669;color:white;font-weight:600;animation:glow 1.5s ease-in-out infinite}
     .q-opt.bad{border-color:#b91c1c;background:#dc2626;color:white;font-weight:600}
     .q-tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-    .q-tbtn{padding:9px;border:2px solid #e2e8f0;border-radius:8px;background:white;cursor:pointer;font-size:.82rem;position:relative;transition:all .2s}
-    .q-tbtn:hover:not(:disabled){border-color:#94a3b8}
-    .q-tbtn.sel{border-color:#7c3aed;background:#f3e8ff}
-    .q-tbtn.sel-p{border-color:#7c3aed;background:#ddd6fe}
+    .q-tbtn{padding:9px;border:2px solid #d4c4b0;border-radius:8px;background:white;cursor:pointer;font-size:.82rem;position:relative;transition:all .2s}
+    .q-tbtn:hover:not(:disabled){border-color:#a0826d}
+    .q-tbtn.sel{border-color:#e8920a;background:#fef3e2}
+    .q-tbtn.sel-p{border-color:#f5a623;background:#fde8b8}
     .q-tbtn.ok-p,.q-tbtn.ok{border-color:#047857;background:#059669;color:white;font-weight:600;animation:glow 1.5s ease-in-out infinite}
     .q-tbtn.bad{border-color:#b91c1c;background:#dc2626;color:white;font-weight:600}
-    .q-order{position:absolute;top:-8px;right:-8px;background:#7c3aed;color:white;width:18px;height:18px;border-radius:50%;font-size:.65rem;display:flex;align-items:center;justify-content:center;font-weight:700}
+    .q-order{position:absolute;top:-8px;right:-8px;background:#f5a623;color:white;width:18px;height:18px;border-radius:50%;font-size:.65rem;display:flex;align-items:center;justify-content:center;font-weight:700}
     .q-mainbtn{width:100%;padding:14px;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s}
-    .q-mainbtn.prim{background:#4f46e5;color:white}
-    .q-mainbtn.prim:hover{background:#3730a3}
+    .q-mainbtn.prim{background:#2d2d2d;color:white;letter-spacing:.03em}
+    .q-mainbtn.prim:hover{background:#1a1a1a}
     .q-mainbtn.succ{background:#16a34a;color:white}
-    .q-mainbtn:disabled{background:#e2e8f0;color:#94a3b8;cursor:not-allowed}
+    .q-mainbtn:disabled{background:#d4c4b0;color:#a09080;cursor:not-allowed}
     .q-fb{padding:14px;border-radius:12px;margin-bottom:12px}
-    .q-fb.blue{background:#eff6ff}.q-fb.purple{background:#faf5ff}.q-fb.amber{background:#fffbeb}.q-fb.green{background:#ecfdf5}
+    .q-fb.blue{background:#faf5ee;border-left:3px solid #f5a623}
+    .q-fb.purple{background:#f5ede0;border-left:3px solid #a0826d}
+    .q-fb.amber{background:#fef3e2;border-left:3px solid #e8920a}
+    .q-fb.green{background:#ecfdf5;border-left:3px solid #059669}
     .q-fb h4{font-size:.9rem;margin-bottom:6px}
-    .q-fb.blue h4{color:#1e40af}.q-fb.purple h4{color:#6b21a8}.q-fb.amber h4{color:#92400e}.q-fb.green h4{color:#065f46}
+    .q-fb.blue h4{color:#7a4f1e}
+    .q-fb.purple h4{color:#5a3520}
+    .q-fb.amber h4{color:#92400e}
+    .q-fb.green h4{color:#065f46}
+    .q-fb p{font-size:.82rem;color:#374151;margin-bottom:4px}
+    .q-tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.75rem;font-weight:600;margin-right:5px}
+    .q-tag.p{background:#fde8b8;color:#92400e}
+    .q-tag.s{background:#f5ede0;color:#5a3520}
+    @keyframes glow{0%,100%{box-shadow:0 0 5px #059669,0 0 10px #059669}50%{box-shadow:0 0 10px #10b981,0 0 20px #10b981}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
     .q-fb p{font-size:.82rem;color:#374151;margin-bottom:4px}
     .q-tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.75rem;font-weight:600;margin-right:5px}
     .q-tag.p{background:#ddd6fe;color:#5b21b6}.q-tag.s{background:#e0e7ff;color:#3730a3}
