@@ -214,6 +214,57 @@
   @keyframes q-glow{0%,100%{box-shadow:0 0 5px #4a7c55,0 0 8px #4a7c55}50%{box-shadow:0 0 8px #5a9466,0 0 16px #5a9466}}
   @keyframes spin{to{transform:rotate(360deg)}}
 
+  /* ══ MOBILE ══ */
+  @media (max-width: 700px) {
+    .sidenav { width: 11vw; left: 0.5vw; gap: 4px; }
+    .sidenav-btn { width: 9vw; height: 9vw; min-width: 36px; min-height: 36px; }
+    .sidenav-btn svg { width: 48%; height: 48%; }
+    .sidenav-btn span { display: none; }
+    .topbar { height: 11vw; min-height: 44px; }
+    .topbar-icon { width: 13vw; min-width: 44px; }
+    .topbar-title { font-size: 3.5vw; padding: 0 2vw; }
+    .topbar-copy { display: none; }
+    .theme-nav a { font-size: 2.8vw; padding: 0 3vw; }
+
+    /* Κατακόρυφο layout */
+    .section-body {
+      flex-direction: column !important;
+      padding: 4vw 4vw 4vw 14vw !important;
+      gap: 3vw !important;
+      align-items: stretch !important;
+    }
+    .left-col { flex: none !important; width: 100% !important; }
+    .hero-card-lg { min-height: 18vw !important; padding: 3vw !important; }
+    .hero-card-lg h1 { font-size: 5.5vw !important; }
+    .info-card, .info-card-sm { width: 100% !important; flex: none !important; }
+    .card-title { font-size: 4vw !important; }
+    .card-title-sm { font-size: 3.5vw !important; }
+    .card-text { font-size: 3.5vw !important; }
+
+    /* Section 1: 1 στήλη */
+    .grid-area-3row { flex: none !important; width: 100% !important; }
+    .grid-row-3 { flex-direction: column !important; gap: 3vw !important; }
+
+    /* Δεξί κείμενο */
+    [data-text] { font-size: 3.5vw !important; }
+
+    /* Footer */
+    .footer { flex-direction: column; padding: 4vw; gap: 3vw; }
+    .fblock-title { font-size: 3vw; }
+    .fblock-text { font-size: 2.5vw; }
+    .arrows { justify-content: center; }
+    .arrow { font-size: 10vw; }
+
+    /* Quiz */
+    #s-quiz { padding: 4vw 4vw 4vw 14vw !important; }
+
+    /* Overlay */
+    #text-overlay-inner { max-width: 95vw; padding: 6vw; }
+    #text-overlay-text { font-size: 4vw !important; }
+    #text-overlay-source { font-size: 3vw !important; }
+    #text-overlay-close { font-size: 7vw; top: 3vw; right: 4vw; }
+  }
+
   /* ══ FULLSCREEN TEXT OVERLAY ══ */
   #text-overlay {
     display: none;
