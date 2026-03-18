@@ -387,10 +387,10 @@
       <div class="sidenav-btn" onclick="showSlide(3)"><svg viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span style="color:#f5a623;font-weight:700;">Κουίζ</span></div>
     </div>
     <div class="quiz-area">
-      <div id="quizApp" style="max-width:680px;width:100%;margin:0 auto;">
+      <div id="quizApp" style="max-width:680px;width:100%;margin:0 auto;flex:1;">
         <div style="text-align:center;padding:40px;color:#888;font-size:13px;">Φόρτωση...</div>
       </div>
-      <div class="footer">
+      <div class="footer" style="margin-top:auto; width:calc(100% + 20px + 14px); margin-left:-14px;">
     <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Η οργάνωση του κειμένου</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Συνοχή – Συνεκτικότητα – Δομή παραγράφου – Τρόποι ανάπτυξης παραγράφου – Πλαγιότιτλος</div></div></div>
     <div class="arrows"><a class="arrow" onclick="prevSlide()">&#60;</a><a class="arrow" onclick="nextSlide()">&#62;</a></div>
     <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Τρόποι ανάπτυξης</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Παραδείγματα, αιτιολόγηση, αίτιο – αποτέλεσμα, διαίρεση, σύγκριση – αντίθεση, ορισμός, αναλογία</div></div></div>
@@ -557,7 +557,7 @@
 
   function scaleSlide() {
     const W = 1000, H = 563;
-    const scale = Math.min(window.innerWidth / W, window.innerHeight / H);
+    const scale = Math.max(window.innerWidth / W, window.innerHeight / H);
     const wrapper = document.getElementById('slides-wrapper');
     wrapper.style.transform = `translate(-50%, -50%) scale(${scale})`;
   }
