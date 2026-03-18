@@ -192,8 +192,8 @@
   .right-card:hover { box-shadow: 4px 8px 32px rgba(0,0,0,.45); }
 
   /* SLIDE 3 QUIZ */
-  #slide-3 .body { overflow: hidden; align-items: stretch; padding: 0 28px 0 0; }
-  #slide-3 .quiz-area { flex:1; overflow-y:scroll; overflow-x:hidden; padding: 14px 20px 10px 14px; display:flex; flex-direction:column; min-height:0; }
+  #slide-3 .body { overflow-y: auto; align-items: stretch; padding: 0 28px 0 0; flex-direction: column; }
+  #slide-3 .quiz-area { overflow: visible; padding: 14px 20px 10px 14px; }
   #slide-3 .q-selection-title { font-size: 16px; font-weight: 700; color: #2d2d2d; margin-bottom: 4px; text-align: center; }
   #slide-3 .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   #slide-3 .q-title { font-size: 14px; font-weight: 700; color: #2d2d2d; }
@@ -378,8 +378,8 @@
     <div class="topbar-copy">© Αλέξανδρος &amp; Σπύρος Μητσέλος</div>
     <nav class="theme-nav"><a href="#" class="active">Θέμα Α</a><a href="#">Θέμα Β</a><a href="#">Θέμα Γ</a><a href="#">Θέμα Δ</a></nav>
   </div>
-  <div class="body" style="align-items:stretch;">
-    <div class="sidenav" style="padding:8px 6px;">
+  <div class="body" style="align-items:flex-start; overflow-y:auto; overflow-x:hidden;">
+    <div class="sidenav" style="padding:8px 6px; position:sticky; top:0; align-self:flex-start; z-index:5;">
       <div class="sidenav-btn" onclick="showSlide(1)"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg><span>Αρχική</span></div>
       <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg><span>Εύρεση</span></div>
       <div class="sidenav-btn" onclick="prevSlide()"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="19 12 5 12"/><polyline points="11 18 5 12 11 6"/></svg><span>Πίσω</span></div>
