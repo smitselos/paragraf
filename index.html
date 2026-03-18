@@ -20,7 +20,7 @@
     width: 1000px; height: 563px;
     position: absolute;
     top: 0; left: 0;
-    transform-origin: center center;
+    transform-origin: top left;
   }
   .slide {
     width: 1000px; height: 563px;
@@ -581,11 +581,10 @@
     const W = 1000, H = 563;
     const scale = Math.max(window.innerWidth / W, window.innerHeight / H);
     const wrapper = document.getElementById('slides-wrapper');
-    // Κεντράρω οριζόντια, αλλά ξεκινώ από πάνω ώστε η topbar να μην κόβεται
-    const scaledW = W * scale;
-    const left = (window.innerWidth - scaledW) / 2;
+    const dx = (window.innerWidth  - W * scale) / 2;
+    const dy = (window.innerHeight - H * scale) / 2;
     wrapper.style.transformOrigin = 'top left';
-    wrapper.style.transform = `translate(${left}px, 0) scale(${scale})`;
+    wrapper.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
   }
   function fitText() {
     document.querySelectorAll('.right-text').forEach(el => {
@@ -594,7 +593,6 @@
       while (el.scrollHeight > el.clientHeight && size > 9) { size -= 0.5; el.style.fontSize = size + 'px'; }
     });
   }
-  document.getElementById('qTextModal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
   scaleSlide(); fitText();
   window.addEventListener('resize', () => { scaleSlide(); fitText(); });
 </script>
@@ -606,5 +604,8 @@
     <div id="qTextModalContent"></div>
   </div>
 </div>
+<script>
+  document.getElementById('qTextModal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
+</script>
 </body>
 </html>
