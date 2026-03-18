@@ -3,880 +3,961 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Νέα Ελληνικά Γ΄ Λυκείου</title>
+<title>Παραδείγματα — Μέθοδοι ανάπτυξης</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap');
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
   html, body {
-    width: 100%;
+    width: 100%; height: 100%;
+    background: #a0826d;
+    overflow: hidden;
     font-family: 'Noto Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  #slides-wrapper {
+    width: 1000px; height: 563px;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform-origin: center center;
+  }
+  .slide {
+    width: 1000px; height: 563px;
+    position: absolute; top: 0; left: 0;
+    overflow: hidden;
     background: #e8d5b8;
+    transform-origin: top left;
+    display: none; flex-direction: column;
   }
+  .slide.active { display: flex; flex-direction: column; }
 
-  /* ══ ΕΝΙΑΙΟ ΦΟΝΤΟ blob πίσω από όλα ══ */
-  #bg-global {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-  }
-  #bg-global svg { width: 100%; height: 100%; }
+  /* ΦΟΝΤΟ */
+  .bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+  .bg svg { width: 100%; height: 100%; }
 
-  /* ══ STICKY TOPBAR ══ */
+  /* TOP BAR */
   .topbar {
-    position: sticky; top: 0; z-index: 200;
-    height: 5.5vw; min-height: 52px; background: #3a3a3a;
-    display: flex; align-items: center;
+    position: relative; z-index: 10;
+    height: 38px; background: linear-gradient(to bottom, #555 0%, #3a3a3a 100%); box-shadow: 0 3px 8px rgba(0,0,0,.45);
+    display: flex; align-items: center; flex-shrink: 0;
   }
   .topbar-icon {
-    width: 7vw; min-width: 64px; height: 100%; background: #1e1e1e;
+    width: 68px; height: 100%; background: #1e1e1e;
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    position: relative;
   }
-  .topbar-icon svg { width: 2.2vw; height: 2.2vw; min-width: 20px; min-height: 20px; fill: #fff; opacity: .85; }
-  .topbar-title { color: #fff; font-size: 1.6vw; font-weight: 600; padding: 0 1.6vw; white-space: nowrap; }
-  .topbar-copy { color: #aaa; font-size: 1.1vw; padding: 0 1vw; white-space: nowrap; margin-right: auto; }
+  .topbar-icon::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 100%; width: 24px; height: 100%;
+    background: #1e1e1e;
+    clip-path: polygon(0 0, 100% 100%, 0 100%);
+  }
+  .topbar-icon svg { width: 22px; height: 22px; fill: #fff; opacity: .85; position: relative; z-index: 1; }
+  .topbar-title { color: #fff; font-size: 15px; font-weight: 500; font-size: 13px; padding: 0 16px 0 28px; white-space: nowrap; letter-spacing: .02em; }
+  .topbar-divider { display: none; }
+  .topbar-copy  { color: #bbb; font-size: 9px; padding: 0 20px; white-space: nowrap; margin-right: 0; margin-left: auto; text-align: right; opacity: .9; }
   .theme-nav { display: flex; height: 100%; }
   .theme-nav a {
-    display: flex; align-items: center; padding: 0 2vw;
-    color: #ccc; font-size: 1.3vw; font-weight: 500;
+    display: flex; align-items: center; padding: 0 20px;
+    color: #ccc; font-size: 13px; font-weight: 500;
     text-decoration: none; border-left: 1px solid #555; white-space: nowrap;
   }
   .theme-nav a.active { color: #f5a623; font-weight: 700; }
 
-  /* ══ FIXED SIDENAV — ξεκινά στο ίδιο ύψος με τα πλαίσια ══ */
+  /* ΚΥΡΙΟ ΣΩΜΑ */
+  .body {
+    position: relative; z-index: 1; flex: 1;
+    display: flex; align-items: flex-start; justify-content: flex-start;
+    padding: 0 28px 0 0; gap: 0;
+  }
+  .body-inner {
+    display: flex; align-items: stretch; gap: 0;
+    margin: auto 0;
+    height: 310px;
+  }
+
+  /* SIDENAV */
   .sidenav {
-    position: fixed;
-    top: calc(5.5vw + 4vw); /* topbar + section top padding */
-    left: 1.2vw;
-    z-index: 150;
     display: flex; flex-direction: column;
-    align-items: center; gap: .7vw;
-    width: 6vw;
+    align-items: center; gap: 6px;
+    width: 62px; flex-shrink: 0; padding: 0 6px;
   }
   .sidenav-btn {
-    width: 5vw; height: 5vw;
-    min-width: 44px; min-height: 44px;
-    background: #fff; border-radius: 8px;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.18); gap: 3px;
-    transition: box-shadow .15s;
-  }
-  .sidenav-btn:hover { box-shadow: 0 4px 14px rgba(0,0,0,.28); }
-  .sidenav-btn.active { background: #f5a623; box-shadow: 0 4px 14px rgba(245,166,35,.4); }
-  .sidenav-btn.active svg { stroke: white; }
-  .sidenav-btn.active span { color: white; }
-  .sidenav-btn svg { width: 44%; height: 44%; }
-  .sidenav-btn span { font-size: .65vw; color: #444; font-weight: 500; text-align: center; line-height: 1.2; }
-
-  .section {
-    width: 100%;
-    position: relative;
-    min-height: 0;
-    display: flex;
-  }
-  #theory-view { display: flex; flex-direction: column; gap: 2vw; padding-bottom: 2vw; }
-
-  /* BG per-section αφαιρείται — χρησιμοποιούμε global bg */
-
-  /* ══ SECTION BODY ══ */
-  .section-body {
-    position: relative; z-index: 1;
-    flex: 1;
-    display: flex;
-    padding: 3.5vw 4.5vw 3.5vw 9vw;
-    gap: 3.5vw;
-    align-items: stretch;
-  }
-
-  /* ══ GRID ══ */
-  .grid-area { flex: 1; display: flex; flex-direction: column; gap: 2.5vw; }
-  .grid-row   { display: flex; gap: 3vw; align-items: stretch; }
-
-  .grid-area-3row { flex: 1; display: flex; flex-direction: column; gap: 0; padding: 0; }
-  .grid-row-3 { display: flex; gap: 2vw; }
-  .grid-row-3:not(:first-child) { margin-top: 2.5vw; }
-
-  .left-col { display: flex; flex-direction: column; justify-content: flex-start; flex: 0 0 24vw; }
-
-  /* Spacer για section 2 — αντιστοιχεί στο left-col + gap του section 1 */
-  .left-spacer { flex: 0 0 calc(24vw + 3.5vw); }
-
-  /* ══ CARDS ══ */
-  .hero-card {
-    background: #2d2d2d; border-radius: 1vw;
-    display: flex; align-items: center; justify-content: center;
-    padding: 2vw; box-shadow: .4vw .8vw 2.4vw rgba(0,0,0,.38);
-    min-height: 20vw; flex: 1;
-  }
-  .hero-card h1 { color: #fff; font-size: 3vw; font-weight: 300; line-height: 1.3; text-align: center; letter-spacing: .08em; }
-
-  .hero-card-lg {
-    background: #2d2d2d; border-radius: 1vw;
+    width: 48px; height: 48px; background: #fff; border-radius: 8px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 2.8vw 2.4vw; box-shadow: .4vw .8vw 2.4vw rgba(0,0,0,.38);
-    gap: 1.5vw; min-height: 30vw;
+    cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,.13); gap: 3px;
   }
-  .hero-card-lg h1 { color: #fff; font-size: 4.6vw; font-weight: 800; line-height: 1.1; text-align: center; letter-spacing: .04em; }
-  .hero-subtitle { color: #ccc; font-size: 1.4vw; text-align: center; line-height: 1.4; }
+  .sidenav-btn svg { width: 18px; height: 18px; }
+  .sidenav-btn span { font-size: 8px; color: #444; font-weight: 500; text-align: center; line-height: 1.2; }
+
+  /* ΑΡΙΣΤΕΡΗ ΣΤΗΛΗ */
+  .left-col {
+    flex: 0 0 340px;
+    display: flex; flex-direction: column; gap: 12px;
+    margin-left: 28px;
+    overflow: hidden;
+  }
+
+  .title-card {
+    background: #2d2d2d;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 14px 20px;
+    box-shadow: 4px 8px 24px rgba(0,0,0,.35);
+  }
+  .title-card h2 {
+    color: #fff; font-size: 20px; font-weight: 100; letter-spacing: .10em;
+    text-align: center; line-height: 1.2;
+  }
 
   .info-card {
-    flex: 1; background: #fff; border-radius: 1vw;
-    padding: 1.3vw 1.5vw; display: flex; flex-direction: column; gap: .7vw;
-    box-shadow: .4vw .8vw 2.4vw rgba(0,0,0,.28);
+    background: #fff; border-radius: 10px;
+    padding: 11px 14px;
+    box-shadow: 4px 8px 20px rgba(0,0,0,.25);
+    display: flex; flex-direction: column; gap: 6px;
+    flex: 1; overflow: hidden;
   }
-  .info-card-sm {
-    flex: 1; background: #fff; border-radius: 1vw;
-    padding: 1.1vw 1.3vw; display: flex; flex-direction: column; gap: .5vw;
-    box-shadow: .4vw .8vw 2.4vw rgba(0,0,0,.28);
+  .info-card-label {
+    font-size: 15px; font-weight: 800; color: #2d2d2d;
+    display: flex; align-items: center; gap: 8px; padding-left: 0;
+  }
+  .ic-osq { width: 11px; height: 15px; background: #f5a623; border-radius: 2px; flex-shrink: 0; margin-left: 0; }
+  .info-card-body {
+    display: flex; gap: 8px; align-items: stretch; padding-left: 0;
+  }
+  .ic-vbar { width: 13px; background: #2d2d2d; border-radius: 2px; flex-shrink: 0; }
+  .info-card-text {
+    font-size: 13.5px; color: #333; line-height: 1.55;
+    font-style: italic;
   }
 
-  .card-header { display: flex; align-items: stretch; gap: .7vw; padding-left: .4vw; }
-  .osq { width: 1.3vw; background: #f5a623; border-radius: 2px; flex-shrink: 0; }
-  .card-title    { font-size: 2vw;   font-weight: 800; color: #2d2d2d; }
-  .card-title-sm { font-size: 1.8vw; font-weight: 800; color: #2d2d2d; }
-  .card-body { display: flex; gap: .9vw; padding-left: .4vw; align-items: stretch; }
-  .vbar { width: 1.3vw; background: #2d2d2d; border-radius: 2px; flex-shrink: 0; }
-  .card-text    { font-size: 1.8vw; color: #333; line-height: 1.3; }
-  .card-text-sm { font-size: 1.2vw; color: #333; line-height: 1.35; }
+  /* ΔΕΞΙ CARD — κείμενο παραδείγματος */
+  .right-card {
+    flex: 0 0 460px; align-self: stretch;
+    background: #fff; border-radius: 10px;
+    padding: 18px 22px;
+    box-shadow: 4px 8px 24px rgba(0,0,0,.28);
+    display: flex; flex-direction: column; justify-content: space-between;
+    margin-left: 24px;
+    overflow: hidden;
+    min-width: 0; min-height: 0;
+  }
+  .right-text {
+    font-size: 15px; color: #222; line-height: 1.7;
+    text-align: justify; flex: 1;
+    overflow: hidden;
+  }
+  .right-text strong { font-weight: 800; }
+  .right-source {
+    font-size: 11px; color: #888; font-style: italic;
+    text-align: right; margin-top: 10px;
+  }
 
-  /* ══ FOOTER ══ */
+  /* FOOTER */
   .footer {
-    background: #fff; border-top: 2px solid #ddd;
-    display: flex; align-items: flex-start;
-    padding: 2vw 3vw 2vw 7vw; gap: 2vw;
+    position: relative; z-index: 10; height: 115px; background: #fff;
+    border-top: 1px solid #ddd; display: flex; align-items: flex-start;
+    padding: 18px 28px 0 28px; gap: 16px; flex-shrink: 0;
   }
-  .fblock { flex: 1; display: flex; flex-direction: column; gap: .4vw; min-width: 0; }
-  .fblock-hdr { display: flex; align-items: center; gap: .5vw; }
-  .osq-sm { width: .9vw; height: .9vw; min-width: 8px; min-height: 8px; background: #f5a623; border-radius: 2px; flex-shrink: 0; }
-  .fblock-title { font-size: 1.1vw; font-weight: 700; color: #2d2d2d; }
-  .fblock-body { display: flex; gap: .5vw; padding-left: .2vw; align-items: flex-start; }
-  .vbar-sm { width: .9vw; min-width: 7px; background: #2d2d2d; border-radius: 2px; flex-shrink: 0; align-self: stretch; }
-  .fblock-text { font-size: .9vw; color: #555; line-height: 1.55; word-break: break-word; }
-  .arrows { display: flex; align-items: center; gap: 1.5vw; flex-shrink: 0; padding: 0 2vw; }
-  .arrow { font-size: 5vw; color: #f5a623; font-weight: 900; text-decoration: none; line-height: 1; }
+  .fblock { flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .fblock-hdr { display: flex; align-items: center; gap: 6px; }
+  .osq-sm { width: 9px; height: 9px; background: #f5a623; border-radius: 2px; flex-shrink: 0; }
+  .fblock-title { font-size: 11px; font-weight: 700; color: #2d2d2d; }
+  .fblock-body { display: flex; gap: 6px; padding-left: 2px; align-items: flex-start; }
+  .vbar-sm { width: 9px; background: #2d2d2d; border-radius: 2px; flex-shrink: 0; align-self: stretch; }
+  .fblock-text { font-size: 9px; color: #555; line-height: 1.55; white-space: normal; word-break: break-word; }
+  .arrows { display: flex; align-items: center; gap: 20px; flex-shrink: 0; padding: 0 24px; }
+  .arrow { font-size: 64px; color: #f5a623; font-weight: 900; cursor: pointer; line-height: 1; text-decoration: none; }
   .arrow:hover { color: #e8920a; }
-  .fpage { font-size: .9vw; color: #aaa; align-self: flex-end; }
+  .fpage { font-size: 10px; color: #aaa; align-self: flex-end; padding-bottom: 6px; }
 
-  /* ══ QUIZ STYLES ══ */
-  .q-card{background:white;border-radius:16px;box-shadow:4px 8px 24px rgba(0,0,0,.18);padding:24px;margin-bottom:16px}
-  .q-filter{background:#f5ede0;border-radius:12px;padding:16px;margin-bottom:12px}
-  .q-filter h3{color:#2d2d2d;font-size:.95rem;margin-bottom:10px;font-weight:700}
-  .q-fbtn{padding:8px 14px;border:2px solid #d4c4b0;border-radius:8px;background:white;cursor:pointer;font-size:.85rem;transition:all .2s;margin:3px}
-  .q-fbtn:hover{border-color:#a0826d}
-  .q-fbtn.sel{border-color:#f5a623;background:#f5a623;color:white;font-weight:600}
-  .q-start{width:100%;padding:16px;border:none;border-radius:12px;background:#2d2d2d;color:white;font-size:1.1rem;font-weight:600;cursor:pointer;margin-top:8px;letter-spacing:.03em}
-  .q-start:hover{background:#1a1a1a}
-  .q-start:disabled{background:#d4c4b0;color:#a09080;cursor:not-allowed}
-  .q-info{background:#fef3e2;color:#7a4f1e;padding:10px;border-radius:8px;margin-top:12px;font-weight:500;font-size:.875rem;border-left:3px solid #f5a623}
-  .q-prog{background:#d4c4b0;border-radius:999px;height:8px;margin-top:12px;overflow:hidden}
-  .q-prog-fill{background:#f5a623;height:100%;transition:width .3s}
-  .q-par{background:linear-gradient(135deg,#faf5ee,#f5ede0);padding:18px;border-radius:12px;border-left:4px solid #f5a623;line-height:1.9;font-size:.95rem;-webkit-user-select:none;user-select:none}
-  .q-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:14px}
-  .q-qcard{background:white;border-radius:16px;box-shadow:4px 8px 24px rgba(0,0,0,.15);padding:18px;border:2px solid transparent}
-  .q-qcard.correct{background:#e8f5eb;border-color:#4a7c55}
-  .q-qcard.incorrect{background:#f5e8e4;border-color:#a04535}
-  .q-qcard.partial{background:#fef3e2;border-color:#f5a623}
-  .q-opt{width:100%;padding:10px 14px;border:2px solid #d4c4b0;border-radius:10px;background:white;text-align:left;cursor:pointer;font-size:.9rem;margin-bottom:6px;transition:all .2s}
-  .q-opt:hover:not(:disabled){border-color:#a0826d}
-  .q-opt.sel{border-color:#f5a623;background:#fef3e2}
-  .q-opt.ok{border-color:#3d6b45;background:#4a7c55;color:white;font-weight:600;animation:q-glow 1.5s ease-in-out infinite}
-  .q-opt.bad{border-color:#8b3a2a;background:#a04535;color:white;font-weight:600}
-  .q-tgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-  .q-tbtn{padding:9px;border:2px solid #d4c4b0;border-radius:8px;background:white;cursor:pointer;font-size:.82rem;position:relative;transition:all .2s}
-  .q-tbtn:hover:not(:disabled){border-color:#a0826d}
-  .q-tbtn.sel{border-color:#e8920a;background:#fef3e2}
-  .q-tbtn.sel-p{border-color:#f5a623;background:#fde8b8}
-  .q-tbtn.ok-p,.q-tbtn.ok{border-color:#3d6b45;background:#4a7c55;color:white;font-weight:600;animation:q-glow 1.5s ease-in-out infinite}
-  .q-tbtn.bad{border-color:#8b3a2a;background:#a04535;color:white;font-weight:600}
-  .q-order{position:absolute;top:-8px;right:-8px;background:#f5a623;color:white;width:18px;height:18px;border-radius:50%;font-size:.65rem;display:flex;align-items:center;justify-content:center;font-weight:700}
-  .q-mainbtn{width:100%;padding:14px;border:none;border-radius:12px;font-size:1rem;font-weight:600;cursor:pointer;transition:all .2s}
-  .q-mainbtn.prim{background:#2d2d2d;color:white;letter-spacing:.03em}
-  .q-mainbtn.prim:hover{background:#1a1a1a}
-  .q-mainbtn.succ{background:#4a7c55;color:white}
-  .q-mainbtn:disabled{background:#d4c4b0;color:#a09080;cursor:not-allowed}
-  .q-fb{padding:14px;border-radius:12px;margin-bottom:12px}
-  .q-fb.blue{background:#faf5ee;border-left:3px solid #f5a623}
-  .q-fb.purple{background:#f5ede0;border-left:3px solid #a0826d}
-  .q-fb.amber{background:#fef3e2;border-left:3px solid #e8920a}
-  .q-fb.green{background:#e8f5eb;border-left:3px solid #4a7c55}
-  .q-fb h4{font-size:.9rem;margin-bottom:6px}
-  .q-fb.blue h4{color:#7a4f1e}
-  .q-fb.purple h4{color:#5a3520}
-  .q-fb.amber h4{color:#92400e}
-  .q-fb.green h4{color:#3d6b45}
-  .q-fb p{font-size:.82rem;color:#374151;margin-bottom:4px}
-  .q-tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:.75rem;font-weight:600;margin-right:5px}
-  .q-tag.p{background:#fde8b8;color:#92400e}
-  .q-tag.s{background:#f5ede0;color:#5a3520}
-  @keyframes q-glow{0%,100%{box-shadow:0 0 5px #4a7c55,0 0 8px #4a7c55}50%{box-shadow:0 0 8px #5a9466,0 0 16px #5a9466}}
-  @keyframes spin{to{transform:rotate(360deg)}}
+  /* 3-card grid για slide Διαίρεσης */
+  .left-col-3 { flex: 0 0 340px; display: flex; flex-direction: column; gap: 10px; margin-left: 28px; }
+  .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: 1; }
+  .left-col-3 .title-card { flex-shrink: 0; }
 
-  /* ══ MOBILE ══ */
-  @media (max-width: 700px) {
-    .sidenav { width: 11vw; left: 0.5vw; gap: 4px; }
-    .sidenav-btn { width: 9vw; height: 9vw; min-width: 36px; min-height: 36px; }
-    .sidenav-btn svg { width: 48%; height: 48%; }
-    .sidenav-btn span { display: none; }
-    .topbar { height: 11vw; min-height: 44px; }
-    .topbar-icon { width: 13vw; min-width: 44px; }
-    .topbar-title { font-size: 3.5vw; padding: 0 2vw; }
-    .topbar-copy { display: none; }
-    .theme-nav a { font-size: 2.8vw; padding: 0 3vw; }
-
-    /* Κατακόρυφο layout */
-    .section-body {
-      flex-direction: column !important;
-      padding: 4vw 4vw 4vw 14vw !important;
-      gap: 3vw !important;
-      align-items: stretch !important;
-    }
-    .left-col { flex: none !important; width: 100% !important; }
-    .hero-card-lg { min-height: 18vw !important; padding: 3vw !important; }
-    .hero-card-lg h1 { font-size: 5.5vw !important; }
-    .info-card, .info-card-sm { width: 100% !important; flex: none !important; }
-    .card-title { font-size: 4vw !important; }
-    .card-title-sm { font-size: 3.5vw !important; }
-    .card-text { font-size: 3.5vw !important; }
-
-    /* Section 1: 1 στήλη */
-    .grid-area-3row { flex: none !important; width: 100% !important; }
-    .grid-row-3 { flex-direction: column !important; gap: 3vw !important; }
-
-    /* Δεξί κείμενο */
-    [data-text] { font-size: 3.5vw !important; }
-
-    /* Footer */
-    .footer { flex-direction: column; padding: 4vw; gap: 3vw; }
-    .fblock-title { font-size: 3vw; }
-    .fblock-text { font-size: 2.5vw; }
-    .arrows { justify-content: center; }
-    .arrow { font-size: 10vw; }
-
-    /* Quiz */
-    #s-quiz { padding: 4vw 4vw 4vw 14vw !important; }
-
-    /* Overlay */
-    #text-overlay-inner { max-width: 95vw; padding: 6vw; }
-    #text-overlay-text { font-size: 4vw !important; }
-    #text-overlay-source { font-size: 3vw !important; }
-    #text-overlay-close { font-size: 7vw; top: 3vw; right: 4vw; }
-  }
-
-  /* ══ FULLSCREEN TEXT OVERLAY ══ */
-  #text-overlay {
+  /* MODAL για δεξί κείμενο */
+  .text-modal {
     display: none;
-    position: fixed; inset: 0; z-index: 500;
-    background: rgba(0,0,0,.75);
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,.55);
     align-items: center; justify-content: center;
-    cursor: zoom-out;
   }
-  #text-overlay.open { display: flex; }
-  #text-overlay-inner {
-    background: white;
-    border-radius: 1.5vw;
-    padding: 5vw 6vw;
-    max-width: 80vw; max-height: 85vh;
-    overflow-y: auto;
-    display: flex; flex-direction: column; gap: 2vw;
+  .text-modal.open { display: flex; }
+  .text-modal-inner {
+    background: #fff; border-radius: 14px;
+    padding: 36px 44px;
+    width: 80vw; max-width: 820px;
+    max-height: 80vh; overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0,0,0,.4);
-    cursor: default;
+    position: relative;
   }
-  #text-overlay-text {
-    font-size: 2.4vw; line-height: 1.9;
-    text-align: justify; color: #1a1a1a;
+  .text-modal-inner .modal-text {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 20px; color: #222; line-height: 1.75;
+    text-align: justify;
   }
-  #text-overlay-text ol {
-    margin: 1.2vw 0 0 2vw;
-    display: flex; flex-direction: column; gap: .8vw;
+  .text-modal-inner .modal-source {
+    font-size: 13px; color: #888; font-style: italic;
+    text-align: right; margin-top: 20px;
   }
-  #text-overlay-text ol li { line-height: 1.75; }
-    font-size: 1.4vw; color: #888;
-    font-style: italic; text-align: right;
+  .text-modal-close {
+    position: absolute; top: 14px; right: 18px;
+    font-size: 24px; color: #aaa; cursor: pointer;
+    background: none; border: none; line-height: 1;
   }
-  #text-overlay-close {
-    position: absolute; top: 2vw; right: 2.5vw;
-    font-size: 3vw; color: white; cursor: pointer;
-    font-weight: 300; line-height: 1;
-    transition: opacity .2s;
+  .text-modal-close:hover { color: #333; }
+  .right-card { cursor: pointer; }
+  .right-card:hover { box-shadow: 4px 8px 32px rgba(0,0,0,.45); }
+
+  /* ── SLIDE 3: QUIZ ── */
+  #slide-3 {
+    background: #e8d5b8;
+    overflow: hidden;
   }
-  #text-overlay-close:hover { opacity: .7; }
-  .text-card-clickable {
-    cursor: zoom-in;
-    transition: box-shadow .2s, transform .15s;
+  #slide-3 .quiz-wrap {
+    position: relative; z-index: 1;
+    flex: 1; overflow-y: auto;
+    padding: 0;
+    font-family: 'Noto Sans', 'Helvetica Neue', sans-serif;
   }
-  .text-card-clickable:hover {
-    box-shadow: 0 10px 32px rgba(0,0,0,.28);
-    transform: translateY(-2px);
+  #slide-3 .quiz-inner {
+    padding: 18px 24px 18px 18px;
+    max-width: 100%;
   }
+  /* Χρώματα κουίζ — αντικαθιστώ indigo με τα δικά μας */
+  #slide-3 .q-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px;
+  }
+  #slide-3 .q-title { font-size: 14px; font-weight: 700; color: #2d2d2d; }
+  #slide-3 .q-counter { font-size: 11px; color: #888; }
+  #slide-3 .q-progress-bar {
+    background: #d4c4a8; border-radius: 999px; height: 5px; margin-bottom: 12px; overflow: hidden;
+  }
+  #slide-3 .q-progress-fill { background: #f5a623; height: 100%; transition: width 0.3s; }
+
+  /* Filter buttons */
+  #slide-3 .q-filter-section { background: rgba(255,255,255,0.6); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; }
+  #slide-3 .q-filter-section h3 { font-size: 11px; font-weight: 700; color: #2d2d2d; margin-bottom: 6px; }
+  #slide-3 .q-filter-options { display: flex; flex-wrap: wrap; gap: 5px; }
+  #slide-3 .q-filter-btn {
+    padding: 4px 10px; border: 1.5px solid #c8b89a; border-radius: 6px;
+    background: #fff; cursor: pointer; font-size: 10px; font-family: inherit;
+    transition: all 0.15s;
+  }
+  #slide-3 .q-filter-btn:hover { border-color: #f5a623; }
+  #slide-3 .q-filter-btn.sel { border-color: #f5a623; background: #f5a623; color: #fff; font-weight: 600; }
+
+  /* Start button */
+  #slide-3 .q-start-btn {
+    width: 100%; padding: 10px; border: none; border-radius: 8px;
+    background: #2d2d2d; color: #fff; font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit; margin-top: 6px; transition: background 0.2s;
+  }
+  #slide-3 .q-start-btn:hover { background: #f5a623; }
+  #slide-3 .q-start-btn:disabled { background: #c8b89a; color: #fff; cursor: not-allowed; }
+
+  /* Count info */
+  #slide-3 .q-count-info {
+    background: rgba(245,166,35,0.15); color: #7a5200; padding: 6px 10px;
+    border-radius: 6px; margin-top: 6px; font-size: 10px; font-weight: 500;
+  }
+  #slide-3 .q-count-info.warn { background: rgba(200,50,50,0.1); color: #8b0000; }
+
+  /* Paragraph */
+  #slide-3 .q-par-label {
+    display: inline-block; background: rgba(245,166,35,0.2); color: #7a5200;
+    padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-bottom: 6px;
+  }
+  #slide-3 .q-par-text {
+    background: rgba(255,255,255,0.85); color: #1e1e1e;
+    padding: 12px 14px; border-radius: 8px; font-size: 12px; line-height: 1.65;
+    text-align: justify; border-left: 3px solid #f5a623;
+    margin-bottom: 10px; user-select: none;
+  }
+
+  /* Questions grid */
+  #slide-3 .q-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  #slide-3 .q-card {
+    background: rgba(255,255,255,0.9); border-radius: 10px; padding: 10px 12px;
+    border: 2px solid transparent;
+  }
+  #slide-3 .q-card.correct { background: #dcfce7; border-color: #22c55e; }
+  #slide-3 .q-card.incorrect { background: #fee2e2; border-color: #ef4444; }
+  #slide-3 .q-card.partial { background: #fef9c3; border-color: #eab308; }
+  #slide-3 .q-card h3 { font-size: 11px; font-weight: 700; color: #2d2d2d; margin-bottom: 7px; }
+  #slide-3 .q-hint { font-size: 9px; color: #888; font-style: italic; margin-bottom: 6px; }
+
+  /* Option buttons */
+  #slide-3 .q-opt-list { display: flex; flex-direction: column; gap: 5px; }
+  #slide-3 .q-opt-btn {
+    width: 100%; padding: 7px 10px; border: 1.5px solid #c8b89a; border-radius: 6px;
+    background: #fff; text-align: left; cursor: pointer; font-size: 11px;
+    font-family: inherit; transition: all 0.15s;
+  }
+  #slide-3 .q-opt-btn:hover:not(:disabled) { border-color: #f5a623; }
+  #slide-3 .q-opt-btn.sel { border-color: #f5a623; background: #fff8ec; }
+  #slide-3 .q-opt-btn.ok { border-color: #047857; background: #059669; color: #fff; font-weight: 600; }
+  #slide-3 .q-opt-btn.wrong { border-color: #b91c1c; background: #dc2626; color: #fff; font-weight: 600; }
+  #slide-3 .q-opt-btn:disabled { cursor: default; }
+  #slide-3 .q-opt-hint { font-size: 9px; color: #888; margin-left: 4px; }
+  #slide-3 .q-opt-btn.ok .q-opt-hint, #slide-3 .q-opt-btn.wrong .q-opt-hint { color: rgba(255,255,255,0.8); }
+
+  /* Tropos grid */
+  #slide-3 .q-tropos-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 5px; }
+  #slide-3 .q-tropos-btn {
+    padding: 6px 6px; border: 1.5px solid #c8b89a; border-radius: 6px;
+    background: #fff; cursor: pointer; font-size: 10px; font-family: inherit;
+    transition: all 0.15s; position: relative;
+  }
+  #slide-3 .q-tropos-btn:hover:not(:disabled) { border-color: #f5a623; }
+  #slide-3 .q-tropos-btn.sel-p { border-color: #2d2d2d; background: #e8d5b8; font-weight: 600; }
+  #slide-3 .q-tropos-btn.sel-s { border-color: #f5a623; background: #fff8ec; }
+  #slide-3 .q-tropos-btn.ok-p, #slide-3 .q-tropos-btn.ok-s { border-color: #047857; background: #059669; color: #fff; font-weight: 600; }
+  #slide-3 .q-tropos-btn.wrong { border-color: #b91c1c; background: #dc2626; color: #fff; }
+  #slide-3 .q-tropos-btn:disabled { cursor: default; }
+  #slide-3 .q-sel-order {
+    position: absolute; top: -7px; right: -7px;
+    background: #2d2d2d; color: #fff; width: 16px; height: 16px;
+    border-radius: 50%; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 700;
+  }
+
+  /* Action buttons */
+  #slide-3 .q-btn {
+    width: 100%; padding: 10px; border: none; border-radius: 8px;
+    font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s;
+  }
+  #slide-3 .q-btn.primary { background: #2d2d2d; color: #fff; }
+  #slide-3 .q-btn.primary:hover { background: #f5a623; }
+  #slide-3 .q-btn.success { background: #2d6a4f; color: #fff; }
+  #slide-3 .q-btn.success:hover { background: #1b4332; }
+  #slide-3 .q-btn:disabled { background: #c8b89a; color: #fff; cursor: not-allowed; }
+
+  /* Feedback */
+  #slide-3 .q-feedback { background: rgba(255,255,255,0.9); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+  #slide-3 .q-feedback h3 { font-size: 11px; font-weight: 700; color: #2d2d2d; margin-bottom: 8px; }
+  #slide-3 .q-fbox { padding: 8px 10px; border-radius: 8px; margin-bottom: 8px; font-size: 10.5px; color: #333; }
+  #slide-3 .q-fbox.blue { background: rgba(245,166,35,0.1); }
+  #slide-3 .q-fbox.purple { background: rgba(45,45,45,0.07); }
+  #slide-3 .q-fbox.amber { background: rgba(200,184,154,0.25); }
+  #slide-3 .q-fbox.green { background: rgba(5,150,105,0.1); }
+  #slide-3 .q-fbox h4 { font-size: 10.5px; font-weight: 700; color: #2d2d2d; margin-bottom: 4px; }
+  #slide-3 .q-tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 9px; font-weight: 700; margin-right: 4px; }
+  #slide-3 .q-tag.p { background: #e8d5b8; color: #2d2d2d; }
+  #slide-3 .q-tag.s { background: rgba(245,166,35,0.2); color: #7a5200; }
+
+  /* Results */
+  #slide-3 .q-results { text-align: center; padding: 20px; }
+  #slide-3 .q-results-score { font-size: 2.5rem; font-weight: 700; color: #f5a623; }
+  #slide-3 .q-results-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin: 12px 0; }
+  #slide-3 .q-rbox { padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.8); font-size: 10px; }
+  #slide-3 .q-rbox p:last-child { font-size: 1.3rem; font-weight: 700; color: #2d2d2d; }
+
+  /* Theory */
+  #slide-3 .q-theory-toggle { background: none; border: none; color: #f5a623; cursor: pointer; font-size: 10px; font-weight: 600; font-family: inherit; padding: 4px 0; }
+  #slide-3 .q-theory-box { background: rgba(255,255,255,0.8); border: 1px solid #f5a623; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 10px; color: #333; }
+  #slide-3 .q-selection-title { font-size: 16px; font-weight: 700; color: #2d2d2d; margin-bottom: 4px; text-align: center; }
 </style>
 </head>
 <body>
+<div id="slides-wrapper">
+<div class="slide active" id="slide-1">
 
-<!-- ΕΝΙΑΙΟ ΦΟΝΤΟ -->
-<div id="bg-global">
-  <svg viewBox="0 0 100 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <ellipse cx="70" cy="30"  rx="40" ry="25" fill="#f5a623" opacity=".28" transform="rotate(-15 70 30)"/>
-    <ellipse cx="80" cy="60"  rx="32" ry="18" fill="#f5a623" opacity=".20" transform="rotate(-8 80 60)"/>
-    <ellipse cx="15" cy="50"  rx="14" ry="10" fill="#f5a623" opacity=".18" transform="rotate(12 15 50)"/>
-    <ellipse cx="60" cy="110" rx="38" ry="22" fill="#f5a623" opacity=".25" transform="rotate(-20 60 110)"/>
-    <ellipse cx="20" cy="130" rx="18" ry="12" fill="#f5a623" opacity=".16" transform="rotate(10 20 130)"/>
-    <ellipse cx="75" cy="160" rx="30" ry="18" fill="#f5a623" opacity=".22" transform="rotate(-12 75 160)"/>
-  </svg>
-</div>
-
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="topbar-icon"><svg viewBox="0 0 24 24"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg></div>
-  <div class="topbar-title" id="topbar-title">Μέθοδοι ανάπτυξης</div>
-  <div class="topbar-copy">© Αλέξανδρος &amp; Σπύρος Μητσέλος</div>
-  <nav class="theme-nav">
-    <a href="#" class="active">Θέμα Α</a><a href="#">Θέμα Β</a><a href="#">Θέμα Γ</a><a href="#">Θέμα Δ</a>
-  </nav>
-</div>
-
-<!-- FIXED SIDENAV -->
-<div class="sidenav">
-  <div class="sidenav-btn" id="btn-arxiki" onclick="showView('theory')" title="Θεωρία"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg><span>Αρχική</span></div>
-  <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg><span>Εύρεση</span></div>
-  <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg><span>Μπροστά</span></div>
-  <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="19 12 5 12"/><polyline points="11 18 5 12 11 6"/></svg><span>Πίσω</span></div>
-  <div class="sidenav-btn" id="btn-xartis" onclick="showView('quiz')" title="Quiz"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Quiz</span></div>
-</div>
-
-<!-- THEORY VIEW -->
-<div id="theory-view">
-
-<!-- SECTION 1: Overview - Τρόποι ανάπτυξης παραγράφου -->
-<div class="section" id="s1">
-  <div class="section-body" style="align-items:stretch;">
-    <div class="left-col" style="align-self:stretch;">
-      <div class="hero-card-lg" style="background:#2d2d2d; height:100%;">
-        <h1>Τρόποι ανάπτυξης<br>παραγράφου</h1>
-      </div>
-    </div>
-    <div class="grid-area-3row" style="padding:0; flex:1;">
-      <div class="grid-row-3">
-        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Παραδείγματα</div></div>
-        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Αιτιολόγηση</div></div>
-      </div>
-      <div class="grid-row-3">
-        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Αίτιο-αποτέλεσμα</div></div>
-        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Διαίρεση</div></div>
-      </div>
-      <div class="grid-row-3">
-        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Σύγκριση-αντίθεση</div></div>
-        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Ορισμός</div></div>
-      </div>
-      <div class="grid-row-3" style="margin-top:2.5vw;">
-        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Αναλογία</div></div>
-        <div class="info-card-sm" style="background:#faf0e6; display:flex; align-items:center; justify-content:center; padding:1.5vw;"><div class="card-title-sm" style="font-size:1.8vw; text-align:center; font-weight:700; color:#2d2d2d;">Συνδυασμός</div></div>
-      </div>
-    </div>
+  <!-- ΦΟΝΤΟ -->
+  <div class="bg">
+    <svg viewBox="0 0 1000 563" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="640" cy="320" rx="360" ry="210" fill="#f5a623" opacity=".30" transform="rotate(-15 640 320)"/>
+      <ellipse cx="720" cy="360" rx="290" ry="160" fill="#f5a623" opacity=".22" transform="rotate(-8 720 360)"/>
+      <ellipse cx="150" cy="340" rx="120" ry="80" fill="#f5a623" opacity=".18" transform="rotate(12 150 340)"/>
+    </svg>
   </div>
-</div>
 
-<!-- SECTION 2: Παραδείγματα -->
-<div class="section" id="s2">
-  <div class="section-body" style="gap:2vw; align-items:stretch;">
-    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
-      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
-        <h1 style="font-size:3vw;">Παραδείγματα</h1>
-      </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Να τεκμηριώσει έναν ισχυρισμό ή/και να επεξηγήσει, να βοηθήσει τον αναγνώστη να κατανοήσει ευκρινέστερα ένα γενικό ή ασαφές νόημα.</div></div>
-      </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Διαρθρωτικές φράσεις / λέξεις</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw; font-style:italic;">π.χ., για παράδειγμα, χαρακτηριστικό παράδειγμα, λόγου χάρη, ενδεικτικά, ένα δείγμα κ.λπ</div></div>
-      </div>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-icon">
+      <svg viewBox="0 0 24 24"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg>
     </div>
-    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
-      <div data-text="&lt;u&gt;Υπάρχουν νέοι όλων των ειδών:&lt;/u&gt; &lt;ol&gt;&lt;li&gt;οι ναζί Ες Ες, που περιφρουρούσαν τα στρατόπεδα συγκεντρώσεως του Άουσβιτς και του Μπούχενβαλντ, ήταν δεκαοχτώ δεκαεννιά χρονών·&lt;/li&gt;&lt;li&gt;την ίδια ηλικία είχαν και οι νέοι που βρέθηκαν αντιμέτωποι με τα τανκς της κινεζικής κυβέρνησης στην πλατεία Τιενανμέν ζητώντας ελευθερία&lt;/li&gt;&lt;li&gt;αυτοί που ακριβώς τώρα αφήνουν εθελουσίως τα σπίτια τους για να προσφέρουν τη βοήθειά τους σε χώρες που πλήττονται.&lt;/li&gt;&lt;/ol&gt;" style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Υπάρχουν νέοι όλων των ειδών: οι ναζί Ες Ες, που περιφρουρούσαν τα στρατόπεδα συγκεντρώσεως του Άουσβιτς και του Μπούχενβαλντ, ήταν δεκαοχτώ δεκαεννιά χρονών· την ίδια ηλικία είχαν και οι νέοι που βρέθηκαν αντιμέτωποι με τα τανκς της κινεζικής κυβέρνησης στην πλατεία Τιενανμέν ζητώντας ελευθερία ή αυτοί που ακριβώς τώρα αφήνουν εθελουσίως τα σπίτια τους για να προσφέρουν τη βοήθειά τους σε χώρες που πλήττονται.</div>
-      <div data-source="Φ. Σαβατέρ, «Μιλώντας στον γιο μου για την Πολιτική και τη Δημοκρατία»" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Φ. Σαβατέρ, «Μιλώντας στον γιο μου για την Πολιτική και τη Δημοκρατία»</div>
-    </div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-title">Παράγραφος</div>
+    <div class="topbar-copy">© Αλέξανδρος &amp; Σπύρος Μητσέλος</div>
+    <nav class="theme-nav">
+      <a href="#" class="active">Θέμα Α</a>
+      <a href="#">Θέμα Β</a>
+      <a href="#">Θέμα Γ</a>
+      <a href="#">Θέμα Δ</a>
+    </nav>
   </div>
-</div>
 
-<!-- SECTION 3: Αιτιολόγηση -->
-<div class="section" id="s3">
-  <div class="section-body" style="gap:2vw; align-items:stretch;">
-    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
-      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
-        <h1 style="font-size:3vw;">Αιτιολόγηση</h1>
+  <!-- ΚΥΡΙΟ ΣΩΜΑ -->
+  <div class="body">
+
+    <div class="body-inner">
+  <!-- SIDENAV -->
+    <div class="sidenav">
+      <div class="sidenav-btn" onclick="showSlide(1)" style="cursor:pointer;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
+        <span>Αρχική</span>
       </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Να αποδείξει έναν ισχυρισμό και να πείσει για την ορθότητά του. Η αιτιολόγηση συνδέεται με την επιχειρηματολογία και την επίκληση στη λογική.</div></div>
+      <div class="sidenav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+        <span>Εύρεση</span>
       </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Διαρθρωτικές φράσεις / λέξεις</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw; font-style:italic;">Γιατί, επειδή, διότι, εφόσον, αφού, μιας και, καθώς κ.ά.</div></div>
+      <div class="sidenav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+        <span>Μπροστά</span>
+      </div>
+      <div class="sidenav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="19 12 5 12"/><polyline points="11 18 5 12 11 6"/></svg>
+        <span>Πίσω</span>
+      </div>
+      <div class="sidenav-btn" onclick="showSlide(3)" style="cursor:pointer;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <span>Κουίζ</span>
       </div>
     </div>
-    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
-      <div data-text="Αλλά και ως μέσον εκφοβισμού και συγκράτησης των πολλών από την τέλεση εγκλημάτων η θανατική ποινή είναι απολύτως ακατάλληλη ως αναποτελεσματική. Γιατί ο δράστης που τελεί τα βαριά εγκλήματα για τα οποία προβλέπεται η θανατική ποινή, είτε τα διαπράττει κάτω από καταστάσεις ακραίας συναισθηματικής υπερδιέγερσης, οπότε δεν είναι σε θέση να λάβει υπόψη του ψύχραιμα τις συνέπειες, είτε είναι πρόσωπο τόσο καθυστερημένο πνευματικά, ώστε να μην είναι σε θέση να σταθμίσει σοβαρά τις οποιεσδήποτε συνέπειες." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Αλλά και ως μέσον εκφοβισμού και συγκράτησης των πολλών από την τέλεση εγκλημάτων η θανατική ποινή είναι απολύτως ακατάλληλη ως αναποτελεσματική. Γιατί ο δράστης που τελεί τα βαριά εγκλήματα για τα οποία προβλέπεται η θανατική ποινή, είτε τα διαπράττει κάτω από καταστάσεις ακραίας συναισθηματικής υπερδιέγερσης, οπότε δεν είναι σε θέση να λάβει υπόψη του ψύχραιμα τις συνέπειες, είτε είναι πρόσωπο τόσο καθυστερημένο πνευματικά, ώστε να μην είναι σε θέση να σταθμίσει σοβαρά τις οποιεσδήποτε συνέπειες.</div>
-      <div data-source="Γ.Α. Μαγκάκης, Η εσχάτη των ποινών, έσχατη πλάνη" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Γ.Α. Μαγκάκης, Η εσχάτη των ποινών, έσχατη πλάνη</div>
+
+    <!-- ΑΡΙΣΤΕΡΑ -->
+    <div class="left-col">
+      <div class="title-card">
+        <h2>Παραδείγματα</h2>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label"><div class="ic-osq"></div>Πρόθεση συντάκτη</div>
+        <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-style:normal;">Να τεκμηριώσει έναν ισχυρισμό ή/και να επεξηγήσει ένα γενικό ή ασαφές νόημα.</div></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label"><div class="ic-osq"></div>Διαρθρωτικές φράσεις / λέξεις</div>
+        <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text">π.χ., για παράδειγμα, χαρακτηριστικό παράδειγμα, λόγου χάρη, ενδεικτικά, ένα δείγμα κ.λπ.</div></div>
+      </div>
     </div>
+
+    <!-- ΔΕΞΙΑ -->
+    <div class="right-card" onclick="openModal('modal-1')">
+      <div class="right-text">
+        &nbsp;&nbsp;&nbsp;Υπάρχουν νέοι όλων των ειδών: οι ναζί Ες Ες, που περιφρουρούσαν τα στρατόπεδα συγκεντρώσεως του Άουσβιτς και του Μπούχενβαλντ, ήταν δεκαοχτώ δεκαεννιά χρονών· την ίδια ηλικία είχαν και οι νέοι που βρέθηκαν αντιμέτωποι με τα τανκς της κινεζικής κυβέρνησης στην πλατεία Τιενανμέν ζητώντας ελευθερία ή αυτοί που ακριβώς τώρα αφήνουν εθελουσίως τα σπίτια τους για να προσφέρουν τη βοήθειά τους σε χώρες που πλήττονται.
+      </div>
+      <div class="right-source">Φ. Σαβατέρ, «Μιλώντας στον γιο μου για την Πολιτική και τη Δημοκρατία»</div>
+    </div>
+
+  </div><!-- /body-inner -->
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="fblock">
+      <div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Η οργάνωση του κειμένου</div></div>
+      <div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Συνοχή – Συνεκτικότητα – Δομή παραγράφου – Τρόποι ανάπτυξης παραγράφου – Πλαγιότιτλος</div></div>
+    </div>
+    <div class="arrows">
+      <a class="arrow" onclick="prevSlide()">&#60;</a>
+      <a class="arrow" onclick="nextSlide()">&#62;</a>
+    </div>
+    <div class="fblock">
+      <div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Τρόποι ανάπτυξης</div></div>
+      <div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Παραδείγματα, αιτιολόγηση, αίτιο – αποτέλεσμα, διαίρεση, σύγκριση – αντίθεση, ορισμός, αναλογία</div></div>
+    </div>
+    <div class="fblock">
+      <div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Αιτιολόγηση</div></div>
+      <div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Επιχειρηματολογία - στήριξη / απόδειξη ενός ισχυρισμού με επαρκείς αιτιολογήσεις (γιατί, επειδή, διότι, αφού, καθώς...)</div></div>
+    </div>
+    <div class="fpage">1</div>
   </div>
-</div>
 
-<!-- SECTION 4: Αίτιο-αποτέλεσμα -->
-<div class="section" id="s4">
-  <div class="section-body" style="gap:2vw; align-items:stretch;">
-    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
-      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
-        <h1 style="font-size:3vw;">Αίτιο - αποτέλεσμα</h1>
-      </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Να εξηγήσει / ερμηνεύσει την εμφάνιση/εκδήλωση (αιτίες) ενός φαινομένου ή να αναδείξει τις συνέπειές του.</div></div>
-      </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Διαρθρωτικές λέξεις / φράσεις</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw; font-style:italic;">Λόγω, εξαιτίας, έτσι, γι' αυτόν τον λόγο, χάρη σ' αυτό, με αποτέλεσμα (οφείλεται, καταλήγει…).</div></div>
-      </div>
-    </div>
-    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
-      <div data-text="Ένα σημαντικό πρόβλημα του καιρού μας είναι η μεγάλη αύξηση της εγκληματικότητας, ιδίως των νέων. Σε σημαντικό βαθμό <strong>οφείλεται</strong> στην έλλειψη υγιούς οικογενειακού περιβάλλοντος, στην απουσία διαπαιδαγώγησης και παραδείγματος που να εμπνέει πίστη στις αξίες και να τους δίνει υγιείς στόχους και ιδανικά, στην ανεργία, στη χρήση ναρκωτικών και στην έκθεση σε μια υποκουλτούρα βίας, μέσα από τον κινηματογράφο και την τηλεόραση." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Ένα σημαντικό πρόβλημα του καιρού μας είναι η μεγάλη αύξηση της εγκληματικότητας, ιδίως των νέων. Σε σημαντικό βαθμό <strong>οφείλεται</strong> στην έλλειψη υγιούς οικογενειακού περιβάλλοντος, στην απουσία διαπαιδαγώγησης και παραδείγματος που να εμπνέει πίστη στις αξίες και να τους δίνει υγιείς στόχους και ιδανικά, στην ανεργία, στη χρήση ναρκωτικών και στην έκθεση σε μια υποκουλτούρα βίας, μέσα από τον κινηματογράφο και την τηλεόραση.</div>
-    </div>
+</div><!-- /slide-1 -->
+
+<div class="slide" id="slide-2">
+
+  <!-- ΦΟΝΤΟ -->
+  <div class="bg">
+    <svg viewBox="0 0 1000 563" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="640" cy="320" rx="360" ry="210" fill="#f5a623" opacity=".30" transform="rotate(-15 640 320)"/>
+      <ellipse cx="720" cy="360" rx="290" ry="160" fill="#f5a623" opacity=".22" transform="rotate(-8 720 360)"/>
+      <ellipse cx="150" cy="340" rx="120" ry="80" fill="#f5a623" opacity=".18" transform="rotate(12 150 340)"/>
+    </svg>
   </div>
-</div>
 
-<!-- SECTION 5: Διαίρεση -->
-<div class="section" id="s5">
-  <div class="section-body" style="gap:2vw; align-items:stretch;">
-    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
-      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
-        <h1 style="font-size:3vw;">Διαίρεση</h1>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-icon">
+      <svg viewBox="0 0 24 24"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-title">Παράγραφος</div>
+    <div class="topbar-copy">© Αλέξανδρος &amp; Σπύρος Μητσέλος</div>
+    <nav class="theme-nav">
+      <a href="#" class="active">Θέμα Α</a>
+      <a href="#">Θέμα Β</a>
+      <a href="#">Θέμα Γ</a>
+      <a href="#">Θέμα Δ</a>
+    </nav>
+  </div>
+
+  <!-- ΚΥΡΙΟ ΣΩΜΑ -->
+  <div class="body">
+
+    <div class="body-inner">
+  <!-- SIDENAV -->
+    <div class="sidenav">
+      <div class="sidenav-btn" onclick="showSlide(1)" style="cursor:pointer;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
+        <span>Αρχική</span>
       </div>
-      <div style="display:flex; gap:1.5vw;">
+      <div class="sidenav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+        <span>Εύρεση</span>
+      </div>
+      <div class="sidenav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
+        <span>Μπροστά</span>
+      </div>
+      <div class="sidenav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="19 12 5 12"/><polyline points="11 18 5 12 11 6"/></svg>
+        <span>Πίσω</span>
+      </div>
+      <div class="sidenav-btn" onclick="showSlide(3)" style="cursor:pointer;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <span>Κουίζ</span>
+      </div>
+    </div>
+
+    <!-- ΑΡΙΣΤΕΡΑ -->
+    <div class="left-col">
+      <div class="title-card">
+        <h2>Διαίρεση</h2>
+      </div>
+      <div class="info-card" style="flex: 0 0 auto;">
+        <div class="info-card-label"><div class="ic-osq"></div>Πρόθεση συντάκτη</div>
+        <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-style:normal; font-size:14px; line-height:1.55;">Να φωτίσει ένα φαινόμενο / έννοια σε όλες τις πτυχές του, σε όλο του το εύρος.</div></div>
+      </div>
+      <div style="display:flex; gap:10px; flex:1; min-height:0;">
         <div class="info-card" style="flex:1;">
-          <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.5vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
-          <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.2vw;">Να φωτίσει ένα φαινόμενο / έννοια σε όλες τις πτυχές του, σε όλο του το εύρος.</div></div>
+          <div class="info-card-label" style="font-size:13.5px;"><div class="ic-osq"></div>Δείκτες</div>
+          <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-size:12px; line-height:1.35;">Πρώτον, δεύτερον, μια περίπτωση, στην άλλη περίπτωση (διαιρείται, διακρίνεται…)</div></div>
         </div>
-        <div class="info-card text-card-clickable" style="flex:1;" onclick="openOverlay('&lt;strong style=&quot;font-size:1.1em&quot;&gt;Παράδειγμα διαίρεσης&lt;/strong&gt;&lt;br&gt;&lt;br&gt;Οι ρηματικοί χρόνοι διακρίνονται σε παρελθοντικούς, παροντικούς και μελλοντικούς.&lt;br&gt;&lt;br&gt;&lt;strong&gt;Διαιρετέα έννοια:&lt;/strong&gt; ρηματικοί χρόνοι&lt;br&gt;&lt;strong&gt;Διαιρετική βάση:&lt;/strong&gt; η χρονική βαθμίδα στην οποία αναφέρονται.&lt;br&gt;&lt;strong&gt;Μέρη / είδη:&lt;/strong&gt; παρελθοντικοί, παροντικοί, μελλοντικοί', '')">
-          <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.5vw; font-weight:800;">Μέρη διαίρεσης</div></div>
-          <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.2vw;">Διαιρετέα έννοια — είδη — διαιρετική βάση</div></div>
+        <div class="info-card" style="flex:1;">
+          <div class="info-card-label" style="font-size:13.5px;"><div class="ic-osq"></div>Μέρη διαίρεσης</div>
+          <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-size:13px; line-height:1.5;">Διαιρετέα έννοια — είδη — διαιρετική βάση</div></div>
         </div>
       </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Διαρθρωτικές λέξεις / φράσεις</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw; font-style:italic;">Πρώτον, δεύτερον, μια περίπτωση, στην άλλη περίπτωση (διαιρείται, διακρίνεται…)</div></div>
-      </div>
     </div>
-    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
-      <div data-text="Οι συλλογισμοί διακρίνονται με βάση την πορεία σκέψης σε παραγωγικούς, επαγωγικούς και αναλογικούς. Στον παραγωγικό συλλογισμό ξεκινούμε από κάτι γενικό και αφηρημένο και καταλήγουμε σε κάτι ειδικό. Στον επαγωγικό συλλογισμό ακολουθούμε πορεία αντίστροφη: ξεκινούμε από τις επιμέρους περιπτώσεις και καταλήγουμε στον κανόνα, στον νόμο που τις διέπει. Τέλος, στον αναλογικό συλλογισμό, από τα επιμέρους συμπεραίνουμε πάλι για τα επιμέρους." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Οι συλλογισμοί διακρίνονται με βάση την πορεία σκέψης σε παραγωγικούς, επαγωγικούς και αναλογικούς. Στον παραγωγικό συλλογισμό ξεκινούμε από κάτι γενικό και αφηρημένο και καταλήγουμε σε κάτι ειδικό. Στον επαγωγικό συλλογισμό ακολουθούμε πορεία αντίστροφη: ξεκινούμε από τις επιμέρους περιπτώσεις και καταλήγουμε στον κανόνα, στον νόμο που τις διέπει. Τέλος, στον αναλογικό συλλογισμό, από τα επιμέρους συμπεραίνουμε πάλι για τα επιμέρους.</div>
-      <div data-source="Έκφραση – Έκθεση Λυκείου, τεύχος Γ΄" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Έκφραση – Έκθεση Λυκείου, τεύχος Γ΄</div>
+
+    <!-- ΔΕΞΙΑ -->
+    <div class="right-card" onclick="openModal('modal-2')">
+      <div class="right-text" style="font-size:14.5px; line-height:1.72;">
+        &nbsp;&nbsp;&nbsp;Οι συλλογισμοί <strong>διακρίνονται</strong> με βάση την πορεία σκέψης σε παραγωγικούς, επαγωγικούς και αναλογικούς. Στον παραγωγικό συλλογισμό ξεκινούμε από κάτι γενικό και αφηρημένο και καταλήγουμε σε κάτι ειδικό. Στον επαγωγικό συλλογισμό ακολουθούμε πορεία αντίστροφη: ξεκινούμε από τις επιμέρους περιπτώσεις και καταλήγουμε στον κανόνα, στον νόμο που τις διέπει. Τέλος, στον αναλογικό συλλογισμό, από τα επιμέρους συμπεραίνουμε πάλι για τα επιμέρους.
+      </div>
+      <div class="right-source">Έκφραση – Έκθεση Λυκείου, τεύχος Γ΄</div>
+    </div>
+
+  </div><!-- /body-inner -->
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="fblock">
+      <div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Η οργάνωση του κειμένου</div></div>
+      <div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Συνοχή – Συνεκτικότητα – Δομή παραγράφου – Τρόποι ανάπτυξης παραγράφου – Πλαγιότιτλος</div></div>
+    </div>
+    <div class="arrows">
+      <a class="arrow" onclick="prevSlide()">&#60;</a>
+      <a class="arrow" onclick="nextSlide()">&#62;</a>
+    </div>
+    <div class="fblock">
+      <div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Τρόποι ανάπτυξης</div></div>
+      <div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Παραδείγματα, αιτιολόγηση, αίτιο – αποτέλεσμα, διαίρεση, σύγκριση – αντίθεση, ορισμός, αναλογία</div></div>
+    </div>
+    <div class="fblock">
+      <div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Αιτιολόγηση</div></div>
+      <div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Επιχειρηματολογία - στήριξη / απόδειξη ενός ισχυρισμού με επαρκείς αιτιολογήσεις (γιατί, επειδή, διότι, αφού, καθώς...)</div></div>
+    </div>
+    <div class="fpage">2</div>
+  </div>
+
+</div><!-- /slide-2 -->
+</div><!-- /slides-wrapper -->
+
+<!-- ══════════════════ SLIDE 3: QUIZ ══════════════════ -->
+<div class="slide" id="slide-3">
+  <div class="bg">
+    <svg viewBox="0 0 1000 563" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="640" cy="320" rx="360" ry="210" fill="#f5a623" opacity=".28" transform="rotate(-15 640 320)"/>
+      <ellipse cx="720" cy="360" rx="290" ry="160" fill="#f5a623" opacity=".20" transform="rotate(-8 720 360)"/>
+      <ellipse cx="150" cy="340" rx="120" ry="80" fill="#f5a623" opacity=".15" transform="rotate(12 150 340)"/>
+    </svg>
+  </div>
+  <div class="topbar">
+    <div class="topbar-icon">
+      <svg viewBox="0 0 24 24"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg>
+    </div>
+    <div class="topbar-divider"></div>
+    <div class="topbar-title">Παράγραφος</div>
+    <div class="topbar-copy">© Αλέξανδρος &amp; Σπύρος Μητσέλος</div>
+    <nav class="theme-nav">
+      <a href="#" class="active">Θέμα Α</a><a href="#">Θέμα Β</a><a href="#">Θέμα Γ</a><a href="#">Θέμα Δ</a>
+    </nav>
+  </div>
+  <div class="quiz-wrap" id="quizWrap">
+    <div class="quiz-inner" id="quizApp">
+      <div style="text-align:center; padding:40px; color:#888; font-size:13px;">Φόρτωση...</div>
     </div>
   </div>
-</div>
-
-<!-- SECTION 6: Σύγκριση-αντίθεση -->
-<div class="section" id="s6">
-  <div class="section-body" style="gap:2vw; align-items:stretch;">
-    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
-      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
-        <h1 style="font-size:3vw;">Σύγκριση-αντίθεση</h1>
-      </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Να φωτίσει το περιεχόμενο των εννοιών μέσω της αντίθεσής τους, να αναδείξει τις διαφορές και να αποτρέψει τη μεταξύ τους σύγχυση.</div></div>
-      </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Διαρθρωτικές λέξεις / φράσεις</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw; font-style:italic;">Αντίθετα, ωστόσο, από τη μια… Από την άλλη…, όμως, εννοώ, στον αντίποδα κ.ά.</div></div>
-      </div>
-    </div>
-    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
-      <div data-text="Μια διαφορά μεταξύ προφορικού και γραπτού λόγου εντοπίζεται στη δυνατότητα επαφής μεταξύ πομπού και δέκτη. Στον προφορικό συνομιλιακό λόγο το κείμενο, την ίδια στιγμή που παράγεται από τον πομπό, προσλαμβάνεται από τον δέκτη, ο οποίος συχνά είναι παρών στον ίδιο χώρο. Αντίθετα, στον γραπτό λόγο ο συγγραφέας δεν έχει άμεση επαφή με τους αναγνώστες του, απευθύνεται σε δέκτες απόντες, οι οποίοι θα προσλάβουν το κείμενό του ύστερα από κάποιο χρονικό διάστημα." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Μια διαφορά μεταξύ προφορικού και γραπτού λόγου εντοπίζεται στη δυνατότητα επαφής μεταξύ πομπού και δέκτη. Στον προφορικό συνομιλιακό λόγο το κείμενο, την ίδια στιγμή που παράγεται από τον πομπό, προσλαμβάνεται από τον δέκτη, ο οποίος συχνά είναι παρών στον ίδιο χώρο. Αντίθετα, στον γραπτό λόγο ο συγγραφέας δεν έχει άμεση επαφή με τους αναγνώστες του, απευθύνεται σε δέκτες απόντες, οι οποίοι θα προσλάβουν το κείμενό του ύστερα από κάποιο χρονικό διάστημα.</div>
-      <div data-source="Α. Αρχάκης «Γλωσσική Διδασκαλία και Σύσταση των Κειμένων»" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Α. Αρχάκης «Γλωσσική Διδασκαλία και Σύσταση των Κειμένων»</div>
-    </div>
+  <!-- mini footer με βελάκια μόνο -->
+  <div style="position:relative; z-index:10; height:44px; background:#fff; border-top:1px solid #ddd; display:flex; align-items:center; justify-content:center; gap:32px; flex-shrink:0;">
+    <a class="arrow" style="font-size:36px;" onclick="prevSlide()">&#60;</a>
+    <span style="font-size:10px; color:#aaa;">3</span>
+    <a class="arrow" style="font-size:36px;" onclick="nextSlide()">&#62;</a>
   </div>
-</div>
-
-<!-- SECTION 7: Ορισμός -->
-<div class="section" id="s7">
-  <div class="section-body" style="gap:2vw; align-items:stretch;">
-    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
-      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
-        <h1 style="font-size:3vw;">Ορισμός</h1>
-      </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Να προσδιορίσει επακριβώς το περιεχόμενο ενός όρου, ο οποίος μπορεί να μην είναι γνωστός στο ευρύ κοινό, να αποτρέψει τη σύγχυση με παρεμφερείς έννοιες / όρους.</div></div>
-      </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Μέθοδος ορισμού</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Οριστέα έννοια = γένος + ειδοποιός διαφορά<br>π.χ.: Δημοκρατία = πολίτευμα + εξουσία ο λαός</div></div>
-      </div>
-    </div>
-    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
-      <div data-text="Ο όρος «στερεότυπο» ορίζεται ως «προκατασκευασμένες» πεποιθήσεις για τάξεις ατόμων, ομάδων ή αντικειμένων. Πρόκειται για ομαδικές πεποιθήσεις που είναι δυνατόν να αναφέρονται σε έναν λαό, θεσμό, ιδέα, αξία, φαινόμενο ή αντικείμενο κατά τρόπο μονόπλευρο, σχηματικό και γενικευτικό, σε βαθμό που οι «κρινόμενοι» να εμφανίζουν σημαντικές παραμορφώσεις και στρεβλώσεις ως προς την πραγματική τους εικόνα και κατάσταση." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Ο όρος «στερεότυπο» ορίζεται ως «προκατασκευασμένες» πεποιθήσεις για τάξεις ατόμων, ομάδων ή αντικειμένων. Πρόκειται για ομαδικές πεποιθήσεις που είναι δυνατόν να αναφέρονται σε έναν λαό, θεσμό, ιδέα, αξία, φαινόμενο ή αντικείμενο κατά τρόπο μονόπλευρο, σχηματικό και γενικευτικό, σε βαθμό που οι «κρινόμενοι» να εμφανίζουν σημαντικές παραμορφώσεις και στρεβλώσεις ως προς την πραγματική τους εικόνα και κατάσταση.</div>
-      <div data-source="Πώς τα ΜΜΕ ενισχύουν τα αρνητικά στερεότυπα, Τράπεζα Θεμάτων. Β΄ Λυκείου" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Πώς τα ΜΜΕ ενισχύουν τα αρνητικά στερεότυπα, Τράπεζα Θεμάτων. Β΄ Λυκείου</div>
-    </div>
-  </div>
-</div>
-
-<!-- SECTION 8: Αναλογία -->
-<div class="section" id="s8">
-  <div class="section-body" style="gap:2vw; align-items:stretch;">
-    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
-      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
-        <h1 style="font-size:3vw;">Αναλογία</h1>
-      </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Να καταστήσει κατανοητό ένα φαινόμενο, όρο ή κατάσταση μέσω του παραλληλισμού του με κάτι που είναι γνωστό στον αναγνώστη.</div></div>
-      </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Διαρθρωτικές λέξεις/φράσεις</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw; font-style:italic;">Σαν, όπως ακριβώς… έτσι και…, με παρόμοιο τρόπο κ.ά.</div></div>
-      </div>
-    </div>
-    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
-      <div data-text="Είναι ολοφάνερο ότι το πρώτο πράγμα που χρειαζόμαστε είναι η εξασφάλιση από την κακόβουλη χρήση των πληροφοριών. Όπως ακριβώς ο άνθρωπος ανακάλυψε τη φωτιά, η οποία είναι εξαιρετικά χρήσιμη αλλά ταυτόχρονα μπορεί να είναι πολύ καταστροφική, και στη συνέχεια δημιούργησε τα μέσα για την κατάσβεσή της, έτσι πρέπει να αντιμετωπιστεί και η διάχυση των πληροφοριών." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Είναι ολοφάνερο ότι το πρώτο πράγμα που χρειαζόμαστε είναι η εξασφάλιση από την κακόβουλη χρήση των πληροφοριών. Όπως ακριβώς ο άνθρωπος ανακάλυψε τη φωτιά, η οποία είναι εξαιρετικά χρήσιμη αλλά ταυτόχρονα μπορεί να είναι πολύ καταστροφική, και στη συνέχεια δημιούργησε τα μέσα για την κατάσβεσή της, έτσι πρέπει να αντιμετωπιστεί και η διάχυση των πληροφοριών.</div>
-      <div data-source="Η ψηφιακή εποχή έρχεται. Προετοιμαζόμαστε; Τράπεζα Θεμάτων, Β΄ Λυκείου" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Η ψηφιακή εποχή έρχεται. Προετοιμαζόμαστε; Τράπεζα Θεμάτων, Β΄ Λυκείου</div>
-    </div>
-  </div>
-</div>
-
-<!-- SECTION 9: Συνδυασμός μεθόδων -->
-<div class="section" id="s9">
-  <div class="section-body" style="gap:2vw; align-items:stretch;">
-    <div class="left-col" style="flex:0 0 38vw; gap:1.5vw; display:flex; flex-direction:column; align-self:stretch;">
-      <div class="hero-card-lg" style="background:#2d2d2d; flex:0 0 auto; min-height:0; padding:1.5vw 2vw;">
-        <h1 style="font-size:2.6vw;">Συνδυασμός μεθόδων</h1>
-      </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Τι είναι</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Αξιοποιούνται περισσότερες από μία μέθοδοι ανάπτυξης.</div></div>
-      </div>
-      <div class="info-card" style="flex:1;">
-        <div class="card-header"><div class="osq"></div><div class="card-title" style="font-size:1.6vw; font-weight:800;">Πρόθεση συντάκτη</div></div>
-        <div class="card-body"><div class="vbar" style="background:#2d2d2d;min-width:14px;"></div><div class="card-text" style="font-size:1.5vw;">Συνδέεται με τις επιμέρους μεθόδους που χρησιμοποιεί.</div></div>
-      </div>
-    </div>
-    <div class="info-card text-card-clickable" style="flex:1; display:flex; flex-direction:column; align-self:stretch; justify-content:space-between;" onclick="openOverlay(this.querySelector('[data-text]').getAttribute('data-text'), this.querySelector('[data-source]') ? this.querySelector('[data-source]').getAttribute('data-source') : '')">
-      <div data-text="Ας δεχθούμε ακόμη ότι η τεχνολογία ορίζεται ως το σύνολο των μεθόδων τις οποίες οι άνθρωποι χρησιμοποιούν για να πετύχουν τους σκοπούς τους και να ικανοποιήσουν τις ανάγκες τους. Το μαχαίρι, με το οποίο κόβουμε το ψωμί, το τηλέφωνο, με το οποίο επικοινωνούμε εξ αποστάσεως, το ηλεκτρικό φως, με το οποίο φωτίζουμε το θέατρο, το πιεστήριο, με το οποίο τυπώνουμε τα βιβλία, ο ηλεκτρονικός υπολογιστής, με τον οποίο κάνουμε αριθμητικές πράξεις και το όπλο, με το οποίο σκοτώνουμε, είναι παραδείγματα των στοιχείων της τεχνολογίας." style="flex:1; font-size:1.5vw; line-height:1.85; display:flex; flex-direction:column; justify-content:center;">Ας δεχθούμε ακόμη ότι η τεχνολογία ορίζεται ως το σύνολο των μεθόδων τις οποίες οι άνθρωποι χρησιμοποιούν για να πετύχουν τους σκοπούς τους και να ικανοποιήσουν τις ανάγκες τους. Το μαχαίρι, με το οποίο κόβουμε το ψωμί, το τηλέφωνο, με το οποίο επικοινωνούμε εξ αποστάσεως, το ηλεκτρικό φως, με το οποίο φωτίζουμε το θέατρο, το πιεστήριο, με το οποίο τυπώνουμε τα βιβλία, ο ηλεκτρονικός υπολογιστής, με τον οποίο κάνουμε αριθμητικές πράξεις και το όπλο, με το οποίο σκοτώνουμε, είναι παραδείγματα των στοιχείων της τεχνολογίας.</div>
-      <div data-source="Θ. Λιανός, Πολιτισμός και τεχνολογία" style="text-align:right; font-size:1.1vw; color:#888; margin-top:1vw; font-style:italic;">Θ. Λιανός, Πολιτισμός και τεχνολογία</div>
-    </div>
-  </div>
-</div>
-
-</div><!-- /theory-view -->
-
-<!-- QUIZ -->
-<div id="s-quiz" style="position:relative; z-index:1; padding: 4vw 4.5vw 4vw 9vw;">
-  <div id="quiz-app">
-    <div style="background:white; border-radius:16px; box-shadow:4px 8px 24px rgba(0,0,0,.18); padding:24px; text-align:center;">
-      <div style="width:40px;height:40px;border:4px solid #d4c4b0;border-top-color:#f5a623;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;"></div>
-      <p>Φόρτωση quiz...</p>
-    </div>
-  </div>
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-  <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Μέθοδοι ανάπτυξης παραγράφου</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Παραδείγματα — Αιτιολόγηση — Αίτιο-αποτέλεσμα — Διαίρεση — Σύγκριση-αντίθεση — Ορισμός — Αναλογία — Συνδυασμός</div></div></div>
-  <div class="arrows"><a href="#s1" class="arrow">&#60;</a><a href="#s2" class="arrow">&#62;</a></div>
-  <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Τεχνικές πύκνωσης</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Τεχνικές συνοπτικής απόδοσης: γενίκευση, σύνθεση, επιλογή, ονοματοποίηση κ.ά.</div></div></div>
-  <div class="fpage">3–4</div>
-</div>
+</div><!-- /slide-3 -->
 
 <script>
-
-  function openOverlay(text, source) {
-    document.getElementById('text-overlay-text').innerHTML = text;
-    document.getElementById('text-overlay-source').textContent = source || '';
-    document.getElementById('text-overlay-source').style.display = source ? 'block' : 'none';
-    document.getElementById('text-overlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
+  const TOTAL = 3;
+  let current = 1;
+  function showSlide(n) {
+    document.getElementById('slide-' + current).classList.remove('active');
+    current = Math.max(1, Math.min(n, TOTAL));
+    document.getElementById('slide-' + current).classList.add('active');
   }
-  function closeOverlay() {
-    document.getElementById('text-overlay').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeOverlay(); });
+  function nextSlide() { showSlide(current + 1); }
+  function prevSlide() { showSlide(current - 1); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prevSlide();
+  });
 
-  function showView(view) {
-    const btnA = document.getElementById('btn-arxiki');
-    const btnX = document.getElementById('btn-xartis');
-    if (view === 'theory') {
-      btnA.classList.add('active');
-      btnX.classList.remove('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      btnX.classList.add('active');
-      btnA.classList.remove('active');
-      document.getElementById('s-quiz').scrollIntoView({ behavior: 'smooth' });
+
+  // ══════════════════════════════════════════════
+  // QUIZ LOGIC (slide 3)
+  // ══════════════════════════════════════════════
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTF385Wqk5c-makn7m3cxaDD35hr3LFyjKtR3r6cplVW4ZtGwEbcdqvHhvVztdbM5uxNrs8gxxoYHuW/pub?gid=176063284&single=true&output=csv';
+  const TROPOI = ["Παραδείγματα","Αιτιολόγηση","Αίτιο-αποτέλεσμα","Διαίρεση","Σύγκριση-αντίθεση","Αναλογία","Ορισμός"];
+  let qAllData=[], qQuizData=[];
+  let qState = {
+    screen:'selection', domiFil:'all', troposFil:'all', count:10,
+    cur:0, selDomi:null, selTropoi:[], showResult:false,
+    score:{domi:0,kyrios:0,deyt:0}, theory:false
+  };
+
+  function qParseCSVLine(line){const r=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}else if(c===','&&!inQ){r.push(cur.trim());cur='';}else cur+=c;}r.push(cur.trim());return r;}
+  function qParseCSV(csv){const lines=csv.split('\n').filter(l=>l.trim());if(lines.length<2)return[];const hdrs=qParseCSVLine(lines[0]).map(h=>h.toLowerCase().trim());const data=[];for(let i=1;i<lines.length;i++){const vals=qParseCSVLine(lines[i]);const obj={};hdrs.forEach((h,idx)=>{let v=(vals[idx]||'').trim();obj[h]=(v===''||v.toLowerCase()==='null')?null:v;});if(obj.keimeno&&obj.domi&&obj.kyrios)data.push(obj);}return data;}
+  function qShuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+  function qFiltered(){let f=[...qAllData];if(qState.domiFil!=='all')f=f.filter(x=>x.domi===qState.domiFil);if(qState.troposFil==='syndyasmos')f=f.filter(x=>x.deytereyon!==null);else if(qState.troposFil!=='all')f=f.filter(x=>x.kyrios===qState.troposFil);return f;}
+
+  async function qLoadData(){
+    try{
+      const r=await fetch(SHEET_CSV_URL);
+      const csv=await r.text();
+      qAllData=qParseCSV(csv);
+      qState.screen=qAllData.length?'selection':'error';
+    }catch(e){qState.screen='error';}
+    qRender();
+  }
+
+  function qRender(){
+    const app=document.getElementById('quizApp');
+    if(!app)return;
+    if(qState.screen==='loading'||qState.screen==='error'){
+      app.innerHTML=qState.screen==='error'
+        ?'<div style="text-align:center;padding:30px;color:#ef4444;font-size:12px;">⚠️ Αδυναμία φόρτωσης. <button onclick="qLoadData()" style="background:#2d2d2d;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:11px;margin-top:8px;">Επανάληψη</button></div>'
+        :'<div style="text-align:center;padding:30px;color:#888;font-size:12px;">Φόρτωση...</div>';
+      return;
     }
+    if(qState.screen==='selection') app.innerHTML=qRenderSelection();
+    else if(qState.screen==='quiz') app.innerHTML=qRenderQuiz();
+    else app.innerHTML=qRenderResults();
+    qAttach();
   }
 
-  // Init — theory visible, arxiki active
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('btn-arxiki').classList.add('active');
+  function qRenderSelection(){
+    const fc=qFiltered().length;
+    const domiFilters=[['all','Όλες'],['Διμερής','Διμερής'],['Τριμερής','Τριμερής']];
+    const troposFilters=[['all','Όλοι'],['Παραδείγματα','Παραδείγματα'],['Αιτιολόγηση','Αιτιολόγηση'],['Αίτιο-αποτέλεσμα','Αίτιο-αποτέλεσμα'],['Διαίρεση','Διαίρεση'],['Σύγκριση-αντίθεση','Σύγκριση-αντίθεση'],['Αναλογία','Αναλογία'],['Ορισμός','Ορισμός'],['syndyasmos','Συνδυασμός']];
+    return `
+      <div class="q-selection-title">📝 Quiz Ανάλυσης Παραγράφου</div>
+      <p style="text-align:center;font-size:10px;color:#888;margin-bottom:10px;">Νεοελληνική Γλώσσα — Λύκειο</p>
+      <div class="q-filter-section"><h3>📐 Δομή</h3><div class="q-filter-options">${domiFilters.map(([v,l])=>`<button class="q-filter-btn${qState.domiFil===v?' sel':''}" data-qd="${v}">${l}</button>`).join('')}</div></div>
+      <div class="q-filter-section"><h3>📚 Τρόπος Ανάπτυξης</h3><div class="q-filter-options">${troposFilters.map(([v,l])=>`<button class="q-filter-btn${qState.troposFil===v?' sel':''}" data-qt="${v}">${l}</button>`).join('')}</div></div>
+      <div class="q-filter-section"><h3>🔢 Αριθμός</h3><div class="q-filter-options">${[1,10,20].map(n=>`<button class="q-filter-btn${qState.count===n?' sel':''}" data-qn="${n}">${n}</button>`).join('')}</div></div>
+      <div class="q-count-info${fc===0?' warn':''}">${fc>0?`✅ Βρέθηκαν <strong>${fc}</strong> παράγραφοι`:'⚠️ Δεν βρέθηκαν παράγραφοι'}</div>
+      <button class="q-start-btn" id="qStartBtn" ${fc===0?'disabled':''}>Ξεκίνα το Quiz</button>`;
+  }
+
+  function qRenderQuiz(){
+    const c=qQuizData[qState.cur];
+    const pct=((qState.cur+1)/qQuizData.length)*100;
+    const isSyn=c.deytereyon!==null;
+    return `
+      <div class="q-header"><div class="q-title">📝 Ανάλυση Παραγράφου</div><div class="q-counter">Ερώτηση ${qState.cur+1}/${qQuizData.length}</div></div>
+      <div class="q-progress-bar"><div class="q-progress-fill" style="width:${pct}%"></div></div>
+      <button class="q-theory-toggle" id="qTheoryToggle">${qState.theory?'▼':'▶'} Θεωρητικό πλαίσιο</button>
+      ${qState.theory?`<div class="q-theory-box"><strong>Τριμερής:</strong> Θεματική + Σχόλια + Κατακλείδα &nbsp;|&nbsp; <strong>Διμερής:</strong> Θεματική + Σχόλια<br><strong>Κύριος τρόπος:</strong> βασική πρόθεση &nbsp;|&nbsp; <strong>Δευτερεύων:</strong> συμπληρωματικός</div>`:''}
+      <span class="q-par-label">Παράγραφος ${qState.cur+1}${isSyn?' ⚡':''}</span>
+      <p class="q-par-text">${c.keimeno}</p>
+      <div class="q-grid">
+        <div class="q-card${qState.showResult?(qState.selDomi===c.domi?' correct':' incorrect'):''}">
+          <h3>1️⃣ Δομή παραγράφου;</h3>
+          <div class="q-opt-list">
+            ${['Τριμερής','Διμερής'].map(d=>{
+              const ok=qState.showResult&&d===c.domi;
+              const wr=qState.showResult&&qState.selDomi===d&&d!==c.domi;
+              return `<button class="q-opt-btn${qState.selDomi===d&&!qState.showResult?' sel':''}${ok?' ok':''}${wr?' wrong':''}" data-qdom="${d}" ${qState.showResult?'disabled':''}>${d}<span class="q-opt-hint">${d==='Τριμερής'?'(με κατακλείδα)':'(χωρίς κατακλείδα)'}</span></button>`;
+            }).join('')}
+          </div>
+        </div>
+        <div class="q-card${qState.showResult?qTroposClass(c):''}">
+          <h3>2️⃣ Τρόπος ανάπτυξης;</h3>
+          <p class="q-hint">💡 1ος = κύριος, 2ος = δευτερεύων</p>
+          <div class="q-tropos-grid">
+            ${TROPOI.map(t=>{
+              const si=qState.selTropoi.indexOf(t);
+              const isSel=si!==-1;
+              const ok=t===c.kyrios;
+              const okD=t===c.deytereyon;
+              const wr=qState.showResult&&isSel&&!ok&&!okD;
+              let cls='q-tropos-btn';
+              if(!qState.showResult&&isSel) cls+=si===0?' sel-p':' sel-s';
+              if(qState.showResult){if(ok)cls+=' ok-p';else if(okD)cls+=' ok-s';else if(wr)cls+=' wrong';}
+              return `<button class="${cls}" data-qtr="${t}" ${qState.showResult?'disabled':''}>${t}${isSel&&!qState.showResult?`<span class="q-sel-order">${si+1}</span>`:''}</button>`;
+            }).join('')}
+          </div>
+        </div>
+      </div>
+      ${!qState.showResult
+        ?`<button class="q-btn primary" id="qCheckBtn" ${!qState.selDomi||qState.selTropoi.length===0?'disabled':''}>Έλεγχος</button>`
+        :`<div class="q-feedback">
+            <h3>📋 Ανάλυση</h3>
+            <div class="q-fbox blue"><h4>${qState.selDomi===c.domi?'✅':'❌'} Δομή: ${c.domi}</h4>${c.thematiki?`<p><strong>Θεματική:</strong> ${c.thematiki}</p>`:''}${c.katakleida?`<p><strong>Κατακλείδα:</strong> ${c.katakleida}</p>`:''}</div>
+            <div class="q-fbox purple"><h4>Τρόπος/οι:</h4><p><span class="q-tag p">Κύριος: ${c.kyrios}</span>${c.deytereyon?`<span class="q-tag s">Δευτ.: ${c.deytereyon}</span>`:''}</p>${c.aitiologisi?`<p style="margin-top:5px;font-size:10px">${c.aitiologisi}</p>`:''}</div>
+            <div class="q-fbox amber"><h4>Η επιλογή σου:</h4><p>${qState.selTropoi[0]?`<span class="q-tag p">1ος: ${qState.selTropoi[0]}</span>`:''}${qState.selTropoi[1]?`<span class="q-tag s">2ος: ${qState.selTropoi[1]}</span>`:''}</p></div>
+          </div>
+          <button class="q-btn success" id="qNextBtn">${qState.cur<qQuizData.length-1?'Επόμενη →':'Αποτελέσματα'}</button>`
+      }`;
+  }
+
+  function qTroposClass(c){
+    const ok=qState.selTropoi[0]===c.kyrios;
+    const okD=!c.deytereyon||qState.selTropoi[1]===c.deytereyon;
+    if(ok&&okD)return' correct';
+    if(ok)return' partial';
+    return' incorrect';
+  }
+
+  function qRenderResults(){
+    const maxD=qQuizData.length, maxK=qQuizData.length, maxDey=qQuizData.filter(q=>q.deytereyon).length;
+    const tot=qState.score.domi+qState.score.kyrios+qState.score.deyt;
+    const max=maxD+maxK+maxDey;
+    const pct=Math.round((tot/max)*100);
+    return `<div class="q-results">
+      <div style="font-size:3rem">${pct>=80?'🎉':pct>=60?'👍':'📚'}</div>
+      <h2 style="font-size:15px;color:#2d2d2d;margin:8px 0;">Ολοκλήρωσες το Quiz!</h2>
+      <div style="background:rgba(255,255,255,0.8);border-radius:10px;padding:14px;margin-bottom:12px;">
+        <div class="q-results-score">${tot} / ${max}</div>
+        <div style="font-size:11px;color:#888;">(${pct}%)</div>
+      </div>
+      <div class="q-results-grid">
+        <div class="q-rbox"><p>Δομή</p><p>${qState.score.domi}/${maxD}</p></div>
+        <div class="q-rbox"><p>Κύριος</p><p>${qState.score.kyrios}/${maxK}</p></div>
+        <div class="q-rbox"><p>Δευτερεύων</p><p>${qState.score.deyt}/${maxDey}</p></div>
+      </div>
+      <button class="q-btn primary" id="qRestartBtn" style="margin-bottom:8px;">Ξεκίνα Ξανά</button>
+      <button class="q-btn" id="qNewSelBtn" style="background:#888;color:#fff;">Νέα Κριτήρια</button>
+    </div>`;
+  }
+
+  function qAttach(){
+    document.querySelectorAll('[data-qd]').forEach(b=>b.addEventListener('click',()=>{qState.domiFil=b.dataset.qd;qRender();}));
+    document.querySelectorAll('[data-qt]').forEach(b=>b.addEventListener('click',()=>{qState.troposFil=b.dataset.qt;qRender();}));
+    document.querySelectorAll('[data-qn]').forEach(b=>b.addEventListener('click',()=>{qState.count=parseInt(b.dataset.qn);qRender();}));
+    const sb=document.getElementById('qStartBtn');
+    if(sb)sb.addEventListener('click',()=>{qQuizData=qShuffle(qFiltered()).slice(0,qState.count);qState.screen='quiz';qState.cur=0;qState.selDomi=null;qState.selTropoi=[];qState.showResult=false;qState.score={domi:0,kyrios:0,deyt:0};qRender();});
+    const tt=document.getElementById('qTheoryToggle');
+    if(tt)tt.addEventListener('click',()=>{qState.theory=!qState.theory;qRender();});
+    document.querySelectorAll('[data-qdom]').forEach(b=>b.addEventListener('click',()=>{qState.selDomi=b.dataset.qdom;qRender();}));
+    document.querySelectorAll('[data-qtr]').forEach(b=>b.addEventListener('click',()=>{
+      const t=b.dataset.qtr,idx=qState.selTropoi.indexOf(t);
+      if(idx!==-1)qState.selTropoi.splice(idx,1);
+      else if(qState.selTropoi.length<2)qState.selTropoi.push(t);
+      else qState.selTropoi[1]=t;
+      qRender();
+    }));
+    const cb=document.getElementById('qCheckBtn');
+    if(cb)cb.addEventListener('click',()=>{
+      const c=qQuizData[qState.cur];
+      if(qState.selDomi===c.domi)qState.score.domi++;
+      if(qState.selTropoi[0]===c.kyrios)qState.score.kyrios++;
+      if(c.deytereyon&&qState.selTropoi[1]===c.deytereyon)qState.score.deyt++;
+      qState.showResult=true;qRender();
+    });
+    const nb=document.getElementById('qNextBtn');
+    if(nb)nb.addEventListener('click',()=>{
+      if(qState.cur<qQuizData.length-1){qState.cur++;qState.selDomi=null;qState.selTropoi=[];qState.showResult=false;}
+      else qState.screen='results';
+      qRender();
+    });
+    const rb=document.getElementById('qRestartBtn');
+    if(rb)rb.addEventListener('click',()=>{qQuizData=qShuffle(qFiltered()).slice(0,qState.count);qState.cur=0;qState.selDomi=null;qState.selTropoi=[];qState.showResult=false;qState.score={domi:0,kyrios:0,deyt:0};qState.screen='quiz';qRender();});
+    const ns=document.getElementById('qNewSelBtn');
+    if(ns)ns.addEventListener('click',()=>{qState.screen='selection';qRender();});
+  }
+
+  // Φόρτωση κουίζ όταν πάμε στο slide 3
+  const origShowSlide = showSlide;
+  showSlide = function(n) {
+    origShowSlide(n);
+    if(n===3 && qAllData.length===0 && qState.screen==='selection'){
+      qState.screen='loading'; qRender(); qLoadData();
+    }
+  };
+
+  function scaleSlide() {
+    const W = 1000, H = 563;
+    const scale = Math.min(window.innerWidth / W, window.innerHeight / H);
+    const wrapper = document.getElementById('slides-wrapper');
+    wrapper.style.transform = `translate(-50%, -50%) scale(${scale})`;
+  }
+  function fitText() {
+    document.querySelectorAll('.right-text').forEach(el => {
+      // Reset
+      el.style.fontSize = '15px';
+      el.style.lineHeight = '1.65';
+      // Μικραίνω μέχρι να χωράει
+      let size = 15;
+      while (el.scrollHeight > el.clientHeight && size > 9) {
+        size -= 0.5;
+        el.style.fontSize = size + 'px';
+      }
+    });
+  }
+  scaleSlide();
+  fitText();
+  window.addEventListener('resize', () => { scaleSlide(); fitText(); });
+</script>
+
+<!-- MODAL SLIDE 1 -->
+<div class="text-modal" id="modal-1">
+  <div class="text-modal-inner" style="width:82vw; max-width:900px;">
+    <button class="text-modal-close" onclick="closeModal('modal-1')">&#x2715;</button>
+
+    <div style="display:flex; gap:32px; align-items:flex-start;">
+
+      <!-- ΑΡΙΣΤΕΡΑ: δομή παραγράφου -->
+      <div style="flex:0 0 200px; display:flex; flex-direction:column; align-items:center; gap:0; padding-top:4px;">
+        <div style="background:#2d2d2d; color:#fff; border-radius:8px; padding:10px 18px; font-size:13px; font-weight:700; text-align:center; width:100%;">Θεματική περίοδος</div>
+        <div style="width:2px; height:16px; background:#f5a623;"></div>
+        <!-- 3 παραδείγματα -->
+        <div style="border:2px solid #f5a623; border-radius:8px; padding:10px 14px; width:100%; display:flex; flex-direction:column; gap:8px;">
+          <div style="font-size:11px; font-weight:700; color:#f5a623; text-align:center; letter-spacing:.06em;">ΠΑΡΑΔΕΙΓΜΑΤΑ</div>
+          <div style="background:#fff7ee; border-radius:6px; padding:7px 10px; font-size:11.5px; color:#333; line-height:1.35; border-left:3px solid #f5a623;">
+            🟡 Ναζί Ες Ες<br><span style="color:#888; font-size:10.5px;">στρατόπεδα Άουσβιτς / Μπούχενβαλντ</span>
+          </div>
+          <div style="background:#fff7ee; border-radius:6px; padding:7px 10px; font-size:11.5px; color:#333; line-height:1.35; border-left:3px solid #f5a623;">
+            🟢 Νέοι στην Τιενανμέν<br><span style="color:#888; font-size:10.5px;">αντιμέτωποι με τανκς</span>
+          </div>
+          <div style="background:#fff7ee; border-radius:6px; padding:7px 10px; font-size:11.5px; color:#333; line-height:1.35; border-left:3px solid #f5a623;">
+            🔵 Εθελοντές νέοι<br><span style="color:#888; font-size:10.5px;">βοήθεια σε πληγείσες χώρες</span>
+          </div>
+        </div>
+        <div style="font-size:10px; color:#aaa; margin-top:8px; text-align:center; font-style:italic;">και οι τρεις: 18–19 ετών</div>
+      </div>
+
+      <!-- ΔΕΞΙΑ: κείμενο -->
+      <div style="flex:1;">
+        <div class="modal-text" style="font-size:17px;">
+          &nbsp;&nbsp;&nbsp;Υπάρχουν νέοι όλων των ειδών: <mark style="background:#fff3cd; border-radius:3px; padding:0 2px;">οι ναζί Ες Ες, που περιφρουρούσαν τα στρατόπεδα συγκεντρώσεως του Άουσβιτς και του Μπούχενβαλντ, ήταν δεκαοχτώ δεκαεννιά χρονών</mark>· την ίδια ηλικία είχαν και <mark style="background:#d4edda; border-radius:3px; padding:0 2px;">οι νέοι που βρέθηκαν αντιμέτωποι με τα τανκς της κινεζικής κυβέρνησης στην πλατεία Τιενανμέν ζητώντας ελευθερία</mark> ή <mark style="background:#d1ecf1; border-radius:3px; padding:0 2px;">αυτοί που ακριβώς τώρα αφήνουν εθελουσίως τα σπίτια τους για να προσφέρουν τη βοήθειά τους σε χώρες που πλήττονται</mark>.
+        </div>
+        <div class="modal-source">Φ. Σαβατέρ, «Μιλώντας στον γιο μου για την Πολιτική και τη Δημοκρατία»</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SLIDE 2 -->
+<div class="text-modal" id="modal-2">
+  <div class="text-modal-inner">
+    <button class="text-modal-close" onclick="closeModal('modal-2')">&#x2715;</button>
+    <div class="modal-text">
+      &nbsp;&nbsp;&nbsp;Οι συλλογισμοί <strong>διακρίνονται</strong> με βάση την πορεία σκέψης σε παραγωγικούς, επαγωγικούς και αναλογικούς. Στον παραγωγικό συλλογισμό ξεκινούμε από κάτι γενικό και αφηρημένο και καταλήγουμε σε κάτι ειδικό. Στον επαγωγικό συλλογισμό ακολουθούμε πορεία αντίστροφη: ξεκινούμε από τις επιμέρους περιπτώσεις και καταλήγουμε στον κανόνα, στον νόμο που τις διέπει. Τέλος, στον αναλογικό συλλογισμό, από τα επιμέρους συμπεραίνουμε πάλι για τα επιμέρους.
+    </div>
+    <div class="modal-source">Έκφραση – Έκθεση Λυκείου, τεύχος Γ΄</div>
+  </div>
+</div>
+
+<!-- ══════════════════ SLIDE 3: QUIZ ══════════════════ -->
+
+<script>
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+  // Κλείσιμο με κλικ έξω
+  document.querySelectorAll('.text-modal').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
   });
 </script>
 
-<script>
-// =====================================================
-// QUIZ — ενσωματωμένο στη σελίδα
-// =====================================================
-const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTF385Wqk5c-makn7m3cxaDD35hr3LFyjKtR3r6cplVW4ZtGwEbcdqvHhvVztdbM5uxNrs8gxxoYHuW/pub?gid=176063284&single=true&output=csv';
+<!-- MODAL ΜΕΡΗ ΔΙΑΙΡΕΣΗΣ -->
+<div class="text-modal" id="modal-meri">
+  <div class="text-modal-inner" style="max-width:700px;">
+    <button class="text-modal-close" onclick="closeModal('modal-meri')">&#x2715;</button>
 
-const tropoiAnaptyxis = ["Παραδείγματα","Αιτιολόγηση","Αίτιο-αποτέλεσμα","Διαίρεση","Σύγκριση-αντίθεση","Αναλογία","Ορισμός"];
-
-let allData = [], quizData = [];
-let qstate = {
-  screen: 'loading',
-  selectedDomiFilter: 'all', selectedTroposFilter: 'all',
-  selectedCount: 10, selectedDifficulty: 'all',
-  currentQuestion: 0, selectedDomi: null, selectedTropoi: [],
-  showResult: false, score: { domi:0, tropiKyrios:0, tropiDeytereyon:0 }, showTheory: false
-};
-
-function parseCSVLine(line) {
-  const result=[]; let current='',inQuotes=false;
-  for(let i=0;i<line.length;i++){
-    const c=line[i];
-    if(c==='"'){if(inQuotes&&line[i+1]==='"'){current+='"';i++;}else{inQuotes=!inQuotes;}}
-    else if(c===','&&!inQuotes){result.push(current.trim());current='';}
-    else{current+=c;}
-  }
-  result.push(current.trim()); return result;
-}
-
-function parseCSV(csv) {
-  const lines=csv.split('\n').filter(l=>l.trim());
-  if(lines.length<2)return[];
-  const headers=parseCSVLine(lines[0]).map(h=>h.toLowerCase().trim());
-  const data=[];
-  for(let i=1;i<lines.length;i++){
-    const vals=parseCSVLine(lines[i]);
-    const obj={};
-    headers.forEach((h,idx)=>{let v=(vals[idx]||'').trim();obj[h]=(v===''||v.toLowerCase()==='null')?null:v;});
-    if(obj.keimeno&&obj.domi&&obj.kyrios)data.push(obj);
-  }
-  return data;
-}
-
-async function loadQuizData() {
-  try {
-    const r=await fetch(SHEET_CSV_URL);
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const csv=await r.text();
-    allData=parseCSV(csv);
-    if(allData.length===0)throw new Error('Κενά δεδομένα');
-    qstate.screen='selection';
-  } catch(e) {
-    document.getElementById('quiz-app').innerHTML=`<div style="background:white;border-radius:16px;padding:24px;text-align:center"><p style="color:#ef4444">⚠️ ${e.message}</p><button onclick="loadQuizData()" style="margin-top:16px;padding:10px 20px;background:#4f46e5;color:white;border:none;border-radius:8px;cursor:pointer">Επανάληψη</button></div>`;
-    return;
-  }
-  renderQuiz();
-}
-
-function shuffleArray(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
-
-function getFilteredData(){
-  let f=[...allData];
-  if(qstate.selectedDomiFilter!=='all')f=f.filter(i=>i.domi===qstate.selectedDomiFilter);
-  if(qstate.selectedTroposFilter==='syndyasmos')f=f.filter(i=>i.deytereyon!==null);
-  else if(qstate.selectedTroposFilter!=='all')f=f.filter(i=>i.kyrios===qstate.selectedTroposFilter);
-  return f;
-}
-
-function renderQuiz(){
-  const app=document.getElementById('quiz-app');
-  if(qstate.screen==='loading'){app.innerHTML=`<div style="background:white;border-radius:16px;padding:40px;text-align:center"><div style="width:40px;height:40px;border:4px solid #e2e8f0;border-top-color:#4f46e5;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px"></div><p>Φόρτωση...</p></div>`;return;}
-  if(qstate.screen==='selection'){renderQSelection();return;}
-  if(qstate.screen==='quiz'){renderQQuiz();return;}
-  if(qstate.screen==='results'){renderQResults();return;}
-}
-
-function renderQSelection(){
-  const fc=getFilteredData().length;
-  document.getElementById('quiz-app').innerHTML=`
-  <div class="q-card" style="text-align:center">
-    <h2 style="color:#2d2d2d;margin-bottom:6px;font-size:1.5rem">📝 Quiz Ανάλυσης Παραγράφου</h2>
-    <p style="color:#a0826d;font-size:.875rem">Νεοελληνική Γλώσσα — Α΄ Λυκείου</p>
-    <div class="q-filter" style="text-align:left;margin-top:16px">
-      <h3>📐 Δομή</h3>
-      <div>
-        ${['all','Διμερής','Τριμερής'].map(v=>`<button class="q-fbtn ${qstate.selectedDomiFilter===v?'sel':''}" onclick="qstate.selectedDomiFilter='${v}';renderQuiz()">${v==='all'?'Όλες':v}</button>`).join('')}
+    <div style="font-family:'Noto Sans',sans-serif;">
+      <!-- Τίτλος -->
+      <div style="background:#2d2d2d; color:#fff; border-radius:10px; padding:12px 20px; text-align:center; font-size:16px; font-weight:700; letter-spacing:.05em; margin-bottom:20px;">
+        Παράδειγμα διαίρεσης
       </div>
-    </div>
-    <div class="q-filter" style="text-align:left">
-      <h3>📚 Τρόπος Ανάπτυξης</h3>
-      <div>
-        ${['all',...tropoiAnaptyxis,'syndyasmos'].map(v=>`<button class="q-fbtn ${qstate.selectedTroposFilter===v?'sel':''}" onclick="qstate.selectedTroposFilter='${v}';renderQuiz()">${v==='all'?'Όλοι':v==='syndyasmos'?'Συνδυασμός':v}</button>`).join('')}
-      </div>
-    </div>
-    <div class="q-filter" style="text-align:left">
-      <h3>🔢 Αριθμός Παραγράφων</h3>
-      <div>
-        ${[1,10,20].map(n=>`<button class="q-fbtn ${qstate.selectedCount===n?'sel':''}" onclick="qstate.selectedCount=${n};renderQuiz()">${n}</button>`).join('')}
-      </div>
-    </div>
-    <div class="q-info">✅ Βρέθηκαν <strong>${fc}</strong> παράγραφοι</div>
-    <button class="q-start" ${fc===0?'disabled':''} onclick="startQuiz()">Ξεκινήστε το Quiz</button>
-  </div>`;
-}
 
-function startQuiz(){
-  quizData=shuffleArray(getFilteredData()).slice(0,qstate.selectedCount);
-  qstate.screen='quiz'; qstate.currentQuestion=0; qstate.selectedDomi=null;
-  qstate.selectedTropoi=[]; qstate.showResult=false;
-  qstate.score={domi:0,tropiKyrios:0,tropiDeytereyon:0};
-  renderQuiz();
-}
-
-function renderQQuiz(){
-  const c=quizData[qstate.currentQuestion];
-  const prog=((qstate.currentQuestion+1)/quizData.length)*100;
-  const isSyn=c.deytereyon!==null;
-  document.getElementById('quiz-app').innerHTML=`
-  <div class="q-card">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div><strong style="color:#2d2d2d">📝 Ανάλυση Παραγράφου</strong><br><span style="color:#a0826d;font-size:.8rem">Νεοελληνική Γλώσσα</span></div>
-      <div style="text-align:right"><span style="color:#a0826d;font-size:.8rem">Ερώτηση</span><br><span style="font-size:1.6rem;font-weight:700;color:#f5a623">${qstate.currentQuestion+1}/${quizData.length}</span></div>
-    </div>
-    <div class="q-prog"><div class="q-prog-fill" style="width:${prog}%"></div></div>
-  </div>
-  <div class="q-card">
-    <span style="display:inline-block;background:#fde8b8;color:#7a4f1e;padding:3px 10px;border-radius:6px;font-size:.8rem;font-weight:600;margin-bottom:10px">Παράγραφος ${qstate.currentQuestion+1}</span>
-    ${isSyn?'<span style="display:inline-block;background:#fef3c7;color:#92400e;padding:3px 8px;border-radius:6px;font-size:.72rem;font-weight:600;margin-left:6px">⚡ Συνδυασμός</span>':''}
-    <div class="q-par">${c.keimeno}</div>
-  </div>
-  <div class="q-grid">
-    <div class="q-qcard ${qstate.showResult?(qstate.selectedDomi===c.domi?'correct':'incorrect'):''}">
-      <h3 style="color:#2d2d2d;font-size:.95rem;margin-bottom:10px">1️⃣ Δομή της παραγράφου;</h3>
-      ${['Τριμερής','Διμερής'].map(d=>{
-        const ok=qstate.showResult&&d===c.domi;
-        const bad=qstate.showResult&&qstate.selectedDomi===d&&d!==c.domi;
-        return `<button class="q-opt ${qstate.selectedDomi===d&&!qstate.showResult?'sel':''} ${ok?'ok':''} ${bad?'bad':''}"
-          onclick="if(!${qstate.showResult}){qstate.selectedDomi='${d}';renderQuiz()}" ${qstate.showResult?'disabled':''}>
-          ${d} <span style="font-size:.72rem;opacity:.7">${d==='Τριμερής'?'(με κατακλείδα)':'(χωρίς κατακλείδα)'}</span>
-        </button>`;
-      }).join('')}
-    </div>
-    <div class="q-qcard ${qstate.showResult?getQTroposClass(c):''}">
-      <h3 style="color:#2d2d2d;font-size:.95rem;margin-bottom:6px">2️⃣ Τρόπος ανάπτυξης;</h3>
-      <p style="font-size:.72rem;color:#a0826d;margin-bottom:10px;font-style:italic">💡 1ος = κύριος, 2ος = δευτερεύων</p>
-      <div class="q-tgrid">
-        ${tropoiAnaptyxis.map(t=>{
-          const si=qstate.selectedTropoi.indexOf(t);
-          const isSel=si!==-1, isPrim=si===0;
-          const okK=t===c.kyrios, okD=t===c.deytereyon;
-          const bad=qstate.showResult&&isSel&&!okK&&!okD;
-          let cls='q-tbtn';
-          if(!qstate.showResult&&isSel)cls+=isPrim?' sel-p':' sel';
-          if(qstate.showResult){if(okK)cls+=' ok-p';else if(okD)cls+=' ok';else if(bad)cls+=' bad';}
-          return `<button class="${cls}" onclick="qToggleTropos('${t}')" ${qstate.showResult?'disabled':''}>
-            ${t}${isSel&&!qstate.showResult?`<span class="q-order">${si+1}</span>`:''}
-          </button>`;
-        }).join('')}
+      <!-- Κείμενο -->
+      <div style="background:#f9f4ee; border-radius:8px; padding:14px 18px; font-size:15px; color:#222; line-height:1.6; text-align:justify; margin-bottom:22px; border-left:4px solid #f5a623;">
+        Οι ρηματικοί χρόνοι <strong>διακρίνονται</strong> σε παρελθοντικούς, παροντικούς και μελλοντικούς.
       </div>
-    </div>
-  </div>
-  ${!qstate.showResult
-    ?`<button class="q-mainbtn prim" onclick="qCheck()" ${!qstate.selectedDomi||qstate.selectedTropoi.length===0?'disabled':''}>Έλεγχος Απάντησης</button>`
-    :`<div class="q-card">
-        <h3 style="color:#1e293b;font-size:1.1rem;margin-bottom:14px">📋 Ανάλυση Απάντησης</h3>
-        <div class="q-fb blue">
-          <h4>${qstate.selectedDomi===c.domi?'✅':'❌'} Δομή: ${c.domi}</h4>
-          ${c.thematiki?`<p><strong>Θεματική:</strong> ${c.thematiki}</p>`:''}
-          ${c.scholia?`<p><strong>Σχόλια:</strong> ${c.scholia}</p>`:''}
-          ${c.katakleida?`<p><strong>Κατακλείδα:</strong> ${c.katakleida}</p>`:''}
+
+      <!-- Σχεδιάγραμμα -->
+      <div style="display:flex; flex-direction:column; align-items:center; gap:0;">
+
+        <!-- Διαιρετέα έννοια -->
+        <div style="background:#2d2d2d; color:#fff; border-radius:8px; padding:10px 28px; font-size:13.5px; font-weight:700; text-align:center;">
+          ⬛ Διαιρετέα έννοια<br>
+          <span style="font-weight:300; font-size:15px; letter-spacing:.04em;">ρηματικοί χρόνοι</span>
         </div>
-        <div class="q-fb purple">
-          <h4>Τρόπος/οι Ανάπτυξης:</h4>
-          <p><span class="q-tag p">Κύριος: ${c.kyrios}</span>${c.deytereyon?`<span class="q-tag s">Δευτερεύων: ${c.deytereyon}</span>`:''}</p>
-          ${c.aitiologisi?`<p style="margin-top:8px">${c.aitiologisi}</p>`:''}
+
+        <!-- Βάση -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:0; margin:2px 0;">
+          <div style="width:2px; height:14px; background:#aaa;"></div>
+          <div style="background:#f5a623; color:#fff; border-radius:6px; padding:7px 22px; font-size:12px; font-weight:600; text-align:center;">
+            📐 Διαιρετική βάση<br>
+            <span style="font-weight:400; font-size:11.5px;">η χρονική βαθμίδα στην οποία αναφέρονται</span>
+          </div>
+          <div style="width:2px; height:14px; background:#aaa;"></div>
         </div>
-        <div class="q-fb amber">
-          <h4>📊 Η επιλογή σου:</h4>
-          <p>${qstate.selectedTropoi.map((t,i)=>`<span class="q-tag ${i===0?'p':'s'}">${i===0?'Κύριος':'Δευτερεύων'}: ${t}</span>`).join('')}</p>
-          <p style="margin-top:6px">Κύριος: ${qstate.selectedTropoi[0]===c.kyrios?'✅':'❌'}${c.deytereyon?` | Δευτ.: ${qstate.selectedTropoi[1]===c.deytereyon?'✅':(qstate.selectedTropoi.length<2?'⚠️ Δεν επιλέχθηκε':'❌')}`:''}
-          </p>
+
+        <!-- Γραμμή διακλάδωσης -->
+        <div style="display:flex; align-items:flex-start; gap:0; width:100%; justify-content:center; position:relative;">
+          <div style="position:absolute; top:0; left:50%; transform:translateX(-50%); width:66%; height:2px; background:#aaa;"></div>
+          <!-- 3 κλάδοι -->
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; padding-top:0;">
+            <div style="width:2px; height:18px; background:#aaa;"></div>
+            <div style="background:#fff3cd; border:2px solid #f5a623; border-radius:8px; padding:10px 14px; font-size:13px; font-weight:700; color:#333; text-align:center; min-width:120px;">
+              🕐 Παρελθοντικοί
+            </div>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; padding-top:0;">
+            <div style="width:2px; height:18px; background:#aaa;"></div>
+            <div style="background:#d4edda; border:2px solid #28a745; border-radius:8px; padding:10px 14px; font-size:13px; font-weight:700; color:#333; text-align:center; min-width:120px;">
+              🕑 Παροντικοί
+            </div>
+          </div>
+          <div style="flex:1; display:flex; flex-direction:column; align-items:center; padding-top:0;">
+            <div style="width:2px; height:18px; background:#aaa;"></div>
+            <div style="background:#d1ecf1; border:2px solid #17a2b8; border-radius:8px; padding:10px 14px; font-size:13px; font-weight:700; color:#333; text-align:center; min-width:120px;">
+              🕒 Μελλοντικοί
+            </div>
+          </div>
         </div>
-        ${c.prothesi?`<div class="q-fb green"><h4>🎯 Πρόθεση Συντάκτη</h4><p>${c.prothesi}</p></div>`:''}
+
       </div>
-      <button class="q-mainbtn succ" onclick="qNext()">${qstate.currentQuestion<quizData.length-1?'Επόμενη Ερώτηση →':'Δες τα Αποτελέσματα'}</button>`
-  }`;
-}
-
-function getQTroposClass(c){
-  const kOk=qstate.selectedTropoi[0]===c.kyrios;
-  const dOk=!c.deytereyon||qstate.selectedTropoi[1]===c.deytereyon;
-  if(kOk&&dOk)return 'correct';
-  if(kOk||(c.deytereyon&&qstate.selectedTropoi.includes(c.deytereyon)))return 'partial';
-  return 'incorrect';
-}
-
-function qToggleTropos(t){
-  if(qstate.showResult)return;
-  const idx=qstate.selectedTropoi.indexOf(t);
-  if(idx!==-1)qstate.selectedTropoi.splice(idx,1);
-  else if(qstate.selectedTropoi.length<2)qstate.selectedTropoi.push(t);
-  else qstate.selectedTropoi[1]=t;
-  renderQuiz();
-}
-
-function qCheck(){
-  const c=quizData[qstate.currentQuestion];
-  if(qstate.selectedDomi===c.domi)qstate.score.domi++;
-  if(qstate.selectedTropoi[0]===c.kyrios)qstate.score.tropiKyrios++;
-  if(c.deytereyon&&qstate.selectedTropoi[1]===c.deytereyon)qstate.score.tropiDeytereyon++;
-  qstate.showResult=true; renderQuiz();
-}
-
-function qNext(){
-  if(qstate.currentQuestion<quizData.length-1){
-    qstate.currentQuestion++; qstate.selectedDomi=null;
-    qstate.selectedTropoi=[]; qstate.showResult=false;
-  } else { qstate.screen='results'; }
-  renderQuiz();
-}
-
-function renderQResults(){
-  const maxD=quizData.length, maxK=quizData.length;
-  const maxDey=quizData.filter(q=>q.deytereyon).length;
-  const total=qstate.score.domi+qstate.score.tropiKyrios+qstate.score.tropiDeytereyon;
-  const max=maxD+maxK+maxDey;
-  const pct=Math.round((total/max)*100);
-  document.getElementById('quiz-app').innerHTML=`
-  <div style="background:white;border-radius:16px;box-shadow:4px 8px 24px rgba(0,0,0,.18);padding:40px 24px;text-align:center">
-    <div style="font-size:3.5rem;margin-bottom:12px">${pct>=80?'🎉':pct>=60?'👍':'📚'}</div>
-    <h2 style="color:#2d2d2d;margin-bottom:20px">Ολοκλήρωσες το Quiz!</h2>
-    <div style="background:linear-gradient(135deg,#faf5ee,#f5ede0);border-radius:16px;padding:20px;margin-bottom:20px">
-      <div style="font-size:2.8rem;font-weight:700;color:#f5a623">${total} / ${max}</div>
-      <div style="color:#a0826d">(${pct}%)</div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px">
-      <div style="background:#faf5ee;padding:14px;border-radius:12px;border-left:3px solid #f5a623"><p style="font-size:.8rem;color:#7a4f1e">Δομή</p><p style="font-size:1.4rem;font-weight:700;color:#2d2d2d">${qstate.score.domi}/${maxD}</p></div>
-      <div style="background:#f5ede0;padding:14px;border-radius:12px;border-left:3px solid #a0826d"><p style="font-size:.8rem;color:#5a3520">Κύριος</p><p style="font-size:1.4rem;font-weight:700;color:#2d2d2d">${qstate.score.tropiKyrios}/${maxK}</p></div>
-      <div style="background:#e8f5eb;padding:14px;border-radius:12px;border-left:3px solid #4a7c55"><p style="font-size:.8rem;color:#3d6b45">Δευτερεύων</p><p style="font-size:1.4rem;font-weight:700;color:#3d6b45">${qstate.score.tropiDeytereyon}/${maxDey}</p></div>
-    </div>
-    <button onclick="startQuiz()" style="width:100%;padding:14px;border:none;border-radius:12px;background:#2d2d2d;color:white;font-size:1rem;font-weight:600;cursor:pointer;margin-bottom:10px;letter-spacing:.03em">Ξεκίνα Ξανά</button>
-    <button onclick="qstate.screen='selection';renderQuiz()" style="width:100%;padding:14px;border:none;border-radius:12px;background:#a0826d;color:white;font-size:1rem;font-weight:600;cursor:pointer">Νέα Επιλογή</button>
-  </div>`;
-}
-
-loadQuizData();
-</script>
-
-<!-- FULLSCREEN TEXT OVERLAY -->
-<div id="text-overlay" onclick="closeOverlay()">
-  <span id="text-overlay-close" onclick="closeOverlay()">&#10005;</span>
-  <div id="text-overlay-inner" onclick="event.stopPropagation()">
-    <div id="text-overlay-text"></div>
-    <div id="text-overlay-source"></div>
   </div>
 </div>
-
 </body>
 </html>
