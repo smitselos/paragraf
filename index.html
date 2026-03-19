@@ -194,7 +194,7 @@
 // ══════════════════════════════════════════════
 // CONFIG
 // ══════════════════════════════════════════════
-const SHEET_SLIDES_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS0kpIdEdvpy3D-6DZPDZaTn3WE-oTcxUf8x5dWHATTo4MYw_lzaW9Q7WARogDygujZmZlnQ-KUr7U2/pub?gid=1005025868&single=true&output=csv';
+const SHEET_SLIDES_URL = 'https://script.google.com/macros/s/AKfycbwhRGXm04SFsUphDVIuQzJD3r5tnw-DvW0md25t_w-NptUXqQoIDOuH75p62Imcgj2ZWg/exec';
 const SHEET_QUIZ_URL   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTF385Wqk5c-makn7m3cxaDD35hr3LFyjKtR3r6cplVW4ZtGwEbcdqvHhvVztdbM5uxNrs8gxxoYHuW/pub?gid=176063284&single=true&output=csv';
 const TROPOI = ["Παραδείγματα","Αιτιολόγηση","Αίτιο-αποτέλεσμα","Διαίρεση","Σύγκριση-αντίθεση","Αναλογία","Ορισμός"];
 
@@ -205,8 +205,7 @@ function parseCSV(csv, sep=';') {
   const lines = csv.split('\n').filter(l => l.trim() && l.replace(/;/g,'').trim());
   const rawHeaders = lines[0].replace(/^\uFEFF/,'').split(sep).map(h => h.trim().replace(/\r/g,''));
   return lines.slice(1).filter(l => l.split(sep)[0].trim()).map(line => {
-    // Αφαιρώ 
- από κάθε τιμή
+    // Αφαιρώ \r από κάθε τιμή
     const vals = line.split(sep).map(v => v.trim().replace(/\r/g,'').replace(/^"|"$/g,''));
     const obj = {};
     rawHeaders.forEach((h,i) => obj[h] = vals[i] || '');
@@ -248,6 +247,11 @@ document.addEventListener('keydown', e => {
 // ══════════════════════════════════════════════
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openCardModal(el) {
+  const text = el.dataset.keimeno || '';
+  const source = el.dataset.pigi || '';
+  openTextModal(text, source);
+}
 function openTextModal(text, source) {
   document.getElementById('textModalBody').textContent = text;
   document.getElementById('textModalSource').textContent = source || '';
@@ -354,7 +358,7 @@ function buildDefault(row, idx) {
             <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text">${deiktes}</div></div>
           </div>
         </div>
-        <div class="right-card" onclick="openTextModal('${esc(keimeno)}','${esc(pigi)}')">
+        <div class="right-card" data-keimeno="${keimeno.replace(/"/g,'&quot;')}" data-pigi="${pigi.replace(/"/g,'&quot;')}" onclick="openCardModal(this)">
           <div class="right-text">&nbsp;&nbsp;&nbsp;${keimeno}</div>
           <div class="right-source">${pigi}</div>
         </div>
@@ -393,7 +397,7 @@ function buildTwoBottom(row, idx) {
             </div>
           </div>
         </div>
-        <div class="right-card" onclick="openTextModal('${esc(keimeno)}','${esc(pigi)}')">
+        <div class="right-card" data-keimeno="${keimeno.replace(/"/g,'&quot;')}" data-pigi="${pigi.replace(/"/g,'&quot;')}" onclick="openCardModal(this)">
           <div class="right-text" style="font-size:14.5px;line-height:1.72;">&nbsp;&nbsp;&nbsp;${keimeno}</div>
           <div class="right-source">${pigi}</div>
         </div>
