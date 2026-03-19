@@ -219,6 +219,7 @@ function parseCSV(csv, sep=';') {
 // ══════════════════════════════════════════════
 let current = 1, total = 1;
 function showSlide(n) {
+  console.log('showSlide:', n, 'total:', total);
   const prev = document.getElementById('slide-'+current);
   if (prev) prev.classList.remove('active');
   current = Math.max(1, Math.min(n, total));
@@ -467,6 +468,10 @@ async function loadSlides() {
 
     document.getElementById('slides-wrapper').innerHTML = html;
     document.getElementById('loading').style.display = 'none';
+    console.log('Slides built:', total, 'current:', current);
+    // Βεβαιώνω ότι το slide-1 είναι active
+    const first = document.getElementById('slide-1');
+    if (first) first.classList.add('active');
 
     // event listeners για modals
     document.querySelectorAll('.text-modal').forEach(m =>
