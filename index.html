@@ -294,7 +294,7 @@ function topbarHTML() {
     <div class="topbar-icon"><svg viewBox="0 0 24 24"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg></div>
     <div class="topbar-title">Παράγραφος</div>
     <div class="topbar-copy">© Αλέξανδρος &amp; Σπύρος Μητσέλος</div>
-    <nav class="theme-nav"><a href="#" class="active">Θέμα Α</a><a href="#">Θέμα Β</a><a href="#">Θέμα Γ</a><a href="#">Θέμα Δ</a></nav>
+    <nav class="theme-nav"><a href="javascript:void(0)" class="active">Θέμα Α</a><a href="javascript:void(0)">Θέμα Β</a><a href="javascript:void(0)">Θέμα Γ</a><a href="javascript:void(0)">Θέμα Δ</a></nav>
   </div>`;
 }
 
@@ -310,7 +310,7 @@ function footerHTML(row, idx, transparent=false) {
       <div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">${f1}</div></div>
       <div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Συνοχή – Συνεκτικότητα – Δομή παραγράφου – Τρόποι ανάπτυξης παραγράφου – Πλαγιότιτλος</div></div>
     </div>
-    <div class="arrows"><a class="arrow" onclick="prevSlide()">&#60;</a><a class="arrow" onclick="nextSlide()">&#62;</a></div>
+    <div class="arrows"><a class="arrow" href="javascript:void(0)" onclick="prevSlide()">&#60;</a><a class="arrow" href="javascript:void(0)" onclick="nextSlide()">&#62;</a></div>
     <div class="fblock">
       <div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">${row.footer2||'Τρόποι ανάπτυξης'}</div></div>
       <div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Παραδείγματα, αιτιολόγηση, αίτιο – αποτέλεσμα, διαίρεση, σύγκριση – αντίθεση, ορισμός, αναλογία</div></div>
