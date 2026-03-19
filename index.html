@@ -202,11 +202,14 @@ const TROPOI = ["Παραδείγματα","Αιτιολόγηση","Αίτιο-
 // ══════════════════════════════════════════════
 function parseCSV(csv, sep=';') {
   const lines = csv.split('\n').filter(l => l.trim());
-  const headers = lines[0].split(sep).map(h => h.trim().replace(/\r/g,''));
+  // Αφαιρώ BOM και carriage returns
+  const rawHeaders = lines[0].replace(/^\uFEFF/,'').split(sep).map(h => h.trim().replace(/\r/g,''));
   return lines.slice(1).map(line => {
     const vals = line.split(sep).map(v => v.trim().replace(/\r/g,''));
     const obj = {};
-    headers.forEach((h,i) => obj[h] = vals[i] || '');
+    rawHeaders.forEach((h,i) => obj[h] = vals[i] || '');
+    // Επίσης index-based για ασφάλεια
+    obj._cols = vals;
     return obj;
   });
 }
@@ -300,9 +303,11 @@ function topbarHTML() {
 // ══════════════════════════════════════════════
 function footerHTML(row, idx, transparent=false) {
   const style = transparent ? 'background:transparent; border-top:1px solid rgba(200,184,154,0.4);' : '';
+  const c = row._cols || [];
+  const f1=c[9]||'Η οργάνωση του κειμένου', f2=c[10]||'Τρόποι ανάπτυξης', f3=c[11]||'';
   return `<div class="footer" style="${style}">
     <div class="fblock">
-      <div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">${row.footer1||'Η οργάνωση του κειμένου'}</div></div>
+      <div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">${f1}</div></div>
       <div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Συνοχή – Συνεκτικότητα – Δομή παραγράφου – Τρόποι ανάπτυξης παραγράφου – Πλαγιότιτλος</div></div>
     </div>
     <div class="arrows"><a class="arrow" onclick="prevSlide()">&#60;</a><a class="arrow" onclick="nextSlide()">&#62;</a></div>
@@ -322,6 +327,8 @@ function footerHTML(row, idx, transparent=false) {
 // BUILD SLIDE: layout = default
 // ══════════════════════════════════════════════
 function buildDefault(row, idx) {
+  const c = row._cols;
+  const titlos=c[2]||'', prothesi=c[3]||'', deiktes=c[4]||'', keimeno=c[7]||'', pigi=c[8]||'';
   return `<div class="slide${idx===1?' active':''}" id="slide-${idx}" data-layout="default">
     <div class="bg">${BG_SVG}</div>
     ${topbarHTML()}
@@ -329,19 +336,19 @@ function buildDefault(row, idx) {
       <div class="body-inner">
         ${sidenavHTML()}
         <div class="left-col">
-          <div class="title-card"><h2>${row['Τίτλος']}</h2></div>
+          <div class="title-card"><h2>${titlos}</h2></div>
           <div class="info-card">
             <div class="info-card-label"><div class="ic-osq"></div>Πρόθεση συντάκτη</div>
-            <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-style:normal;">${row['Πρόθεση']}</div></div>
+            <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-style:normal;">${prothesi}</div></div>
           </div>
           <div class="info-card">
             <div class="info-card-label"><div class="ic-osq"></div>Δείκτες</div>
-            <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text">${row['Δείκτες']}</div></div>
+            <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text">${deiktes}</div></div>
           </div>
         </div>
-        <div class="right-card" onclick="openTextModal('${esc(row['κείμενο'])}','${esc(row['πηγή'])}')">
-          <div class="right-text">&nbsp;&nbsp;&nbsp;${row['κείμενο']}</div>
-          <div class="right-source">${row['πηγή']}</div>
+        <div class="right-card" onclick="openTextModal('${esc(keimeno)}','${esc(pigi)}')">
+          <div class="right-text">&nbsp;&nbsp;&nbsp;${keimeno}</div>
+          <div class="right-source">${pigi}</div>
         </div>
       </div>
     </div>
@@ -353,6 +360,8 @@ function buildDefault(row, idx) {
 // BUILD SLIDE: layout = two_bottom
 // ══════════════════════════════════════════════
 function buildTwoBottom(row, idx) {
+  const c = row._cols;
+  const titlos=c[2]||'', prothesi=c[3]||'', deiktes=c[4]||'', c3tit=c[5]||'', c3txt=c[6]||'', keimeno=c[7]||'', pigi=c[8]||'';
   return `<div class="slide${idx===1?' active':''}" id="slide-${idx}" data-layout="two_bottom">
     <div class="bg">${BG_SVG}</div>
     ${topbarHTML()}
@@ -360,25 +369,25 @@ function buildTwoBottom(row, idx) {
       <div class="body-inner">
         ${sidenavHTML()}
         <div class="left-col">
-          <div class="title-card"><h2>${row['Τίτλος']}</h2></div>
+          <div class="title-card"><h2>${titlos}</h2></div>
           <div class="info-card" style="flex:0 0 auto;">
             <div class="info-card-label"><div class="ic-osq"></div>Πρόθεση συντάκτη</div>
-            <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-style:normal;font-size:14px;line-height:1.55;">${row['Πρόθεση']}</div></div>
+            <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-style:normal;font-size:14px;line-height:1.55;">${prothesi}</div></div>
           </div>
           <div style="display:flex;gap:10px;flex:1;min-height:0;">
             <div class="info-card" style="flex:1;">
               <div class="info-card-label" style="font-size:13.5px;"><div class="ic-osq"></div>Δείκτες</div>
-              <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-size:12px;line-height:1.35;">${row['Δείκτες']}</div></div>
+              <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-size:12px;line-height:1.35;">${deiktes}</div></div>
             </div>
             <div class="info-card" style="flex:1;">
-              <div class="info-card-label" style="font-size:12px;"><div class="ic-osq"></div>${row['card3_τίτλος']}</div>
-              <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-size:13px;line-height:1.5;">${row['card3_κείμενο']}</div></div>
+              <div class="info-card-label" style="font-size:12px;"><div class="ic-osq"></div>${c3tit}</div>
+              <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-size:13px;line-height:1.5;">${c3txt}</div></div>
             </div>
           </div>
         </div>
-        <div class="right-card" onclick="openTextModal('${esc(row['κείμενο'])}','${esc(row['πηγή'])}')">
-          <div class="right-text" style="font-size:14.5px;line-height:1.72;">&nbsp;&nbsp;&nbsp;${row['κείμενο']}</div>
-          <div class="right-source">${row['πηγή']}</div>
+        <div class="right-card" onclick="openTextModal('${esc(keimeno)}','${esc(pigi)}')">
+          <div class="right-text" style="font-size:14.5px;line-height:1.72;">&nbsp;&nbsp;&nbsp;${keimeno}</div>
+          <div class="right-source">${pigi}</div>
         </div>
       </div>
     </div>
@@ -444,7 +453,7 @@ async function loadSlides() {
     let html = '';
     rows.forEach((row, i) => {
       const idx = i+1;
-      const layout = row['layout']||'default';
+      const layout = row._cols[1]||'default';
       if (layout === 'quiz')       html += buildQuiz(row, idx);
       else if (layout==='two_bottom') html += buildTwoBottom(row, idx);
       else                         html += buildDefault(row, idx);
