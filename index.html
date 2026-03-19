@@ -202,14 +202,14 @@ const TROPOI = ["Παραδείγματα","Αιτιολόγηση","Αίτιο-
 // CSV PARSER (semicolon)
 // ══════════════════════════════════════════════
 function parseCSV(csv, sep=';') {
-  const lines = csv.split('\n').filter(l => l.trim());
-  // Αφαιρώ BOM και carriage returns
+  const lines = csv.split('\n').filter(l => l.trim() && l.replace(/;/g,'').trim());
   const rawHeaders = lines[0].replace(/^\uFEFF/,'').split(sep).map(h => h.trim().replace(/\r/g,''));
-  return lines.slice(1).map(line => {
-    const vals = line.split(sep).map(v => v.trim().replace(/\r/g,''));
+  return lines.slice(1).filter(l => l.split(sep)[0].trim()).map(line => {
+    // Αφαιρώ 
+ από κάθε τιμή
+    const vals = line.split(sep).map(v => v.trim().replace(/\r/g,'').replace(/^"|"$/g,''));
     const obj = {};
     rawHeaders.forEach((h,i) => obj[h] = vals[i] || '');
-    // Επίσης index-based για ασφάλεια
     obj._cols = vals;
     return obj;
   });
@@ -489,6 +489,7 @@ async function loadSlides() {
     document.getElementById('slides-wrapper').innerHTML = html;
     document.getElementById('loading').style.display = 'none';
     const d=document.getElementById('dbg'); if(d) d.textContent='loaded: '+total+' slides';
+    current = 1;
     const first = document.getElementById('slide-1');
     if (first) first.classList.add('active');
 
