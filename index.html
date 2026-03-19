@@ -219,17 +219,23 @@ function parseCSV(csv, sep=';') {
 // ══════════════════════════════════════════════
 let current = 1, total = 1;
 function showSlide(n) {
-  document.getElementById('slide-'+current)?.classList.remove('active');
+  const prev = document.getElementById('slide-'+current);
+  if (prev) prev.classList.remove('active');
   current = Math.max(1, Math.min(n, total));
-  document.getElementById('slide-'+current)?.classList.add('active');
-  // Αν είναι quiz slide, φόρτωσε
-  const s = document.getElementById('slide-'+current);
-  if (s && s.dataset.layout === 'quiz' && qAllData.length === 0) {
-    qState.screen = 'loading'; qRender(); qLoadData();
+  const next = document.getElementById('slide-'+current);
+  if (next) {
+    next.classList.add('active');
+    if (next.dataset.layout === 'quiz' && qAllData.length === 0) {
+      qState.screen = 'loading'; qRender(); qLoadData();
+    }
   }
 }
 function nextSlide() { showSlide(current+1); }
 function prevSlide() { showSlide(current-1); }
+function goToQuiz() {
+  const quizSlide = document.querySelector('[data-layout="quiz"]');
+  if (quizSlide) showSlide(parseInt(quizSlide.id.replace('slide-','')));
+}
 document.addEventListener('keydown', e => {
   if (e.key==='ArrowRight'||e.key==='ArrowDown') nextSlide();
   if (e.key==='ArrowLeft' ||e.key==='ArrowUp')   prevSlide();
@@ -279,7 +285,7 @@ function sidenavHTML(isQuiz=false) {
       <svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg>
       <span>Μπροστά</span>
     </div>
-    <div class="sidenav-btn" onclick="showSlide(${total})" style="${isQuiz?'cursor:pointer;':''}">
+    <div class="sidenav-btn" onclick="goToQuiz()" style="cursor:pointer;">
       <svg viewBox="0 0 24 24" fill="none" stroke="${isQuiz?'#f5a623':'#444'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
       <span style="${isQuiz?'color:#f5a623;font-weight:700;':''}">Κουίζ</span>
     </div>
