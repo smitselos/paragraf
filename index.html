@@ -249,9 +249,9 @@ function parseCSV(csv) {
       let v = (vals[idx]||'').trim();
       obj[h] = (v===''||v.toLowerCase()==='null'||v.toLowerCase()==='false') ? null : v;
     });
-    // skip inactive or incomplete
-    if (!obj['Ενεργό'] || obj['Ενεργό']==='FALSE' || obj['Ενεργό']==='false') return;
-    if (!obj['Τύπος'] || !obj['Κατηγορία'] || !obj['Κείμενο Ερώτησης']) return;
+    // skip inactive or incomplete — use continue, not return
+    if (!obj['Ενεργό'] || obj['Ενεργό']==='FALSE' || obj['Ενεργό']==='false') continue;
+    if (!obj['Τύπος'] || !obj['Κατηγορία'] || !obj['Κείμενο Ερώτησης']) continue;
     // parse numeric fields
     obj.cat = parseInt(obj['Κατηγορία']) || 0;
     obj.diff = parseInt(obj['Δυσκολία']) || 1;
