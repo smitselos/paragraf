@@ -183,6 +183,551 @@
     background: #fff; border-radius: 14px; padding: 3vh 4vw;
     width: 82vw; max-height: 82vh; overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0,0,0,.4); position: relative;
+    font-size: clamp(13px, 1.8vw, 26px);
+  }
+  .text-modal-inner .modal-text { font-family: 'Noto Sans', sans-serif; font-size: clamp(15px, 2.2vw, 32px); color: #222; line-height: 1.8; text-align: justify; }
+  .text-modal-inner .modal-source { font-size: clamp(11px, 1.3vw, 18px); color: #888; font-style: italic; text-align: right; margin-top: 1.5vh; }
+  .text-modal-close { position: absolute; top: 14px; right: 18px; font-size: 24px; color: #aaa; cursor: pointer; background: none; border: none; line-height: 1; }
+  .text-modal-close:hover { color: #333; }
+  .right-card { cursor: pointer; }
+  .right-card:hover { box-shadow: 4px 8px 32px rgba(0,0,0,.45); }
+
+  /* SLIDE 3 QUIZ */
+  #slide-3 .body { overflow: hidden; align-items: stretch; padding: 0 28px 0 0; }
+  #slide-3 .quiz-area { flex:1; overflow-y:auto; overflow-x:hidden; padding: 14px 20px 0 14px; display:flex; flex-direction:column; min-height:0; }
+  #slide-3 .q-selection-title { font-size: 16px; font-weight: 700; color: #2d2d2d; margin-bottom: 4px; text-align: center; }
+  #slide-3 .q-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  #slide-3 .q-title { font-size: 14px; font-weight: 700; color: #2d2d2d; }
+  #slide-3 .q-counter { font-size: 11px; color: #888; }
+  #slide-3 .q-progress-bar { background: #d4c4a8; border-radius: 999px; height: 5px; margin-bottom: 12px; overflow: hidden; }
+  #slide-3 .q-progress-fill { background: #f5a623; height: 100%; transition: width 0.3s; }
+  #slide-3 .q-filter-section { background: rgba(255,255,255,0.45); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; border: 1px solid rgba(200,184,154,0.4); }
+  #slide-3 .q-filter-section h3 { font-size: 11px; font-weight: 700; color: #2d2d2d; margin-bottom: 6px; }
+  #slide-3 .q-filter-options { display: flex; flex-wrap: wrap; gap: 5px; }
+  #slide-3 .q-filter-btn { padding: 4px 10px; border: 1.5px solid #c8b89a; border-radius: 6px; background: #fff; cursor: pointer; font-size: 10px; font-family: inherit; transition: all 0.15s; }
+  #slide-3 .q-filter-btn:hover { border-color: #f5a623; }
+  #slide-3 .q-filter-btn.sel { border-color: #f5a623; background: #f5a623; color: #fff; font-weight: 600; }
+  #slide-3 .q-start-btn { width: 100%; padding: 10px; border: none; border-radius: 8px; background: #2d2d2d; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; margin-top: 6px; transition: background 0.2s; }
+  #slide-3 .q-start-btn:hover { background: #f5a623; }
+  #slide-3 .q-start-btn:disabled { background: #c8b89a; cursor: not-allowed; }
+  #slide-3 .q-count-info { background: rgba(245,166,35,0.2); color: #6b4400; padding: 6px 10px; border-radius: 6px; margin-top: 6px; font-size: 10px; font-weight: 500; border: 1px solid rgba(245,166,35,0.3); }
+  #slide-3 .q-count-info.warn { background: rgba(200,50,50,0.1); color: #8b0000; }
+  #slide-3 .q-par-label { display: inline-block; background: rgba(245,166,35,0.2); color: #7a5200; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-bottom: 6px; }
+  #slide-3 .q-par-text { background: rgba(255,255,255,0.7); color: #1e1e1e; padding: 12px 14px; border-radius: 8px; font-size: 12px; line-height: 1.65; text-align: justify; border-left: 3px solid #f5a623; margin-bottom: 10px; user-select: none; }
+  #slide-3 .q-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  #slide-3 .q-card { background: rgba(255,255,255,0.75); border-radius: 10px; padding: 10px 12px; border: 2px solid rgba(200,184,154,0.5); }
+  #slide-3 .q-card.correct { background: #dcfce7; border-color: #22c55e; }
+  #slide-3 .q-card.incorrect { background: #fee2e2; border-color: #ef4444; }
+  #slide-3 .q-card.partial { background: #fef9c3; border-color: #eab308; }
+  #slide-3 .q-card h3 { font-size: 11px; font-weight: 700; color: #2d2d2d; margin-bottom: 7px; }
+  #slide-3 .q-hint { font-size: 9px; color: #888; font-style: italic; margin-bottom: 6px; }
+  #slide-3 .q-opt-list { display: flex; flex-direction: column; gap: 5px; }
+  #slide-3 .q-opt-btn { width: 100%; padding: 7px 10px; border: 1.5px solid #c8b89a; border-radius: 6px; background: rgba(255,255,255,0.8); text-align: left; cursor: pointer; font-size: 11px; font-family: inherit; transition: all 0.15s; }
+  #slide-3 .q-opt-btn:hover:not(:disabled) { border-color: #f5a623; }
+  #slide-3 .q-opt-btn.sel { border-color: #f5a623; background: #fff8ec; }
+  #slide-3 .q-opt-btn.ok { border-color: #047857; background: #059669; color: #fff; font-weight: 600; }
+  #slide-3 .q-opt-btn.wrong { border-color: #b91c1c; background: #dc2626; color: #fff; font-weight: 600; }
+  #slide-3 .q-opt-btn:disabled { cursor: default; }
+  #slide-3 .q-opt-hint { font-size: 9px; color: #888; margin-left: 4px; }
+  #slide-3 .q-opt-btn.ok .q-opt-hint, #slide-3 .q-opt-btn.wrong .q-opt-hint { color: rgba(255,255,255,0.8); }
+  #slide-3 .q-tropos-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 5px; }
+  #slide-3 .q-tropos-btn { padding: 6px 6px; border: 1.5px solid #c8b89a; border-radius: 6px; background: rgba(255,255,255,0.8); cursor: pointer; font-size: 10px; font-family: inherit; transition: all 0.15s; position: relative; }
+  #slide-3 .q-tropos-btn:hover:not(:disabled) { border-color: #f5a623; }
+  #slide-3 .q-tropos-btn.sel-p { border-color: #2d2d2d; background: #e8d5b8; font-weight: 600; }
+  #slide-3 .q-tropos-btn.sel-s { border-color: #f5a623; background: #fff8ec; }
+  #slide-3 .q-tropos-btn.ok-p, #slide-3 .q-tropos-btn.ok-s { border-color: #047857; background: #059669; color: #fff; font-weight: 600; }
+  #slide-3 .q-tropos-btn.wrong { border-color: #b91c1c; background: #dc2626; color: #fff; }
+  #slide-3 .q-tropos-btn:disabled { cursor: default; }
+  #slide-3 .q-sel-order { position: absolute; top: -7px; right: -7px; background: #2d2d2d; color: #fff; width: 16px; height: 16px; border-radius: 50%; font-size: 9px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  #slide-3 .q-btn { width: 100%; padding: 10px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+  #slide-3 .q-btn.primary { background: #2d2d2d; color: #fff; }
+  #slide-3 .q-btn.primary:hover { background: #f5a623; }
+  #slide-3 .q-btn.success { background: #2d6a4f; color: #fff; }
+  #slide-3 .q-btn:disabled { background: #c8b89a; color: #fff; cursor: not-allowed; }
+  #slide-3 .q-feedback { background: rgba(255,255,255,0.6); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+  #slide-3 .q-feedback h3 { font-size: 11px; font-weight: 700; color: #2d2d2d; margin-bottom: 8px; }
+  #slide-3 .q-fbox { padding: 8px 10px; border-radius: 8px; margin-bottom: 8px; font-size: 10.5px; color: #333; }
+  #slide-3 .q-fbox.blue { background: rgba(245,166,35,0.1); }
+  #slide-3 .q-fbox.purple { background: rgba(45,45,45,0.07); }
+  #slide-3 .q-fbox.amber { background: rgba(200,184,154,0.25); }
+  #slide-3 .q-fbox h4 { font-size: 10.5px; font-weight: 700; color: #2d2d2d; margin-bottom: 4px; }
+  #slide-3 .q-tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 9px; font-weight: 700; margin-right: 4px; }
+  #slide-3 .q-tag.p { background: #e8d5b8; color: #2d2d2d; }
+  #slide-3 .q-tag.s { background: rgba(245,166,35,0.2); color: #7a5200; }
+  #slide-3 .q-results { text-align: center; padding: 20px; }
+  #slide-3 .q-results-score { font-size: 2.5rem; font-weight: 700; color: #f5a623; }
+  #slide-3 .q-results-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin: 12px 0; }
+  #slide-3 .q-rbox { padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.6); font-size: 10px; border: 1px solid rgba(200,184,154,0.4); }
+  #slide-3 .q-rbox p:last-child { font-size: 1.3rem; font-weight: 700; color: #2d2d2d; }
+  #slide-3 .q-theory-toggle { background: none; border: none; color: #f5a623; cursor: pointer; font-size: 10px; font-weight: 600; font-family: inherit; padding: 4px 0; }
+  #slide-3 .q-theory-box { background: rgba(245,166,35,0.1); border: 1px solid #f5a623; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: 10px; color: #333; }
+
+  /* Modal κειμένου παραγράφου κουίζ */
+  #qTextModal {
+    display: none; position: fixed; inset: 0; z-index: 2000;
+    background: rgba(0,0,0,.55); align-items: center; justify-content: center;
+  }
+  #qTextModal.open { display: flex; }
+  #qTextModal .inner {
+    background: #fff; border-radius: 14px;
+    padding: 32px 40px; width: 75vw; max-width: 780px;
+    max-height: 75vh; overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,.4); position: relative;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 16px; color: #222; line-height: 1.8; text-align: justify;
+    border-left: 4px solid #f5a623;
+  }
+  #qTextModal .close-btn {
+    position: absolute; top: 12px; right: 16px;
+    font-size: 22px; color: #aaa; cursor: pointer;
+    background: none; border: none; line-height: 1;
+  }
+  #qTextModal .close-btn:hover { color: #333; }
+</style>
+</head>
+<body>
+<div id="slides-wrapper">
+<div class="slide active" id="slide-1">
+  <div class="bg"><svg viewBox="0 0 1000 563" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="640" cy="320" rx="360" ry="210" fill="#f5a623" opacity=".30" transform="rotate(-15 640 320)"/>
+    <ellipse cx="720" cy="360" rx="290" ry="160" fill="#f5a623" opacity=".22" transform="rotate(-8 720 360)"/>
+    <ellipse cx="150" cy="340" rx="120" ry="80" fill="#f5a623" opacity=".18" transform="rotate(12 150 340)"/>
+  </svg></div>
+  <div class="topbar">
+    <div class="topbar-icon"><svg viewBox="0 0 24 24"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg></div>
+    <div class="topbar-title">Παράγραφος</div>
+    <div class="topbar-copy">© Αλέξανδρος &amp; Σπύρος Μητσέλος</div>
+    <nav class="theme-nav"><a href="#" class="active">Θέμα Α</a><a href="#">Θέμα Β</a><a href="#">Θέμα Γ</a><a href="#">Θέμα Δ</a></nav>
+  </div>
+  <div class="body">
+    <div class="body-inner">
+      <div class="sidenav">
+        <div class="sidenav-btn" onclick="showSlide(1)"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg><span>Αρχική</span></div>
+        <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg><span>Εύρεση</span></div>
+        <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg><span>Μπροστά</span></div>
+        <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="19 12 5 12"/><polyline points="11 18 5 12 11 6"/></svg><span>Πίσω</span></div>
+        <div class="sidenav-btn" onclick="showSlide(3)"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Κουίζ</span></div>
+      </div>
+      <div class="left-col">
+        <div class="title-card"><h2>Παραδείγματα</h2></div>
+        <div class="info-card">
+          <div class="info-card-label"><div class="ic-osq"></div>Πρόθεση συντάκτη</div>
+          <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-style:normal;">Να τεκμηριώσει έναν ισχυρισμό ή/και να επεξηγήσει ένα γενικό ή ασαφές νόημα.</div></div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label"><div class="ic-osq"></div>Διαρθρωτικές φράσεις / λέξεις</div>
+          <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text">π.χ., για παράδειγμα, χαρακτηριστικό παράδειγμα, λόγου χάρη, ενδεικτικά, ένα δείγμα κ.λπ.</div></div>
+        </div>
+      </div>
+      <div class="right-card" onclick="openModal('modal-1')">
+        <div class="right-text">&nbsp;&nbsp;&nbsp;Υπάρχουν νέοι όλων των ειδών: οι ναζί Ες Ες, που περιφρουρούσαν τα στρατόπεδα συγκεντρώσεως του Άουσβιτς και του Μπούχενβαλντ, ήταν δεκαοχτώ δεκαεννιά χρονών· την ίδια ηλικία είχαν και οι νέοι που βρέθηκαν αντιμέτωποι με τα τανκς της κινεζικής κυβέρνησης στην πλατεία Τιενανμέν ζητώντας ελευθερία ή αυτοί που ακριβώς τώρα αφήνουν εθελουσίως τα σπίτια τους για να προσφέρουν τη βοήθειά τους σε χώρες που πλήττονται.</div>
+        <div class="right-source">Φ. Σαβατέρ, «Μιλώντας στον γιο μου για την Πολιτική και τη Δημοκρατία»</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Η οργάνωση του κειμένου</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Συνοχή – Συνεκτικότητα – Δομή παραγράφου – Τρόποι ανάπτυξης παραγράφου – Πλαγιότιτλος</div></div></div>
+    <div class="arrows"><a class="arrow" onclick="prevSlide()">&#60;</a><a class="arrow" onclick="nextSlide()">&#62;</a></div>
+    <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Τρόποι ανάπτυξης</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Παραδείγματα, αιτιολόγηση, αίτιο – αποτέλεσμα, διαίρεση, σύγκριση – αντίθεση, ορισμός, αναλογία</div></div></div>
+    <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Αιτιολόγηση</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Επιχειρηματολογία - στήριξη / απόδειξη ενός ισχυρισμού με επαρκείς αιτιολογήσεις (γιατί, επειδή, διότι, αφού, καθώς...)</div></div></div>
+    <div class="fpage">1</div>
+  </div>
+</div><!-- /slide-1 -->
+
+
+<!-- ══ SLIDE 2: Διαίρεση ══ -->
+<div class="slide" id="slide-2">
+  <div class="bg"><svg viewBox="0 0 1000 563" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="640" cy="320" rx="360" ry="210" fill="#f5a623" opacity=".30" transform="rotate(-15 640 320)"/>
+    <ellipse cx="720" cy="360" rx="290" ry="160" fill="#f5a623" opacity=".22" transform="rotate(-8 720 360)"/>
+    <ellipse cx="150" cy="340" rx="120" ry="80" fill="#f5a623" opacity=".18" transform="rotate(12 150 340)"/>
+  </svg></div>
+  <div class="topbar">
+    <div class="topbar-icon"><svg viewBox="0 0 24 24"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg></div>
+    <div class="topbar-title">Παράγραφος</div>
+    <div class="topbar-copy">© Αλέξανδρος &amp; Σπύρος Μητσέλος</div>
+    <nav class="theme-nav"><a href="#" class="active">Θέμα Α</a><a href="#">Θέμα Β</a><a href="#">Θέμα Γ</a><a href="#">Θέμα Δ</a></nav>
+  </div>
+  <div class="body">
+    <div class="body-inner">
+      <div class="sidenav">
+        <div class="sidenav-btn" onclick="showSlide(1)"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg><span>Αρχική</span></div>
+        <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg><span>Εύρεση</span></div>
+        <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg><span>Μπροστά</span></div>
+        <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="19 12 5 12"/><polyline points="11 18 5 12 11 6"/></svg><span>Πίσω</span></div>
+        <div class="sidenav-btn" onclick="showSlide(3)"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Κουίζ</span></div>
+      </div>
+      <div class="left-col">
+        <div class="title-card"><h2>Διαίρεση</h2></div>
+        <div class="info-card" style="flex:0 0 auto;">
+          <div class="info-card-label"><div class="ic-osq"></div>Πρόθεση συντάκτη</div>
+          <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-style:normal; font-size:14px; line-height:1.55;">Να φωτίσει ένα φαινόμενο / έννοια σε όλες τις πτυχές του, σε όλο του το εύρος.</div></div>
+        </div>
+        <div style="display:flex; gap:10px; flex:1; min-height:0;">
+          <div class="info-card" style="flex:1;">
+            <div class="info-card-label" style="font-size:13.5px;"><div class="ic-osq"></div>Δείκτες</div>
+            <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-size:12px; line-height:1.35;">Πρώτον, δεύτερον, μια περίπτωση, στην άλλη περίπτωση (διαιρείται, διακρίνεται…)</div></div>
+          </div>
+          <div class="info-card" style="flex:1; cursor:pointer;" onclick="openModal('modal-meri')">
+            <div class="info-card-label" style="font-size:12px;"><div class="ic-osq"></div>Μέρη διαίρεσης</div>
+            <div class="info-card-body"><div class="ic-vbar"></div><div class="info-card-text" style="font-size:13px; line-height:1.5;">Διαιρετέα έννοια — είδη — διαιρετική βάση</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="right-card" onclick="openModal('modal-2')">
+        <div class="right-text" style="font-size:14.5px; line-height:1.72;">&nbsp;&nbsp;&nbsp;Οι συλλογισμοί <strong>διακρίνονται</strong> με βάση την πορεία σκέψης σε παραγωγικούς, επαγωγικούς και αναλογικούς. Στον παραγωγικό συλλογισμό ξεκινούμε από κάτι γενικό και αφηρημένο και καταλήγουμε σε κάτι ειδικό. Στον επαγωγικό συλλογισμό ακολουθούμε πορεία αντίστροφη: ξεκινούμε από τις επιμέρους περιπτώσεις και καταλήγουμε στον κανόνα, στον νόμο που τις διέπει. Τέλος, στον αναλογικό συλλογισμό, από τα επιμέρους συμπεραίνουμε πάλι για τα επιμέρους.</div>
+        <div class="right-source">Έκφραση – Έκθεση Λυκείου, τεύχος Γ΄</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Η οργάνωση του κειμένου</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Συνοχή – Συνεκτικότητα – Δομή παραγράφου – Τρόποι ανάπτυξης παραγράφου – Πλαγιότιτλος</div></div></div>
+    <div class="arrows"><a class="arrow" onclick="prevSlide()">&#60;</a><a class="arrow" onclick="nextSlide()">&#62;</a></div>
+    <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Τρόποι ανάπτυξης</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Παραδείγματα, αιτιολόγηση, αίτιο – αποτέλεσμα, διαίρεση, σύγκριση – αντίθεση, ορισμός, αναλογία</div></div></div>
+    <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Σύγκριση-αντίθεση</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Αντιπαράθεση δύο όρων – ανάδειξη των διαφορών (ή και των ομοιοτήτων) τους.</div></div></div>
+    <div class="fpage">2</div>
+  </div>
+</div><!-- /slide-2 -->
+<!-- ══ SLIDE 3: Quiz ══ -->
+<div class="slide" id="slide-3">
+  <div class="bg"><svg viewBox="0 0 1000 563" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="640" cy="320" rx="360" ry="210" fill="#f5a623" opacity=".28" transform="rotate(-15 640 320)"/>
+    <ellipse cx="720" cy="360" rx="290" ry="160" fill="#f5a623" opacity=".20" transform="rotate(-8 720 360)"/>
+    <ellipse cx="150" cy="340" rx="120" ry="80" fill="#f5a623" opacity=".15" transform="rotate(12 150 340)"/>
+  </svg></div>
+  <div class="topbar">
+    <div class="topbar-icon"><svg viewBox="0 0 24 24"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg></div>
+    <div class="topbar-title">Παράγραφος</div>
+    <div class="topbar-copy">© Αλέξανδρος &amp; Σπύρος Μητσέλος</div>
+    <nav class="theme-nav"><a href="#" class="active">Θέμα Α</a><a href="#">Θέμα Β</a><a href="#">Θέμα Γ</a><a href="#">Θέμα Δ</a></nav>
+  </div>
+  <div class="body" style="align-items:stretch;">
+    <div class="sidenav" style="padding:8px 6px;">
+      <div class="sidenav-btn" onclick="showSlide(1)"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20a8 8 0 0 1 16 0"/></svg><span>Αρχική</span></div>
+      <div class="sidenav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg><span>Εύρεση</span></div>
+      <div class="sidenav-btn" onclick="prevSlide()"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="19 12 5 12"/><polyline points="11 18 5 12 11 6"/></svg><span>Πίσω</span></div>
+      <div class="sidenav-btn" onclick="nextSlide()"><svg viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 19 12"/><polyline points="13 6 19 12 13 18"/></svg><span>Μπροστά</span></div>
+      <div class="sidenav-btn" onclick="showSlide(3)"><svg viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span style="color:#f5a623;font-weight:700;">Κουίζ</span></div>
+    </div>
+    <div class="quiz-area">
+      <div id="quizApp" style="max-width:680px;width:100%;margin:0 auto;flex:1;">
+        <div style="text-align:center;padding:40px;color:#888;font-size:13px;">Φόρτωση...</div>
+      </div>
+      <div class="footer" style="margin-top:auto; width:calc(100% + 20px + 14px); margin-left:-14px; background:transparent; border-top:1px solid rgba(200,184,154,0.4);">
+    <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Η οργάνωση του κειμένου</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Συνοχή – Συνεκτικότητα – Δομή παραγράφου – Τρόποι ανάπτυξης παραγράφου – Πλαγιότιτλος</div></div></div>
+    <div class="arrows"><a class="arrow" onclick="prevSlide()">&#60;</a><a class="arrow" onclick="nextSlide()">&#62;</a></div>
+    <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Τρόποι ανάπτυξης</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Παραδείγματα, αιτιολόγηση, αίτιο – αποτέλεσμα, διαίρεση, σύγκριση – αντίθεση, ορισμός, αναλογία</div></div></div>
+    <div class="fblock"><div class="fblock-hdr"><div class="osq-sm"></div><div class="fblock-title">Quiz</div></div><div class="fblock-body"><div class="vbar-sm"></div><div class="fblock-text">Ανάλυση παραγράφου: δομή και τρόπος ανάπτυξης</div></div></div>
+    <div class="fpage">3</div>
+  </div>
+    </div>
+  </div>
+</div><!-- /slide-3 -->
+</div><!-- /slides-wrapper -->
+
+<div class="text-modal" id="modal-1">
+  <div class="text-modal-inner" style="width:82vw;">
+    <button class="text-modal-close" onclick="closeModal('modal-1')">&#x2715;</button>
+    <div style="display:flex;gap:32px;align-items:flex-start;">
+      <div style="flex:0 0 200px;display:flex;flex-direction:column;align-items:center;gap:0;padding-top:4px;">
+        <div style="background:#2d2d2d;color:#fff;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:700;text-align:center;width:100%;">Θεματική περίοδος</div>
+        <div style="width:2px;height:16px;background:#f5a623;"></div>
+        <div style="border:2px solid #f5a623;border-radius:8px;padding:10px 14px;width:100%;display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:11px;font-weight:700;color:#f5a623;text-align:center;letter-spacing:.06em;">ΠΑΡΑΔΕΙΓΜΑΤΑ</div>
+          <div style="background:#fff7ee;border-radius:6px;padding:0.6vh 0.8vw;font-size:clamp(12px,1.4vw,19px);color:#333;line-height:1.35;border-left:3px solid #f5a623;">🟡 Ναζί Ες Ες<br><span style="color:#888;font-size:clamp(10px,1.1vw,15px);">στρατόπεδα Άουσβιτς / Μπούχενβαλντ</span></div>
+          <div style="background:#fff7ee;border-radius:6px;padding:0.6vh 0.8vw;font-size:clamp(12px,1.4vw,19px);color:#333;line-height:1.35;border-left:3px solid #f5a623;">🟢 Νέοι στην Τιενανμέν<br><span style="color:#888;font-size:clamp(10px,1.1vw,15px);">αντιμέτωποι με τανκς</span></div>
+          <div style="background:#fff7ee;border-radius:6px;padding:0.6vh 0.8vw;font-size:clamp(12px,1.4vw,19px);color:#333;line-height:1.35;border-left:3px solid #f5a623;">🔵 Εθελοντές νέοι<br><span style="color:#888;font-size:clamp(10px,1.1vw,15px);">βοήθεια σε πληγείσες χώρες</span></div>
+        </div>
+        <div style="font-size:clamp(10px,1.1vw,15px);color:#aaa;margin-top:1vh;text-align:center;font-style:italic;">και οι τρεις: 18–19 ετών</div>
+      </div>
+      <div style="flex:1;">
+        <div class="modal-text" style="font-size:17px;">&nbsp;&nbsp;&nbsp;Υπάρχουν νέοι όλων των ειδών: <mark style="background:#fff3cd;border-radius:3px;padding:0 2px;">οι ναζί Ες Ες, που περιφρουρούσαν τα στρατόπεδα συγκεντρώσεως του Άουσβιτς και του Μπούχενβαλντ, ήταν δεκαοχτώ δεκαεννιά χρονών</mark>· την ίδια ηλικία είχαν και <mark style="background:#d4edda;border-radius:3px;padding:0 2px;">οι νέοι που βρέθηκαν αντιμέτωποι με τα τανκς της κινεζικής κυβέρνησης στην πλατεία Τιενανμέν ζητώντας ελευθερία</mark> ή <mark style="background:#d1ecf1;border-radius:3px;padding:0 2px;">αυτοί που ακριβώς τώρα αφήνουν εθελουσίως τα σπίτια τους για να προσφέρουν τη βοήθειά τους σε χώρες που πλήττονται</mark>.</div>
+        <div class="modal-source">Φ. Σαβατέρ, «Μιλώντας στον γιο μου για την Πολιτική και τη Δημοκρατία»</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SLIDE 2 -->
+<div class="text-modal" id="modal-2">
+  <div class="text-modal-inner">
+    <button class="text-modal-close" onclick="closeModal('modal-2')">&#x2715;</button>
+    <div class="modal-text">&nbsp;&nbsp;&nbsp;Οι συλλογισμοί <strong>διακρίνονται</strong> με βάση την πορεία σκέψης σε παραγωγικούς, επαγωγικούς και αναλογικούς. Στον παραγωγικό συλλογισμό ξεκινούμε από κάτι γενικό και αφηρημένο και καταλήγουμε σε κάτι ειδικό. Στον επαγωγικό συλλογισμό ακολουθούμε πορεία αντίστροφη: ξεκινούμε από τις επιμέρους περιπτώσεις και καταλήγουμε στον κανόνα, στον νόμο που τις διέπει. Τέλος, στον αναλογικό συλλογισμό, από τα επιμέρους συμπεραίνουμε πάλι για τα επιμέρους.</div>
+    <div class="modal-source">Έκφραση – Έκθεση Λυκείου, τεύχος Γ΄</div>
+  </div>
+</div>
+
+<!-- MODAL ΜΕΡΗ ΔΙΑΙΡΕΣΗΣ -->
+<div class="text-modal" id="modal-meri">
+  <div class="text-modal-inner" >
+    <button class="text-modal-close" onclick="closeModal('modal-meri')">&#x2715;</button>
+    <div style="font-family:'Noto Sans',sans-serif;">
+      <div style="background:#2d2d2d;color:#fff;border-radius:10px;padding:1vh 2vw;text-align:center;font-size:clamp(16px,2vw,28px);font-weight:700;letter-spacing:.05em;margin-bottom:2vh;">Παράδειγμα διαίρεσης</div>
+      <div style="background:#f9f4ee;border-radius:8px;padding:1.2vh 1.5vw;font-size:clamp(14px,1.8vw,26px);color:#222;line-height:1.6;text-align:justify;margin-bottom:2vh;border-left:4px solid #f5a623;">Οι ρηματικοί χρόνοι <strong>διακρίνονται</strong> σε παρελθοντικούς, παροντικούς και μελλοντικούς.</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+        <div style="background:#2d2d2d;color:#fff;border-radius:8px;padding:1vh 2.5vw;font-size:clamp(14px,1.7vw,24px);font-weight:700;text-align:center;">⬛ Διαιρετέα έννοια<br><span style="font-weight:300;font-size:15px;">ρηματικοί χρόνοι</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;margin:2px 0;">
+          <div style="width:2px;height:14px;background:#aaa;"></div>
+          <div style="background:#f5a623;color:#fff;border-radius:6px;padding:0.7vh 2vw;font-size:clamp(12px,1.5vw,20px);font-weight:600;text-align:center;">📐 Διαιρετική βάση<br><span style="font-weight:400;font-size:11.5px;">η χρονική βαθμίδα στην οποία αναφέρονται</span></div>
+          <div style="width:2px;height:14px;background:#aaa;"></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;width:100%;justify-content:center;position:relative;">
+          <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:66%;height:2px;background:#aaa;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#fff3cd;border:2px solid #f5a623;border-radius:8px;padding:10px 14px;font-size:clamp(13px,1.6vw,22px);font-weight:700;color:#333;text-align:center;">🕐 Παρελθοντικοί</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#d4edda;border:2px solid #28a745;border-radius:8px;padding:10px 14px;font-size:clamp(13px,1.6vw,22px);font-weight:700;color:#333;text-align:center;">🕑 Παροντικοί</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#d1ecf1;border:2px solid #17a2b8;border-radius:8px;padding:10px 14px;font-size:clamp(13px,1.6vw,22px);font-weight:700;color:#333;text-align:center;">🕒 Μελλοντικοί</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+  document.querySelectorAll('.text-modal').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+  });
+</script>
+
+<!-- MODAL SLIDE 2 -->
+<div class="text-modal" id="modal-2">
+  <div class="text-modal-inner">
+    <button class="text-modal-close" onclick="closeModal('modal-2')">&#x2715;</button>
+    <div class="modal-text">&nbsp;&nbsp;&nbsp;Οι συλλογισμοί <strong>διακρίνονται</strong> με βάση την πορεία σκέψης σε παραγωγικούς, επαγωγικούς και αναλογικούς. Στον παραγωγικό συλλογισμό ξεκινούμε από κάτι γενικό και αφηρημένο και καταλήγουμε σε κάτι ειδικό. Στον επαγωγικό συλλογισμό ακολουθούμε πορεία αντίστροφη: ξεκινούμε από τις επιμέρους περιπτώσεις και καταλήγουμε στον κανόνα, στον νόμο που τις διέπει. Τέλος, στον αναλογικό συλλογισμό, από τα επιμέρους συμπεραίνουμε πάλι για τα επιμέρους.</div>
+    <div class="modal-source">Έκφραση – Έκθεση Λυκείου, τεύχος Γ΄</div>
+  </div>
+</div>
+
+<!-- MODAL ΜΕΡΗ ΔΙΑΙΡΕΣΗΣ -->
+<div class="text-modal" id="modal-meri">
+  <div class="text-modal-inner" >
+    <button class="text-modal-close" onclick="closeModal('modal-meri')">&#x2715;</button>
+    <div style="font-family:'Noto Sans',sans-serif;">
+      <div style="background:#2d2d2d;color:#fff;border-radius:10px;padding:1vh 2vw;text-align:center;font-size:clamp(16px,2vw,28px);font-weight:700;letter-spacing:.05em;margin-bottom:2vh;">Παράδειγμα διαίρεσης</div>
+      <div style="background:#f9f4ee;border-radius:8px;padding:1.2vh 1.5vw;font-size:clamp(14px,1.8vw,26px);color:#222;line-height:1.6;text-align:justify;margin-bottom:2vh;border-left:4px solid #f5a623;">Οι ρηματικοί χρόνοι <strong>διακρίνονται</strong> σε παρελθοντικούς, παροντικούς και μελλοντικούς.</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+        <div style="background:#2d2d2d;color:#fff;border-radius:8px;padding:1vh 2.5vw;font-size:clamp(14px,1.7vw,24px);font-weight:700;text-align:center;">⬛ Διαιρετέα έννοια<br><span style="font-weight:300;font-size:15px;">ρηματικοί χρόνοι</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;margin:2px 0;">
+          <div style="width:2px;height:14px;background:#aaa;"></div>
+          <div style="background:#f5a623;color:#fff;border-radius:6px;padding:0.7vh 2vw;font-size:clamp(12px,1.5vw,20px);font-weight:600;text-align:center;">📐 Διαιρετική βάση<br><span style="font-weight:400;font-size:11.5px;">η χρονική βαθμίδα στην οποία αναφέρονται</span></div>
+          <div style="width:2px;height:14px;background:#aaa;"></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;width:100%;justify-content:center;position:relative;">
+          <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:66%;height:2px;background:#aaa;"></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#fff3cd;border:2px solid #f5a623;border-radius:8px;padding:10px 14px;font-size:clamp(13px,1.6vw,22px);font-weight:700;color:#333;text-align:center;">🕐 Παρελθοντικοί</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#d4edda;border:2px solid #28a745;border-radius:8px;padding:10px 14px;font-size:clamp(13px,1.6vw,22px);font-weight:700;color:#333;text-align:center;">🕑 Παροντικοί</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#d1ecf1;border:2px solid #17a2b8;border-radius:8px;padding:10px 14px;font-size:clamp(13px,1.6vw,22px);font-weight:700;color:#333;text-align:center;">🕒 Μελλοντικοί</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const TOTAL = 3;
+  let current = 1;
+  // Quiz state
+  let qAllData=[], qQuizData=[];
+  let qState = { screen:'selection', domiFil:'all', troposFil:'all', count:10, cur:0, selDomi:null, selTropoi:[], showResult:false, score:{domi:0,kyrios:0,deyt:0}, theory:false };
+
+  function showSlide(n) {
+    document.getElementById('slide-' + current).classList.remove('active');
+    current = Math.max(1, Math.min(n, TOTAL));
+    document.getElementById('slide-' + current).classList.add('active');
+    if(n===3 && qAllData.length===0){ qState.screen='loading'; qRender(); qLoadData(); }
+  }
+  function nextSlide() { showSlide(current + 1); }
+  function prevSlide() { showSlide(current - 1); }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prevSlide();
+  });
+
+  // QUIZ
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTF385Wqk5c-makn7m3cxaDD35hr3LFyjKtR3r6cplVW4ZtGwEbcdqvHhvVztdbM5uxNrs8gxxoYHuW/pub?gid=176063284&single=true&output=csv';
+  const TROPOI = ["Παραδείγματα","Αιτιολόγηση","Αίτιο-αποτέλεσμα","Διαίρεση","Σύγκριση-αντίθεση","Αναλογία","Ορισμός"];
+  function qParseCSVLine(line){const r=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}else if(c===','&&!inQ){r.push(cur.trim());cur='';}else cur+=c;}r.push(cur.trim());return r;}
+  function qParseCSV(csv){const lines=csv.split('\n').filter(l=>l.trim());if(lines.length<2)return[];const hdrs=qParseCSVLine(lines[0]).map(h=>h.toLowerCase().trim());const data=[];for(let i=1;i<lines.length;i++){const vals=qParseCSVLine(lines[i]);const obj={};hdrs.forEach((h,idx)=>{let v=(vals[idx]||'').trim();obj[h]=(v===''||v.toLowerCase()==='null')?null:v;});if(obj.keimeno&&obj.domi&&obj.kyrios)data.push(obj);}return data;}
+  function qShuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+  function qFiltered(){let f=[...qAllData];if(qState.domiFil!=='all')f=f.filter(x=>x.domi===qState.domiFil);if(qState.troposFil==='syndyasmos')f=f.filter(x=>x.deytereyon!==null);else if(qState.troposFil!=='all')f=f.filter(x=>x.kyrios===qState.troposFil);return f;}
+  async function qLoadData(){
+    try{
+      const r=await fetch(SHEET_CSV_URL, {cache:'no-cache'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const csv=await r.text();
+      qAllData=qParseCSV(csv);
+      qState.screen=qAllData.length?'selection':'error';
+    }catch(e){
+      console.error('Quiz load error:',e);
+      // Αν file:// protocol, δείχνω χρήσιμο μήνυμα
+      const isFile = location.protocol==='file:';
+      const app=document.getElementById('quizApp');
+      if(app) app.innerHTML=`<div style="text-align:center;padding:30px;font-family:'Noto Sans',sans-serif;">
+        <div style="font-size:2rem;margin-bottom:12px;">⚠️</div>
+        <p style="font-size:13px;color:#555;margin-bottom:8px;">Αδυναμία φόρτωσης δεδομένων.</p>
+        ${isFile?`<p style="font-size:11px;color:#888;margin-bottom:16px;">Το κουίζ χρειάζεται σύνδεση στο διαδίκτυο.<br>Άνοιξε το αρχείο μέσω web server ή Vercel.</p>`:''}
+        <button onclick="qState.screen='loading';qRender();qLoadData();" style="background:#2d2d2d;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:12px;">Επανάληψη</button>
+      </div>`;
+      return;
+    }
+    qRender();
+  }
+  function qRender(){const app=document.getElementById('quizApp');if(!app)return;if(qState.screen==='loading'||qState.screen==='error'){app.innerHTML='<div style="text-align:center;padding:30px;color:#888;font-size:12px;">Φόρτωση...</div>';return;}if(qState.screen==='selection')app.innerHTML=qRenderSelection();else if(qState.screen==='quiz')app.innerHTML=qRenderQuiz();else app.innerHTML=qRenderResults();qAttach();}
+  function qRenderSelection(){const fc=qFiltered().length;return`<div class="q-selection-title">📝 Quiz Ανάλυσης Παραγράφου</div><p style="text-align:center;font-size:10px;color:#888;margin-bottom:10px;">Νεοελληνική Γλώσσα — Λύκειο</p><div class="q-filter-section"><h3>📐 Δομή</h3><div class="q-filter-options">${[['all','Όλες'],['Διμερής','Διμερής'],['Τριμερής','Τριμερής']].map(([v,l])=>`<button class="q-filter-btn${qState.domiFil===v?' sel':''}" data-qd="${v}">${l}</button>`).join('')}</div></div><div class="q-filter-section"><h3>📚 Τρόπος</h3><div class="q-filter-options">${[['all','Όλοι'],['Παραδείγματα','Παραδείγματα'],['Αιτιολόγηση','Αιτιολόγηση'],['Αίτιο-αποτέλεσμα','Αίτιο-αποτέλεσμα'],['Διαίρεση','Διαίρεση'],['Σύγκριση-αντίθεση','Σύγκριση-αντίθεση'],['Αναλογία','Αναλογία'],['Ορισμός','Ορισμός'],['syndyasmos','Συνδυασμός']].map(([v,l])=>`<button class="q-filter-btn${qState.troposFil===v?' sel':''}" data-qt="${v}">${l}</button>`).join('')}</div></div><div class="q-filter-section"><h3>🔢 Αριθμός</h3><div class="q-filter-options">${[1,10,20].map(n=>`<button class="q-filter-btn${qState.count===n?' sel':''}" data-qn="${n}">${n}</button>`).join('')}</div></div><div class="q-count-info${fc===0?' warn':''}">${fc>0?`✅ Βρέθηκαν <strong>${fc}</strong> παράγραφοι`:'⚠️ Δεν βρέθηκαν'}</div><button class="q-start-btn" id="qStartBtn" ${fc===0?'disabled':''}>Ξεκίνα το Quiz</button>`;}
+  function qRenderQuiz(){const c=qQuizData[qState.cur];const pct=((qState.cur+1)/qQuizData.length)*100;const isSyn=c.deytereyon!==null;return`<div class="q-header"><div class="q-title">📝 Quiz Ανάλυσης Παραγράφου</div><div style="display:flex;align-items:center;gap:8px;"><div class="q-counter">Ερώτηση ${qState.cur+1}/${qQuizData.length}</div><button onclick="qState.screen='selection';qRender();" style="font-size:9px;background:none;border:1px solid #c8b89a;border-radius:4px;padding:2px 7px;cursor:pointer;color:#888;font-family:inherit;">← Επιλογή</button></div></div><div class="q-progress-bar"><div class="q-progress-fill" style="width:${pct}%"></div></div><button class="q-theory-toggle" id="qTheoryToggle">${qState.theory?'▼':'▶'} Θεωρητικό πλαίσιο</button>${qState.theory?`<div class="q-theory-box"><strong>Τριμερής:</strong> Θεματική+Σχόλια+Κατακλείδα | <strong>Διμερής:</strong> Θεματική+Σχόλια</div>`:''}<span class="q-par-label">Παράγραφος ${qState.cur+1}${isSyn?' ⚡':''}</span><p class="q-par-text" style="cursor:pointer;" onclick="document.getElementById('qTextModalContent').innerHTML=this.innerHTML; document.getElementById('qTextModal').classList.add('open');" title="Κλικ για μεγέθυνση">${c.keimeno} <span style='font-size:9px;color:#f5a623;margin-left:6px;'>🔍</span></p><div class="q-grid"><div class="q-card${qState.showResult?(qState.selDomi===c.domi?' correct':' incorrect'):''}"><h3>1️⃣ Δομή;</h3><div class="q-opt-list">${['Τριμερής','Διμερής'].map(d=>{const ok=qState.showResult&&d===c.domi;const wr=qState.showResult&&qState.selDomi===d&&d!==c.domi;return`<button class="q-opt-btn${qState.selDomi===d&&!qState.showResult?' sel':''}${ok?' ok':''}${wr?' wrong':''}" data-qdom="${d}" ${qState.showResult?'disabled':''}>${d}<span class="q-opt-hint">${d==='Τριμερής'?'(με κατακλείδα)':'(χωρίς)'}</span></button>`;}).join('')}</div></div><div class="q-card${qState.showResult?qTroposClass(c):''}"><h3>2️⃣ Τρόπος ανάπτυξης;</h3><p class="q-hint">💡 1ος=κύριος, 2ος=δευτερεύων</p><div class="q-tropos-grid">${TROPOI.map(t=>{const si=qState.selTropoi.indexOf(t);const isSel=si!==-1;const ok=t===c.kyrios;const okD=t===c.deytereyon;const wr=qState.showResult&&isSel&&!ok&&!okD;let cls='q-tropos-btn';if(!qState.showResult&&isSel)cls+=si===0?' sel-p':' sel-s';if(qState.showResult){if(ok)cls+=' ok-p';else if(okD)cls+=' ok-s';else if(wr)cls+=' wrong';}return`<button class="${cls}" data-qtr="${t}" ${qState.showResult?'disabled':''}>${t}${isSel&&!qState.showResult?`<span class="q-sel-order">${si+1}</span>`:''}</button>`;}).join('')}</div></div></div>${!qState.showResult?`<button class="q-btn primary" id="qCheckBtn" ${!qState.selDomi||qState.selTropoi.length===0?'disabled':''}>Έλεγχος</button>`:`<div class="q-feedback"><h3>📋 Ανάλυση</h3><div class="q-fbox blue"><h4>${qState.selDomi===c.domi?'✅':'❌'} Δομή: ${c.domi}</h4>${c.thematiki?`<p><strong>Θεματική:</strong> ${c.thematiki}</p>`:''}${c.katakleida?`<p><strong>Κατακλείδα:</strong> ${c.katakleida}</p>`:''}</div><div class="q-fbox purple"><h4>Τρόπος/οι:</h4><p><span class="q-tag p">Κύριος: ${c.kyrios}</span>${c.deytereyon?`<span class="q-tag s">Δευτ.: ${c.deytereyon}</span>`:''}</p>${c.aitiologisi?`<p style="margin-top:5px;font-size:10px">${c.aitiologisi}</p>`:''}</div><div class="q-fbox amber"><h4>Επιλογή σου:</h4><p>${qState.selTropoi[0]?`<span class="q-tag p">1ος: ${qState.selTropoi[0]}</span>`:''}${qState.selTropoi[1]?`<span class="q-tag s">2ος: ${qState.selTropoi[1]}</span>`:''}</p></div></div><button class="q-btn success" id="qNextBtn">${qState.cur<qQuizData.length-1?'Επόμενη →':'Αποτελέσματα'}</button>`}`;}
+  function qTroposClass(c){const ok=qState.selTropoi[0]===c.kyrios;const okD=!c.deytereyon||qState.selTropoi[1]===c.deytereyon;if(ok&&okD)return' correct';if(ok)return' partial';return' incorrect';}
+  function qRenderResults(){const maxD=qQuizData.length,maxK=qQuizData.length,maxDey=qQuizData.filter(q=>q.deytereyon).length;const tot=qState.score.domi+qState.score.kyrios+qState.score.deyt;const max=maxD+maxK+maxDey;const pct=Math.round((tot/max)*100);return`<div class="q-results"><div style="font-size:3rem">${pct>=80?'🎉':pct>=60?'👍':'📚'}</div><h2 style="font-size:15px;color:#2d2d2d;margin:8px 0;">Ολοκλήρωσες!</h2><div style="background:rgba(255,255,255,0.8);border-radius:10px;padding:14px;margin-bottom:12px;"><div class="q-results-score">${tot}/${max}</div><div style="font-size:11px;color:#888;">(${pct}%)</div></div><div class="q-results-grid"><div class="q-rbox"><p>Δομή</p><p>${qState.score.domi}/${maxD}</p></div><div class="q-rbox"><p>Κύριος</p><p>${qState.score.kyrios}/${maxK}</p></div><div class="q-rbox"><p>Δευτερεύων</p><p>${qState.score.deyt}/${maxDey}</p></div></div><button class="q-btn primary" id="qRestartBtn" style="margin-bottom:8px;">Ξεκίνα Ξανά</button><button class="q-btn" id="qNewSelBtn" style="background:#888;color:#fff;">← Νέα Κριτήρια</button></div>`;}
+  function qAttach(){document.querySelectorAll('[data-qd]').forEach(b=>b.addEventListener('click',()=>{qState.domiFil=b.dataset.qd;qRender();}));document.querySelectorAll('[data-qt]').forEach(b=>b.addEventListener('click',()=>{qState.troposFil=b.dataset.qt;qRender();}));document.querySelectorAll('[data-qn]').forEach(b=>b.addEventListener('click',()=>{qState.count=parseInt(b.dataset.qn);qRender();}));const sb=document.getElementById('qStartBtn');if(sb)sb.addEventListener('click',()=>{qQuizData=qShuffle(qFiltered()).slice(0,qState.count);qState.screen='quiz';qState.cur=0;qState.selDomi=null;qState.selTropoi=[];qState.showResult=false;qState.score={domi:0,kyrios:0,deyt:0};qRender();});const tt=document.getElementById('qTheoryToggle');if(tt)tt.addEventListener('click',()=>{qState.theory=!qState.theory;qRender();});document.querySelectorAll('[data-qdom]').forEach(b=>b.addEventListener('click',()=>{qState.selDomi=b.dataset.qdom;qRender();}));document.querySelectorAll('[data-qtr]').forEach(b=>b.addEventListener('click',()=>{const t=b.dataset.qtr,idx=qState.selTropoi.indexOf(t);if(idx!==-1)qState.selTropoi.splice(idx,1);else if(qState.selTropoi.length<2)qState.selTropoi.push(t);else qState.selTropoi[1]=t;qRender();}));const cb=document.getElementById('qCheckBtn');if(cb)cb.addEventListener('click',()=>{const c=qQuizData[qState.cur];if(qState.selDomi===c.domi)qState.score.domi++;if(qState.selTropoi[0]===c.kyrios)qState.score.kyrios++;if(c.deytereyon&&qState.selTropoi[1]===c.deytereyon)qState.score.deyt++;qState.showResult=true;qRender();});const nb=document.getElementById('qNextBtn');if(nb)nb.addEventListener('click',()=>{if(qState.cur<qQuizData.length-1){qState.cur++;qState.selDomi=null;qState.selTropoi=[];qState.showResult=false;}else qState.screen='results';qRender();});const rb=document.getElementById('qRestartBtn');if(rb)rb.addEventListener('click',()=>{qQuizData=qShuffle(qFiltered()).slice(0,qState.count);qState.cur=0;qState.selDomi=null;qState.selTropoi=[];qState.showResult=false;qState.score={domi:0,kyrios:0,deyt:0};qState.screen='quiz';qRender();});const ns=document.getElementById('qNewSelBtn');if(ns)ns.addEventListener('click',()=>{qState.screen='selection';qRender();});}
+
+  function scaleSlide() {
+    const W = 1000, H = 563;
+    const scale = Math.max(window.innerWidth / W, window.innerHeight / H);
+    const wrapper = document.getElementById('slides-wrapper');
+    const dx = (window.innerWidth  - W * scale) / 2;
+    const dy = (window.innerHeight - H * scale) / 2;
+    wrapper.style.transformOrigin = 'top left';
+    wrapper.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+  }
+  function fitText() {
+    document.querySelectorAll('.right-text').forEach(el => {
+      el.style.fontSize = '15px'; el.style.lineHeight = '1.65';
+      let size = 15;
+      while (el.scrollHeight > el.clientHeight && size > 9) { size -= 0.5; el.style.fontSize = size + 'px'; }
+    });
+  }
+  scaleSlide(); fitText();
+  window.addEventListener('resize', () => { scaleSlide(); fitText(); });
+</script>
+
+<!-- Modal κειμένου παραγράφου κουίζ -->
+<div id="qTextModal">
+  <div class="inner">
+    <button class="close-btn" onclick="document.getElementById('qTextModal').classList.remove('open')">&#x2715;</button>
+    <div id="qTextModalContent"></div>
+  </div>
+</div>
+<script>
+  document.getElementById('qTextModal').addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); });
+</script>
+</body>
+</html>  .theme-nav a.active { color: #f5a623; font-weight: 700; }
+
+  /* ΚΥΡΙΟ ΣΩΜΑ */
+  .body {
+    position: relative; z-index: 1; flex: 1;
+    display: flex; align-items: flex-start; justify-content: flex-start;
+    padding: 0 28px 0 0; gap: 0;
+  }
+  .body-inner {
+    display: flex; align-items: stretch; gap: 0;
+    margin: auto 0;
+    height: 310px;
+  }
+
+  /* SIDENAV */
+  .sidenav {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 6px;
+    width: 62px; flex-shrink: 0; padding: 0 6px;
+  }
+  .sidenav-btn {
+    width: 48px; height: 48px; background: #fff; border-radius: 8px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,.13); gap: 3px;
+  }
+  .sidenav-btn svg { width: 18px; height: 18px; }
+  .sidenav-btn span { font-size: 8px; color: #444; font-weight: 500; text-align: center; line-height: 1.2; }
+
+  /* ΑΡΙΣΤΕΡΗ ΣΤΗΛΗ */
+  .left-col {
+    flex: 0 0 340px;
+    display: flex; flex-direction: column; gap: 12px;
+    margin-left: 28px;
+    overflow: hidden;
+  }
+
+  .title-card {
+    background: #2d2d2d;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 14px 20px;
+    box-shadow: 4px 8px 24px rgba(0,0,0,.35);
+  }
+  .title-card h2 {
+    color: #fff; font-size: 20px; font-weight: 100; letter-spacing: .10em;
+    text-align: center; line-height: 1.2;
+  }
+
+  .info-card {
+    background: #fff; border-radius: 10px;
+    padding: 11px 14px;
+    box-shadow: 4px 8px 20px rgba(0,0,0,.25);
+    display: flex; flex-direction: column; gap: 6px;
+    flex: 1; overflow: hidden;
+  }
+  .info-card-label {
+    font-size: 15px; font-weight: 800; color: #2d2d2d;
+    display: flex; align-items: center; gap: 8px; padding-left: 0;
+  }
+  .ic-osq { width: 11px; height: 15px; background: #f5a623; border-radius: 2px; flex-shrink: 0; margin-left: 0; }
+  .info-card-body {
+    display: flex; gap: 8px; align-items: stretch; padding-left: 0;
+  }
+  .ic-vbar { width: 13px; background: #2d2d2d; border-radius: 2px; flex-shrink: 0; }
+  .info-card-text {
+    font-size: 13.5px; color: #333; line-height: 1.55;
+    font-style: italic;
+  }
+
+  /* ΔΕΞΙ CARD */
+  .right-card {
+    flex: 0 0 460px; align-self: stretch;
+    background: #fff; border-radius: 10px;
+    padding: 18px 22px;
+    box-shadow: 4px 8px 24px rgba(0,0,0,.28);
+    display: flex; flex-direction: column; justify-content: space-between;
+    margin-left: 24px;
+    overflow: hidden;
+    min-width: 0; min-height: 0;
+  }
+  .right-text {
+    font-size: 15px; color: #222; line-height: 1.7;
+    text-align: justify; flex: 1;
+    overflow: hidden;
+  }
+  .right-text strong { font-weight: 800; }
+  .right-source {
+    font-size: 11px; color: #888; font-style: italic;
+    text-align: right; margin-top: 10px;
+  }
+
+  /* FOOTER */
+  .footer {
+    position: relative; z-index: 10; height: 115px; background: #fff;
+    border-top: 1px solid #ddd; display: flex; align-items: flex-start;
+    padding: 18px 28px 0 28px; gap: 16px; flex-shrink: 0;
+  }
+  .fblock { flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .fblock-hdr { display: flex; align-items: center; gap: 6px; }
+  .osq-sm { width: 9px; height: 9px; background: #f5a623; border-radius: 2px; flex-shrink: 0; }
+  .fblock-title { font-size: 11px; font-weight: 700; color: #2d2d2d; }
+  .fblock-body { display: flex; gap: 6px; padding-left: 2px; align-items: flex-start; }
+  .vbar-sm { width: 9px; background: #2d2d2d; border-radius: 2px; flex-shrink: 0; align-self: stretch; }
+  .fblock-text { font-size: 9px; color: #555; line-height: 1.55; white-space: normal; word-break: break-word; }
+  .arrows { display: flex; align-items: center; gap: 20px; flex-shrink: 0; padding: 0 24px; }
+  .arrow { font-size: 64px; color: #f5a623; font-weight: 900; cursor: pointer; line-height: 1; text-decoration: none; }
+  .arrow:hover { color: #e8920a; }
+  .fpage { font-size: 10px; color: #aaa; align-self: flex-end; padding-bottom: 6px; }
+
+  /* MODAL */
+  .text-modal {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,.55); align-items: center; justify-content: center;
+  }
+  .text-modal.open { display: flex; }
+  .text-modal-inner {
+    background: #fff; border-radius: 14px; padding: 3vh 4vw;
+    width: 82vw; max-height: 82vh; overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,.4); position: relative;
     font-size: clamp(11px, 1.2vw, 18px);
   }
   .text-modal-inner .modal-text { font-family: 'Noto Sans', sans-serif; font-size: clamp(13px, 1.8vw, 24px); color: #222; line-height: 1.75; text-align: justify; }
