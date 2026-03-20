@@ -183,6 +183,7 @@
     background: #fff; border-radius: 14px; padding: 3vh 4vw;
     width: 82vw; max-height: 82vh; overflow-y: auto;
     box-shadow: 0 20px 60px rgba(0,0,0,.4); position: relative;
+    font-size: clamp(11px, 1.2vw, 18px);
   }
   .text-modal-inner .modal-text { font-family: 'Noto Sans', sans-serif; font-size: clamp(13px, 1.8vw, 24px); color: #222; line-height: 1.75; text-align: justify; }
   .text-modal-inner .modal-source { font-size: clamp(9px, 1vw, 14px); color: #888; font-style: italic; text-align: right; margin-top: 1.5vh; }
@@ -433,11 +434,11 @@
         <div style="width:2px;height:16px;background:#f5a623;"></div>
         <div style="border:2px solid #f5a623;border-radius:8px;padding:10px 14px;width:100%;display:flex;flex-direction:column;gap:8px;">
           <div style="font-size:11px;font-weight:700;color:#f5a623;text-align:center;letter-spacing:.06em;">ΠΑΡΑΔΕΙΓΜΑΤΑ</div>
-          <div style="background:#fff7ee;border-radius:6px;padding:7px 10px;font-size:11.5px;color:#333;line-height:1.35;border-left:3px solid #f5a623;">🟡 Ναζί Ες Ες<br><span style="color:#888;font-size:10.5px;">στρατόπεδα Άουσβιτς / Μπούχενβαλντ</span></div>
-          <div style="background:#fff7ee;border-radius:6px;padding:7px 10px;font-size:11.5px;color:#333;line-height:1.35;border-left:3px solid #f5a623;">🟢 Νέοι στην Τιενανμέν<br><span style="color:#888;font-size:10.5px;">αντιμέτωποι με τανκς</span></div>
-          <div style="background:#fff7ee;border-radius:6px;padding:7px 10px;font-size:11.5px;color:#333;line-height:1.35;border-left:3px solid #f5a623;">🔵 Εθελοντές νέοι<br><span style="color:#888;font-size:10.5px;">βοήθεια σε πληγείσες χώρες</span></div>
+          <div style="background:#fff7ee;border-radius:6px;padding:0.6vh 0.8vw;font-size:clamp(9px,1.1vw,14px);color:#333;line-height:1.35;border-left:3px solid #f5a623;">🟡 Ναζί Ες Ες<br><span style="color:#888;font-size:clamp(8px,0.9vw,12px);">στρατόπεδα Άουσβιτς / Μπούχενβαλντ</span></div>
+          <div style="background:#fff7ee;border-radius:6px;padding:0.6vh 0.8vw;font-size:clamp(9px,1.1vw,14px);color:#333;line-height:1.35;border-left:3px solid #f5a623;">🟢 Νέοι στην Τιενανμέν<br><span style="color:#888;font-size:clamp(8px,0.9vw,12px);">αντιμέτωποι με τανκς</span></div>
+          <div style="background:#fff7ee;border-radius:6px;padding:0.6vh 0.8vw;font-size:clamp(9px,1.1vw,14px);color:#333;line-height:1.35;border-left:3px solid #f5a623;">🔵 Εθελοντές νέοι<br><span style="color:#888;font-size:clamp(8px,0.9vw,12px);">βοήθεια σε πληγείσες χώρες</span></div>
         </div>
-        <div style="font-size:10px;color:#aaa;margin-top:8px;text-align:center;font-style:italic;">και οι τρεις: 18–19 ετών</div>
+        <div style="font-size:clamp(8px,0.9vw,12px);color:#aaa;margin-top:1vh;text-align:center;font-style:italic;">και οι τρεις: 18–19 ετών</div>
       </div>
       <div style="flex:1;">
         <div class="modal-text" style="font-size:17px;">&nbsp;&nbsp;&nbsp;Υπάρχουν νέοι όλων των ειδών: <mark style="background:#fff3cd;border-radius:3px;padding:0 2px;">οι ναζί Ες Ες, που περιφρουρούσαν τα στρατόπεδα συγκεντρώσεως του Άουσβιτς και του Μπούχενβαλντ, ήταν δεκαοχτώ δεκαεννιά χρονών</mark>· την ίδια ηλικία είχαν και <mark style="background:#d4edda;border-radius:3px;padding:0 2px;">οι νέοι που βρέθηκαν αντιμέτωποι με τα τανκς της κινεζικής κυβέρνησης στην πλατεία Τιενανμέν ζητώντας ελευθερία</mark> ή <mark style="background:#d1ecf1;border-radius:3px;padding:0 2px;">αυτοί που ακριβώς τώρα αφήνουν εθελουσίως τα σπίτια τους για να προσφέρουν τη βοήθειά τους σε χώρες που πλήττονται</mark>.</div>
@@ -461,20 +462,20 @@
   <div class="text-modal-inner" >
     <button class="text-modal-close" onclick="closeModal('modal-meri')">&#x2715;</button>
     <div style="font-family:'Noto Sans',sans-serif;">
-      <div style="background:#2d2d2d;color:#fff;border-radius:10px;padding:12px 20px;text-align:center;font-size:16px;font-weight:700;letter-spacing:.05em;margin-bottom:20px;">Παράδειγμα διαίρεσης</div>
-      <div style="background:#f9f4ee;border-radius:8px;padding:14px 18px;font-size:15px;color:#222;line-height:1.6;text-align:justify;margin-bottom:22px;border-left:4px solid #f5a623;">Οι ρηματικοί χρόνοι <strong>διακρίνονται</strong> σε παρελθοντικούς, παροντικούς και μελλοντικούς.</div>
+      <div style="background:#2d2d2d;color:#fff;border-radius:10px;padding:1vh 2vw;text-align:center;font-size:clamp(13px,1.5vw,20px);font-weight:700;letter-spacing:.05em;margin-bottom:2vh;">Παράδειγμα διαίρεσης</div>
+      <div style="background:#f9f4ee;border-radius:8px;padding:1.2vh 1.5vw;font-size:clamp(11px,1.3vw,18px);color:#222;line-height:1.6;text-align:justify;margin-bottom:2vh;border-left:4px solid #f5a623;">Οι ρηματικοί χρόνοι <strong>διακρίνονται</strong> σε παρελθοντικούς, παροντικούς και μελλοντικούς.</div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
-        <div style="background:#2d2d2d;color:#fff;border-radius:8px;padding:10px 28px;font-size:13.5px;font-weight:700;text-align:center;">⬛ Διαιρετέα έννοια<br><span style="font-weight:300;font-size:15px;">ρηματικοί χρόνοι</span></div>
+        <div style="background:#2d2d2d;color:#fff;border-radius:8px;padding:1vh 2.5vw;font-size:clamp(11px,1.3vw,17px);font-weight:700;text-align:center;">⬛ Διαιρετέα έννοια<br><span style="font-weight:300;font-size:15px;">ρηματικοί χρόνοι</span></div>
         <div style="display:flex;flex-direction:column;align-items:center;margin:2px 0;">
           <div style="width:2px;height:14px;background:#aaa;"></div>
-          <div style="background:#f5a623;color:#fff;border-radius:6px;padding:7px 22px;font-size:12px;font-weight:600;text-align:center;">📐 Διαιρετική βάση<br><span style="font-weight:400;font-size:11.5px;">η χρονική βαθμίδα στην οποία αναφέρονται</span></div>
+          <div style="background:#f5a623;color:#fff;border-radius:6px;padding:0.7vh 2vw;font-size:clamp(10px,1.1vw,15px);font-weight:600;text-align:center;">📐 Διαιρετική βάση<br><span style="font-weight:400;font-size:11.5px;">η χρονική βαθμίδα στην οποία αναφέρονται</span></div>
           <div style="width:2px;height:14px;background:#aaa;"></div>
         </div>
         <div style="display:flex;align-items:flex-start;width:100%;justify-content:center;position:relative;">
           <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:66%;height:2px;background:#aaa;"></div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#fff3cd;border:2px solid #f5a623;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;color:#333;text-align:center;min-width:120px;">🕐 Παρελθοντικοί</div></div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#d4edda;border:2px solid #28a745;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;color:#333;text-align:center;min-width:120px;">🕑 Παροντικοί</div></div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#d1ecf1;border:2px solid #17a2b8;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;color:#333;text-align:center;min-width:120px;">🕒 Μελλοντικοί</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#fff3cd;border:2px solid #f5a623;border-radius:8px;padding:10px 14px;font-size:clamp(10px,1.2vw,16px);font-weight:700;color:#333;text-align:center;">🕐 Παρελθοντικοί</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#d4edda;border:2px solid #28a745;border-radius:8px;padding:10px 14px;font-size:clamp(10px,1.2vw,16px);font-weight:700;color:#333;text-align:center;">🕑 Παροντικοί</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#d1ecf1;border:2px solid #17a2b8;border-radius:8px;padding:10px 14px;font-size:clamp(10px,1.2vw,16px);font-weight:700;color:#333;text-align:center;">🕒 Μελλοντικοί</div></div>
         </div>
       </div>
     </div>
@@ -502,20 +503,20 @@
   <div class="text-modal-inner" >
     <button class="text-modal-close" onclick="closeModal('modal-meri')">&#x2715;</button>
     <div style="font-family:'Noto Sans',sans-serif;">
-      <div style="background:#2d2d2d;color:#fff;border-radius:10px;padding:12px 20px;text-align:center;font-size:16px;font-weight:700;letter-spacing:.05em;margin-bottom:20px;">Παράδειγμα διαίρεσης</div>
-      <div style="background:#f9f4ee;border-radius:8px;padding:14px 18px;font-size:15px;color:#222;line-height:1.6;text-align:justify;margin-bottom:22px;border-left:4px solid #f5a623;">Οι ρηματικοί χρόνοι <strong>διακρίνονται</strong> σε παρελθοντικούς, παροντικούς και μελλοντικούς.</div>
+      <div style="background:#2d2d2d;color:#fff;border-radius:10px;padding:1vh 2vw;text-align:center;font-size:clamp(13px,1.5vw,20px);font-weight:700;letter-spacing:.05em;margin-bottom:2vh;">Παράδειγμα διαίρεσης</div>
+      <div style="background:#f9f4ee;border-radius:8px;padding:1.2vh 1.5vw;font-size:clamp(11px,1.3vw,18px);color:#222;line-height:1.6;text-align:justify;margin-bottom:2vh;border-left:4px solid #f5a623;">Οι ρηματικοί χρόνοι <strong>διακρίνονται</strong> σε παρελθοντικούς, παροντικούς και μελλοντικούς.</div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
-        <div style="background:#2d2d2d;color:#fff;border-radius:8px;padding:10px 28px;font-size:13.5px;font-weight:700;text-align:center;">⬛ Διαιρετέα έννοια<br><span style="font-weight:300;font-size:15px;">ρηματικοί χρόνοι</span></div>
+        <div style="background:#2d2d2d;color:#fff;border-radius:8px;padding:1vh 2.5vw;font-size:clamp(11px,1.3vw,17px);font-weight:700;text-align:center;">⬛ Διαιρετέα έννοια<br><span style="font-weight:300;font-size:15px;">ρηματικοί χρόνοι</span></div>
         <div style="display:flex;flex-direction:column;align-items:center;margin:2px 0;">
           <div style="width:2px;height:14px;background:#aaa;"></div>
-          <div style="background:#f5a623;color:#fff;border-radius:6px;padding:7px 22px;font-size:12px;font-weight:600;text-align:center;">📐 Διαιρετική βάση<br><span style="font-weight:400;font-size:11.5px;">η χρονική βαθμίδα στην οποία αναφέρονται</span></div>
+          <div style="background:#f5a623;color:#fff;border-radius:6px;padding:0.7vh 2vw;font-size:clamp(10px,1.1vw,15px);font-weight:600;text-align:center;">📐 Διαιρετική βάση<br><span style="font-weight:400;font-size:11.5px;">η χρονική βαθμίδα στην οποία αναφέρονται</span></div>
           <div style="width:2px;height:14px;background:#aaa;"></div>
         </div>
         <div style="display:flex;align-items:flex-start;width:100%;justify-content:center;position:relative;">
           <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:66%;height:2px;background:#aaa;"></div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#fff3cd;border:2px solid #f5a623;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;color:#333;text-align:center;min-width:120px;">🕐 Παρελθοντικοί</div></div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#d4edda;border:2px solid #28a745;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;color:#333;text-align:center;min-width:120px;">🕑 Παροντικοί</div></div>
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#d1ecf1;border:2px solid #17a2b8;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;color:#333;text-align:center;min-width:120px;">🕒 Μελλοντικοί</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#fff3cd;border:2px solid #f5a623;border-radius:8px;padding:10px 14px;font-size:clamp(10px,1.2vw,16px);font-weight:700;color:#333;text-align:center;">🕐 Παρελθοντικοί</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#d4edda;border:2px solid #28a745;border-radius:8px;padding:10px 14px;font-size:clamp(10px,1.2vw,16px);font-weight:700;color:#333;text-align:center;">🕑 Παροντικοί</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;"><div style="width:2px;height:18px;background:#aaa;"></div><div style="background:#d1ecf1;border:2px solid #17a2b8;border-radius:8px;padding:10px 14px;font-size:clamp(10px,1.2vw,16px);font-weight:700;color:#333;text-align:center;">🕒 Μελλοντικοί</div></div>
         </div>
       </div>
     </div>
