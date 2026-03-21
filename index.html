@@ -1546,23 +1546,24 @@ function renderGQSelect() {
   const counts = [1,10,20,'all'];
   const countLabels = {1:'1',10:'10',20:'20','all':'Όλες'};
 
-  return `<div class="card">
+  return `
+  <div class="card">
     <p class="sel-title" style="color:#7c3aed">⚡ Γρήγορο Quiz</p>
     <p class="sel-sub">Εντόπισε τη δομή και τον τρόπο ανάπτυξης</p>
-    <div class="gq-filter">
+    <div class="fg" style="margin-top:18px">
       <label>Δομή</label>
-      <div class="gq-pills">${domiOpts.map(d=>`<button class="gq-pill ${gqState.domiFilter===d?'on':''}" data-gq-domi="${d}">${domiLabels[d]}</button>`).join('')}</div>
+      <div class="pills">${domiOpts.map(d=>`<button class="pill ${gqState.domiFilter===d?'on':''}" data-gq-domi="${d}">${domiLabels[d]}</button>`).join('')}</div>
     </div>
-    <div class="gq-filter">
+    <div class="fg">
       <label>Τρόπος ανάπτυξης</label>
-      <div class="gq-pills">${troposOpts.map(t=>`<button class="gq-pill ${gqState.troposFilter===t?'on':''}" data-gq-tropos="${t}">${troposLabels[t]}</button>`).join('')}</div>
+      <div class="pills">${troposOpts.map(t=>`<button class="pill ${gqState.troposFilter===t?'on':''}" data-gq-tropos="${t}">${troposLabels[t]}</button>`).join('')}</div>
     </div>
-    <div class="gq-filter">
+    <div class="fg">
       <label>Αριθμός ερωτήσεων</label>
-      <div class="gq-pills">${counts.map(c=>`<button class="gq-pill ${gqState.countFilter===c?'on':''}" data-gq-count="${c}">${countLabels[c]}</button>`).join('')}</div>
+      <div class="pills">${counts.map(c=>`<button class="pill ${gqState.countFilter===c?'on':''}" data-gq-count="${c}">${countLabels[c]}</button>`).join('')}</div>
     </div>
-    <div class="gq-info ${cnt===0?'warn':''}">${cnt===0?'⚠️ Δεν υπάρχουν ερωτήσεις με αυτά τα φίλτρα':`✅ <strong>${cnt}</strong> ερωτήσεις διαθέσιμες`}</div>
-    <button class="btn-gq-start" id="btnGQStart" ${cnt===0?'disabled':''}>Ξεκίνα ⚡</button>
+    <div class="info ${cnt===0?'warn':''}">${cnt===0?'⚠️ Δεν υπάρχουν ερωτήσεις με αυτά τα φίλτρα':`✅ <strong>${cnt}</strong> ερωτήσεις διαθέσιμες`}</div>
+    <button class="btn-go" id="btnGQStart" style="background:#7c3aed" ${cnt===0?'disabled':''}>Ξεκίνα ⚡</button>
     <button class="btn-sec" id="btnHomeFromGQ" style="margin-top:8px">↩ Αρχική</button>
   </div>`;
 }
