@@ -471,12 +471,9 @@ function getFiltered(diff) {
 
 function getDiagnosticQuestions() {
   // Ερωτήσεις με diagOrder !== null, ταξινομημένες κατά αριθμό
-  const result = allQ
+  return allQ
     .filter(q => q.diagOrder !== null && !isNaN(q.diagOrder))
     .sort((a,b) => a.diagOrder - b.diagOrder);
-  console.log('DEBUG diagQ:', result.length, result.map(q=>q.id+':'+q.diagOrder));
-  console.log('DEBUG allQ diagOrders:', allQ.map(q=>q.id+':'+JSON.stringify(q.diagOrder)));
-  return result;
 }
 
 function pickQuestions(pool, n) {
@@ -1155,14 +1152,52 @@ function attachEvents() {
   const btnHomeFromCat = document.getElementById('btnHomeFromCat');
   if (btnHomeFromCat) btnHomeFromCat.addEventListener('click', () => { state.screen='home'; render(); });
 
-  // CAT SELECTION — επιλογή τύπου
-  document.querySelectorAll('[data-cat]').forEach(b =>
+  // HOME back buttons
+  const btnHS = document.getElementById('btnHomeFromSel');
+  if (btnHS) btnHS.addEventListener('click', () => { state.screen='home'; render(); });
+  const btnHD = document.getElementById('btnHomeFromDiag');
+  if (btnHD) btnHD.addEventListener('click', () => { state.screen='home'; render(); });
+
+  // DIAG RESULT
+  const btnSD = document.getElementById('btnStartFromDiag');
+  if (btnSD) btnSD.addEventListener('click', () => startQuiz(state.diagLevel));
+
+  // SELECTION difficulty pills
+  document.querySelectorAll('[data-diff]').forEach(b =>
     b.addEventListener('click', () => {
-      state.selectedCat = b.dataset.cat;
+      state.difficulty = isNaN(b.dataset.diff) ? b.dataset.diff : parseInt(b.dataset.diff);
+      render();
+    }));
+  const btnStart = document.getElementById('btnStart');
+  if (btnStart) btnStart.addEventListener('click', () => startQuiz(state.difficulty));
+
+  // THEORY TOGGLE
+  const btnTh = document.getElementById('btnTheory');
+  if (btnTh) btnTh.addEventListener('click', () => { state.showTheory=!state.showTheory; render(); });
+
+  // MC/YN options
+  document.querySelectorAll('[data-opt]').forEach(b =>
+    b.addEventListener('click', () => { if(!state.answered){ state.answer=b.dataset.opt; render(); } }));
+
+  // CLK words
+  document.querySelectorAll('[data-word]').forEach(b =>
+    b.addEventListener('click', () => {
+      if (state.answered) return;
+      if (b.dataset.phrase) {
+        const phrase = b.dataset.phrase;
+        const idx2 = state.clkSelected.indexOf(phrase);
+        if (idx2!==-1) state.clkSelected.splice(idx2,1);
+        else state.clkSelected.push(phrase);
+      } else {
+        const w = b.dataset.word.replace(/[.,;:!?«»"'()\[\]]/g,'').trim();
+        const idx2 = state.clkSelected.indexOf(w);
+        if (idx2!==-1) state.clkSelected.splice(idx2,1);
+        else state.clkSelected.push(w);
+      }
       render();
     }));
 
-      // DD — Drag & Drop + κλικ για κινητό
+  // DD — Drag & Drop + κλικ για κινητό
   let _ddDrag = null, _ddChip = null;
   document.querySelectorAll('[data-dd-li]').forEach(el => {
     const li = parseInt(el.dataset.ddLi);
