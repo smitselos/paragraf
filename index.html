@@ -938,9 +938,9 @@ function renderDD(q) {
         const li = parseInt(usedByLeft[0]);
         html += `<button class="dd-slot filled" data-dd-unpair="${li}" title="Κλικ για αναίρεση">↩ ${r}</button>`;
       } else {
-        // Slot κενό — ενεργό μόνο αν έχει επιλεγεί αριστερά στοιχείο
+        // Slot κενό — πάντα εμφανίζει την τιμή, ενεργό μόνο αν έχει επιλεγεί αριστερά
         const isReady = selLeft !== null;
-        html += `<button class="dd-slot ${isReady?'ready':''}" data-dd-r="${i}" ${!isReady?'disabled':''}>${isReady?r:'—'}</button>`;
+        html += `<button class="dd-slot ${isReady?'ready':''}" data-dd-r="${i}" ${!isReady?'disabled':''}>${r}</button>`;
       }
     });
     html += '</div></div>';
