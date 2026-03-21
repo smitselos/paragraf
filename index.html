@@ -28,6 +28,8 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .app-hdr p{font-size:.78rem;color:var(--muted);margin-top:2px}
 .badge{background:var(--indigo-l);color:var(--indigo);padding:4px 12px;border-radius:999px;font-size:.78rem;font-weight:600;white-space:nowrap}
 .btn-home{background:none;border:2px solid var(--border);border-radius:999px;padding:4px 12px;cursor:pointer;font-size:1rem;line-height:1;color:var(--ink2);transition:all .15s;display:none}
+.btn-mute{background:none;border:2px solid var(--border);border-radius:999px;width:34px;height:34px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--ink2);transition:all .15s;flex-shrink:0}
+.btn-mute:hover{border-color:var(--indigo);color:var(--indigo)}
 .btn-home.visible{display:inline-flex;align-items:center;gap:5px}
 .btn-home:hover{border-color:var(--indigo);color:var(--indigo)}
 .app-hdr-right{display:flex;align-items:center;gap:8px}
@@ -260,6 +262,7 @@ to{width:100%}}
       <p>Νεοελληνική Γλώσσα για το Λύκειο</p>
     </div>
     <div class="app-hdr-right">
+      <button class="btn-mute" id="btnMute" title="Σίγαση">🔊</button>
       <button class="btn-home" id="btnHdrHome">🏠 Αρχική</button>
       <span class="badge" id="hdrBadge">Quiz</span>
     </div>
@@ -274,6 +277,38 @@ to{width:100%}}
 // ══════════════════════════════════════════════
 // CONFIG
 // ══════════════════════════════════════════════
+// ══════════════════════════════════════════════
+// AUDIO
+// ══════════════════════════════════════════════
+let audioMuted = false;
+function playSound(type) {
+  if (audioMuted) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    if (type === 'correct') {
+      // Δύο νότες ανοδικές
+      osc.frequency.setValueAtTime(523, ctx.currentTime);       // C5
+      osc.frequency.setValueAtTime(659, ctx.currentTime + 0.12); // E5
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.4);
+    } else {
+      // Μία νότα κατεβατή
+      osc.frequency.setValueAtTime(330, ctx.currentTime);
+      osc.frequency.setValueAtTime(220, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.35);
+    }
+  } catch(e) {}
+}
+
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRvQNTsoPcU08XK8mT56x6m-5T0zigqVnyB27VOeXpJnv8smyhKDQChQ9r55jBQN9pDCHB9Fs2W0SAi/pub?gid=1446071944&single=true&output=csv';
 const QUIZ_PER_SESSION = 10;
 
@@ -679,8 +714,7 @@ function renderDiagnostic() {
     </div>`;
     const isLast = state.idx===state.quizQ.length-1;
     const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
-    const btnCls = ok2 ? 'btn-next countdown' : 'btn-next';
-        html += `<button class="${btnCls}" id="btnNext">${isLast?'Δες το αποτέλεσμα →':'Επόμενη →'}</button>`;
+    html += `<div class="btn-next-wrap"><button class="btn-next" id="btnNext">${isLast?'Δες το αποτέλεσμα →':'Επόμενη →'}</button>${ok2?'<div class="btn-progress"><div class="btn-progress-fill" id="progressFill"></div></div>':''}</div>`;
   } else {
     html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
   }
@@ -932,8 +966,7 @@ function renderRetry() {
     }
     const isLast = state.idx===state.quizQ.length-1;
     const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
-    const btnCls = ok2 ? 'btn-next countdown' : 'btn-next';
-        html += `<button class="${btnCls}" id="btnNext">${isLast?'Τέλος ανατροφοδότησης →':'Επόμενη →'}</button>`;
+    html += `<div class="btn-next-wrap"><button class="btn-next" id="btnNext">${isLast?'Τέλος ανατροφοδότησης →':'Επόμενη →'}</button>${ok2?'<div class="btn-progress"><div class="btn-progress-fill" id="progressFill"></div></div>':''}</div>`;
   } else {
     html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
   }
@@ -1143,6 +1176,12 @@ function renderDD(q) {
 // EVENTS
 // ══════════════════════════════════════════════
 function attachEvents() {
+  const btnMute = document.getElementById('btnMute');
+  if (btnMute) btnMute.addEventListener('click', () => {
+    audioMuted = !audioMuted;
+    btnMute.textContent = audioMuted ? '🔇' : '🔊';
+    btnMute.title = audioMuted ? 'Ενεργοποίηση ήχου' : 'Σίγαση';
+  });
   const btnHdrHome = document.getElementById('btnHdrHome');
   if (btnHdrHome) btnHdrHome.addEventListener('click', () => { state.screen='home'; render(); });
 
@@ -1281,7 +1320,6 @@ function attachEvents() {
 // ══════════════════════════════════════════════
 function resetQuizState() {
   if (state._autoNextTimer) { clearTimeout(state._autoNextTimer); state._autoNextTimer=null; }
-  if (state._colorTimer) { clearInterval(state._colorTimer); state._colorTimer=null; }
   state.idx=0; state.answer=null; state.answered=false;
   state.ddPairs={}; state.ddSelected=null; state.clkSelected=[];
   state.showTheory=false; state.score=0; state.wrongByCat={};
@@ -1312,21 +1350,18 @@ function doCheck() {
     state.wrongByCat[q.cat].push(q.id);
   }
   render();
+  playSound(ok ? 'correct' : 'wrong');
   if (ok) {
     state._autoNextTimer = setTimeout(() => { if(state.answered) doNext(); }, 3500);
-    let _pct=0;
-    state._colorTimer = setInterval(() => {
-      _pct+=2;
-      const btn=document.getElementById('btnNext');
-      if (btn) { const r2=Math.round(5+(79-5)*_pct/100),g2=Math.round(150+(70-150)*_pct/100),b2=Math.round(105+(229-105)*_pct/100); btn.style.background=`rgb(${r2},${g2},${b2})`; }
-      if (_pct>=100) clearInterval(state._colorTimer);
-    }, 70);
+    requestAnimationFrame(() => {
+      const fill = document.getElementById('progressFill');
+      if (fill) { fill.style.transition='width 3.5s linear'; fill.style.width='100%'; }
+    });
   }
 }
 
 function doNext() {
   if (state._autoNextTimer) { clearTimeout(state._autoNextTimer); state._autoNextTimer=null; }
-  if (state._colorTimer) { clearInterval(state._colorTimer); state._colorTimer=null; }
   if (state.idx < state.quizQ.length-1) {
     state.idx++; state.answer=null; state.answered=false;
     state.ddPairs={}; state.ddSelected=null; state.clkSelected=[]; render();
