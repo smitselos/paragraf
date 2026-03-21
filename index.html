@@ -1264,7 +1264,7 @@ function attachEvents() {
   const gapInp = document.getElementById('gapInp');
   if (gapInp) {
     if (state.answer) gapInp.value = state.answer;
-    gapInp.addEventListener('input', ()=>{ state.answer = gapInp.value; });
+    gapInp.addEventListener('input', ()=>{ state.answer = gapInp.value; const btn=document.getElementById('btnCheck'); if(btn) btn.disabled=!state.answer.trim(); });
     gapInp.addEventListener('keydown', e=>{ if(e.key==='Enter'&&state.answer) doCheck(); });
   }
   const btnCheck = document.getElementById('btnCheck');
