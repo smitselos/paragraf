@@ -205,10 +205,10 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .btn-check:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
 .btn-next{width:100%;padding:13px;border:none;border-radius:var(--r);background:var(--green);color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px;transition:background .15s}
 .btn-next:hover{background:#047857}
-.btn-next-wrap{position:relative;margin-top:10px}
-.btn-next-wrap .btn-next{width:100%;margin-top:0}
-.btn-progress{height:4px;background:#e2e2f0;border-radius:0 0 var(--r) var(--r);overflow:hidden;margin-top:0}
-.btn-progress-fill{height:100%;width:0%;background:#065f46;transition:none}
+
+
+
+
 
 to{width:100%}}
 .btn-sec{width:100%;padding:11px;border:2px solid var(--border);border-radius:var(--r);background:var(--white);color:var(--ink2);font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;transition:all .15s}
@@ -714,7 +714,7 @@ function renderDiagnostic() {
     </div>`;
     const isLast = state.idx===state.quizQ.length-1;
     const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
-    html += `<div class="btn-next-wrap"><button class="btn-next" id="btnNext">${isLast?'Δες το αποτέλεσμα →':'Επόμενη →'}</button>${ok2?'<div class="btn-progress"><div class="btn-progress-fill" id="progressFill"></div></div>':''}</div>`;
+    html += `<button class="btn-next" id="btnNext">${isLast?'Δες το αποτέλεσμα →':'Επόμενη →'}</button>`;
   } else {
     html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
   }
@@ -966,7 +966,7 @@ function renderRetry() {
     }
     const isLast = state.idx===state.quizQ.length-1;
     const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
-    html += `<div class="btn-next-wrap"><button class="btn-next" id="btnNext">${isLast?'Τέλος ανατροφοδότησης →':'Επόμενη →'}</button>${ok2?'<div class="btn-progress"><div class="btn-progress-fill" id="progressFill"></div></div>':''}</div>`;
+    html += `<button class="btn-next" id="btnNext">${isLast?'Τέλος ανατροφοδότησης →':'Επόμενη →'}</button>`;
   } else {
     html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
   }
@@ -1353,11 +1353,7 @@ function doCheck() {
   playSound(ok ? 'correct' : 'wrong');
   if (ok) {
     state._autoNextTimer = setTimeout(() => { if(state.answered) doNext(); }, 3500);
-    // Το progressFill μπαίνει στο DOM μετά το render — περιμένουμε
-    setTimeout(() => {
-      const fill = document.getElementById('progressFill');
-      if (fill) { fill.style.transition='width 3.5s linear'; fill.style.width='100%'; }
-    }, 50);
+
   }
 }
 
