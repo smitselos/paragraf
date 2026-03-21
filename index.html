@@ -309,7 +309,9 @@ function parseCSVLine(line) {
 }
 
 function parseCSV(csv) {
-  const lines = csv.split('\n').filter(l=>l.trim());
+  const lines = csv.replace(/
+/g,'').split('
+').filter(l=>l.trim());
   if (lines.length < 2) return [];
   const hdrs = parseCSVLine(lines[0]).map(h=>h.trim());
   const data = [];
@@ -320,11 +322,11 @@ function parseCSV(csv) {
       let v = (vals[idx]||'').trim();
       obj[h] = (v===''||v.toLowerCase()==='null'||v.toLowerCase()==='false') ? null : v;
     });
-    if (!obj['Ενεργό'] || obj['Ενεργό']==='FALSE' || obj['Ενεργό']==='false') continue;
+    if (!obj['Ενεργό'] || obj['Ενεργό'].toUpperCase()==='FALSE') continue;
     if (!obj['Τύπος'] || !obj['Κατηγορία'] || !obj['Κείμενο Ερώτησης']) continue;
     obj.cat = parseInt(obj['Κατηγορία']) || 0;
     obj.diff = parseInt(obj['Δυσκολία']) || 1;
-    obj.diagOrder = obj['Διαγνωστική'] ? parseInt(obj['Διαγνωστική']) : null; // αριθμός σειράς ή null
+    const diagRaw = (obj['Διαγνωστική']||'').toString().trim(); const diagNum = parseFloat(diagRaw); obj.diagOrder = (!diagRaw || isNaN(diagNum)) ? null : Math.round(diagNum);
     obj.quizId = obj['Quiz_ID'];
     obj.id = obj['ID'];
     obj.type = obj['Τύπος'].trim().toUpperCase();
