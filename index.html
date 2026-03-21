@@ -207,6 +207,9 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .btn-check:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
 .btn-next{width:100%;padding:13px;border:none;border-radius:var(--r);background:var(--green);color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px;transition:background .15s}
 .btn-next:hover{background:#047857}
+.btn-next.countdown{background:var(--green);position:relative;overflow:hidden}
+.btn-next.countdown::after{content:'';position:absolute;left:0;top:0;height:100%;background:rgba(255,255,255,.2);animation:countdown-bar 3.5s linear forwards}
+@keyframes countdown-bar{from{width:100%}to{width:0%}}
 .btn-sec{width:100%;padding:11px;border:2px solid var(--border);border-radius:var(--r);background:var(--white);color:var(--ink2);font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;transition:all .15s}
 .btn-sec:hover{border-color:#94a3b8}
 
@@ -659,7 +662,9 @@ function renderDiagnostic() {
       ${!ok?`<p>${getFeedback(q,state.answer)||''}</p>`:''}
     </div>`;
     const isLast = state.idx===state.quizQ.length-1;
-    html += `<button class="btn-next" id="btnNext">${isLast?'Δες το αποτέλεσμα →':'Επόμενη →'}</button>`;
+    const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
+    const btnCls = ok2 ? 'btn-next countdown' : 'btn-next';
+    html += `<button class="${btnCls}" id="btnNext">${isLast?'Δες το αποτέλεσμα →':'Επόμενη →'}</button>`;
   } else {
     html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
   }
@@ -739,7 +744,7 @@ function renderQuiz() {
     </div>
   </div>`;
 
-  html += `<button class="theory-toggle" id="btnTheory">${state.showTheory?'▼':'▶'} Θεωρητικό Πλαίσιο</button>`;
+  html += `<button class="theory-toggle" id="btnTheory">${state.showTheory?'▼':'▶'} Θεωρητικό Πλαίσιο (Βοήθεια)</button>`;
   if (state.showTheory) {
     const keys = (q.theoryKeys && q.theoryKeys.length) ? q.theoryKeys : (CAT_THEORY[q.cat] ? [q.cat] : []);
     if (keys.length) {
@@ -879,7 +884,9 @@ function renderRetry() {
       </div>`;
     }
     const isLast = state.idx===state.quizQ.length-1;
-    html += `<button class="btn-next" id="btnNext">${isLast?'Τέλος ανατροφοδότησης →':'Επόμενη →'}</button>`;
+    const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
+    const btnCls = ok2 ? 'btn-next countdown' : 'btn-next';
+    html += `<button class="${btnCls}" id="btnNext">${isLast?'Τέλος ανατροφοδότησης →':'Επόμενη →'}</button>`;
   } else {
     html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
   }
@@ -952,26 +959,58 @@ function renderMC(q) {
 function renderExcerptCLK(q) {
   const targets = q.targets.map(t=>t.trim().toLowerCase());
   const text = q.excerpt;
+  // Tokenize: λέξεις και κενά
   const tokens = text.split(/(\s+)/);
+  // Φτιάχνω λίστα μόνο με λέξεις (χωρίς whitespace) για να βρίσκω φράσεις
+  const words = tokens.map(t => /^\s+$/.test(t) ? null : t.replace(/[.,;:!?«»"'()\[\]]/g,'').toLowerCase());
+
+  // Για κάθε token: αν είναι μέρος φράσης-στόχου, το σημειώνω με data-phrase
+  // Χτίζω ευρετήριο: wordIdx → phraseKey (το πλήρες target)
+  const wordPhraseMap = {}; // wordIdx → target string
+  targets.forEach(target => {
+    const parts = target.split(' ').filter(Boolean);
+    if (parts.length <= 1) return; // μεμονωμένες λέξεις χειρίζονται κανονικά
+    // Ψάχνω στη λίστα words για τη φράση
+    const wordOnlyIdxs = tokens.reduce((acc, t, i) => { if (!/^\s+$/.test(t)) acc.push(i); return acc; }, []);
+    for (let wi = 0; wi <= wordOnlyIdxs.length - parts.length; wi++) {
+      const match = parts.every((p, pi) => words[wordOnlyIdxs[wi+pi]] === p);
+      if (match) {
+        for (let pi = 0; pi < parts.length; pi++) {
+          wordPhraseMap[wordOnlyIdxs[wi+pi]] = target;
+        }
+      }
+    }
+  });
+
   let html = '<div class="exc clk" id="excClk">';
-  tokens.forEach((tok) => {
+  tokens.forEach((tok, ti) => {
     if (/^\s+$/.test(tok)) { html += tok; return; }
-    const clean = tok.replace(/[.,;:!?«»"'()\[\]]/g,'').toLowerCase();
-    const partOfTarget = targets.some(t => t.split(' ').some(tw=>tw===clean) || t===clean);
+    const clean = words[ti];
+    const phraseTarget = wordPhraseMap[ti]; // αν ανήκει σε φράση
+    const isSingleTarget = targets.includes(clean);
+    const isAnyTarget = phraseTarget || isSingleTarget;
+
+    // Έλεγχος αν επιλεγμένο
+    const isSelPhrase = phraseTarget && state.clkSelected.includes(phraseTarget);
+    const isSelWord = !phraseTarget && state.clkSelected.some(s=>s.toLowerCase()===clean);
+    const isSelected = isSelPhrase || isSelWord;
+
     let cls = 'tok';
     if (state.answered) {
-      const wasSelected = state.clkSelected.some(s=>s.toLowerCase()===clean);
-      if (partOfTarget) {
-        // Σωστή λέξη-στόχος: πράσινο πάντα
-        cls += ' hit';
-      } else if (wasSelected) {
-        // Επιλέχθηκε λάθος λέξη: κόκκινο
-        cls += ' miss';
-      }
+      if (isAnyTarget) cls += ' hit';
+      else if (isSelected) cls += ' miss';
     } else {
-      if (state.clkSelected.map(s=>s.toLowerCase()).includes(clean)) cls += ' sel';
+      if (isSelected) cls += ' sel';
     }
-    html += `<span class="${cls}" data-word="${tok.replace(/"/g,'&quot;')}">${tok}</span>`;
+    // Μόνο τα targets είναι κλικάρισμα
+    if (isAnyTarget || isSelected) {
+      const dataAttr = phraseTarget
+        ? `data-phrase="${phraseTarget.replace(/"/g,'&quot;')}" data-word="${tok.replace(/"/g,'&quot;')}"`
+        : `data-word="${tok.replace(/"/g,'&quot;')}"`;
+      html += `<span class="${cls}" ${dataAttr}>${tok}</span>`;
+    } else {
+      html += `<span>${tok}</span>`;
+    }
   });
   html += '</div>';
   return html;
@@ -1107,14 +1146,22 @@ function attachEvents() {
   document.querySelectorAll('[data-opt]').forEach(b =>
     b.addEventListener('click', ()=>{ if(!state.answered){ state.answer=b.dataset.opt; render(); }}));
 
-  // CLK
+  // CLK — υποστηρίζει μεμονωμένες λέξεις και φράσεις
   document.querySelectorAll('[data-word]').forEach(b =>
     b.addEventListener('click', ()=>{
       if (state.answered) return;
-      const w = b.dataset.word.replace(/[.,;:!?«»"'()\[\]]/g,'').trim();
-      const idx2 = state.clkSelected.indexOf(w);
-      if (idx2!==-1) state.clkSelected.splice(idx2,1);
-      else state.clkSelected.push(w);
+      if (b.dataset.phrase) {
+        // Κλικ σε λέξη φράσης → επιλέγει/αποεπιλέγει ολόκληρη τη φράση
+        const phrase = b.dataset.phrase;
+        const idx2 = state.clkSelected.indexOf(phrase);
+        if (idx2!==-1) state.clkSelected.splice(idx2,1);
+        else state.clkSelected.push(phrase);
+      } else {
+        const w = b.dataset.word.replace(/[.,;:!?«»"'()\[\]]/g,'').trim();
+        const idx2 = state.clkSelected.indexOf(w);
+        if (idx2!==-1) state.clkSelected.splice(idx2,1);
+        else state.clkSelected.push(w);
+      }
       render();
     }));
 
@@ -1218,6 +1265,7 @@ function attachEvents() {
 // ACTIONS
 // ══════════════════════════════════════════════
 function resetQuizState() {
+  if (state._autoNextTimer) { clearTimeout(state._autoNextTimer); state._autoNextTimer = null; }
   state.idx = 0;
   state.answer = null;
   state.answered = false;
@@ -1270,9 +1318,16 @@ function doCheck() {
     state.wrongByCat[q.cat].push(q.id);
   }
   render();
+  // Αυτόματη μετάβαση αν σωστά
+  if (ok) {
+    state._autoNextTimer = setTimeout(() => {
+      if (state.answered) doNext();
+    }, 3500);
+  }
 }
 
 function doNext() {
+  if (state._autoNextTimer) { clearTimeout(state._autoNextTimer); state._autoNextTimer = null; }
   if (state.idx < state.quizQ.length-1) {
     state.idx++;
     state.answer = null;
