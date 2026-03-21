@@ -1134,6 +1134,55 @@ function attachEvents() {
 
   const btnCat = document.getElementById('btnCat');
   if (btnCat) btnCat.addEventListener('click', () => { state.screen='cat_selection'; state.selectedCat=null; render(); });
+
+  // Cat selection pills
+  document.querySelectorAll('[data-cat]').forEach(b =>
+    b.addEventListener('click', () => { state.selectedCat=b.dataset.cat; render(); }));
+
+  // Start cat quiz
+  const btnStartCat = document.getElementById('btnStartCat');
+  if (btnStartCat) btnStartCat.addEventListener('click', () => {
+    const pool = allQ.filter(q=>q.type===state.selectedCat);
+    resetQuizState();
+    state.quizQ = pickQuestions(pool, QUIZ_PER_SESSION);
+    state.difficulty = 'all';
+    state.phase = 'main';
+    state.screen = 'quiz';
+    render();
+  });
+
+  // Back home from cat
+  const btnHomeFromCat = document.getElementById('btnHomeFromCat');
+  if (btnHomeFromCat) btnHomeFromCat.addEventListener('click', () => { state.screen='home'; render(); });
+
+  // CAT SELECTION — επιλογή τύπου
+  document.querySelectorAll('[data-cat]').forEach(b =>
+    b.addEventListener('click', () => {
+      state.selectedCat = b.dataset.cat;
+      render();
+    }));
+
+  const btnStartCat = document.getElementById('btnStartCat');
+  if (btnStartCat) btnStartCat.addEventListener('click', () => {
+    const pool = allQ.filter(q => q.type === state.selectedCat);
+    if (!pool.length) return;
+    state.quizQ = shuffle(pool).slice(0, QUIZ_PER_SESSION);
+    state.idx = 0;
+    state.answer = null;
+    state.answered = false;
+    state.phase = 'main';
+    state.score = 0;
+    state.wrongByCat = {};
+    state.ddPairs = {};
+    state.ddSelected = null;
+    state.clkSelected = [];
+    state.showTheory = false;
+    state.screen = 'quiz';
+    render();
+  });
+
+  const btnHomeFromCat = document.getElementById('btnHomeFromCat');
+  if (btnHomeFromCat) btnHomeFromCat.addEventListener('click', () => { state.screen='home'; render(); });
   const btnHS = document.getElementById('btnHomeFromSel');
   if (btnHS) btnHS.addEventListener('click', () => { state.screen='home'; render(); });
   const btnHD = document.getElementById('btnHomeFromDiag');
