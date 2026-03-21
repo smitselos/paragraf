@@ -1353,10 +1353,11 @@ function doCheck() {
   playSound(ok ? 'correct' : 'wrong');
   if (ok) {
     state._autoNextTimer = setTimeout(() => { if(state.answered) doNext(); }, 3500);
-    requestAnimationFrame(() => {
+    // Το progressFill μπαίνει στο DOM μετά το render — περιμένουμε
+    setTimeout(() => {
       const fill = document.getElementById('progressFill');
       if (fill) { fill.style.transition='width 3.5s linear'; fill.style.width='100%'; }
-    });
+    }, 50);
   }
 }
 
