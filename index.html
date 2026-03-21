@@ -929,7 +929,9 @@ function renderDD(q) {
     shuffledRight.forEach(({r,i})=>{
       const usedByLeft = Object.entries(state.ddPairs).find(([,ri])=>ri===i);
       const isFilled = usedByLeft !== undefined;
-      const filledText = isFilled ? r : '↓';
+      // Αν γεμάτο: δείχνει κείμενο του αριστερού στοιχείου που μπήκε
+      const filledLi = isFilled ? parseInt(usedByLeft[0]) : null;
+      const filledText = isFilled ? q.leftItems[filledLi] : '↓';
       html += `<div class="dd-slot-row">
         <div class="dd-slot ${isFilled?'filled':''}" data-dd-ri="${i}" data-dd-label="${r.replace(/"/g,'&quot;')}">${filledText}</div>
         <span class="dd-slot-label">${r}</span>
