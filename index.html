@@ -207,9 +207,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .btn-check:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
 .btn-next{width:100%;padding:13px;border:none;border-radius:var(--r);background:var(--green);color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px;transition:background .15s}
 .btn-next:hover{background:#047857}
-.btn-next.countdown{background:var(--green);position:relative;overflow:hidden;cursor:pointer}
-.btn-next .cbfill{position:absolute;top:0;left:0;height:100%;width:0%;background:var(--indigo);transition:none;animation:cbfill 3.5s linear forwards;pointer-events:none;border-radius:inherit}
-@keyframes cbfill{from{width:0%}to{width:100%}}to{width:100%}}to{width:100%}}to{width:100%}}to{width:100%}}
+.btn-next.countdown{background:var(--green);position:relative;overflow:hidden;cursor:pointer}to{width:100%}}to{width:100%}}to{width:100%}}to{width:100%}}to{width:100%}}
 .btn-sec{width:100%;padding:11px;border:2px solid var(--border);border-radius:var(--r);background:var(--white);color:var(--ink2);font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;transition:all .15s}
 .btn-sec:hover{border-color:#94a3b8}
 
@@ -664,8 +662,7 @@ function renderDiagnostic() {
     const isLast = state.idx===state.quizQ.length-1;
     const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
     const btnCls = ok2 ? 'btn-next countdown' : 'btn-next';
-    const fillDiv = ok2 ? '<span class="cbfill"></span>' : '';
-    html += `<button class="${btnCls}" id="btnNext">${fillDiv}<span style="position:relative;z-index:1">${isLast?'Δες το αποτέλεσμα →':'Επόμενη →'}</span></button>`;
+        html += `<button class="${btnCls}" id="btnNext">${isLast?'Δες το αποτέλεσμα →':'Επόμενη →'}</button>`;
   } else {
     html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
   }
@@ -887,8 +884,7 @@ function renderRetry() {
     const isLast = state.idx===state.quizQ.length-1;
     const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
     const btnCls = ok2 ? 'btn-next countdown' : 'btn-next';
-    const fillDiv = ok2 ? '<span class="cbfill"></span>' : '';
-    html += `<button class="${btnCls}" id="btnNext">${fillDiv}<span style="position:relative;z-index:1">${isLast?'Τέλος ανατροφοδότησης →':'Επόμενη →'}</span></button>`;
+        html += `<button class="${btnCls}" id="btnNext">${isLast?'Τέλος ανατροφοδότησης →':'Επόμενη →'}</button>`;
   } else {
     html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
   }
@@ -1267,7 +1263,7 @@ function attachEvents() {
 // ACTIONS
 // ══════════════════════════════════════════════
 function resetQuizState() {
-  if (state._autoNextTimer) { clearTimeout(state._autoNextTimer); state._autoNextTimer = null; }
+  if (state._autoNextTimer) { clearTimeout(state._autoNextTimer); state._autoNextTimer = null; } if (state._colorTimer) { clearInterval(state._colorTimer); state._colorTimer = null; }
   state.idx = 0;
   state.answer = null;
   state.answered = false;
@@ -1325,11 +1321,25 @@ function doCheck() {
     state._autoNextTimer = setTimeout(() => {
       if (state.answered) doNext();
     }, 3500);
+    // Κλιμακωτή αλλαγή χρώματος κουμπιού
+    let pct = 0;
+    state._colorTimer = setInterval(() => {
+      pct += 2;
+      const btn = document.getElementById('btnNext');
+      if (btn) {
+        // Από πράσινο (#059669) προς indigo (#4f46e5)
+        const r = Math.round(5 + (79-5)*pct/100);
+        const g = Math.round(150 + (70-150)*pct/100);
+        const b = Math.round(105 + (229-105)*pct/100);
+        btn.style.background = `rgb(${r},${g},${b})`;
+      }
+      if (pct >= 100) clearInterval(state._colorTimer);
+    }, 70);
   }
 }
 
 function doNext() {
-  if (state._autoNextTimer) { clearTimeout(state._autoNextTimer); state._autoNextTimer = null; }
+  if (state._autoNextTimer) { clearTimeout(state._autoNextTimer); state._autoNextTimer = null; } if (state._colorTimer) { clearInterval(state._colorTimer); state._colorTimer = null; }
   if (state.idx < state.quizQ.length-1) {
     state.idx++;
     state.answer = null;
