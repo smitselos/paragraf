@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quiz — Παράγραφος</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -65,10 +67,10 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .home-card.c4 .hc-arrow{color:var(--amber)}
 
 /* ══ DIAGNOSTIC ══ */
-.diag-intro{text-align:center;padding:10px 0 18px}
-.diag-intro .d-icon{font-size:2.4rem;margin-bottom:10px}
-.diag-intro h2{font-family:'IBM Plex Serif',serif;font-size:1.3rem;font-weight:600;margin-bottom:6px}
-.diag-intro p{color:var(--muted);font-size:.875rem}
+
+
+
+
 .diag-steps{display:flex;gap:6px;justify-content:center;margin:16px 0 4px;flex-wrap:wrap}
 .diag-step{width:28px;height:6px;border-radius:999px;background:var(--border);transition:background .3s}
 .diag-step.done{background:var(--teal)}
@@ -106,9 +108,9 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 
 /* progress */
 .prog-wrap{margin-bottom:16px}
-.prog-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
-.prog-info span{font-size:.83rem;color:var(--muted)}
-.prog-info strong{color:var(--indigo);font-size:1rem}
+
+
+
 .prog-bar{background:var(--border);border-radius:999px;height:5px;overflow:hidden}
 .prog-fill{background:var(--indigo);height:100%;transition:width .4s ease}
 .prog-fill.teal{background:var(--teal)}
@@ -241,7 +243,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 
 @media(max-width:600px){
   .score-grid{grid-template-columns:1fr}
-  .dd-grid{grid-template-columns:1fr 24px 1fr}
+  
   .home-cards{grid-template-columns:1fr}
 }
 </style>
