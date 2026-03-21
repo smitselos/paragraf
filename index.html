@@ -142,15 +142,34 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .gap-inp.ko{color:var(--red);border-color:var(--red)}
 
 /* DD */
-.dd-grid{display:grid;grid-template-columns:1fr 32px 1fr;gap:6px;align-items:center;margin-bottom:6px}
-.dd-left,.dd-right{padding:9px 12px;border:2px solid var(--border);border-radius:8px;font-size:.855rem;background:var(--white);cursor:pointer;font-family:inherit;color:var(--ink);text-align:left;transition:all .15s}
-.dd-left:hover:not(:disabled),.dd-right:hover:not(:disabled){border-color:#94a3b8}
-.dd-left.sel,.dd-right.sel{border-color:var(--indigo);background:var(--indigo-l)}
-.dd-left.paired,.dd-right.paired{border-color:var(--indigo);background:var(--indigo-l);cursor:default}
-.dd-left.ok,.dd-right.ok{border-color:var(--green);background:var(--green-l);cursor:default}
-.dd-left.ko,.dd-right.ko{border-color:var(--red);background:var(--red-l);cursor:default}
-.dd-arrow{text-align:center;color:var(--muted);font-size:.9rem}
-.dd-hint{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:10px}
+.dd-wrap{width:100%}
+.dd-hint{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:12px}
+.dd-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.dd-col-hdr{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:0 4px;margin-bottom:4px}
+.dd-left-col,.dd-right-col{display:flex;flex-direction:column;gap:6px}
+.dd-item{padding:10px 13px;border:2px solid var(--border);border-radius:9px;font-size:.855rem;background:var(--white);cursor:pointer;font-family:inherit;color:var(--ink);text-align:left;transition:all .15s;min-height:42px;display:flex;align-items:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.dd-item:hover:not(:disabled):not(.paired):not(.ok):not(.ko){border-color:#94a3b8;background:#f8f8ff}
+.dd-item.sel{border-color:var(--indigo);background:var(--indigo-l);font-weight:600}
+.dd-item.paired{border-color:var(--indigo);background:var(--indigo-l);cursor:default}
+.dd-item.ok{border-color:var(--green);background:var(--green-l);cursor:default;color:#065f46;font-weight:600}
+.dd-item.ko{border-color:var(--red);background:var(--red-l);cursor:default;color:#7f1d1d}
+.dd-slot{padding:10px 13px;border:2px dashed var(--border);border-radius:9px;font-size:.855rem;background:#fafafa;min-height:42px;display:flex;align-items:center;color:var(--muted);font-style:italic;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.dd-slot.ready{border-color:var(--indigo);border-style:solid;background:var(--indigo-l);cursor:pointer}
+.dd-slot.ready:hover{background:#e0e7ff}
+.dd-slot.filled{border-color:var(--indigo);border-style:solid;background:var(--indigo-l);color:var(--ink);font-style:normal;font-weight:600;cursor:pointer}
+.dd-slot.filled:hover:not(.ok):not(.ko){background:#dde4ff}
+.dd-slot.ok{border-color:var(--green);border-style:solid;background:var(--green-l);color:#065f46;font-style:normal;font-weight:600;cursor:default}
+.dd-slot.ko{border-color:var(--red);border-style:solid;background:var(--red-l);color:#7f1d1d;font-style:normal;cursor:default}
+.dd-correct-show{margin-top:12px;padding:12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0}
+.dd-correct-show p{font-size:.78rem;color:#065f46;font-weight:600;margin-bottom:8px}
+.dd-correct-row{display:grid;grid-template-columns:1fr 20px 1fr;gap:4px;align-items:center;margin-bottom:4px;font-size:.83rem}
+.dd-correct-row .dl{padding:6px 10px;background:var(--green-l);border-radius:6px;color:#065f46}
+.dd-correct-row .dr{padding:6px 10px;background:var(--green-l);border-radius:6px;color:#065f46}
+.dd-correct-row .da{text-align:center;color:var(--muted)}
+@media(max-width:480px){
+  .dd-cols{grid-template-columns:1fr}
+  .dd-right-col{margin-top:4px}
+}
 
 /* feedback */
 .fb{border-radius:var(--r);padding:14px 16px;margin-top:14px;font-size:.875rem;line-height:1.65}
@@ -838,45 +857,95 @@ function renderExcerptGAP(q) {
 }
 
 function renderDD(q) {
-  const shuffledRight = q._shuffledRight || (q._shuffledRight = shuffle(q.rightItems.map((r,i)=>({r,i}))));
-  let html = '<p class="dd-hint">Κάντε κλικ πρώτα σε στοιχείο αριστερά, μετά στο αντίστοιχο δεξιά.</p>';
+  // Αρχικοποίηση ανακατεμένης δεξιάς λίστας (σταθερή ανά ερώτηση)
+  if (!q._shuffledRight) {
+    q._shuffledRight = shuffle(q.rightItems.map((r,i)=>({r,i})));
+  }
+  const shuffledRight = q._shuffledRight;
+
+  let html = '<div class="dd-wrap">';
+
   if (state.answered) {
+    // ── ΑΠΟΤΕΛΕΣΜΑ ──
     const correctPairs = parseCorrectDD(q.correct, q.leftItems, q.rightItems);
-    html += '<div>';
+    html += '<div class="dd-cols">';
+    html += '<div><div class="dd-col-hdr">Αριστερά</div><div class="dd-left-col">';
     q.leftItems.forEach((l,li)=>{
       const myRi = state.ddPairs[li];
       const correctRi = correctPairs?.[li];
       const isOk = myRi===correctRi;
-      const rText = myRi!==undefined ? q.rightItems[myRi] : '—';
-      html += `<div class="dd-grid"><div class="dd-left ${isOk?'ok':'ko'}">${l}</div><div class="dd-arrow">→</div><div class="dd-right ${isOk?'ok':'ko'}">${rText}</div></div>`;
+      html += `<div class="dd-item ${isOk?'ok':'ko'}">${l}</div>`;
     });
+    html += '</div></div>';
+    html += '<div><div class="dd-col-hdr">Απάντησες</div><div class="dd-right-col">';
+    q.leftItems.forEach((_,li)=>{
+      const myRi = state.ddPairs[li];
+      const correctRi = correctPairs?.[li];
+      const isOk = myRi===correctRi;
+      const rText = myRi!==undefined ? q.rightItems[myRi] : '—';
+      html += `<div class="dd-slot ${isOk?'ok':'ko'}">${rText}</div>`;
+    });
+    html += '</div></div>';
+    html += '</div>'; // dd-cols
+
+    // Σωστές αντιστοιχίσεις αν υπάρχουν λάθη
     const allOk = q.leftItems.every((_,li)=>state.ddPairs[li]===correctPairs?.[li]);
     if (!allOk && correctPairs) {
-      html += `<p style="font-size:.78rem;color:var(--muted);margin-top:8px;font-style:italic">Σωστές αντιστοιχίσεις:</p>`;
+      html += '<div class="dd-correct-show"><p>✅ Σωστές αντιστοιχίσεις:</p>';
       q.leftItems.forEach((l,li)=>{
         const ri = correctPairs[li];
-        html += `<div class="dd-grid"><div class="dd-left ok">${l}</div><div class="dd-arrow">→</div><div class="dd-right ok">${q.rightItems[ri]||'—'}</div></div>`;
+        html += `<div class="dd-correct-row"><div class="dl">${l}</div><div class="da">→</div><div class="dr">${q.rightItems[ri]||'—'}</div></div>`;
       });
+      html += '</div>';
     }
-    html += '</div>';
+
   } else {
-    html += '<div>';
+    // ── ΑΛΛΗΛΕΠΙΔΡΑΣΗ ──
+    // Βήμα 1: επίλεξε αριστερά  Βήμα 2: επίλεξε δεξιά slot
+    const selLeft = state.ddSelected; // "L0", "L1" κλπ ή null
+    const selLeftIdx = selLeft ? parseInt(selLeft.slice(1)) : null;
+
+    // Οδηγίες
+    if (selLeft === null) {
+      html += '<p class="dd-hint">👆 Επίλεξε ένα στοιχείο <strong>αριστερά</strong></p>';
+    } else {
+      html += `<p class="dd-hint" style="color:var(--indigo);font-style:normal">➡️ Τώρα επίλεξε το αντίστοιχο <strong>δεξιά</strong></p>`;
+    }
+
+    html += '<div class="dd-cols">';
+
+    // Αριστερή στήλη — σταθερά στοιχεία
+    html += '<div><div class="dd-col-hdr">Στήλη Α</div><div class="dd-left-col">';
     q.leftItems.forEach((l,li)=>{
-      const paired = state.ddPairs[li]!==undefined;
-      const selLeft = state.ddSelected===`L${li}`;
-      html += `<div class="dd-grid">
-        <button class="dd-left ${paired?'paired':selLeft?'sel':''}" data-dd-l="${li}" ${paired?'disabled':''}>${paired?'✓ '+l:l}</button>
-        <div class="dd-arrow">→</div>
-        <div class="dd-right ${paired?'paired':''}">${paired?q.rightItems[state.ddPairs[li]]:'?'}</div>
-      </div>`;
+      const paired = state.ddPairs[li] !== undefined;
+      const isSel = selLeftIdx === li;
+      let cls = 'dd-item';
+      if (paired) cls += ' paired';
+      else if (isSel) cls += ' sel';
+      html += `<button class="${cls}" data-dd-l="${li}" ${paired?'disabled':''}>${paired ? '✓ '+l : l}</button>`;
     });
-    html += '</div><div style="margin-top:12px"><p style="font-size:.78rem;color:var(--muted);margin-bottom:6px">Επιλογές (δεξιά):</p>';
+    html += '</div></div>';
+
+    // Δεξιά στήλη — slots αντιστοίχισης
+    html += '<div><div class="dd-col-hdr">Στήλη Β</div><div class="dd-right-col">';
     shuffledRight.forEach(({r,i})=>{
-      const used = Object.values(state.ddPairs).includes(i);
-      html += `<button class="dd-right ${used?'paired':''}" data-dd-r="${i}" style="display:block;width:100%;margin-bottom:5px" ${used?'disabled':''}>${r}</button>`;
+      const usedByLeft = Object.entries(state.ddPairs).find(([,ri])=>ri===i);
+      if (usedByLeft) {
+        // Slot γεμάτο — δείχνει τιμή, κλικ για αναίρεση
+        const li = parseInt(usedByLeft[0]);
+        html += `<button class="dd-slot filled" data-dd-unpair="${li}" title="Κλικ για αναίρεση">↩ ${r}</button>`;
+      } else {
+        // Slot κενό — ενεργό μόνο αν έχει επιλεγεί αριστερά στοιχείο
+        const isReady = selLeft !== null;
+        html += `<button class="dd-slot ${isReady?'ready':''}" data-dd-r="${i}" ${!isReady?'disabled':''}>${isReady?r:'—'}</button>`;
+      }
     });
-    html += '</div>';
+    html += '</div></div>';
+
+    html += '</div>'; // dd-cols
   }
+
+  html += '</div>'; // dd-wrap
   return html;
 }
 
@@ -933,15 +1002,19 @@ function attachEvents() {
       render();
     }));
 
-  // DD
+  // DD — αριστερά
   document.querySelectorAll('[data-dd-l]').forEach(b =>
     b.addEventListener('click', ()=>{
+      if (state.answered) return;
       const li = parseInt(b.dataset.ddL);
       state.ddSelected = state.ddSelected===`L${li}` ? null : `L${li}`;
       render();
     }));
+
+  // DD — δεξιά (αντιστοίχιση)
   document.querySelectorAll('[data-dd-r]').forEach(b =>
     b.addEventListener('click', ()=>{
+      if (state.answered) return;
       if (state.ddSelected && state.ddSelected.startsWith('L')) {
         const li = parseInt(state.ddSelected.slice(1));
         const ri = parseInt(b.dataset.ddR);
@@ -949,6 +1022,16 @@ function attachEvents() {
         state.ddSelected = null;
         render();
       }
+    }));
+
+  // DD — αναίρεση (unpair)
+  document.querySelectorAll('[data-dd-unpair]').forEach(b =>
+    b.addEventListener('click', ()=>{
+      if (state.answered) return;
+      const li = parseInt(b.dataset.ddUnpair);
+      delete state.ddPairs[li];
+      state.ddSelected = null;
+      render();
     }));
 
   // GAP
