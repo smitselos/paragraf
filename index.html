@@ -1127,14 +1127,177 @@ function renderDD(q) {
   html += '</div>';
   return html;
 }
-</script>
-</body>
-</html
+
+
+// ══════════════════════════════════════════════
+// EVENTS
+// ══════════════════════════════════════════════
+function attachEvents() {
+  const btnSL1 = document.getElementById('btnStartL1');
+  if (btnSL1) btnSL1.addEventListener('click', () => startQuiz(1));
+  const btnDiag = document.getElementById('btnDiag');
+  if (btnDiag) btnDiag.addEventListener('click', () => { const dq=getDiagnosticQuestions(); if(!dq.length)return; startDiagnostic(dq); });
+  const btnSel = document.getElementById('btnSel');
+  if (btnSel) btnSel.addEventListener('click', () => { state.screen='selection'; state.difficulty=null; render(); });
+  const btnHS = document.getElementById('btnHomeFromSel');
+  if (btnHS) btnHS.addEventListener('click', () => { state.screen='home'; render(); });
+  const btnHD = document.getElementById('btnHomeFromDiag');
+  if (btnHD) btnHD.addEventListener('click', () => { state.screen='home'; render(); });
+  document.querySelectorAll('[data-diff]').forEach(b => b.addEventListener('click', ()=>{ state.difficulty=isNaN(b.dataset.diff)?b.dataset.diff:parseInt(b.dataset.diff); render(); }));
+  const btnStart = document.getElementById('btnStart');
+  if (btnStart) btnStart.addEventListener('click', () => startQuiz(state.difficulty));
+  const btnSD = document.getElementById('btnStartFromDiag');
+  if (btnSD) btnSD.addEventListener('click', () => startQuiz(state.diagLevel));
+  const btnTh = document.getElementById('btnTheory');
+  if (btnTh) btnTh.addEventListener('click', ()=>{ state.showTheory=!state.showTheory; render(); });
+  document.querySelectorAll('[data-opt]').forEach(b => b.addEventListener('click', ()=>{ if(!state.answered){ state.answer=b.dataset.opt; render(); }}));
+  document.querySelectorAll('[data-word]').forEach(b => b.addEventListener('click', ()=>{
+    if (state.answered) return;
+    if (b.dataset.phrase) {
+      const phrase = b.dataset.phrase;
+      const idx2 = state.clkSelected.indexOf(phrase);
+      if (idx2!==-1) state.clkSelected.splice(idx2,1); else state.clkSelected.push(phrase);
+    } else {
+      const w = b.dataset.word.replace(/[.,;:!?«»"'()\[\]]/g,'').trim();
+      const idx2 = state.clkSelected.indexOf(w);
+      if (idx2!==-1) state.clkSelected.splice(idx2,1); else state.clkSelected.push(w);
+    }
+    render();
+  }));
+
+  // DD — Drag & Drop + κλικ για κινητό
+  let _ddDrag = null, _ddChip = null;
+  document.querySelectorAll('[data-dd-li]').forEach(el => {
+    const li = parseInt(el.dataset.ddLi);
+    if (el.classList.contains('used')) return;
+    el.addEventListener('dragstart', e => {
+      _ddDrag=li; _ddChip=null; el.classList.add('dragging');
+      e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',String(li));
+    });
+    el.addEventListener('dragend', () => el.classList.remove('dragging'));
+    el.addEventListener('click', () => {
+      if (state.answered) return;
+      if (_ddChip===li) { _ddChip=null; document.querySelectorAll('[data-dd-li]').forEach(c=>c.classList.remove('dragging')); }
+      else { _ddChip=li; document.querySelectorAll('[data-dd-li]').forEach(c=>c.classList.remove('dragging')); el.classList.add('dragging'); }
+    });
+  });
+  document.querySelectorAll('[data-dd-ri]').forEach(slot => {
+    const ri = parseInt(slot.dataset.ddRi);
+    slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('over'); });
+    slot.addEventListener('dragleave', () => slot.classList.remove('over'));
+    slot.addEventListener('drop', e => {
+      e.preventDefault(); slot.classList.remove('over');
+      if (_ddDrag===null) return;
+      Object.keys(state.ddPairs).forEach(k=>{ if(state.ddPairs[k]===ri) delete state.ddPairs[k]; });
+      state.ddPairs[_ddDrag]=ri; _ddDrag=null; render();
+    });
+    slot.addEventListener('click', () => {
+      if (state.answered) return;
+      if (_ddChip!==null) {
+        Object.keys(state.ddPairs).forEach(k=>{ if(state.ddPairs[k]===ri) delete state.ddPairs[k]; });
+        state.ddPairs[_ddChip]=ri; _ddChip=null;
+        document.querySelectorAll('[data-dd-li]').forEach(c=>c.classList.remove('dragging'));
+        render();
+      } else {
+        const ub = Object.entries(state.ddPairs).find(([,v])=>v===ri);
+        if (ub) { delete state.ddPairs[parseInt(ub[0])]; render(); }
+      }
+    });
+  });
+
+  const gapInp = document.getElementById('gapInp');
+  if (gapInp) {
+    if (state.answer) gapInp.value = state.answer;
+    gapInp.addEventListener('input', ()=>{ state.answer = gapInp.value; });
+    gapInp.addEventListener('keydown', e=>{ if(e.key==='Enter'&&state.answer) doCheck(); });
+  }
+  const btnCheck = document.getElementById('btnCheck');
+  if (btnCheck) btnCheck.addEventListener('click', doCheck);
+  const btnNext = document.getElementById('btnNext');
+  if (btnNext) btnNext.addEventListener('click', doNext);
+  document.querySelectorAll('[data-retry-cat]').forEach(b => b.addEventListener('click', ()=> startRetry(parseInt(b.dataset.retryCat))));
+  const btnNQ = document.getElementById('btnNewQuiz');
+  if (btnNQ) btnNQ.addEventListener('click', () => { state.screen='home'; render(); });
+}
+
+// ══════════════════════════════════════════════
+// ACTIONS
+// ══════════════════════════════════════════════
+function resetQuizState() {
+  if (state._autoNextTimer) { clearTimeout(state._autoNextTimer); state._autoNextTimer=null; }
+  if (state._colorTimer) { clearInterval(state._colorTimer); state._colorTimer=null; }
+  state.idx=0; state.answer=null; state.answered=false;
+  state.ddPairs={}; state.ddSelected=null; state.clkSelected=[];
+  state.showTheory=false; state.score=0; state.wrongByCat={};
+}
+
+function startDiagnostic(diagQ) {
+  resetQuizState(); state.quizQ=diagQ; state.phase='diag';
+  state.diagScore=0; state.diagTotal=diagQ.length; state.screen='diagnostic'; render();
+}
+
+function startQuiz(diff) {
+  const pool = getFiltered(diff); resetQuizState();
+  state.quizQ=pickQuestions(pool,QUIZ_PER_SESSION); state.difficulty=diff;
+  state.phase='main'; state.screen='quiz'; render();
+}
+
+function doCheck() {
+  const q = state.quizQ[state.idx];
+  if (q.type==='GAP') { const inp=document.getElementById('gapInp'); state.answer=inp?inp.value.trim():state.answer; }
+  if (q.type==='CLK') state.answer=[...state.clkSelected];
+  if (q.type==='DD') state.answer={...state.ddPairs};
+  state.answered=true;
+  const ok = checkAnswer(q, state.answer);
+  if (state.phase==='diag') { if(ok) state.diagScore++; }
+  else if (ok) { state.score++; }
+  else if (state.phase==='main') {
+    if (!state.wrongByCat[q.cat]) state.wrongByCat[q.cat]=[];
+    state.wrongByCat[q.cat].push(q.id);
+  }
+  render();
+  if (ok) {
+    state._autoNextTimer = setTimeout(() => { if(state.answered) doNext(); }, 3500);
+    let _pct=0;
+    state._colorTimer = setInterval(() => {
+      _pct+=2;
+      const btn=document.getElementById('btnNext');
+      if (btn) { const r2=Math.round(5+(79-5)*_pct/100),g2=Math.round(150+(70-150)*_pct/100),b2=Math.round(105+(229-105)*_pct/100); btn.style.background=`rgb(${r2},${g2},${b2})`; }
+      if (_pct>=100) clearInterval(state._colorTimer);
+    }, 70);
+  }
+}
+
+function doNext() {
+  if (state._autoNextTimer) { clearTimeout(state._autoNextTimer); state._autoNextTimer=null; }
+  if (state._colorTimer) { clearInterval(state._colorTimer); state._colorTimer=null; }
+  if (state.idx < state.quizQ.length-1) {
+    state.idx++; state.answer=null; state.answered=false;
+    state.ddPairs={}; state.ddSelected=null; state.clkSelected=[]; render();
+  } else {
+    if (state.phase==='diag') { state.diagLevel=calcDiagLevel(state.diagScore,state.diagTotal); state.screen='diag_result'; render(); }
+    else if (state.phase==='main') { state.screen='results'; render(); }
+    else { state.screen='done'; render(); }
+  }
+}
+
+function startRetry(cat) {
+  const wrongIds=state.wrongByCat[cat]||[];
+  const sameWrong=allQ.filter(q=>wrongIds.includes(q.id));
+  const samePool=allQ.filter(q=>q.cat===cat&&!wrongIds.includes(q.id));
+  const extra=shuffle(samePool).slice(0,2);
+  const retrySet=shuffle([...sameWrong.slice(0,1),...extra]).slice(0,3);
+  if (!retrySet.length) return;
+  state.quizQ=retrySet; state.idx=0; state.answer=null; state.answered=false;
+  state.phase='retry'; state.ddPairs={}; state.ddSelected=null; state.clkSelected=[];
+  state.score=0; state.screen='retry'; render();
+}
 
 // ══════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════
 loadData();
+
 </script>
 </body>
 </html>
