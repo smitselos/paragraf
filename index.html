@@ -134,6 +134,10 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .opt:disabled{cursor:default}
 .opt-k{min-width:22px;height:22px;border-radius:50%;background:var(--border);color:var(--ink2);font-size:.72rem;font-weight:700;text-align:center;line-height:22px;flex-shrink:0}
 .opt.ok .opt-k,.opt.ko .opt-k{background:rgba(255,255,255,.3);color:#fff}
+.opt{position:relative}
+.opt-badge{position:absolute;top:6px;right:8px;font-size:.8rem;font-weight:700;line-height:1}
+.opt.ok .opt-badge-ok{display:inline}
+.opt.ko .opt-badge-ko{display:inline}
 
 /* GAP */
 .exc-gap{font-family:'IBM Plex Serif',serif;background:linear-gradient(135deg,#f8f8ff,#f0f0fa);border-left:3px solid var(--indigo);border-radius:0 8px 8px 0;padding:15px 18px;line-height:2.1;font-size:.96rem;color:var(--ink);text-align:justify;margin-bottom:14px}
@@ -144,9 +148,10 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 /* DD */
 .dd-wrap{width:100%}
 .dd-hint{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:12px}
-.dd-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+.dd-cols{display:grid;grid-template-columns:1fr 1fr auto;gap:6px 10px;align-items:start;margin-bottom:8px}
 .dd-col-hdr{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:0 4px;margin-bottom:6px}
-.dd-left-col,.dd-right-col{display:flex;flex-direction:column;gap:6px}
+.dd-left-col,.dd-right-col,.dd-label-col{display:flex;flex-direction:column;gap:6px}
+.dd-label-col{justify-content:flex-start}
 /* Draggable items — Στήλη Α */
 .dd-item{padding:10px 13px;border:2px solid var(--border);border-radius:9px;font-size:.855rem;background:var(--white);cursor:grab;font-family:inherit;color:var(--ink);text-align:left;transition:all .15s;min-height:44px;display:flex;align-items:center;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
 .dd-item:hover:not(.paired):not(.ok):not(.ko){border-color:var(--indigo);background:var(--indigo-l)}
@@ -270,20 +275,93 @@ const QUIZ_PER_SESSION = 10;
 // Ποσοστά διαγνωστικού
 const DIAG_THRESHOLDS = { high: 80, mid: 50 }; // >=80% → επ.3, >=50% → επ.2, <50% → επ.1
 
+const CAT_SHORT = {
+  1:['Τριμερής δομή: Θεματική περίοδος → Σχόλια → Κατακλείδα','Διμερής δομή: Θεματική περίοδος → Σχόλια (χωρίς κατακλείδα)','Κατακλείδα = τελευταία περίοδος ΜΟΝΟ αν αποτελεί συνολικό συμπέρασμα'],
+  2:'Αιτιολόγηση: ο συντάκτης παραθέτει επιχειρήματα/λογικούς συλλογισμούς για να αποδείξει μια θέση. Δείκτες: γιατί, διότι, επειδή, αφού, εφόσον, μιας και, καθώς κ.λπ.',
+  3:'Αίτιο-αποτέλεσμα: ο συντάκτης εξηγεί τις αιτίες εμφάνισης ενός φαινομένου ή τα αποτελέσματά του (αίτια → αποτελέσματα). Δείκτες: λόγω, εξαιτίας, με αποτέλεσμα, προκαλεί, οδηγεί σε κ.λπ.',
+  4:'Διαίρεση: ο συντάκτης διαιρεί μια έννοια στα επιμέρους μέρη/είδη της με βάση κάποιο κριτήριο (διαιρετική βάση). Δείκτες: διακρίνεται, διαιρείται, το πρώτο, το δεύτερο κ.λπ.',
+  5:'Σύγκριση-αντίθεση: ο συντάκτης συγκρίνει ή αντιπαραθέτει δύο όρους αναδεικνύοντας ομοιότητες και διαφορές. Δείκτες: παρόμοια, το ίδιο, ενώ, αντίθετα, ωστόσο, από τη μια… από την άλλη κ.λπ.',
+  6:'Ορισμός: ο συντάκτης προσδιορίζει επακριβώς μια έννοια (οριστέα = γένος + ειδοποιός διαφορά). Δείκτες: είναι, ορίζεται, καλείται, σημαίνει κ.λπ.',
+  7:'Παραδείγματα: ο συντάκτης παραθέτει συγκεκριμένες, αντιπροσωπευτικές περιπτώσεις που τεκμηριώνουν μια θέση ή βοηθούν στην κατανόησή της. Δείκτες: για παράδειγμα, λόγου χάρη, ενδεικτικά, όπως, π.χ. κ.λπ.',
+  8:'Αναλογία: ο συντάκτης παραλληλίζει δύο διαφορετικά φαινόμενα βοηθώντας τον αναγνώστη να κατανοήσει το ασαφές ή άγνωστο από αυτά. Δείκτες: όπως… έτσι και, μοιάζει, θυμίζει, σαν κ.λπ.',
+  9:'Συνδυασμός μεθόδων: χρησιμοποιούνται περισσότεροι τρόποι· διακρίνεται βασικός (κύρια πρόθεση) και δευτερεύων (συμπληρωματικός). Κάθε χωρίο → έναν μόνο τρόπο.'
+};
+
 const CAT_NAMES = {
   1:'Δομή Παραγράφου',
-  2:'Αιτιολόγηση vs Αίτιο-αποτέλεσμα',
-  3:'Διαίρεση & Σύγκριση-αντίθεση',
-  4:'Συνδυασμός Μεθόδων',
-  5:'Παραδείγματα & Αναλογία'
+  2:'Αιτιολόγηση',
+  3:'Αίτιο-Αποτέλεσμα',
+  4:'Διαίρεση',
+  5:'Σύγκριση-Αντίθεση',
+  6:'Ορισμός',
+  7:'Παραδείγματα',
+  8:'Αναλογία',
+  9:'Συνδυασμός Μεθόδων'
 };
 
 const CAT_THEORY = {
-  1:['Τριμερής δομή: Θεματική περίοδος → Σχόλια → Κατακλείδα','Διμερής δομή: Θεματική περίοδος → Σχόλια (χωρίς κατακλείδα)','Κατακλείδα = τελευταία περίοδος ΜΟΝΟ αν αποτελεί συνολικό συμπέρασμα'],
-  2:['Αιτιολόγηση: αποδεικνύει αμφισβητούμενη θέση με επιχειρήματα','Αίτιο-αποτέλεσμα: εξηγεί δεδομένο φαινόμενο (αιτίες ή συνέπειες)','Κριτήριο: η θέση αμφισβητείται → αιτιολόγηση | το φαινόμενο δεδομένο → αίτιο-αποτέλεσμα'],
-  3:['Διαίρεση: μία έννοια ταξινομείται στα είδη/μέρη της','Σύγκριση-αντίθεση: δύο έννοιες συγκρίνονται ή αντιτίθενται','Κριτήριο: μία έννοια → διαίρεση | δύο έννοιες → σύγκριση-αντίθεση'],
-  4:['Συνδυασμός μεθόδων: κύριος + δευτερεύων τρόπος ανάπτυξης','Κύριος = βασική πρόθεση συγγραφέα | Δευτερεύων = υποστηρικτικός','Αναγνώριση: ποιος τρόπος κυριαρχεί στη δομή της παραγράφου;'],
-  5:['Παραδείγματα: συγκεκριμένες περιπτώσεις για τεκμηρίωση γενικής θέσης','Αναλογία: γνωστή εικόνα/κατάσταση που φωτίζει αφηρημένη έννοια','Κριτήριο: αποδεικνύουν → παραδείγματα | επεξηγούν μέσω παραλληλισμού → αναλογία']
+  // Δομή παραγράφου
+  1:[
+    '📌 Τριμερής: Θεματική περίοδος → Σχόλια-λεπτομέρειες → Κατακλείδα',
+    '📌 Διμερής: Θεματική περίοδος → Σχόλια (χωρίς κατακλείδα)',
+    '⚠️ Κατακλείδα = τελευταία περίοδος ΜΟΝΟ αν είναι συνολικό συμπέρασμα — αν προσθέτει νέο επιχείρημα ανήκει στα σχόλια'
+  ],
+  // Αιτιολόγηση
+  2:[
+    '📌 Θεματική περίοδος: διατυπώνει θέση/άποψη προς απόδειξη',
+    '📌 Σχόλια: επιχειρήματα που αποδεικνύουν τη θέση',
+    '🎯 Στόχος: πειθώ | Δείκτες: γιατί, διότι, επειδή, αφού, εφόσον',
+    '⚠️ Κριτήριο: η θέση αμφισβητείται → αιτιολόγηση (≠ αίτιο-αποτέλεσμα)'
+  ],
+  // Αίτιο-αποτέλεσμα
+  3:[
+    '📌 Θεματική περίοδος: παρουσιάζει φαινόμενο ως δεδομένο (δεν το αμφισβητεί)',
+    '📌 Σχόλια: αίτια που το προκαλούν ή αποτελέσματα που προκύπτουν',
+    '🎯 Στόχος: εξήγηση/ερμηνεία | Δείκτες: λόγω, εξαιτίας, με αποτέλεσμα, οδηγεί σε',
+    '⚠️ Κριτήριο: το φαινόμενο είναι δεδομένο → αίτιο-αποτέλεσμα (≠ αιτιολόγηση)'
+  ],
+  // Διαίρεση
+  4:[
+    '📌 Μία έννοια (διαιρετέα) χωρίζεται με κριτήριο (διαιρετική βάση) σε είδη/μέρη',
+    '📌 Τα είδη/μέρη παρουσιάζονται αναλυτικά',
+    '🎯 Στόχος: φωτισμός έννοιας σε όλες τις πτυχές της',
+    '⚠️ Κριτήριο: μία έννοια → διαίρεση | δύο έννοιες → σύγκριση-αντίθεση'
+  ],
+  // Σύγκριση-αντίθεση
+  5:[
+    '📌 Σύγκριση/αντίθεση δύο όρων του ίδιου είδους',
+    '🎯 Στόχος: ανάδειξη ομοιοτήτων ή/και διαφορών',
+    '🔍 Δείκτες: παρόμοια, το ίδιο, ενώ, αντίθετα, ωστόσο, από τη μια… από την άλλη',
+    '⚠️ Κριτήριο: δύο έννοιες → σύγκριση-αντίθεση | μία έννοια → διαίρεση'
+  ],
+  // Ορισμός
+  6:[
+    '📌 Προσδιορισμός έννοιας: Οριστέα = Γένος + Ειδοποιός διαφορά',
+    '🎯 Στόχος: οριοθέτηση/προσδιορισμός της έννοιας',
+    '🔍 Δείκτες: είναι, ορίζεται, καλείται, σημαίνει, εννοείται',
+    '⚠️ Επεξήγηση ορισμού ≠ δεύτερος τρόπος — δεύτερος τρόπος μόνο αν υπάρχει διαίρεση, παραδείγματα κ.λπ.'
+  ],
+  // Παραδείγματα
+  7:[
+    '📌 Παράθεση συγκεκριμένων, αντιπροσωπευτικών περιπτώσεων',
+    '🎯 Στόχος: τεκμηρίωση θέσης ή επεξήγηση αφηρημένης έννοιας',
+    '🔍 Δείκτες: για παράδειγμα, λόγου χάρη, ενδεικτικά, όπως, π.χ.',
+    '⚠️ Κριτήριο: ίδιο πεδίο → παραδείγματα | διαφορετικό πεδίο → αναλογία'
+  ],
+  // Αναλογία
+  8:[
+    '📌 Παραλληλισμός με έναν γνωστό όρο από διαφορετικό πεδίο',
+    '🎯 Στόχος: κατανόηση αφηρημένης/δύσκολης έννοιας μέσω παραλληλισμού',
+    '🔍 Δείκτες: όπως… έτσι και, μοιάζει, θυμίζει, σαν, λες και',
+    '⚠️ Κριτήριο: διαφορετικό πεδίο → αναλογία | ίδιο πεδίο → παραδείγματα'
+  ],
+  // Συνδυασμός μεθόδων
+  9:[
+    '📌 Χρήση δύο (σπάνια τριών) τρόπων ανάπτυξης στην ίδια παράγραφο',
+    '📌 Βασικός τρόπος: υπηρετεί την κύρια πρόθεση | Δευτερεύων: συμπληρωματικός',
+    '⚠️ Κάθε χωρίο ανήκει σε ΈΝΑΝ μόνο τρόπο — δεν επικαλύπτονται',
+    '⚠️ Η κατακλείδα δεν εξετάζεται στους τρόπους ανάπτυξης'
+  ]
 };
 
 // ══════════════════════════════════════════════
@@ -353,6 +431,8 @@ function parseCSV(csv) {
     obj.leftItems  = [obj['Αριστερά 1'],obj['Αριστερά 2'],obj['Αριστερά 3'],obj['Αριστερά 4']].filter(Boolean);
     obj.rightItems = [obj['Δεξιά 1'],   obj['Δεξιά 2'],   obj['Δεξιά 3'],   obj['Δεξιά 4']  ].filter(Boolean);
     obj.targets = obj['Λέξη-Στόχος'] ? obj['Λέξη-Στόχος'].split('|').map(t=>t.trim()).filter(Boolean) : [];
+    obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
+    obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
     obj.correct = (obj['Σωστή Απάντηση']||'').trim();
     obj.fb = [obj['Διόρθωση 1'],obj['Διόρθωση 2'],obj['Διόρθωση 3'],obj['Διόρθωση 4']];
     data.push(obj);
@@ -660,8 +740,22 @@ function renderQuiz() {
   </div>`;
 
   html += `<button class="theory-toggle" id="btnTheory">${state.showTheory?'▼':'▶'} Θεωρητικό Πλαίσιο</button>`;
-  if (state.showTheory && CAT_THEORY[q.cat]) {
-    html += `<div class="theory-box"><h4>📚 ${CAT_NAMES[q.cat]||''}</h4><ul>${CAT_THEORY[q.cat].map(t=>`<li>${t}</li>`).join('')}</ul></div>`;
+  if (state.showTheory) {
+    const keys = (q.theoryKeys && q.theoryKeys.length) ? q.theoryKeys : (CAT_THEORY[q.cat] ? [q.cat] : []);
+    if (keys.length) {
+      html += '<div class="theory-box">';
+      keys.forEach(k => {
+        if (!CAT_SHORT[k]) return;
+        const val = CAT_SHORT[k];
+        if (Array.isArray(val)) {
+          html += `<p style="margin-bottom:4px"><strong>${CAT_NAMES[k]||''}</strong></p>`;
+          html += '<ul style="margin:0 0 8px 16px">' + val.map(v=>`<li style="font-size:.83rem;color:#78350f;margin-bottom:2px">${v}</li>`).join('') + '</ul>';
+        } else {
+          html += `<p style="margin-bottom:6px"><strong>${CAT_NAMES[k]||''}</strong> — ${val}</p>`;
+        }
+      });
+      html += '</div>';
+    }
   }
 
   html += `<div class="card">`;
@@ -830,8 +924,22 @@ function renderMC(q) {
     } else {
       if (state.answer===k) cls+=' sel';
     }
+    let badge = '';
+    if (state.answered) {
+      const isCorrect = k===q.correct.trim().toUpperCase();
+      const isSelected = k===state.answer;
+      const answeredCorrectly = state.answer===q.correct.trim().toUpperCase();
+      if (isSelected && !isCorrect) {
+        // Λάθος επιλογή → ✕
+        badge = '<span class="opt-badge opt-badge-ko">✕</span>';
+      } else if (isCorrect && answeredCorrectly) {
+        // Σωστή επιλογή & απαντήθηκε σωστά → ✓
+        badge = '<span class="opt-badge opt-badge-ok">✓</span>';
+      }
+      // Αν λάθος: η σωστή εμφανίζεται πράσινη χωρίς badge
+    }
     html += `<button class="${cls}" data-opt="${k}" ${state.answered?'disabled':''}>
-      <span class="opt-k">${k}</span>${v}
+      <span class="opt-k">${k}</span>${v}${badge}
     </button>`;
   });
   html += '</div>';
@@ -850,8 +958,13 @@ function renderExcerptCLK(q) {
     let cls = 'tok';
     if (state.answered) {
       const wasSelected = state.clkSelected.some(s=>s.toLowerCase()===clean);
-      if (partOfTarget) cls += wasSelected ? ' hit' : ' miss';
-      else if (wasSelected) cls += ' miss';
+      if (partOfTarget) {
+        // Σωστή λέξη-στόχος: πράσινο πάντα
+        cls += ' hit';
+      } else if (wasSelected) {
+        // Επιλέχθηκε λάθος λέξη: κόκκινο
+        cls += ' miss';
+      }
     } else {
       if (state.clkSelected.map(s=>s.toLowerCase()).includes(clean)) cls += ' sel';
     }
@@ -924,21 +1037,25 @@ function renderDD(q) {
     });
     html += '</div></div>';
 
-    // Στήλη Β — drop slots
+    // Στήλη Β — drop slots (ίδιο πλάτος με αριστερά)
     html += '<div><div class="dd-col-hdr">Στήλη Β</div><div class="dd-right-col">';
     shuffledRight.forEach(({r,i})=>{
       const usedByLeft = Object.entries(state.ddPairs).find(([,ri])=>ri===i);
       const isFilled = usedByLeft !== undefined;
-      // Αν γεμάτο: δείχνει κείμενο του αριστερού στοιχείου που μπήκε
       const filledLi = isFilled ? parseInt(usedByLeft[0]) : null;
       const filledText = isFilled ? q.leftItems[filledLi] : '↓';
-      html += `<div class="dd-slot-row">
-        <div class="dd-slot ${isFilled?'filled':''}" data-dd-ri="${i}" data-dd-label="${r.replace(/"/g,'&quot;')}">${filledText}</div>
-        <span class="dd-slot-label">${r}</span>
-      </div>`;
+      html += `<div class="dd-slot ${isFilled?'filled':''}" data-dd-ri="${i}" data-dd-label="${r.replace(/"/g,'&quot;')}">${filledText}</div>`;
     });
     html += '</div></div>';
-    html += '</div>';
+
+    // Τρίτη στήλη — ετικέτες Στήλης Β
+    html += '<div><div class="dd-col-hdr">&nbsp;</div><div class="dd-label-col">';
+    shuffledRight.forEach(({r})=>{
+      html += `<div style="height:44px;display:flex;align-items:center;font-size:.855rem;color:var(--ink2)">${r}</div>`;
+    });
+    html += '</div></div>';
+
+    html += '</div>'; // dd-cols
   }
 
   html += '</div>';
