@@ -1574,47 +1574,52 @@ function renderGQQuiz() {
   const prog = ((gqState.idx+1)/gqState.questions.length)*100;
   const isMulti = q.gqTropos.length > 1;
 
-  let html = `<div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <span class="ph main" style="background:#ede9fe;color:#7c3aed">⚡ Γρήγορο Quiz</span>
-      <span style="color:var(--muted);font-size:.83rem">${gqState.idx+1} / ${gqState.questions.length}</span>
-    </div>
-    <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:${prog}%;background:#7c3aed"></div></div></div>
-  </div>
-  <div class="card">
-    <p class="exc-lbl">Ερώτηση</p>
-    <p class="q-txt">Να εντοπίσεις τη δομή και τον τρόπο${isMulti?' / τρόπους':''} ανάπτυξης της παραγράφου.</p>
-    <div class="exc">${q.excerpt}</div>
-    <div class="gq-q-wrap">
-      <div>
-        <p class="gq-col-hdr">Δομή</p>
-        ${['Διμερής','Τριμερής'].map(d => {
-          let cls = 'gq-btn';
-          if (gqState.answered) {
-            if (d === q.gqDomi) cls += ' ok';
-            else if (d === gqState.selDomi && d !== q.gqDomi) cls += ' ko';
-          } else {
-            if (gqState.selDomi === d) cls += ' sel';
-          }
-          return `<button class="${cls}" data-gq-sel-domi="${d}" ${gqState.answered?'disabled':''}>${d}</button>`;
-        }).join('')}
-      </div>
-      <div>
-        <p class="gq-col-hdr">Τρόπος ανάπτυξης${isMulti?' <span style=\"font-size:.7rem;color:var(--muted)\">(επίλεξε '+q.gqTropos.length+')</span>':''}</p>
-        ${GQ_TROPOI.map(t => {
-          let cls = 'gq-btn';
-          if (gqState.answered) {
-            if (q.gqTropos.includes(t)) cls += ' ok';
-            else if (gqState.selTropoi.includes(t)) cls += ' ko';
-          } else {
-            if (gqState.selTropoi.includes(t)) cls += ' sel';
-          }
-          return `<button class="${cls}" data-gq-sel-tropos="${t}" ${gqState.answered?'disabled':''}>${t}</button>`;
-        }).join('')}
-      </div>
-    </div>
-  </div>`;
-  return html;
+  // Δομή κουμπιά
+  let domiHtml = '';
+  ['Διμερής','Τριμερής'].forEach(d => {
+    let cls = 'gq-btn';
+    if (gqState.answered) {
+      if (d === q.gqDomi) cls += ' ok';
+      else if (d === gqState.selDomi && d !== q.gqDomi) cls += ' ko';
+    } else {
+      if (gqState.selDomi === d) cls += ' sel';
+    }
+    const dis = gqState.answered ? 'disabled' : '';
+    domiHtml += '<button class="' + cls + '" data-gq-sel-domi="' + d + '" ' + dis + '>' + d + '</button>';
+  });
+
+  // Τρόπος κουμπιά
+  let troposHtml = '';
+  GQ_TROPOI.forEach(t => {
+    let cls = 'gq-btn';
+    if (gqState.answered) {
+      if (q.gqTropos.includes(t)) cls += ' ok';
+      else if (gqState.selTropoi.includes(t)) cls += ' ko';
+    } else {
+      if (gqState.selTropoi.includes(t)) cls += ' sel';
+    }
+    const dis = gqState.answered ? 'disabled' : '';
+    troposHtml += '<button class="' + cls + '" data-gq-sel-tropos="' + t + '" ' + dis + '>' + t + '</button>';
+  });
+
+  const multiHint = isMulti ? ' <span style="font-size:.7rem;color:var(--muted)">(επίλεξε ' + q.gqTropos.length + ')</span>' : '';
+
+  return '<div class="card">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+    + '<span class="ph main" style="background:#ede9fe;color:#7c3aed">⚡ Γρήγορο Quiz</span>'
+    + '<span style="color:var(--muted);font-size:.83rem">' + (gqState.idx+1) + ' / ' + gqState.questions.length + '</span>'
+    + '</div>'
+    + '<div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:' + prog + '%;background:#7c3aed"></div></div></div>'
+    + '</div>'
+    + '<div class="card">'
+    + '<p class="exc-lbl">Ερώτηση</p>'
+    + '<p class="q-txt">Να εντοπίσεις τη δομή και τον τρόπο' + (isMulti?' / τρόπους':'') + ' ανάπτυξης της παραγράφου.</p>'
+    + '<div class="exc">' + q.excerpt + '</div>'
+    + '<div class="gq-q-wrap">'
+    + '<div><p class="gq-col-hdr">Δομή</p>' + domiHtml + '</div>'
+    + '<div><p class="gq-col-hdr">Τρόπος ανάπτυξης' + multiHint + '</p>' + troposHtml + '</div>'
+    + '</div>'
+    + '</div>';
 }
 
 // ── RENDER GQ RESULTS ──
