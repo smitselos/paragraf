@@ -751,7 +751,10 @@ function renderQuiz() {
           html += `<p style="margin-bottom:4px"><strong>${CAT_NAMES[k]||''}</strong></p>`;
           html += '<ul style="margin:0 0 8px 16px">' + val.map(v=>`<li style="font-size:.83rem;color:#78350f;margin-bottom:2px">${v}</li>`).join('') + '</ul>';
         } else {
-          html += `<p style="margin-bottom:6px"><strong>${CAT_NAMES[k]||''}</strong> — ${val}</p>`;
+          // Αφαιρώ το όνομα από την αρχή του val αν επαναλαμβάνεται
+const namePrefix = (CAT_NAMES[k]||'') + ': ';
+const cleanVal = val.startsWith(namePrefix) ? val.slice(namePrefix.length) : val;
+html += `<p style="margin-bottom:6px"><strong>${CAT_NAMES[k]||''}</strong>: ${cleanVal}</p>`;
         }
       });
       html += '</div>';
