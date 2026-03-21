@@ -565,7 +565,6 @@ function render() {
     case 'diag_result': badge.textContent='Αποτέλεσμα';   app.innerHTML=renderDiagResult(); break;
     case 'selection':   badge.textContent='Επιλογή';      app.innerHTML=renderSelection(); break;
     case 'cat_selection': badge.textContent='Κατηγορία';  app.innerHTML=renderCatSelection(); break;
-    case 'cat_selection': badge.textContent='Κατηγορία';  app.innerHTML=renderCatSelection(); break;
     case 'quiz':        badge.textContent=`${state.idx+1}/${state.quizQ.length}`; app.innerHTML=renderQuiz(); break;
     case 'results':     badge.textContent='Αποτελέσματα'; app.innerHTML=renderResults(); break;
     case 'retry':       badge.textContent='Ανατροφοδότηση'; app.innerHTML=renderRetry(); break;
@@ -603,13 +602,6 @@ function renderHome() {
         <p class="hc-title">Επίλεξε επίπεδο</p>
         <p class="hc-desc">Επίλεξε εσύ το επίπεδο δυσκολίας που θέλεις να εξασκηθείς.</p>
         <span class="hc-arrow">Επιλογή →</span>
-      </button>
-
-      <button class="home-card c4" id="btnCat">
-        <div class="hc-icon-wrap">📂</div>
-        <p class="hc-title">Επίλεξε κατηγορία</p>
-        <p class="hc-desc">Εξάσκηση σε συγκεκριμένη θεματική κατηγορία, ανεξάρτητα επιπέδου.</p>
-        <span class="hc-arrow">Κατηγορίες →</span>
       </button>
 
       <button class="home-card c4" id="btnCat">
@@ -1139,6 +1131,9 @@ function attachEvents() {
   if (btnDiag) btnDiag.addEventListener('click', () => { const dq=getDiagnosticQuestions(); if(!dq.length)return; startDiagnostic(dq); });
   const btnSel = document.getElementById('btnSel');
   if (btnSel) btnSel.addEventListener('click', () => { state.screen='selection'; state.difficulty=null; render(); });
+
+  const btnCat = document.getElementById('btnCat');
+  if (btnCat) btnCat.addEventListener('click', () => { state.screen='cat_selection'; state.selectedCat=null; render(); });
   const btnHS = document.getElementById('btnHomeFromSel');
   if (btnHS) btnHS.addEventListener('click', () => { state.screen='home'; render(); });
   const btnHD = document.getElementById('btnHomeFromDiag');
