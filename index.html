@@ -207,9 +207,9 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .btn-check:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
 .btn-next{width:100%;padding:13px;border:none;border-radius:var(--r);background:var(--green);color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px;transition:background .15s}
 .btn-next:hover{background:#047857}
-.btn-next.countdown{background:var(--green);position:relative;overflow:hidden}
-.btn-next.countdown::after{content:'Επόμενη ερώτηση →';position:absolute;top:0;left:0;height:100%;background:var(--indigo);color:#fff;font-weight:600;font-size:.98rem;display:flex;align-items:center;justify-content:center;animation:countdown-bar 3.5s linear forwards;pointer-events:none;white-space:nowrap}
-@keyframes countdown-bar{from{width:0%}to{width:100%}}to{width:100%}}to{width:100%}}to{width:100%}}
+.btn-next.countdown{background:var(--green);position:relative;overflow:hidden;cursor:pointer}
+.btn-next .cbfill{position:absolute;top:0;left:0;height:100%;width:0%;background:var(--indigo);transition:none;animation:cbfill 3.5s linear forwards;pointer-events:none;border-radius:inherit}
+@keyframes cbfill{from{width:0%}to{width:100%}}to{width:100%}}to{width:100%}}to{width:100%}}to{width:100%}}
 .btn-sec{width:100%;padding:11px;border:2px solid var(--border);border-radius:var(--r);background:var(--white);color:var(--ink2);font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;transition:all .15s}
 .btn-sec:hover{border-color:#94a3b8}
 
@@ -664,7 +664,8 @@ function renderDiagnostic() {
     const isLast = state.idx===state.quizQ.length-1;
     const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
     const btnCls = ok2 ? 'btn-next countdown' : 'btn-next';
-    html += `<button class="${btnCls}" id="btnNext">${isLast?'Δες το αποτέλεσμα →':'Επόμενη →'}</button>`;
+    const fillDiv = ok2 ? '<span class="cbfill"></span>' : '';
+    html += `<button class="${btnCls}" id="btnNext">${fillDiv}<span style="position:relative;z-index:1">${isLast?'Δες το αποτέλεσμα →':'Επόμενη →'}</span></button>`;
   } else {
     html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
   }
@@ -886,7 +887,8 @@ function renderRetry() {
     const isLast = state.idx===state.quizQ.length-1;
     const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
     const btnCls = ok2 ? 'btn-next countdown' : 'btn-next';
-    html += `<button class="${btnCls}" id="btnNext">${isLast?'Τέλος ανατροφοδότησης →':'Επόμενη →'}</button>`;
+    const fillDiv = ok2 ? '<span class="cbfill"></span>' : '';
+    html += `<button class="${btnCls}" id="btnNext">${fillDiv}<span style="position:relative;z-index:1">${isLast?'Τέλος ανατροφοδότησης →':'Επόμενη →'}</span></button>`;
   } else {
     html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
   }
