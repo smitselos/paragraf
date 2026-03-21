@@ -53,6 +53,12 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .home-card.c1 .hc-arrow{color:var(--green)}
 .home-card.c2 .hc-arrow{color:var(--teal)}
 .home-card.c3 .hc-arrow{color:var(--indigo)}
+.home-card.c4{border-color:var(--amber);background:linear-gradient(135deg,var(--amber-l),#fff)}
+.home-card.c4 .hc-icon-wrap{background:var(--amber-l);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
+.home-card.c4 .hc-arrow{color:var(--amber)}
+.home-card.c4{border-color:var(--amber);background:linear-gradient(135deg,var(--amber-l),#fff)}
+.home-card.c4 .hc-icon-wrap{background:var(--amber-l);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
+.home-card.c4 .hc-arrow{color:var(--amber)}
 
 /* ══ DIAGNOSTIC ══ */
 .diag-intro{text-align:center;padding:10px 0 18px}
@@ -148,39 +154,23 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 /* DD */
 .dd-wrap{width:100%}
 .dd-hint{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:12px}
-.dd-cols{display:grid;grid-template-columns:1fr 1fr auto;gap:6px 10px;align-items:start;margin-bottom:8px}
-.dd-col-hdr{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:0 4px;margin-bottom:6px}
-.dd-left-col,.dd-right-col,.dd-label-col{display:flex;flex-direction:column;gap:6px}
-.dd-label-col{justify-content:flex-start}
-/* Draggable items — Στήλη Α */
-.dd-item{padding:10px 13px;border:2px solid var(--border);border-radius:9px;font-size:.855rem;background:var(--white);cursor:grab;font-family:inherit;color:var(--ink);text-align:left;transition:all .15s;min-height:44px;display:flex;align-items:center;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
-.dd-item:hover:not(.paired):not(.ok):not(.ko){border-color:var(--indigo);background:var(--indigo-l)}
-.dd-item.dragging{opacity:.4;cursor:grabbing}
-.dd-item.paired{border-color:var(--indigo);background:var(--indigo-l);cursor:grab;opacity:.6}
-.dd-item.ok{border-color:var(--green);background:var(--green-l);cursor:default;color:#065f46;font-weight:600}
-.dd-item.ko{border-color:var(--red);background:var(--red-l);cursor:default;color:#7f1d1d}
-/* Drop slots — Στήλη Β */
-.dd-slot-row{display:flex;align-items:center;gap:8px}
-.dd-slot{padding:10px 12px;border:2px dashed var(--border);border-radius:9px;font-size:.855rem;background:#fafafa;height:44px;width:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-style:italic;transition:all .15s;user-select:none;-webkit-user-select:none;text-align:center;box-sizing:border-box}
+/* Chips — Στήλη Α */
+.dd-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;min-height:44px;padding:10px;background:#f8f8ff;border-radius:10px;border:2px dashed var(--border)}
+.dd-chip{padding:8px 16px;border:2px solid var(--indigo);border-radius:999px;font-size:.875rem;background:var(--white);cursor:grab;font-family:inherit;color:var(--ink);user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;transition:all .15s;white-space:nowrap}
+.dd-chip:hover{background:var(--indigo-l)}
+.dd-chip.dragging{opacity:.4;cursor:grabbing}
+.dd-chip.used{opacity:.35;cursor:default;border-style:dashed}
+/* Slots */
+.dd-slots{display:flex;flex-direction:column;gap:8px}
+.dd-slot-row{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center}
+.dd-slot-lbl{font-size:.875rem;font-weight:600;color:var(--ink2);white-space:nowrap;min-width:100px}
+.dd-slot{padding:10px 14px;border:2px dashed var(--border);border-radius:9px;font-size:.875rem;background:#fafafa;min-height:44px;display:flex;align-items:center;color:var(--muted);font-style:italic;transition:all .15s;user-select:none;-webkit-user-select:none;width:100%;box-sizing:border-box}
 .dd-slot.over{border-color:var(--indigo);background:var(--indigo-l);border-style:solid}
-.dd-slot.filled{border-color:var(--indigo);border-style:solid;background:var(--indigo-l);color:var(--ink);font-style:normal;font-weight:600}
+.dd-slot.filled{border-color:var(--indigo);border-style:solid;background:var(--indigo-l);color:var(--ink);font-style:normal;font-weight:600;cursor:pointer}
+.dd-slot.filled:hover{background:#dde4ff}
 .dd-slot.ok{border-color:var(--green);border-style:solid;background:var(--green-l);color:#065f46;font-style:normal;font-weight:600}
 .dd-slot.ko{border-color:var(--red);border-style:solid;background:var(--red-l);color:#7f1d1d;font-style:normal}
-.dd-slot-label{font-size:.82rem;color:var(--ink2);white-space:nowrap;min-width:60px}
-.dd-item{padding:10px 12px;border:2px solid var(--border);border-radius:9px;font-size:.855rem;background:var(--white);cursor:grab;font-family:inherit;color:var(--ink);text-align:left;transition:all .15s;height:44px;width:100%;display:flex;align-items:center;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;box-sizing:border-box}
-.dd-item:hover:not(.paired):not(.ok):not(.ko){border-color:var(--indigo);background:var(--indigo-l)}
-.dd-item.dragging{opacity:.4;cursor:grabbing}
-.dd-item.paired{border-color:var(--indigo);background:var(--indigo-l);cursor:grab;opacity:.6}
-.dd-item.ok{border-color:var(--green);background:var(--green-l);cursor:default;color:#065f46;font-weight:600}
-.dd-item.ko{border-color:var(--red);background:var(--red-l);cursor:default;color:#7f1d1d}
-/* Drop slots — Στήλη Β */
-.dd-slot-row{display:flex;align-items:center;gap:10px}
-.dd-slot{padding:8px 12px;border:2px dashed var(--border);border-radius:9px;font-size:.82rem;background:#fafafa;min-height:40px;min-width:110px;max-width:140px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-style:italic;transition:all .15s;user-select:none;-webkit-user-select:none;text-align:center}
-.dd-slot.over{border-color:var(--indigo);background:var(--indigo-l);border-style:solid}
-.dd-slot.filled{border-color:var(--indigo);border-style:solid;background:var(--indigo-l);color:var(--ink);font-style:normal;font-weight:600}
-.dd-slot.ok{border-color:var(--green);border-style:solid;background:var(--green-l);color:#065f46;font-style:normal;font-weight:600}
-.dd-slot.ko{border-color:var(--red);border-style:solid;background:var(--red-l);color:#7f1d1d;font-style:normal}
-.dd-slot-label{font-size:.855rem;color:var(--ink2);flex:1}
+/* Result */
 .dd-correct-show{margin-top:12px;padding:12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0}
 .dd-correct-show p{font-size:.78rem;color:#065f46;font-weight:600;margin-bottom:8px}
 .dd-correct-row{display:grid;grid-template-columns:1fr 20px 1fr;gap:4px;align-items:center;margin-bottom:4px;font-size:.83rem}
@@ -188,8 +178,8 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .dd-correct-row .dr{padding:6px 10px;background:var(--green-l);border-radius:6px;color:#065f46}
 .dd-correct-row .da{text-align:center;color:var(--muted)}
 @media(max-width:480px){
-  .dd-cols{grid-template-columns:1fr}
-  .dd-right-col{margin-top:4px}
+  .dd-slot-row{grid-template-columns:1fr}
+  .dd-slot-lbl{font-size:.8rem}
 }
 
 /* feedback */
@@ -387,6 +377,7 @@ let state = {
   ddSelected: null,
   ddPairs: {},
   clkSelected: [],
+  selectedCat: null,
 };
 
 // ══════════════════════════════════════════════
@@ -572,6 +563,8 @@ function render() {
     case 'diagnostic':  badge.textContent=`Διαγνωστικό ${state.idx+1}/${state.quizQ.length}`; app.innerHTML=renderDiagnostic(); break;
     case 'diag_result': badge.textContent='Αποτέλεσμα';   app.innerHTML=renderDiagResult(); break;
     case 'selection':   badge.textContent='Επιλογή';      app.innerHTML=renderSelection(); break;
+    case 'cat_selection': badge.textContent='Κατηγορία';  app.innerHTML=renderCatSelection(); break;
+    case 'cat_selection': badge.textContent='Κατηγορία';  app.innerHTML=renderCatSelection(); break;
     case 'quiz':        badge.textContent=`${state.idx+1}/${state.quizQ.length}`; app.innerHTML=renderQuiz(); break;
     case 'results':     badge.textContent='Αποτελέσματα'; app.innerHTML=renderResults(); break;
     case 'retry':       badge.textContent='Ανατροφοδότηση'; app.innerHTML=renderRetry(); break;
@@ -609,6 +602,20 @@ function renderHome() {
         <p class="hc-title">Επίλεξε επίπεδο</p>
         <p class="hc-desc">Επίλεξε εσύ το επίπεδο δυσκολίας που θέλεις να εξασκηθείς.</p>
         <span class="hc-arrow">Επιλογή →</span>
+      </button>
+
+      <button class="home-card c4" id="btnCat">
+        <div class="hc-icon-wrap">📂</div>
+        <p class="hc-title">Επίλεξε κατηγορία</p>
+        <p class="hc-desc">Εξάσκηση σε συγκεκριμένη θεματική κατηγορία, ανεξάρτητα επιπέδου.</p>
+        <span class="hc-arrow">Κατηγορίες →</span>
+      </button>
+
+      <button class="home-card c4" id="btnCat">
+        <div class="hc-icon-wrap">📂</div>
+        <p class="hc-title">Επίλεξε κατηγορία</p>
+        <p class="hc-desc">Εξάσκηση σε συγκεκριμένη θεματική κατηγορία, ανεξάρτητα επιπέδου.</p>
+        <span class="hc-arrow">Κατηγορίες →</span>
       </button>
 
     </div>
@@ -695,6 +702,1164 @@ function renderDiagResult() {
     </div>
   </div>`;
 }
+
+// ── TYPE SELECTION ────────────────────────────
+const TYPE_NAMES = {
+  'MC':'Πολλαπλής επιλογής',
+  'YN':'Ναι / Όχι',
+  'GAP':'Συμπλήρωση κενού',
+  'CLK':'Εντοπισμός λέξης',
+  'DD':'Αντιστοίχιση'
+};
+
+function renderCatSelection() {
+  const sel = state.selectedCat;
+  const typeCounts = {};
+  Object.keys(TYPE_NAMES).forEach(t => {
+    typeCounts[t] = allQ.filter(q=>q.type===t).length;
+  });
+  let html = '<div class="card"><p class="sel-title">📂 Επίλεξε Τύπο Ερώτησης</p><p class="sel-sub">Εξάσκηση ανά τύπο ερώτησης — όλα τα επίπεδα</p><div class="fg"><label>Τύπος ερώτησης</label><div class="pills">';
+  Object.entries(TYPE_NAMES).forEach(([t,name]) => {
+    const cnt = typeCounts[t]||0;
+    if (!cnt) return;
+    html += `<button class="pill ${sel===t?'on':''}" data-cat="${t}">${name} <span style="opacity:.7;font-size:.75rem">(${cnt})</span></button>`;
+  });
+  html += '</div></div>';
+  const cnt = sel ? (typeCounts[sel]||0) : 0;
+  html += `<div class="info ${cnt===0&&sel?'warn':''}">${!sel?'👆 Επίλεξε τύπο ερώτησης':cnt===0?'⚠️ Δεν υπάρχουν ερωτήσεις':`✅ <strong>${cnt}</strong> ερωτήσεις — θα εμφανιστούν ${Math.min(cnt,QUIZ_PER_SESSION)}`}</div>`;
+  html += `<button class="btn-go" id="btnStartCat" ${!sel||!cnt?'disabled':''}>Ξεκινήστε →</button>`;
+  html += '<button class="btn-sec" id="btnHomeFromCat">↩ Αρχική</button>';
+  html += '</div>';
+  return html;
+}
+
+
+// ── SELECTION ──────────────────────────────────
+function renderSelection() {
+  const counts = {1: getFiltered(1).length, 2: getFiltered(2).length, 3: getFiltered(3).length, all: allQ.length};
+  const sel = state.difficulty;
+  const cnt = sel ? (counts[sel]||0) : 0;
+  return `
+  <div class="card">
+    <p class="sel-title">⚙️ Επίλεξε Επίπεδο</p>
+    <p class="sel-sub">Νεοελληνική Γλώσσα — Επίλεξε επίπεδο δυσκολίας</p>
+    <div class="fg">
+      <label>Επίπεδο δυσκολίας</label>
+      <div class="pills">
+        <button class="pill ${sel===1?'on':''}" data-diff="1">Επίπεδο 1 <span style="opacity:.7;font-size:.75rem">(${counts[1]} ερωτ.)</span></button>
+        <button class="pill ${sel===2?'on':''}" data-diff="2">Επίπεδο 2 <span style="opacity:.7;font-size:.75rem">(${counts[2]} ερωτ.)</span></button>
+        <button class="pill ${sel===3?'on':''}" data-diff="3">Επίπεδο 3 <span style="opacity:.7;font-size:.75rem">(${counts[3]||0} ερωτ.)</span></button>
+        <button class="pill ${sel==='all'?'on':''}" data-diff="all">Όλα <span style="opacity:.7;font-size:.75rem">(${counts.all} ερωτ.)</span></button>
+      </div>
+    </div>
+    <div class="info ${cnt===0&&sel?'warn':''}" id="cntInfo">
+      ${!sel ? '👆 Επίλεξε επίπεδο για να ξεκινήσεις' :
+        cnt===0 ? '⚠️ Δεν υπάρχουν ερωτήσεις για αυτό το επίπεδο' :
+        `✅ Βρέθηκαν <strong>${cnt}</strong> ερωτήσεις — θα εμφανιστούν ${Math.min(cnt, QUIZ_PER_SESSION)}`}
+    </div>
+    <button class="btn-go" id="btnStart" ${!sel||cnt===0?'disabled':''}>Ξεκινήστε το Quiz →</button>
+    <button class="btn-sec" id="btnHomeFromSel">↩ Αρχική</button>
+  </div>`;
+}
+
+// ── QUIZ ────────────────────────────────────────
+function renderQuiz() {
+  const q = state.quizQ[state.idx];
+  const prog = ((state.idx+1)/state.quizQ.length)*100;
+  const phaseLabel = state.phase==='main' ? 'Κύρια Φάση' : 'Ανατροφοδότηση';
+  const phaseClass = state.phase==='main' ? 'main' : 'retry';
+
+  let html = `
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span class="ph ${phaseClass}">${phaseLabel}</span>
+      <span style="color:var(--muted);font-size:.83rem">${state.idx+1} / ${state.quizQ.length}</span>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-bar"><div class="prog-fill" style="width:${prog}%"></div></div>
+    </div>
+  </div>`;
+
+  html += `<button class="theory-toggle" id="btnTheory">${state.showTheory?'▼':'▶'} Θεωρητικό Πλαίσιο (Βοήθεια)</button>`;
+  if (state.showTheory) {
+    const keys = (q.theoryKeys && q.theoryKeys.length) ? q.theoryKeys : (CAT_THEORY[q.cat] ? [q.cat] : []);
+    if (keys.length) {
+      html += '<div class="theory-box">';
+      keys.forEach(k => {
+        if (!CAT_SHORT[k]) return;
+        const val = CAT_SHORT[k];
+        if (Array.isArray(val)) {
+          html += `<p style="margin-bottom:4px"><strong>${CAT_NAMES[k]||''}</strong></p>`;
+          html += '<ul style="margin:0 0 8px 16px">' + val.map(v=>`<li style="font-size:.83rem;color:#78350f;margin-bottom:2px">${v}</li>`).join('') + '</ul>';
+        } else {
+          // Αφαιρώ το όνομα από την αρχή του val αν επαναλαμβάνεται
+const namePrefix = (CAT_NAMES[k]||'') + ': ';
+const cleanVal = val.startsWith(namePrefix) ? val.slice(namePrefix.length) : val;
+html += `<p style="margin-bottom:6px"><strong>${CAT_NAMES[k]||''}</strong>: ${cleanVal}</p>`;
+        }
+      });
+      html += '</div>';
+    }
+  }
+
+  html += `<div class="card">`;
+  if (q.excerpt) {
+    html += `<p class="exc-lbl">Απόσπασμα κειμένου</p>`;
+    if (q.type==='CLK') html += renderExcerptCLK(q);
+    else if (q.type==='GAP') html += renderExcerptGAP(q);
+    else html += `<div class="exc">${q.excerpt}</div>`;
+  }
+  html += `<p class="q-lbl">${qTypeLabel(q.type)}</p>`;
+  html += `<p class="q-txt">${q.q}</p>`;
+  if (q.type==='MC'||q.type==='YN') html += renderMC(q);
+  else if (q.type==='CLK') html += `<p style="font-size:.8rem;color:var(--muted);font-style:italic">Κάντε κλικ στις λέξεις/φράσεις στο απόσπασμα παραπάνω.</p>`;
+  else if (q.type==='DD') html += renderDD(q);
+
+  if (state.answered) {
+    const ok = checkAnswer(q, state.answer);
+    html += `<div class="fb ${ok?'ok':'ko'}">
+      <p class="fb-title">${ok?'✅ Σωστά!':'❌ Λάθος'}</p>
+      ${!ok ? `<p>${getFeedback(q,state.answer)||''}</p>` : ''}
+    </div>`;
+    const isLast = state.idx===state.quizQ.length-1;
+    html += `<button class="btn-next" id="btnNext">${isLast?(state.phase==='main'?'Δες τα αποτελέσματα →':'Επόμενη κατηγορία →'):'Επόμενη ερώτηση →'}</button>`;
+  } else {
+    html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+// ── RESULTS ─────────────────────────────────────
+function renderResults() {
+  const total = state.quizQ.length;
+  const pct = Math.round((state.score/total)*100);
+  const emoji = pct>=80?'🎉':pct>=60?'👍':'📚';
+  const catErrors = Object.entries(state.wrongByCat).filter(([,ids])=>ids.length>0);
+  const catWrong = Object.values(state.wrongByCat).flat().length;
+
+  let html = `
+  <div class="card">
+    <div class="res-top">
+      <div class="res-emoji">${emoji}</div>
+      <h2 class="res-title">Ολοκλήρωσες το Quiz!</h2>
+    </div>
+    <div class="score-box">
+      <p class="score-big">${state.score} / ${total}</p>
+      <p class="score-pct">${pct}%</p>
+    </div>
+    <div class="score-grid">
+      <div class="sc g"><p>Σωστές</p><p>${state.score}</p></div>
+      <div class="sc r"><p>Λάθος</p><p>${catWrong}</p></div>
+      <div class="sc a"><p>Ποσοστό</p><p>${pct}%</p></div>
+    </div>
+  </div>`;
+
+  if (catErrors.length > 0) {
+    html += `<div class="card">
+      <p class="retry-title">📌 Ανατροφοδότηση ανά κατηγορία λαθών</p>`;
+    catErrors.forEach(([cat, ids]) => {
+      html += `<div class="retry-cat">
+        <div>
+          <p class="retry-cat-name">${CAT_NAMES[cat]||'Κατηγορία '+cat}</p>
+          <p class="retry-cat-errors">${ids.length} λάθος/η</p>
+        </div>
+        <button class="btn-retry" data-retry-cat="${cat}">Εξάσκηση →</button>
+      </div>`;
+    });
+    html += `<p style="font-size:.8rem;color:var(--muted);margin-top:8px">Για κάθε κατηγορία θα εμφανιστούν 3 νέες ερωτήσεις.</p>`;
+    html += `</div>`;
+  } else {
+    html += `<div class="card" style="text-align:center;padding:20px">
+      <p style="color:var(--green);font-weight:600;font-size:1rem">🎯 Μηδέν λάθη — Άριστη επίδοση!</p>
+    </div>`;
+  }
+
+  html += `<button class="btn-sec" id="btnNewQuiz" style="margin-top:4px">↩ Αρχική</button>`;
+  return html;
+}
+
+// ── RETRY ────────────────────────────────────────
+function renderRetry() {
+  const q = state.quizQ[state.idx];
+  const prog = ((state.idx+1)/state.quizQ.length)*100;
+
+  let html = `
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span class="ph retry">Ανατροφοδότηση — ${CAT_NAMES[q.cat]||''}</span>
+      <span style="color:var(--muted);font-size:.83rem">${state.idx+1} / ${state.quizQ.length}</span>
+    </div>
+    <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:${prog}%"></div></div></div>
+  </div>`;
+
+  html += `<div class="card">`;
+  if (q.excerpt) {
+    html += `<p class="exc-lbl">Απόσπασμα</p>`;
+    if (q.type==='CLK') html += renderExcerptCLK(q);
+    else if (q.type==='GAP') html += renderExcerptGAP(q);
+    else html += `<div class="exc">${q.excerpt}</div>`;
+  }
+  html += `<p class="q-lbl">${qTypeLabel(q.type)}</p>`;
+  html += `<p class="q-txt">${q.q}</p>`;
+  if (q.type==='MC'||q.type==='YN') html += renderMC(q);
+  else if (q.type==='CLK') html += `<p style="font-size:.8rem;color:var(--muted);font-style:italic">Κάντε κλικ στις λέξεις στο απόσπασμα.</p>`;
+  else if (q.type==='DD') html += renderDD(q);
+
+  if (state.answered) {
+    const ok = checkAnswer(q, state.answer);
+    html += `<div class="fb ${ok?'ok':'ko'}">
+      <p class="fb-title">${ok?'✅ Σωστά!':'❌ Λάθος'}</p>
+      ${!ok?`<p>${getFeedback(q,state.answer)||''}</p>`:''}
+    </div>`;
+    if (!ok && CAT_THEORY[q.cat]) {
+      html += `<div class="theory-needed">
+        <h4>📖 Μελέτησε τη θεωρία</h4>
+        <p><strong>${CAT_NAMES[q.cat]||''}</strong></p>
+        <ul style="margin:8px 0 0 16px;">${CAT_THEORY[q.cat].map(t=>`<li style="font-size:.83rem;color:#991b1b;margin-bottom:3px">${t}</li>`).join('')}</ul>
+      </div>`;
+    }
+    const isLast = state.idx===state.quizQ.length-1;
+    const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
+    const btnCls = ok2 ? 'btn-next countdown' : 'btn-next';
+        html += `<button class="${btnCls}" id="btnNext">${isLast?'Τέλος ανατροφοδότησης →':'Επόμενη →'}</button>`;
+  } else {
+    html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+// ── DONE ──────────────────────────────────────────
+function renderDone() {
+  return `<div class="card" style="text-align:center;padding:36px 20px">
+    <div style="font-size:2.8rem;margin-bottom:14px">🏁</div>
+    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.5rem;margin-bottom:8px">Ολοκληρώθηκε!</h2>
+    <p style="color:var(--muted);margin-bottom:24px">Έχεις ολοκληρώσει την κύρια φάση και την ανατροφοδότηση.</p>
+    <button class="btn-go" id="btnNewQuiz">↩ Αρχική</button>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════
+// SHARED RENDERERS
+// ══════════════════════════════════════════════
+function qTypeLabel(type) {
+  return type==='CLK'?'Εντοπισμός':type==='DD'?'Αντιστοίχιση':type==='GAP'?'Συμπλήρωση κενού':type==='YN'?'Ναι / Όχι':'Πολλαπλή επιλογή';
+}
+
+function canCheck(q) {
+  if (!state.answered) {
+    if (q.type==='MC'||q.type==='YN') return state.answer!==null;
+    if (q.type==='CLK') return state.clkSelected.length>0;
+    if (q.type==='DD') return Object.keys(state.ddPairs).length===q.leftItems.length;
+    if (q.type==='GAP') return true;
+  }
+  return false;
+}
+
+function renderMC(q) {
+  const keys = ['Α','Β','Γ','Δ'];
+  const vals = [q.optA,q.optB,q.optC,q.optD].filter(Boolean);
+  let html = '<div class="opts">';
+  vals.forEach((v,i) => {
+    const k = keys[i];
+    let cls = 'opt';
+    if (state.answered) {
+      if (k===q.correct.trim().toUpperCase()) cls+=' ok';
+      else if (k===state.answer) cls+=' ko';
+    } else {
+      if (state.answer===k) cls+=' sel';
+    }
+    let badge = '';
+    if (state.answered) {
+      const isCorrect = k===q.correct.trim().toUpperCase();
+      const isSelected = k===state.answer;
+      const answeredCorrectly = state.answer===q.correct.trim().toUpperCase();
+      if (isSelected && !isCorrect) {
+        // Λάθος επιλογή → ✕
+        badge = '<span class="opt-badge opt-badge-ko">✕</span>';
+      } else if (isCorrect && answeredCorrectly) {
+        // Σωστή επιλογή & απαντήθηκε σωστά → ✓
+        badge = '<span class="opt-badge opt-badge-ok">✓</span>';
+      }
+      // Αν λάθος: η σωστή εμφανίζεται πράσινη χωρίς badge
+    }
+    html += `<button class="${cls}" data-opt="${k}" ${state.answered?'disabled':''}>
+      <span class="opt-k">${k}</span>${v}${badge}
+    </button>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderExcerptCLK(q) {
+  const targets = q.targets.map(t=>t.trim().toLowerCase());
+  const text = q.excerpt;
+  // Tokenize: λέξεις και κενά
+  const tokens = text.split(/(\s+)/);
+  // Φτιάχνω λίστα μόνο με λέξεις (χωρίς whitespace) για να βρίσκω φράσεις
+  const words = tokens.map(t => /^\s+$/.test(t) ? null : t.replace(/[.,;:!?«»"'()\[\]]/g,'').toLowerCase());
+
+  // Για κάθε token: αν είναι μέρος φράσης-στόχου, το σημειώνω με data-phrase
+  // Χτίζω ευρετήριο: wordIdx → phraseKey (το πλήρες target)
+  const wordPhraseMap = {}; // wordIdx → target string
+  targets.forEach(target => {
+    const parts = target.split(' ').filter(Boolean);
+    if (parts.length <= 1) return; // μεμονωμένες λέξεις χειρίζονται κανονικά
+    // Ψάχνω στη λίστα words για τη φράση
+    const wordOnlyIdxs = tokens.reduce((acc, t, i) => { if (!/^\s+$/.test(t)) acc.push(i); return acc; }, []);
+    for (let wi = 0; wi <= wordOnlyIdxs.length - parts.length; wi++) {
+      const match = parts.every((p, pi) => words[wordOnlyIdxs[wi+pi]] === p);
+      if (match) {
+        for (let pi = 0; pi < parts.length; pi++) {
+          wordPhraseMap[wordOnlyIdxs[wi+pi]] = target;
+        }
+      }
+    }
+  });
+
+  let html = '<div class="exc clk" id="excClk">';
+  tokens.forEach((tok, ti) => {
+    if (/^\s+$/.test(tok)) { html += tok; return; }
+    const clean = words[ti];
+    const phraseTarget = wordPhraseMap[ti]; // αν ανήκει σε φράση
+    const isSingleTarget = targets.includes(clean);
+    const isAnyTarget = phraseTarget || isSingleTarget;
+
+    // Έλεγχος αν επιλεγμένο
+    const isSelPhrase = phraseTarget && state.clkSelected.includes(phraseTarget);
+    const isSelWord = !phraseTarget && state.clkSelected.some(s=>s.toLowerCase()===clean);
+    const isSelected = isSelPhrase || isSelWord;
+
+    let cls = 'tok';
+    if (state.answered) {
+      if (isAnyTarget) cls += ' hit';
+      else if (isSelected) cls += ' miss';
+    } else {
+      if (isSelected) cls += ' sel';
+    }
+    // Μόνο τα targets είναι κλικάρισμα
+    if (isAnyTarget || isSelected) {
+      const dataAttr = phraseTarget
+        ? `data-phrase="${phraseTarget.replace(/"/g,'&quot;')}" data-word="${tok.replace(/"/g,'&quot;')}"`
+        : `data-word="${tok.replace(/"/g,'&quot;')}"`;
+      html += `<span class="${cls}" ${dataAttr}>${tok}</span>`;
+    } else {
+      html += `<span>${tok}</span>`;
+    }
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderExcerptGAP(q) {
+  if (!q.excerpt) return '';
+  const GAP_MARKER = '__________';
+  const parts = q.excerpt.split(GAP_MARKER);
+  if (parts.length < 2) {
+    const parts2 = q.excerpt.split('_____');
+    if (parts2.length >= 2) {
+      return `<div class="exc-gap">${parts2[0]}<input class="gap-inp" id="gapInp" type="text" placeholder="…" autocomplete="off" ${state.answered?'disabled':''}>${parts2.slice(1).join('_____')}</div>`;
+    }
+    return `<div class="exc">${q.excerpt}</div><input class="gap-inp" id="gapInp" type="text" placeholder="Συμπλήρωσε…" style="width:100%;margin-top:10px" autocomplete="off" ${state.answered?'disabled':''}>`;
+  }
+  return `<div class="exc-gap">${parts[0]}<input class="gap-inp" id="gapInp" type="text" placeholder="…" autocomplete="off" ${state.answered?'disabled':''}>${parts.slice(1).join(GAP_MARKER)}</div>`;
+}
+
+function renderDD(q) {
+  if (!q._shuffledRight) {
+    q._shuffledRight = shuffle(q.rightItems.map((r,i)=>({r,i})));
+  }
+  const shuffledRight = q._shuffledRight;
+  let html = '<div class="dd-wrap">';
+
+  if (state.answered) {
+    // Αποτέλεσμα
+    const correctPairs = parseCorrectDD(q.correct, q.leftItems, q.rightItems);
+    html += '<div class="dd-slots">';
+    shuffledRight.forEach(({r,i}) => {
+      const usedByLeft = Object.entries(state.ddPairs).find(([,ri])=>ri===i);
+      const li = usedByLeft ? parseInt(usedByLeft[0]) : null;
+      const filledText = li !== null ? q.leftItems[li] : '—';
+      const correctRi = li !== null ? correctPairs?.[li] : null;
+      const isOk = correctRi === i;
+      html += `<div class="dd-slot-row">
+        <span class="dd-slot-lbl">${r}</span>
+        <div class="dd-slot ${isOk?'ok':'ko'}">${filledText}</div>
+      </div>`;
+    });
+    html += '</div>';
+    // Σωστές αν λάθος
+    const allOk = q.leftItems.every((_,li)=>state.ddPairs[li]===correctPairs?.[li]);
+    if (!allOk && correctPairs) {
+      html += '<div class="dd-correct-show"><p>✅ Σωστές αντιστοιχίσεις:</p>';
+      q.leftItems.forEach((l,li)=>{
+        const ri = correctPairs[li];
+        html += `<div class="dd-correct-row"><div class="dl">${l}</div><div class="da">→</div><div class="dr">${q.rightItems[ri]||'—'}</div></div>`;
+      });
+      html += '</div>';
+    }
+  } else {
+    // Chips πάνω
+    html += '<p class="dd-hint">🖱️ Σύρε κάθε chip στη σωστή θέση · Κινητό: πάτα chip → πάτα θέση</p>';
+    html += '<div class="dd-chips">';
+    q.leftItems.forEach((l,li)=>{
+      const used = state.ddPairs[li] !== undefined;
+      html += `<div class="dd-chip ${used?'used':''}" draggable="${!used}" data-dd-li="${li}">${l}</div>`;
+    });
+    html += '</div>';
+    // Slots κάτω με ετικέτα αριστερά
+    html += '<div class="dd-slots">';
+    shuffledRight.forEach(({r,i})=>{
+      const usedByLeft = Object.entries(state.ddPairs).find(([,ri])=>ri===i);
+      const isFilled = usedByLeft !== undefined;
+      const filledLi = isFilled ? parseInt(usedByLeft[0]) : null;
+      const filledText = isFilled ? q.leftItems[filledLi] : '↓ τοποθέτησε εδώ';
+      html += `<div class="dd-slot-row">
+        <span class="dd-slot-lbl">${r}</span>
+        <div class="dd-slot ${isFilled?'filled':''}" data-dd-ri="${i}" data-dd-label="${r.replace(/"/g,'&quot;')}">${filledText}</div>
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  html += '</div>';
+  return html;
+}!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Παράγραφος</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1a1a2e; --ink2:#3d3d5c; --muted:#6b6b8a; --border:#e2e2f0;
+  --bg:#f7f7fc; --white:#fff;
+  --indigo:#4f46e5; --indigo-l:#eef2ff; --indigo-d:#3730a3;
+  --green:#059669; --green-l:#d1fae5;
+  --red:#dc2626; --red-l:#fee2e2;
+  --amber:#d97706; --amber-l:#fef3c7;
+  --teal:#0891b2; --teal-l:#e0f2fe;
+  --r:12px; --sh:0 2px 16px rgba(79,70,229,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding:20px 16px 48px;line-height:1.6}
+.wrap{max-width:860px;margin:0 auto}
+
+/* header */
+.app-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;background:var(--white);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:18px;border-left:4px solid var(--indigo)}
+.app-hdr h1{font-family:'IBM Plex Serif',serif;font-size:1.2rem;font-weight:600}
+.app-hdr p{font-size:.78rem;color:var(--muted);margin-top:2px}
+.badge{background:var(--indigo-l);color:var(--indigo);padding:4px 12px;border-radius:999px;font-size:.78rem;font-weight:600;white-space:nowrap}
+
+/* card */
+.card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:22px;margin-bottom:14px}
+
+/* loading */
+.loading{text-align:center;padding:60px 20px}
+.spin{width:42px;height:42px;border:3px solid var(--border);border-top-color:var(--indigo);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ══ HOME SCREEN ══ */
+.home-title{font-family:'IBM Plex Serif',serif;font-size:1.6rem;font-weight:600;margin-bottom:6px}
+.home-sub{color:var(--muted);font-size:.9rem;margin-bottom:28px}
+.home-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:8px}
+.home-card{border-radius:var(--r);padding:24px 20px;cursor:pointer;border:2px solid transparent;transition:all .2s;text-align:left;font-family:inherit;background:var(--white);box-shadow:var(--sh)}
+.home-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(79,70,229,.13)}
+.home-card .hc-icon{font-size:2rem;margin-bottom:12px;display:block}
+.home-card .hc-title{font-family:'IBM Plex Serif',serif;font-size:1.05rem;font-weight:600;margin-bottom:6px;color:var(--ink)}
+.home-card .hc-desc{font-size:.82rem;color:var(--muted);line-height:1.5}
+.home-card.c1{border-color:var(--green);background:linear-gradient(135deg,#f0fdf4,#fff)}
+.home-card.c1 .hc-icon-wrap{background:var(--green-l);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
+.home-card.c2{border-color:var(--teal);background:linear-gradient(135deg,#f0f9ff,#fff)}
+.home-card.c2 .hc-icon-wrap{background:var(--teal-l);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
+.home-card.c3{border-color:var(--indigo);background:linear-gradient(135deg,var(--indigo-l),#fff)}
+.home-card.c3 .hc-icon-wrap{background:var(--indigo-l);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
+.home-card .hc-arrow{display:inline-block;margin-top:14px;font-size:.8rem;font-weight:600;color:var(--muted)}
+.home-card.c1 .hc-arrow{color:var(--green)}
+.home-card.c2 .hc-arrow{color:var(--teal)}
+.home-card.c3 .hc-arrow{color:var(--indigo)}
+.home-card.c4{border-color:var(--amber);background:linear-gradient(135deg,var(--amber-l),#fff)}
+.home-card.c4 .hc-icon-wrap{background:var(--amber-l);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
+.home-card.c4 .hc-arrow{color:var(--amber)}
+.home-card.c4{border-color:var(--amber);background:linear-gradient(135deg,var(--amber-l),#fff)}
+.home-card.c4 .hc-icon-wrap{background:var(--amber-l);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
+.home-card.c4 .hc-arrow{color:var(--amber)}
+
+/* ══ DIAGNOSTIC ══ */
+.diag-intro{text-align:center;padding:10px 0 18px}
+.diag-intro .d-icon{font-size:2.4rem;margin-bottom:10px}
+.diag-intro h2{font-family:'IBM Plex Serif',serif;font-size:1.3rem;font-weight:600;margin-bottom:6px}
+.diag-intro p{color:var(--muted);font-size:.875rem}
+.diag-steps{display:flex;gap:6px;justify-content:center;margin:16px 0 4px;flex-wrap:wrap}
+.diag-step{width:28px;height:6px;border-radius:999px;background:var(--border);transition:background .3s}
+.diag-step.done{background:var(--teal)}
+.diag-step.active{background:var(--indigo)}
+
+/* diagnostic result */
+.diag-result{text-align:center;padding:16px 0}
+.diag-result .dr-icon{font-size:3rem;margin-bottom:12px}
+.diag-result h2{font-family:'IBM Plex Serif',serif;font-size:1.4rem;font-weight:600;margin-bottom:8px}
+.diag-result p{color:var(--muted);font-size:.9rem;margin-bottom:6px}
+.level-badge{display:inline-block;padding:8px 24px;border-radius:999px;font-size:1rem;font-weight:700;margin:10px 0 16px}
+.level-badge.l1{background:var(--amber-l);color:#92400e}
+.level-badge.l2{background:var(--indigo-l);color:var(--indigo-d)}
+.level-badge.l3{background:var(--green-l);color:#065f46}
+.score-diag{font-size:.875rem;color:var(--muted);margin-bottom:18px}
+
+/* selection */
+.sel-title{font-family:'IBM Plex Serif',serif;font-size:1.5rem;font-weight:600;margin-bottom:6px}
+.sel-sub{color:var(--muted);margin-bottom:22px;font-size:.9rem}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{padding:7px 16px;border:2px solid var(--border);border-radius:999px;background:var(--white);cursor:pointer;font-size:.875rem;font-family:inherit;transition:all .15s;color:var(--ink2)}
+.pill:hover{border-color:#94a3b8}
+.pill.on{border-color:var(--indigo);background:var(--indigo);color:#fff;font-weight:600}
+.info{background:var(--indigo-l);border-radius:8px;padding:11px 15px;font-size:.875rem;color:var(--indigo-d);margin:14px 0;font-weight:500}
+.info.warn{background:var(--amber-l);color:#78350f}
+.btn-go{width:100%;padding:14px;border:none;border-radius:var(--r);background:var(--indigo);color:#fff;font-size:1rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:6px;transition:background .15s}
+.btn-go:hover{background:var(--indigo-d)}
+.btn-go:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
+.btn-go.green{background:var(--green)}
+.btn-go.green:hover{background:#047857}
+.btn-go.teal{background:var(--teal)}
+.btn-go.teal:hover{background:#0e7490}
+
+/* progress */
+.prog-wrap{margin-bottom:16px}
+.prog-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.prog-info span{font-size:.83rem;color:var(--muted)}
+.prog-info strong{color:var(--indigo);font-size:1rem}
+.prog-bar{background:var(--border);border-radius:999px;height:5px;overflow:hidden}
+.prog-fill{background:var(--indigo);height:100%;transition:width .4s ease}
+.prog-fill.teal{background:var(--teal)}
+
+/* phase badge */
+.ph{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.ph.main{background:var(--indigo-l);color:var(--indigo)}
+.ph.retry{background:var(--amber-l);color:var(--amber)}
+.ph.deep{background:var(--red-l);color:var(--red)}
+.ph.diag{background:var(--teal-l);color:var(--teal)}
+
+/* excerpt */
+.exc-lbl{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--indigo);margin-bottom:8px}
+.exc{font-family:'IBM Plex Serif',serif;background:linear-gradient(135deg,#f8f8ff,#f0f0fa);border-left:3px solid var(--indigo);border-radius:0 8px 8px 0;padding:15px 18px;line-height:1.85;font-size:.96rem;color:var(--ink);text-align:justify;margin-bottom:16px}
+.exc.clk{cursor:default}
+.tok{cursor:pointer;padding:1px 3px;border-radius:3px;transition:background .12s}
+.tok:hover{background:var(--indigo-l)}
+.tok.sel{background:var(--indigo);color:#fff}
+.tok.hit{background:var(--green);color:#fff}
+.tok.miss{background:var(--red);color:#fff}
+
+/* question */
+.q-lbl{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:6px}
+.q-txt{font-size:.98rem;font-weight:600;color:var(--ink);margin-bottom:14px;line-height:1.5}
+
+/* MC/YN options */
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{padding:11px 15px;border:2px solid var(--border);border-radius:10px;background:var(--white);text-align:left;cursor:pointer;font-size:.9rem;font-family:inherit;color:var(--ink);transition:all .15s;display:flex;align-items:center;gap:10px}
+.opt:hover:not(:disabled){border-color:#94a3b8}
+.opt.sel{border-color:var(--indigo);background:var(--indigo-l)}
+.opt.ok{border-color:var(--green);background:var(--green);color:#fff;font-weight:600}
+.opt.ko{border-color:var(--red);background:var(--red);color:#fff;font-weight:600}
+.opt:disabled{cursor:default}
+.opt-k{min-width:22px;height:22px;border-radius:50%;background:var(--border);color:var(--ink2);font-size:.72rem;font-weight:700;text-align:center;line-height:22px;flex-shrink:0}
+.opt.ok .opt-k,.opt.ko .opt-k{background:rgba(255,255,255,.3);color:#fff}
+.opt{position:relative}
+.opt-badge{position:absolute;top:6px;right:8px;font-size:.8rem;font-weight:700;line-height:1}
+.opt.ok .opt-badge-ok{display:inline}
+.opt.ko .opt-badge-ko{display:inline}
+
+/* GAP */
+.exc-gap{font-family:'IBM Plex Serif',serif;background:linear-gradient(135deg,#f8f8ff,#f0f0fa);border-left:3px solid var(--indigo);border-radius:0 8px 8px 0;padding:15px 18px;line-height:2.1;font-size:.96rem;color:var(--ink);text-align:justify;margin-bottom:14px}
+.gap-inp{display:inline-block;border:none;border-bottom:2px solid var(--indigo);background:transparent;font-family:'IBM Plex Serif',serif;font-size:.96rem;color:var(--indigo);outline:none;min-width:120px;padding:0 4px;text-align:center}
+.gap-inp:disabled{color:var(--green);border-color:var(--green)}
+.gap-inp.ko{color:var(--red);border-color:var(--red)}
+
+/* DD */
+.dd-wrap{width:100%}
+.dd-hint{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:12px}
+/* Chips — Στήλη Α */
+.dd-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;min-height:44px;padding:10px;background:#f8f8ff;border-radius:10px;border:2px dashed var(--border)}
+.dd-chip{padding:8px 16px;border:2px solid var(--indigo);border-radius:999px;font-size:.875rem;background:var(--white);cursor:grab;font-family:inherit;color:var(--ink);user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;transition:all .15s;white-space:nowrap}
+.dd-chip:hover{background:var(--indigo-l)}
+.dd-chip.dragging{opacity:.4;cursor:grabbing}
+.dd-chip.used{opacity:.35;cursor:default;border-style:dashed}
+/* Slots */
+.dd-slots{display:flex;flex-direction:column;gap:8px}
+.dd-slot-row{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center}
+.dd-slot-lbl{font-size:.875rem;font-weight:600;color:var(--ink2);white-space:nowrap;min-width:100px}
+.dd-slot{padding:10px 14px;border:2px dashed var(--border);border-radius:9px;font-size:.875rem;background:#fafafa;min-height:44px;display:flex;align-items:center;color:var(--muted);font-style:italic;transition:all .15s;user-select:none;-webkit-user-select:none;width:100%;box-sizing:border-box}
+.dd-slot.over{border-color:var(--indigo);background:var(--indigo-l);border-style:solid}
+.dd-slot.filled{border-color:var(--indigo);border-style:solid;background:var(--indigo-l);color:var(--ink);font-style:normal;font-weight:600;cursor:pointer}
+.dd-slot.filled:hover{background:#dde4ff}
+.dd-slot.ok{border-color:var(--green);border-style:solid;background:var(--green-l);color:#065f46;font-style:normal;font-weight:600}
+.dd-slot.ko{border-color:var(--red);border-style:solid;background:var(--red-l);color:#7f1d1d;font-style:normal}
+/* Result */
+.dd-correct-show{margin-top:12px;padding:12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0}
+.dd-correct-show p{font-size:.78rem;color:#065f46;font-weight:600;margin-bottom:8px}
+.dd-correct-row{display:grid;grid-template-columns:1fr 20px 1fr;gap:4px;align-items:center;margin-bottom:4px;font-size:.83rem}
+.dd-correct-row .dl{padding:6px 10px;background:var(--green-l);border-radius:6px;color:#065f46}
+.dd-correct-row .dr{padding:6px 10px;background:var(--green-l);border-radius:6px;color:#065f46}
+.dd-correct-row .da{text-align:center;color:var(--muted)}
+@media(max-width:480px){
+  .dd-slot-row{grid-template-columns:1fr}
+  .dd-slot-lbl{font-size:.8rem}
+}
+
+/* feedback */
+.fb{border-radius:var(--r);padding:14px 16px;margin-top:14px;font-size:.875rem;line-height:1.65}
+.fb.ok{background:var(--green-l);border-left:3px solid var(--green)}
+.fb.ko{background:var(--red-l);border-left:3px solid var(--red)}
+.fb-title{font-weight:700;margin-bottom:5px;font-size:.9rem}
+.fb.ok .fb-title{color:#065f46}
+.fb.ko .fb-title{color:#7f1d1d}
+.fb p{color:var(--ink2)}
+
+/* buttons */
+.btn-check{width:100%;padding:13px;border:none;border-radius:var(--r);background:var(--indigo);color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px;transition:background .15s}
+.btn-check:hover{background:var(--indigo-d)}
+.btn-check:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
+.btn-next{width:100%;padding:13px;border:none;border-radius:var(--r);background:var(--green);color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px;transition:background .15s}
+.btn-next:hover{background:#047857}
+.btn-next.countdown{background:var(--green);position:relative;overflow:hidden;cursor:pointer}to{width:100%}}to{width:100%}}to{width:100%}}to{width:100%}}to{width:100%}}
+.btn-sec{width:100%;padding:11px;border:2px solid var(--border);border-radius:var(--r);background:var(--white);color:var(--ink2);font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;transition:all .15s}
+.btn-sec:hover{border-color:#94a3b8}
+
+/* results */
+.res-top{text-align:center;padding:20px 0 14px}
+.res-emoji{font-size:3rem;margin-bottom:10px}
+.res-title{font-family:'IBM Plex Serif',serif;font-size:1.5rem;font-weight:600}
+.score-box{background:var(--indigo-l);border-radius:var(--r);padding:18px;text-align:center;margin:14px 0}
+.score-big{font-size:2.8rem;font-weight:700;color:var(--indigo);line-height:1}
+.score-pct{color:var(--muted);font-size:.95rem;margin-top:3px}
+.score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.sc{padding:12px;border-radius:10px;text-align:center}
+.sc p:first-child{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.sc p:last-child{font-size:1.3rem;font-weight:700}
+.sc.g{background:var(--green-l)} .sc.g p{color:#065f46}
+.sc.r{background:var(--red-l)} .sc.r p{color:#7f1d1d}
+.sc.a{background:var(--amber-l)} .sc.a p{color:#78350f}
+
+/* retry */
+.retry-title{font-family:'IBM Plex Serif',serif;font-size:1.05rem;font-weight:600;margin-bottom:10px}
+.retry-cat{background:var(--amber-l);border:1px solid #fcd34d;border-radius:10px;padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.retry-cat-name{font-weight:600;color:#78350f;font-size:.875rem}
+.retry-cat-errors{font-size:.78rem;color:#92400e}
+.btn-retry{padding:7px 16px;border:none;border-radius:8px;background:var(--amber);color:#fff;font-size:.835rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btn-retry:hover{background:#b45309}
+
+/* theory */
+.theory-box{background:var(--amber-l);border:1px solid #fcd34d;border-radius:var(--r);padding:14px 16px;margin-bottom:14px;font-size:.855rem}
+.theory-box h4{color:#92400e;margin-bottom:8px;font-size:.875rem}
+.theory-box ul{margin-left:16px;color:#78350f}
+.theory-box li{margin-bottom:3px}
+.theory-needed{background:var(--red-l);border:1px solid #fca5a5;border-radius:var(--r);padding:14px 16px;margin-top:10px}
+.theory-needed h4{color:#7f1d1d;margin-bottom:6px;font-size:.875rem;font-weight:700}
+.theory-needed p{color:#991b1b;font-size:.855rem}
+.theory-toggle{background:none;border:none;color:var(--indigo);cursor:pointer;font-size:.83rem;font-weight:500;padding:4px 0;margin-bottom:6px;font-family:inherit}
+
+@media(max-width:600px){
+  .score-grid{grid-template-columns:1fr}
+  .dd-grid{grid-template-columns:1fr 24px 1fr}
+  .home-cards{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="app-hdr">
+    <div>
+      <h1>Παράγραφος</h1>
+      <p>Νεοελληνική Γλώσσα για το Λύκειο</p>
+    </div>
+    <span class="badge" id="hdrBadge">Quiz</span>
+  </div>
+  <div id="app"><div class="card loading"><div class="spin"></div><p style="color:var(--muted)">Φόρτωση ερωτήσεων…</p></div></div>
+</div>
+<footer style="text-align:center;margin-top:32px;padding:16px;font-size:.78rem;color:var(--muted);font-family:'IBM Plex Sans',sans-serif">
+  © Α &amp; Σ Μητσέλος, 2026
+</footer>
+
+<script>
+// ══════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRvQNTsoPcU08XK8mT56x6m-5T0zigqVnyB27VOeXpJnv8smyhKDQChQ9r55jBQN9pDCHB9Fs2W0SAi/pub?gid=1446071944&single=true&output=csv';
+const QUIZ_PER_SESSION = 10;
+
+// Ποσοστά διαγνωστικού
+const DIAG_THRESHOLDS = { high: 80, mid: 50 }; // >=80% → επ.3, >=50% → επ.2, <50% → επ.1
+
+const CAT_SHORT = {
+  1:['Τριμερής δομή: Θεματική περίοδος → Σχόλια → Κατακλείδα','Διμερής δομή: Θεματική περίοδος → Σχόλια (χωρίς κατακλείδα)','Κατακλείδα = τελευταία περίοδος ΜΟΝΟ αν αποτελεί συνολικό συμπέρασμα'],
+  2:'Αιτιολόγηση: ο συντάκτης παραθέτει επιχειρήματα/λογικούς συλλογισμούς για να αποδείξει μια θέση. Δείκτες: γιατί, διότι, επειδή, αφού, εφόσον, μιας και, καθώς κ.λπ.',
+  3:'Αίτιο-αποτέλεσμα: ο συντάκτης εξηγεί τις αιτίες εμφάνισης ενός φαινομένου ή τα αποτελέσματά του (αίτια → αποτελέσματα). Δείκτες: λόγω, εξαιτίας, με αποτέλεσμα, προκαλεί, οδηγεί σε κ.λπ.',
+  4:'Διαίρεση: ο συντάκτης διαιρεί μια έννοια στα επιμέρους μέρη/είδη της με βάση κάποιο κριτήριο (διαιρετική βάση). Δείκτες: διακρίνεται, διαιρείται, το πρώτο, το δεύτερο κ.λπ.',
+  5:'Σύγκριση-αντίθεση: ο συντάκτης συγκρίνει ή αντιπαραθέτει δύο όρους αναδεικνύοντας ομοιότητες και διαφορές. Δείκτες: παρόμοια, το ίδιο, ενώ, αντίθετα, ωστόσο, από τη μια… από την άλλη κ.λπ.',
+  6:'Ορισμός: ο συντάκτης προσδιορίζει επακριβώς μια έννοια (οριστέα = γένος + ειδοποιός διαφορά). Δείκτες: είναι, ορίζεται, καλείται, σημαίνει κ.λπ.',
+  7:'Παραδείγματα: ο συντάκτης παραθέτει συγκεκριμένες, αντιπροσωπευτικές περιπτώσεις που τεκμηριώνουν μια θέση ή βοηθούν στην κατανόησή της. Δείκτες: για παράδειγμα, λόγου χάρη, ενδεικτικά, όπως, π.χ. κ.λπ.',
+  8:'Αναλογία: ο συντάκτης παραλληλίζει δύο διαφορετικά φαινόμενα βοηθώντας τον αναγνώστη να κατανοήσει το ασαφές ή άγνωστο από αυτά. Δείκτες: όπως… έτσι και, μοιάζει, θυμίζει, σαν κ.λπ.',
+  9:'Συνδυασμός μεθόδων: χρησιμοποιούνται περισσότεροι τρόποι· διακρίνεται βασικός (κύρια πρόθεση) και δευτερεύων (συμπληρωματικός). Κάθε χωρίο → έναν μόνο τρόπο.'
+};
+
+const CAT_NAMES = {
+  1:'Δομή Παραγράφου',
+  2:'Αιτιολόγηση',
+  3:'Αίτιο-Αποτέλεσμα',
+  4:'Διαίρεση',
+  5:'Σύγκριση-Αντίθεση',
+  6:'Ορισμός',
+  7:'Παραδείγματα',
+  8:'Αναλογία',
+  9:'Συνδυασμός Μεθόδων'
+};
+
+const CAT_THEORY = {
+  // Δομή παραγράφου
+  1:[
+    '📌 Τριμερής: Θεματική περίοδος → Σχόλια-λεπτομέρειες → Κατακλείδα',
+    '📌 Διμερής: Θεματική περίοδος → Σχόλια (χωρίς κατακλείδα)',
+    '⚠️ Κατακλείδα = τελευταία περίοδος ΜΟΝΟ αν είναι συνολικό συμπέρασμα — αν προσθέτει νέο επιχείρημα ανήκει στα σχόλια'
+  ],
+  // Αιτιολόγηση
+  2:[
+    '📌 Θεματική περίοδος: διατυπώνει θέση/άποψη προς απόδειξη',
+    '📌 Σχόλια: επιχειρήματα που αποδεικνύουν τη θέση',
+    '🎯 Στόχος: πειθώ | Δείκτες: γιατί, διότι, επειδή, αφού, εφόσον',
+    '⚠️ Κριτήριο: η θέση αμφισβητείται → αιτιολόγηση (≠ αίτιο-αποτέλεσμα)'
+  ],
+  // Αίτιο-αποτέλεσμα
+  3:[
+    '📌 Θεματική περίοδος: παρουσιάζει φαινόμενο ως δεδομένο (δεν το αμφισβητεί)',
+    '📌 Σχόλια: αίτια που το προκαλούν ή αποτελέσματα που προκύπτουν',
+    '🎯 Στόχος: εξήγηση/ερμηνεία | Δείκτες: λόγω, εξαιτίας, με αποτέλεσμα, οδηγεί σε',
+    '⚠️ Κριτήριο: το φαινόμενο είναι δεδομένο → αίτιο-αποτέλεσμα (≠ αιτιολόγηση)'
+  ],
+  // Διαίρεση
+  4:[
+    '📌 Μία έννοια (διαιρετέα) χωρίζεται με κριτήριο (διαιρετική βάση) σε είδη/μέρη',
+    '📌 Τα είδη/μέρη παρουσιάζονται αναλυτικά',
+    '🎯 Στόχος: φωτισμός έννοιας σε όλες τις πτυχές της',
+    '⚠️ Κριτήριο: μία έννοια → διαίρεση | δύο έννοιες → σύγκριση-αντίθεση'
+  ],
+  // Σύγκριση-αντίθεση
+  5:[
+    '📌 Σύγκριση/αντίθεση δύο όρων του ίδιου είδους',
+    '🎯 Στόχος: ανάδειξη ομοιοτήτων ή/και διαφορών',
+    '🔍 Δείκτες: παρόμοια, το ίδιο, ενώ, αντίθετα, ωστόσο, από τη μια… από την άλλη',
+    '⚠️ Κριτήριο: δύο έννοιες → σύγκριση-αντίθεση | μία έννοια → διαίρεση'
+  ],
+  // Ορισμός
+  6:[
+    '📌 Προσδιορισμός έννοιας: Οριστέα = Γένος + Ειδοποιός διαφορά',
+    '🎯 Στόχος: οριοθέτηση/προσδιορισμός της έννοιας',
+    '🔍 Δείκτες: είναι, ορίζεται, καλείται, σημαίνει, εννοείται',
+    '⚠️ Επεξήγηση ορισμού ≠ δεύτερος τρόπος — δεύτερος τρόπος μόνο αν υπάρχει διαίρεση, παραδείγματα κ.λπ.'
+  ],
+  // Παραδείγματα
+  7:[
+    '📌 Παράθεση συγκεκριμένων, αντιπροσωπευτικών περιπτώσεων',
+    '🎯 Στόχος: τεκμηρίωση θέσης ή επεξήγηση αφηρημένης έννοιας',
+    '🔍 Δείκτες: για παράδειγμα, λόγου χάρη, ενδεικτικά, όπως, π.χ.',
+    '⚠️ Κριτήριο: ίδιο πεδίο → παραδείγματα | διαφορετικό πεδίο → αναλογία'
+  ],
+  // Αναλογία
+  8:[
+    '📌 Παραλληλισμός με έναν γνωστό όρο από διαφορετικό πεδίο',
+    '🎯 Στόχος: κατανόηση αφηρημένης/δύσκολης έννοιας μέσω παραλληλισμού',
+    '🔍 Δείκτες: όπως… έτσι και, μοιάζει, θυμίζει, σαν, λες και',
+    '⚠️ Κριτήριο: διαφορετικό πεδίο → αναλογία | ίδιο πεδίο → παραδείγματα'
+  ],
+  // Συνδυασμός μεθόδων
+  9:[
+    '📌 Χρήση δύο (σπάνια τριών) τρόπων ανάπτυξης στην ίδια παράγραφο',
+    '📌 Βασικός τρόπος: υπηρετεί την κύρια πρόθεση | Δευτερεύων: συμπληρωματικός',
+    '⚠️ Κάθε χωρίο ανήκει σε ΈΝΑΝ μόνο τρόπο — δεν επικαλύπτονται',
+    '⚠️ Η κατακλείδα δεν εξετάζεται στους τρόπους ανάπτυξης'
+  ]
+};
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let allQ = [];
+let state = {
+  screen: 'loading',      // loading | home | diagnostic | diag_result | selection | quiz | results | retry | done
+  difficulty: null,
+  quizQ: [],
+  idx: 0,
+  answer: null,
+  answered: false,
+  phase: 'main',          // main | retry | diag
+  wrongByCat: {},
+  retryWrongByCat: {},
+  showTheory: false,
+  score: 0,
+  diagScore: 0,
+  diagTotal: 0,
+  diagLevel: null,        // 1 | 2 | 3 — αποτέλεσμα διαγνωστικού
+  ddSelected: null,
+  ddPairs: {},
+  clkSelected: [],
+  selectedCat: null,
+};
+
+// ══════════════════════════════════════════════
+// CSV PARSING
+// ══════════════════════════════════════════════
+function parseCSVLine(line) {
+  const res = []; let cur = ''; let inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') { if (inQ && line[i+1]==='"'){cur+='"';i++;} else inQ=!inQ; }
+    else if (c === ',' && !inQ) { res.push(cur.trim()); cur=''; }
+    else cur += c;
+  }
+  res.push(cur.trim()); return res;
+}
+
+function parseCSV(csv) {
+  const lines = csv.replace(/\r/g,'').split('\n').filter(l=>l.trim());
+  if (lines.length < 2) return [];
+  const hdrs = parseCSVLine(lines[0]).map(h=>h.trim());
+  const data = [];
+  for (let i = 1; i < lines.length; i++) {
+    const vals = parseCSVLine(lines[i]);
+    const obj = {};
+    hdrs.forEach((h,idx) => {
+      let v = (vals[idx]||'').trim();
+      obj[h] = (v===''||v.toLowerCase()==='null'||v.toLowerCase()==='false') ? null : v;
+    });
+    if (!obj['Ενεργό'] || obj['Ενεργό'].toUpperCase()==='FALSE') continue;
+    if (!obj['Τύπος'] || !obj['Κατηγορία'] || !obj['Κείμενο Ερώτησης']) continue;
+    obj.cat = parseInt(obj['Κατηγορία']) || 0;
+    obj.diff = parseInt(obj['Δυσκολία']) || 1;
+    const diagRaw = (obj['Διαγνωστική']||'').toString().trim(); const diagNum = parseFloat(diagRaw); obj.diagOrder = (!diagRaw || isNaN(diagNum)) ? null : Math.round(diagNum);
+    obj.quizId = obj['Quiz_ID'];
+    obj.id = obj['ID'];
+    obj.type = obj['Τύπος'].trim().toUpperCase();
+    obj.q = obj['Κείμενο Ερώτησης'];
+    obj.excerpt = obj['Απόσπασμα'] || null;
+    obj.optA = obj['Επιλογή Α'] || null;
+    obj.optB = obj['Επιλογή Β'] || null;
+    obj.optC = obj['Επιλογή Γ'] || null;
+    obj.optD = obj['Επιλογή Δ'] || null;
+    obj.leftItems  = [obj['Αριστερά 1'],obj['Αριστερά 2'],obj['Αριστερά 3'],obj['Αριστερά 4']].filter(Boolean);
+    obj.rightItems = [obj['Δεξιά 1'],   obj['Δεξιά 2'],   obj['Δεξιά 3'],   obj['Δεξιά 4']  ].filter(Boolean);
+    obj.targets = obj['Λέξη-Στόχος'] ? obj['Λέξη-Στόχος'].split('|').map(t=>t.trim()).filter(Boolean) : [];
+    obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
+    obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
+    obj.correct = (obj['Σωστή Απάντηση']||'').trim();
+    obj.fb = [obj['Διόρθωση 1'],obj['Διόρθωση 2'],obj['Διόρθωση 3'],obj['Διόρθωση 4']];
+    data.push(obj);
+  }
+  return data;
+}
+
+// ══════════════════════════════════════════════
+// DATA LOADING
+// ══════════════════════════════════════════════
+async function loadData() {
+  try {
+    const r = await fetch(CSV_URL);
+    if (!r.ok) throw new Error('HTTP '+r.status);
+    const csv = await r.text();
+    allQ = parseCSV(csv);
+    if (!allQ.length) throw new Error('Δεν βρέθηκαν ερωτήσεις');
+    state.screen = 'home';
+  } catch(e) {
+    document.getElementById('app').innerHTML = `
+      <div class="card" style="text-align:center;padding:40px">
+        <p style="color:var(--red);font-size:1rem;margin-bottom:12px">⚠️ Αδυναμία φόρτωσης</p>
+        <p style="color:var(--muted);font-size:.875rem;margin-bottom:20px">${e.message}</p>
+        <button onclick="loadData()" style="padding:10px 24px;background:var(--indigo);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:.9rem">Επανάληψη</button>
+      </div>`;
+    return;
+  }
+  render();
+}
+
+// ══════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════
+function shuffle(arr) {
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function getFiltered(diff) {
+  return allQ.filter(q => diff==='all' || q.diff===parseInt(diff));
+}
+
+function getDiagnosticQuestions() {
+  // Ερωτήσεις με diagOrder !== null, ταξινομημένες κατά αριθμό
+  const result = allQ
+    .filter(q => q.diagOrder !== null && !isNaN(q.diagOrder))
+    .sort((a,b) => a.diagOrder - b.diagOrder);
+  console.log('DEBUG diagQ:', result.length, result.map(q=>q.id+':'+q.diagOrder));
+  console.log('DEBUG allQ diagOrders:', allQ.map(q=>q.id+':'+JSON.stringify(q.diagOrder)));
+  return result;
+}
+
+function pickQuestions(pool, n) {
+  const byType = {};
+  pool.forEach(q => { if(!byType[q.type]) byType[q.type]=[]; byType[q.type].push(q); });
+  const types = Object.keys(byType);
+  let picked = [];
+  types.forEach(t => { const sh=shuffle(byType[t]); if(sh.length) picked.push(sh[0]); });
+  const pickedIds = new Set(picked.map(q=>q.id));
+  const rest = shuffle(pool.filter(q=>!pickedIds.has(q.id)));
+  for(const q of rest) { if(picked.length>=n) break; picked.push(q); }
+  return shuffle(picked).slice(0,n);
+}
+
+function calcDiagLevel(correct, total) {
+  if (total === 0) return 1;
+  const pct = (correct / total) * 100;
+  if (pct >= DIAG_THRESHOLDS.high) return 3;
+  if (pct >= DIAG_THRESHOLDS.mid) return 2;
+  return 1;
+}
+
+function getFeedback(q, answer) {
+  if (q.type==='MC') {
+    const map = {Α:0,Β:1,Γ:2,Δ:3};
+    const idx = map[answer] ?? 0;
+    return q.fb[idx] || q.fb.find(f=>f) || null;
+  }
+  return q.fb[0] || null;
+}
+
+function checkAnswer(q, answer) {
+  if (q.type==='MC' || q.type==='YN') {
+    return q.correct.trim().toUpperCase() === answer.trim().toUpperCase();
+  }
+  if (q.type==='GAP') {
+    const norm = s => s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const accepted = q.correct.split('|').map(s=>norm(s));
+    const ans = norm(answer);
+    return accepted.some(a => a===ans || a.includes(ans) || ans.includes(a));
+  }
+  if (q.type==='CLK') {
+    const targets = q.targets.map(t=>t.trim().toLowerCase());
+    const sel = (answer||[]).map(s=>s.trim().toLowerCase());
+    return targets.every(t=>sel.includes(t)) && sel.length===targets.length;
+  }
+  if (q.type==='DD') {
+    const correctPairs = parseCorrectDD(q.correct, q.leftItems, q.rightItems);
+    if (!correctPairs) return false;
+    for(const [li, ri] of Object.entries(answer||{})) {
+      if(correctPairs[parseInt(li)] !== parseInt(ri)) return false;
+    }
+    return Object.keys(answer||{}).length === q.leftItems.length;
+  }
+  return false;
+}
+
+function parseCorrectDD(correctStr, lefts, rights) {
+  if (!correctStr) return null;
+  const result = {};
+  const pairs = correctStr.split('|').map(s=>s.trim()).filter(Boolean);
+  for(const p of pairs) {
+    const [l,r] = p.split('→').map(s=>s.trim());
+    const li = lefts.findIndex(x=>x && (x.trim()===l || 'Αριστερά '+(lefts.indexOf(x)+1)===l));
+    const ri = rights.findIndex(x=>x && (x.trim()===r || 'Δεξιά '+(rights.indexOf(x)+1)===r));
+    if(li!==-1 && ri!==-1) result[li]=ri;
+  }
+  if(!Object.keys(result).length) {
+    for(const p of pairs) {
+      const m = p.match(/Αριστερά\s*(\d+)\s*→\s*Δεξιά\s*(\d+)/);
+      if(m) result[parseInt(m[1])-1]=parseInt(m[2])-1;
+    }
+  }
+  return result;
+}
+
+// ══════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════
+function render() {
+  const app = document.getElementById('app');
+  const badge = document.getElementById('hdrBadge');
+  switch(state.screen) {
+    case 'home':        badge.textContent='Αρχική';        app.innerHTML=renderHome(); break;
+    case 'diagnostic':  badge.textContent=`Διαγνωστικό ${state.idx+1}/${state.quizQ.length}`; app.innerHTML=renderDiagnostic(); break;
+    case 'diag_result': badge.textContent='Αποτέλεσμα';   app.innerHTML=renderDiagResult(); break;
+    case 'selection':   badge.textContent='Επιλογή';      app.innerHTML=renderSelection(); break;
+    case 'cat_selection': badge.textContent='Κατηγορία';  app.innerHTML=renderCatSelection(); break;
+    case 'cat_selection': badge.textContent='Κατηγορία';  app.innerHTML=renderCatSelection(); break;
+    case 'quiz':        badge.textContent=`${state.idx+1}/${state.quizQ.length}`; app.innerHTML=renderQuiz(); break;
+    case 'results':     badge.textContent='Αποτελέσματα'; app.innerHTML=renderResults(); break;
+    case 'retry':       badge.textContent='Ανατροφοδότηση'; app.innerHTML=renderRetry(); break;
+    case 'done':        badge.textContent='Τέλος';        app.innerHTML=renderDone(); break;
+  }
+  attachEvents();
+}
+
+// ── HOME ──────────────────────────────────────
+function renderHome() {
+  const diagQ = getDiagnosticQuestions();
+  const diagAvail = diagQ.length > 0;
+  return `
+  <div class="card">
+    <p class="home-title">Καλωσήρθες!</p>
+    <p class="home-sub">Επίλεξε πώς θέλεις να ξεκινήσεις</p>
+    <div class="home-cards">
+
+      <button class="home-card c1" id="btnStartL1">
+        <div class="hc-icon-wrap">🚀</div>
+        <p class="hc-title">Ξεκίνησε</p>
+        <p class="hc-desc">Ξεκινάς αμέσως από το Επίπεδο 1 χωρίς επιλογή.</p>
+        <span class="hc-arrow">Επίπεδο 1 →</span>
+      </button>
+
+      <button class="home-card c2" id="btnDiag" ${!diagAvail?'style="opacity:.5;cursor:not-allowed"':''}>
+        <div class="hc-icon-wrap">🔍</div>
+        <p class="hc-title">Βρες το επίπεδό σου</p>
+        <p class="hc-desc">Απάντησε ${diagAvail?diagQ.length:'μερικές'} διαγνωστικές ερωτήσεις και ξεκίνα στο κατάλληλο επίπεδο.</p>
+        <span class="hc-arrow">${diagAvail?diagQ.length+' ερωτήσεις →':'Δεν υπάρχουν διαγνωστικές'}</span>
+      </button>
+
+      <button class="home-card c3" id="btnSel">
+        <div class="hc-icon-wrap">⚙️</div>
+        <p class="hc-title">Επίλεξε επίπεδο</p>
+        <p class="hc-desc">Επίλεξε εσύ το επίπεδο δυσκολίας που θέλεις να εξασκηθείς.</p>
+        <span class="hc-arrow">Επιλογή →</span>
+      </button>
+
+      <button class="home-card c4" id="btnCat">
+        <div class="hc-icon-wrap">📂</div>
+        <p class="hc-title">Επίλεξε κατηγορία</p>
+        <p class="hc-desc">Εξάσκηση σε συγκεκριμένη θεματική κατηγορία, ανεξάρτητα επιπέδου.</p>
+        <span class="hc-arrow">Κατηγορίες →</span>
+      </button>
+
+      <button class="home-card c4" id="btnCat">
+        <div class="hc-icon-wrap">📂</div>
+        <p class="hc-title">Επίλεξε κατηγορία</p>
+        <p class="hc-desc">Εξάσκηση σε συγκεκριμένη θεματική κατηγορία, ανεξάρτητα επιπέδου.</p>
+        <span class="hc-arrow">Κατηγορίες →</span>
+      </button>
+
+    </div>
+  </div>`;
+}
+
+// ── DIAGNOSTIC ────────────────────────────────
+function renderDiagnostic() {
+  const q = state.quizQ[state.idx];
+  const prog = ((state.idx+1)/state.quizQ.length)*100;
+
+  // step indicators
+  const steps = state.quizQ.map((_,i) => {
+    let cls = 'diag-step';
+    if (i < state.idx) cls += ' done';
+    else if (i === state.idx) cls += ' active';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+
+  let html = `
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span class="ph diag">Διαγνωστικό</span>
+      <span style="color:var(--muted);font-size:.83rem">${state.idx+1} / ${state.quizQ.length}</span>
+    </div>
+    <div class="diag-steps">${steps}</div>
+    <div class="prog-wrap" style="margin-top:10px">
+      <div class="prog-bar"><div class="prog-fill teal" style="width:${prog}%"></div></div>
+    </div>
+  </div>`;
+
+  html += `<div class="card">`;
+  if (q.excerpt) {
+    html += `<p class="exc-lbl">Απόσπασμα κειμένου</p>`;
+    if (q.type==='CLK') html += renderExcerptCLK(q);
+    else if (q.type==='GAP') html += renderExcerptGAP(q);
+    else html += `<div class="exc">${q.excerpt}</div>`;
+  }
+  html += `<p class="q-lbl">${qTypeLabel(q.type)}</p>`;
+  html += `<p class="q-txt">${q.q}</p>`;
+  if (q.type==='MC'||q.type==='YN') html += renderMC(q);
+  else if (q.type==='CLK') html += `<p style="font-size:.8rem;color:var(--muted);font-style:italic">Κάντε κλικ στις λέξεις στο απόσπασμα.</p>`;
+  else if (q.type==='DD') html += renderDD(q);
+
+  if (state.answered) {
+    const ok = checkAnswer(q, state.answer);
+    html += `<div class="fb ${ok?'ok':'ko'}">
+      <p class="fb-title">${ok?'✅ Σωστά!':'❌ Λάθος'}</p>
+      ${!ok?`<p>${getFeedback(q,state.answer)||''}</p>`:''}
+    </div>`;
+    const isLast = state.idx===state.quizQ.length-1;
+    const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
+    const btnCls = ok2 ? 'btn-next countdown' : 'btn-next';
+        html += `<button class="${btnCls}" id="btnNext">${isLast?'Δες το αποτέλεσμα →':'Επόμενη →'}</button>`;
+  } else {
+    html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+// ── DIAGNOSTIC RESULT ─────────────────────────
+function renderDiagResult() {
+  const pct = Math.round((state.diagScore / state.diagTotal) * 100);
+  const lvl = state.diagLevel;
+  const icons = {1:'📘',2:'📗',3:'📕'};
+  const labels = {1:'Επίπεδο 1',2:'Επίπεδο 2',3:'Επίπεδο 3'};
+  const classes = {1:'l1',2:'l2',3:'l3'};
+  const msgs = {
+    1:`Ξεκινάς από το <strong>Επίπεδο 1</strong>. Δεν πειράζει — η πρακτική εξάσκηση θα σε φέρει ψηλά!`,
+    2:`Καλή βάση! Ξεκινάς από το <strong>Επίπεδο 2</strong>.`,
+    3:`Εξαιρετική επίδοση! Ξεκινάς κατευθείαν από το <strong>Επίπεδο 3</strong>.`
+  };
+  return `
+  <div class="card">
+    <div class="diag-result">
+      <div class="dr-icon">${icons[lvl]}</div>
+      <h2>Αποτέλεσμα Διαγνωστικού</h2>
+      <p class="score-diag">${state.diagScore} / ${state.diagTotal} σωστές (${pct}%)</p>
+      <div class="level-badge ${classes[lvl]}">${labels[lvl]}</div>
+      <p style="color:var(--ink2);font-size:.9rem;margin-bottom:20px">${msgs[lvl]}</p>
+      <button class="btn-go ${lvl===3?'green':lvl===2?'':''}" id="btnStartFromDiag">Ξεκίνα το Quiz →</button>
+      <button class="btn-sec" id="btnHomeFromDiag" style="margin-top:8px">↩ Αρχική</button>
+    </div>
+  </div>`;
+}
+
+// ── TYPE SELECTION ────────────────────────────
+const TYPE_NAMES = {
+  'MC':'Πολλαπλής επιλογής',
+  'YN':'Ναι / Όχι',
+  'GAP':'Συμπλήρωση κενού',
+  'CLK':'Εντοπισμός λέξης',
+  'DD':'Αντιστοίχιση'
+};
+
+function renderCatSelection() {
+  const sel = state.selectedCat;
+  const typeCounts = {};
+  Object.keys(TYPE_NAMES).forEach(t => {
+    typeCounts[t] = allQ.filter(q=>q.type===t).length;
+  });
+  let html = '<div class="card"><p class="sel-title">📂 Επίλεξε Τύπο Ερώτησης</p><p class="sel-sub">Εξάσκηση ανά τύπο ερώτησης — όλα τα επίπεδα</p><div class="fg"><label>Τύπος ερώτησης</label><div class="pills">';
+  Object.entries(TYPE_NAMES).forEach(([t,name]) => {
+    const cnt = typeCounts[t]||0;
+    if (!cnt) return;
+    html += `<button class="pill ${sel===t?'on':''}" data-cat="${t}">${name} <span style="opacity:.7;font-size:.75rem">(${cnt})</span></button>`;
+  });
+  html += '</div></div>';
+  const cnt = sel ? (typeCounts[sel]||0) : 0;
+  html += `<div class="info ${cnt===0&&sel?'warn':''}">${!sel?'👆 Επίλεξε τύπο ερώτησης':cnt===0?'⚠️ Δεν υπάρχουν ερωτήσεις':`✅ <strong>${cnt}</strong> ερωτήσεις — θα εμφανιστούν ${Math.min(cnt,QUIZ_PER_SESSION)}`}</div>`;
+  html += `<button class="btn-go" id="btnStartCat" ${!sel||!cnt?'disabled':''}>Ξεκινήστε →</button>`;
+  html += '<button class="btn-sec" id="btnHomeFromCat">↩ Αρχική</button>';
+  html += '</div>';
+  return html;
+}
+
 
 // ── SELECTION ──────────────────────────────────
 function renderSelection() {
@@ -1120,6 +2285,24 @@ function attachEvents() {
   const btnSel = document.getElementById('btnSel');
   if (btnSel) btnSel.addEventListener('click', () => { state.screen='selection'; state.difficulty=null; render(); });
 
+  const btnCat = document.getElementById('btnCat');
+  if (btnCat) btnCat.addEventListener('click', () => { state.screen='cat_selection'; state.selectedCat=null; render(); });
+
+  document.querySelectorAll('[data-cat]').forEach(b =>
+    b.addEventListener('click', ()=>{ state.selectedCat=parseInt(b.dataset.cat); render(); }));
+
+  const btnStartCat = document.getElementById('btnStartCat');
+  if (btnStartCat) btnStartCat.addEventListener('click', () => {
+    const pool = allQ.filter(q=>q.type===state.selectedCat);
+    resetQuizState();
+    state.quizQ = pickQuestions(pool, QUIZ_PER_SESSION);
+    state.difficulty = 'all';
+    state.phase = 'main';
+    state.screen = 'quiz';
+    render();
+  });
+
+
   // HOME back buttons
   const btnHS = document.getElementById('btnHomeFromSel');
   if (btnHS) btnHS.addEventListener('click', () => { state.screen='home'; render(); });
@@ -1163,75 +2346,68 @@ function attachEvents() {
       render();
     }));
 
-  // DD — HTML5 Drag & Drop + Touch
-  let ddDragLi = null; // το li index που σέρνεται
+  // DD — Drag & Drop + Touch (κλικ για κινητό)
+  let ddDragLi = null;
+  let ddTouchSelectedLi = null; // για κλικ σε κινητό
 
-  // Draggable items (Στήλη Α)
+  // Chips (Στήλη Α)
   document.querySelectorAll('[data-dd-li]').forEach(el => {
     const li = parseInt(el.dataset.ddLi);
+    if (el.classList.contains('used')) return;
 
     // Mouse drag
     el.addEventListener('dragstart', e => {
       ddDragLi = li;
+      ddTouchSelectedLi = null;
       el.classList.add('dragging');
       e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/plain', li);
+      e.dataTransfer.setData('text/plain', String(li));
     });
-    el.addEventListener('dragend', () => {
-      el.classList.remove('dragging');
-    });
+    el.addEventListener('dragend', () => el.classList.remove('dragging'));
 
-    // Touch drag
-    el.addEventListener('touchstart', e => {
-      ddDragLi = li;
-      el.classList.add('dragging');
-    }, {passive:true});
-    el.addEventListener('touchend', e => {
-      el.classList.remove('dragging');
-      const touch = e.changedTouches[0];
-      const target = document.elementFromPoint(touch.clientX, touch.clientY);
-      const slot = target?.closest('[data-dd-ri]');
-      if (slot && ddDragLi !== null) {
-        const ri = parseInt(slot.dataset.ddRi);
-        // Αφαίρεση παλιάς αντιστοίχισης αν υπάρχει
-        Object.keys(state.ddPairs).forEach(k => { if(state.ddPairs[k]===ri) delete state.ddPairs[k]; });
-        state.ddPairs[ddDragLi] = ri;
-        ddDragLi = null;
-        render();
+    // Touch/κλικ — πρώτο κλικ επιλέγει chip
+    el.addEventListener('click', () => {
+      if (state.answered) return;
+      if (ddTouchSelectedLi === li) {
+        ddTouchSelectedLi = null;
+        document.querySelectorAll('[data-dd-li]').forEach(c=>c.classList.remove('dragging'));
+      } else {
+        ddTouchSelectedLi = li;
+        document.querySelectorAll('[data-dd-li]').forEach(c=>c.classList.remove('dragging'));
+        el.classList.add('dragging');
       }
     });
   });
 
-  // Drop slots (Στήλη Β)
+  // Slots
   document.querySelectorAll('[data-dd-ri]').forEach(slot => {
     const ri = parseInt(slot.dataset.ddRi);
 
-    slot.addEventListener('dragover', e => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      slot.classList.add('over');
-    });
-    slot.addEventListener('dragleave', () => {
-      slot.classList.remove('over');
-    });
+    // Drag over/leave/drop
+    slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('over'); });
+    slot.addEventListener('dragleave', () => slot.classList.remove('over'));
     slot.addEventListener('drop', e => {
       e.preventDefault();
       slot.classList.remove('over');
       if (ddDragLi === null) return;
-      // Αφαίρεση παλιάς αντιστοίχισης αν υπάρχει
       Object.keys(state.ddPairs).forEach(k => { if(state.ddPairs[k]===ri) delete state.ddPairs[k]; });
       state.ddPairs[ddDragLi] = ri;
       ddDragLi = null;
       render();
     });
 
-    // Κλικ σε filled slot — αναίρεση
+    // Κλικ slot — αν έχει επιλεγεί chip → αντιστοίχιση | αν γεμάτο → αναίρεση
     slot.addEventListener('click', () => {
       if (state.answered) return;
-      const usedBy = Object.entries(state.ddPairs).find(([,v])=>v===ri);
-      if (usedBy) {
-        delete state.ddPairs[parseInt(usedBy[0])];
+      if (ddTouchSelectedLi !== null) {
+        Object.keys(state.ddPairs).forEach(k => { if(state.ddPairs[k]===ri) delete state.ddPairs[k]; });
+        state.ddPairs[ddTouchSelectedLi] = ri;
+        ddTouchSelectedLi = null;
+        document.querySelectorAll('[data-dd-li]').forEach(c=>c.classList.remove('dragging'));
         render();
+      } else {
+        const usedBy = Object.entries(state.ddPairs).find(([,v])=>v===ri);
+        if (usedBy) { delete state.ddPairs[parseInt(usedBy[0])]; render(); }
       }
     });
   });
