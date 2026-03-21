@@ -144,22 +144,22 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 /* DD */
 .dd-wrap{width:100%}
 .dd-hint{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:12px}
-.dd-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.dd-col-hdr{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:0 4px;margin-bottom:4px}
+.dd-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+.dd-col-hdr{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:0 4px;margin-bottom:6px}
 .dd-left-col,.dd-right-col{display:flex;flex-direction:column;gap:6px}
-.dd-item{padding:10px 13px;border:2px solid var(--border);border-radius:9px;font-size:.855rem;background:var(--white);cursor:pointer;font-family:inherit;color:var(--ink);text-align:left;transition:all .15s;min-height:42px;display:flex;align-items:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-.dd-item:hover:not(:disabled):not(.paired):not(.ok):not(.ko){border-color:#94a3b8;background:#f8f8ff}
-.dd-item.sel{border-color:var(--indigo);background:var(--indigo-l);font-weight:600}
-.dd-item.paired{border-color:var(--indigo);background:var(--indigo-l);cursor:default}
+/* Draggable items — Στήλη Α */
+.dd-item{padding:10px 13px;border:2px solid var(--border);border-radius:9px;font-size:.855rem;background:var(--white);cursor:grab;font-family:inherit;color:var(--ink);text-align:left;transition:all .15s;min-height:44px;display:flex;align-items:center;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+.dd-item:hover:not(.paired):not(.ok):not(.ko){border-color:var(--indigo);background:var(--indigo-l)}
+.dd-item.dragging{opacity:.4;cursor:grabbing}
+.dd-item.paired{border-color:var(--indigo);background:var(--indigo-l);cursor:grab;opacity:.6}
 .dd-item.ok{border-color:var(--green);background:var(--green-l);cursor:default;color:#065f46;font-weight:600}
 .dd-item.ko{border-color:var(--red);background:var(--red-l);cursor:default;color:#7f1d1d}
-.dd-slot{padding:10px 13px;border:2px dashed var(--border);border-radius:9px;font-size:.855rem;background:#fafafa;min-height:42px;display:flex;align-items:center;color:var(--muted);font-style:italic;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-.dd-slot.ready{border-color:var(--indigo);border-style:solid;background:var(--indigo-l);cursor:pointer}
-.dd-slot.ready:hover{background:#e0e7ff}
-.dd-slot.filled{border-color:var(--indigo);border-style:solid;background:var(--indigo-l);color:var(--ink);font-style:normal;font-weight:600;cursor:pointer}
-.dd-slot.filled:hover:not(.ok):not(.ko){background:#dde4ff}
-.dd-slot.ok{border-color:var(--green);border-style:solid;background:var(--green-l);color:#065f46;font-style:normal;font-weight:600;cursor:default}
-.dd-slot.ko{border-color:var(--red);border-style:solid;background:var(--red-l);color:#7f1d1d;font-style:normal;cursor:default}
+/* Drop slots — Στήλη Β */
+.dd-slot{padding:10px 13px;border:2px dashed var(--border);border-radius:9px;font-size:.855rem;background:#fafafa;min-height:44px;display:flex;align-items:center;color:var(--muted);font-style:italic;transition:all .15s;user-select:none;-webkit-user-select:none}
+.dd-slot.over{border-color:var(--indigo);background:var(--indigo-l);border-style:solid}
+.dd-slot.filled{border-color:var(--indigo);border-style:solid;background:var(--indigo-l);color:var(--ink);font-style:normal;font-weight:600}
+.dd-slot.ok{border-color:var(--green);border-style:solid;background:var(--green-l);color:#065f46;font-style:normal;font-weight:600}
+.dd-slot.ko{border-color:var(--red);border-style:solid;background:var(--red-l);color:#7f1d1d;font-style:normal}
 .dd-correct-show{margin-top:12px;padding:12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0}
 .dd-correct-show p{font-size:.78rem;color:#065f46;font-weight:600;margin-bottom:8px}
 .dd-correct-row{display:grid;grid-template-columns:1fr 20px 1fr;gap:4px;align-items:center;margin-bottom:4px;font-size:.83rem}
@@ -860,19 +860,16 @@ function renderExcerptGAP(q) {
 }
 
 function renderDD(q) {
-  // Αρχικοποίηση ανακατεμένης δεξιάς λίστας (σταθερή ανά ερώτηση)
   if (!q._shuffledRight) {
     q._shuffledRight = shuffle(q.rightItems.map((r,i)=>({r,i})));
   }
   const shuffledRight = q._shuffledRight;
-
   let html = '<div class="dd-wrap">';
 
   if (state.answered) {
-    // ── ΑΠΟΤΕΛΕΣΜΑ ──
     const correctPairs = parseCorrectDD(q.correct, q.leftItems, q.rightItems);
     html += '<div class="dd-cols">';
-    html += '<div><div class="dd-col-hdr">Αριστερά</div><div class="dd-left-col">';
+    html += '<div><div class="dd-col-hdr">Στήλη Α</div><div class="dd-left-col">';
     q.leftItems.forEach((l,li)=>{
       const myRi = state.ddPairs[li];
       const correctRi = correctPairs?.[li];
@@ -889,9 +886,7 @@ function renderDD(q) {
       html += `<div class="dd-slot ${isOk?'ok':'ko'}">${rText}</div>`;
     });
     html += '</div></div>';
-    html += '</div>'; // dd-cols
-
-    // Σωστές αντιστοιχίσεις αν υπάρχουν λάθη
+    html += '</div>';
     const allOk = q.leftItems.every((_,li)=>state.ddPairs[li]===correctPairs?.[li]);
     if (!allOk && correctPairs) {
       html += '<div class="dd-correct-show"><p>✅ Σωστές αντιστοιχίσεις:</p>';
@@ -901,54 +896,30 @@ function renderDD(q) {
       });
       html += '</div>';
     }
-
   } else {
-    // ── ΑΛΛΗΛΕΠΙΔΡΑΣΗ ──
-    // Βήμα 1: επίλεξε αριστερά  Βήμα 2: επίλεξε δεξιά slot
-    const selLeft = state.ddSelected; // "L0", "L1" κλπ ή null
-    const selLeftIdx = selLeft ? parseInt(selLeft.slice(1)) : null;
-
-    // Οδηγίες
-    if (selLeft === null) {
-      html += '<p class="dd-hint">👆 Επίλεξε ένα στοιχείο <strong>αριστερά</strong></p>';
-    } else {
-      html += `<p class="dd-hint" style="color:var(--indigo);font-style:normal">➡️ Τώρα επίλεξε το αντίστοιχο <strong>δεξιά</strong></p>`;
-    }
-
+    html += '<p class="dd-hint">🖱️ Σύρε κάθε στοιχείο από τη Στήλη Α στη σωστή θέση της Στήλης Β</p>';
     html += '<div class="dd-cols">';
 
-    // Αριστερή στήλη — σταθερά στοιχεία
-    html += '<div><div class="dd-col-hdr">Στήλη Α</div><div class="dd-left-col">';
+    // Στήλη Α — draggable items
+    html += '<div><div class="dd-col-hdr">Στήλη Α</div><div class="dd-left-col" id="ddLeftCol">';
     q.leftItems.forEach((l,li)=>{
       const paired = state.ddPairs[li] !== undefined;
-      const isSel = selLeftIdx === li;
-      let cls = 'dd-item';
-      if (paired) cls += ' paired';
-      else if (isSel) cls += ' sel';
-      html += `<button class="${cls}" data-dd-l="${li}" ${paired?'disabled':''}>${paired ? '✓ '+l : l}</button>`;
+      html += `<div class="dd-item ${paired?'paired':''}" draggable="true" data-dd-li="${li}">${l}</div>`;
     });
     html += '</div></div>';
 
-    // Δεξιά στήλη — slots αντιστοίχισης
+    // Στήλη Β — drop slots
     html += '<div><div class="dd-col-hdr">Στήλη Β</div><div class="dd-right-col">';
     shuffledRight.forEach(({r,i})=>{
       const usedByLeft = Object.entries(state.ddPairs).find(([,ri])=>ri===i);
-      if (usedByLeft) {
-        // Slot γεμάτο — δείχνει τιμή, κλικ για αναίρεση
-        const li = parseInt(usedByLeft[0]);
-        html += `<button class="dd-slot filled" data-dd-unpair="${li}" title="Κλικ για αναίρεση">↩ ${r}</button>`;
-      } else {
-        // Slot κενό — πάντα εμφανίζει την τιμή, ενεργό μόνο αν έχει επιλεγεί αριστερά
-        const isReady = selLeft !== null;
-        html += `<button class="dd-slot ${isReady?'ready':''}" data-dd-r="${i}" ${!isReady?'disabled':''}>${r}</button>`;
-      }
+      const isFilled = usedByLeft !== undefined;
+      html += `<div class="dd-slot ${isFilled?'filled':''}" data-dd-ri="${i}" data-dd-label="${r.replace(/"/g,'&quot;')}">${isFilled ? r : '— σύρε εδώ —'}</div>`;
     });
     html += '</div></div>';
-
-    html += '</div>'; // dd-cols
+    html += '</div>';
   }
 
-  html += '</div>'; // dd-wrap
+  html += '</div>';
   return html;
 }
 
@@ -1005,37 +976,78 @@ function attachEvents() {
       render();
     }));
 
-  // DD — αριστερά
-  document.querySelectorAll('[data-dd-l]').forEach(b =>
-    b.addEventListener('click', ()=>{
-      if (state.answered) return;
-      const li = parseInt(b.dataset.ddL);
-      state.ddSelected = state.ddSelected===`L${li}` ? null : `L${li}`;
-      render();
-    }));
+  // DD — HTML5 Drag & Drop + Touch
+  let ddDragLi = null; // το li index που σέρνεται
 
-  // DD — δεξιά (αντιστοίχιση)
-  document.querySelectorAll('[data-dd-r]').forEach(b =>
-    b.addEventListener('click', ()=>{
-      if (state.answered) return;
-      if (state.ddSelected && state.ddSelected.startsWith('L')) {
-        const li = parseInt(state.ddSelected.slice(1));
-        const ri = parseInt(b.dataset.ddR);
-        state.ddPairs[li] = ri;
-        state.ddSelected = null;
+  // Draggable items (Στήλη Α)
+  document.querySelectorAll('[data-dd-li]').forEach(el => {
+    const li = parseInt(el.dataset.ddLi);
+
+    // Mouse drag
+    el.addEventListener('dragstart', e => {
+      ddDragLi = li;
+      el.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', li);
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+    });
+
+    // Touch drag
+    el.addEventListener('touchstart', e => {
+      ddDragLi = li;
+      el.classList.add('dragging');
+    }, {passive:true});
+    el.addEventListener('touchend', e => {
+      el.classList.remove('dragging');
+      const touch = e.changedTouches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY);
+      const slot = target?.closest('[data-dd-ri]');
+      if (slot && ddDragLi !== null) {
+        const ri = parseInt(slot.dataset.ddRi);
+        // Αφαίρεση παλιάς αντιστοίχισης αν υπάρχει
+        Object.keys(state.ddPairs).forEach(k => { if(state.ddPairs[k]===ri) delete state.ddPairs[k]; });
+        state.ddPairs[ddDragLi] = ri;
+        ddDragLi = null;
         render();
       }
-    }));
+    });
+  });
 
-  // DD — αναίρεση (unpair)
-  document.querySelectorAll('[data-dd-unpair]').forEach(b =>
-    b.addEventListener('click', ()=>{
-      if (state.answered) return;
-      const li = parseInt(b.dataset.ddUnpair);
-      delete state.ddPairs[li];
-      state.ddSelected = null;
+  // Drop slots (Στήλη Β)
+  document.querySelectorAll('[data-dd-ri]').forEach(slot => {
+    const ri = parseInt(slot.dataset.ddRi);
+
+    slot.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      slot.classList.add('over');
+    });
+    slot.addEventListener('dragleave', () => {
+      slot.classList.remove('over');
+    });
+    slot.addEventListener('drop', e => {
+      e.preventDefault();
+      slot.classList.remove('over');
+      if (ddDragLi === null) return;
+      // Αφαίρεση παλιάς αντιστοίχισης αν υπάρχει
+      Object.keys(state.ddPairs).forEach(k => { if(state.ddPairs[k]===ri) delete state.ddPairs[k]; });
+      state.ddPairs[ddDragLi] = ri;
+      ddDragLi = null;
       render();
-    }));
+    });
+
+    // Κλικ σε filled slot — αναίρεση
+    slot.addEventListener('click', () => {
+      if (state.answered) return;
+      const usedBy = Object.entries(state.ddPairs).find(([,v])=>v===ri);
+      if (usedBy) {
+        delete state.ddPairs[parseInt(usedBy[0])];
+        render();
+      }
+    });
+  });
 
   // GAP
   const gapInp = document.getElementById('gapInp');
