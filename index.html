@@ -473,7 +473,11 @@ function parseCSV(csv) {
     obj.rightItems = [obj['Δεξιά 1'],   obj['Δεξιά 2'],   obj['Δεξιά 3'],   obj['Δεξιά 4']  ].filter(Boolean);
     obj.targets = obj['Λέξη-Στόχος'] ? obj['Λέξη-Στόχος'].split('|').map(t=>t.trim()).filter(Boolean) : [];
     obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
+    obj.gqDomi  = (obj['Δομή']||'').trim() || null;
+    obj.gqTropos = obj['Τρόπος'] ? obj['Τρόπος'].split(',').map(s=>s.trim()).filter(Boolean) : null;
     obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
+    obj.gqDomi  = (obj['Δομή']||'').trim() || null;
+    obj.gqTropos = obj['Τρόπος'] ? obj['Τρόπος'].split(',').map(s=>s.trim()).filter(Boolean) : null;
     obj.correct = (obj['Σωστή Απάντηση']||'').trim();
     obj.fb = [obj['Διόρθωση 1'],obj['Διόρθωση 2'],obj['Διόρθωση 3'],obj['Διόρθωση 4']];
     data.push(obj);
@@ -622,6 +626,9 @@ function render() {
     case 'results':     badge.textContent='Αποτελέσματα'; app.innerHTML=renderResults(); break;
     case 'retry':       badge.textContent='Ανατροφοδότηση'; app.innerHTML=renderRetry(); break;
     case 'done':        badge.textContent='Τέλος';        app.innerHTML=renderDone(); break;
+    case 'gq_select':   badge.textContent='Γρήγορο Quiz';  app.innerHTML=renderGQSelect(); break;
+    case 'gq_quiz':     badge.textContent=`⚡ ${gqState.idx+1}/${gqState.questions.length}`; app.innerHTML=renderGQQuiz(); break;
+    case 'gq_results':  badge.textContent='Αποτέλεσμα';   app.innerHTML=renderGQResults(); break;
   }
   attachEvents();
 }
@@ -662,6 +669,13 @@ function renderHome() {
         <p class="hc-title">Επίλεξε τύπο ερώτησης</p>
         <p class="hc-desc">Εξάσκηση σε συγκεκριμένο τύπο ερωτήσεων ανεξαρτήτως επιπέδου.</p>
         <span class="hc-arrow">Κατηγορίες →</span>
+      </button>
+
+      <button class="home-card c5" id="btnGQ">
+        <div class="hc-icon-wrap">⚡</div>
+        <p class="hc-title">Γρήγορο Quiz</p>
+        <p class="hc-desc">Εντόπισε τη δομή και τον τρόπο ανάπτυξης — άμεση απάντηση, χωρίς ανατροφοδότηση.</p>
+        <span class="hc-arrow">Γρήγορα →</span>
       </button>
 
     </div>
@@ -1313,6 +1327,106 @@ function attachEvents() {
   document.querySelectorAll('[data-retry-cat]').forEach(b => b.addEventListener('click', ()=> startRetry(parseInt(b.dataset.retryCat))));
   const btnNQ = document.getElementById('btnNewQuiz');
   if (btnNQ) btnNQ.addEventListener('click', () => { state.screen='home'; render(); });
+
+  // ══ ΓΡΗΓΟΡΟ QUIZ EVENTS ══
+  const btnGQ = document.getElementById('btnGQ');
+  if (btnGQ) btnGQ.addEventListener('click', () => { state.screen='gq_select'; render(); });
+
+  // Φίλτρα
+  document.querySelectorAll('[data-gq-domi]').forEach(b =>
+    b.addEventListener('click', () => { gqState.domiFilter=b.dataset.gqDomi; render(); }));
+  document.querySelectorAll('[data-gq-tropos]').forEach(b =>
+    b.addEventListener('click', () => { gqState.troposFilter=b.dataset.gqTropos; render(); }));
+  document.querySelectorAll('[data-gq-count]').forEach(b =>
+    b.addEventListener('click', () => {
+      const v = b.dataset.gqCount;
+      gqState.countFilter = v==='all'?'all':parseInt(v);
+      render();
+    }));
+
+  // Εκκίνηση
+  const btnGQStart = document.getElementById('btnGQStart');
+  if (btnGQStart) btnGQStart.addEventListener('click', () => {
+    const pool = shuffle(getGQFiltered());
+    const n = gqState.countFilter==='all' ? pool.length : Math.min(gqState.countFilter, pool.length);
+    gqState.questions = pool.slice(0, n);
+    gqState.idx = 0;
+    gqState.selDomi = null;
+    gqState.selTropoi = [];
+    gqState.answered = false;
+    gqState.score = 0;
+    gqState.wrong = 0;
+    state.screen = 'gq_quiz';
+    render();
+  });
+
+  // Επιλογή δομής
+  document.querySelectorAll('[data-gq-sel-domi]').forEach(b =>
+    b.addEventListener('click', () => {
+      if (gqState.answered) return;
+      gqState.selDomi = b.dataset.gqSelDomi;
+      gqCheckAndAdvance();
+    }));
+
+  // Επιλογή τρόπου
+  document.querySelectorAll('[data-gq-sel-tropos]').forEach(b =>
+    b.addEventListener('click', () => {
+      if (gqState.answered) return;
+      const t = b.dataset.gqSelTropos;
+      const q = gqState.questions[gqState.idx];
+      const needed = q.gqTropos.length;
+      const idx2 = gqState.selTropoi.indexOf(t);
+      if (idx2 !== -1) gqState.selTropoi.splice(idx2, 1);
+      else {
+        if (gqState.selTropoi.length < needed) gqState.selTropoi.push(t);
+        else gqState.selTropoi[needed-1] = t;
+      }
+      gqCheckAndAdvance();
+    }));
+
+  // Αποτελέσματα buttons
+  const btnGQAgain = document.getElementById('btnGQAgain');
+  if (btnGQAgain) btnGQAgain.addEventListener('click', () => {
+    const pool = shuffle(getGQFiltered());
+    const n = gqState.countFilter==='all' ? pool.length : Math.min(gqState.countFilter, pool.length);
+    gqState.questions = pool.slice(0, n);
+    gqState.idx = 0; gqState.selDomi=null; gqState.selTropoi=[];
+    gqState.answered=false; gqState.score=0; gqState.wrong=0;
+    state.screen='gq_quiz'; render();
+  });
+  const btnGQNewSel = document.getElementById('btnGQNewSel');
+  if (btnGQNewSel) btnGQNewSel.addEventListener('click', () => { state.screen='gq_select'; render(); });
+  const btnHomeGQ = document.getElementById('btnHomeFromGQ');
+  if (btnHomeGQ) btnHomeGQ.addEventListener('click', () => { state.screen='home'; render(); });
+  const btnHomeGQR = document.getElementById('btnHomeFromGQR');
+  if (btnHomeGQR) btnHomeGQR.addEventListener('click', () => { state.screen='home'; render(); });
+}
+
+function gqCheckAndAdvance() {
+  const q = gqState.questions[gqState.idx];
+  const needed = q.gqTropos.length;
+  // Ελέγχω αν έχουν επιλεγεί και δομή και τρόποι
+  if (!gqState.selDomi || gqState.selTropoi.length < needed) {
+    render(); return;
+  }
+  // Αξιολόγηση
+  gqState.answered = true;
+  const ok = checkGQAnswer(q);
+  if (ok) gqState.score++; else gqState.wrong++;
+  render();
+  // Αυτόματη μετάβαση σε 1.5 δευτερόλεπτα
+  if (gqState.autoTimer) clearTimeout(gqState.autoTimer);
+  gqState.autoTimer = setTimeout(() => {
+    if (gqState.idx < gqState.questions.length - 1) {
+      gqState.idx++;
+      gqState.selDomi = null;
+      gqState.selTropoi = [];
+      gqState.answered = false;
+    } else {
+      state.screen = 'gq_results';
+    }
+    render();
+  }, 1500);
 }
 
 // ══════════════════════════════════════════════
@@ -1379,6 +1493,150 @@ function startRetry(cat) {
   state.quizQ=retrySet; state.idx=0; state.answer=null; state.answered=false;
   state.phase='retry'; state.ddPairs={}; state.ddSelected=null; state.clkSelected=[];
   state.score=0; state.screen='retry'; render();
+}
+
+// ══════════════════════════════════════════════
+// ΓΡΗΓΟΡΟ QUIZ — STATE & HELPERS
+// ══════════════════════════════════════════════
+const GQ_TROPOI = ['Παραδείγματα','Αιτιολόγηση','Αίτιο-αποτέλεσμα','Διαίρεση','Σύγκριση-αντίθεση','Αναλογία','Ορισμός','Συνδυασμός μεθόδων'];
+
+let gqState = {
+  domiFilter: 'all',
+  troposFilter: 'all',
+  countFilter: 10,
+  questions: [],
+  idx: 0,
+  selDomi: null,
+  selTropoi: [],
+  answered: false,
+  score: 0,
+  wrong: 0,
+  autoTimer: null,
+};
+
+function getGQPool() {
+  return allQ.filter(q => q.gqDomi && q.gqTropos && q.gqTropos.length > 0 && q.excerpt);
+}
+
+function getGQFiltered() {
+  let pool = getGQPool();
+  if (gqState.domiFilter !== 'all') pool = pool.filter(q => q.gqDomi === gqState.domiFilter);
+  if (gqState.troposFilter !== 'all') {
+    if (gqState.troposFilter === 'syndyasmos') pool = pool.filter(q => q.gqTropos.length > 1);
+    else pool = pool.filter(q => q.gqTropos.includes(gqState.troposFilter));
+  }
+  return pool;
+}
+
+function checkGQAnswer(q) {
+  const domiOk = gqState.selDomi === q.gqDomi;
+  const tropoiOk = q.gqTropos.every(t => gqState.selTropoi.includes(t)) && gqState.selTropoi.length === q.gqTropos.length;
+  return domiOk && tropoiOk;
+}
+
+// ── RENDER GQ SELECT ──
+function renderGQSelect() {
+  const pool = getGQFiltered();
+  const cnt = pool.length;
+  const domiOpts = ['all','Διμερής','Τριμερής'];
+  const domiLabels = {'all':'Όλες','Διμερής':'Διμερής','Τριμερής':'Τριμερής'};
+  const troposOpts = ['all',...GQ_TROPOI,'syndyasmos'];
+  const troposLabels = {'all':'Όλοι','syndyasmos':'Συνδυασμός'};
+  GQ_TROPOI.forEach(t => troposLabels[t]=t);
+  const counts = [1,10,20,'all'];
+  const countLabels = {1:'1',10:'10',20:'20','all':'Όλες'};
+
+  return `<div class="card">
+    <p class="sel-title" style="color:#7c3aed">⚡ Γρήγορο Quiz</p>
+    <p class="sel-sub">Εντόπισε τη δομή και τον τρόπο ανάπτυξης</p>
+    <div class="gq-filter">
+      <label>Δομή</label>
+      <div class="gq-pills">${domiOpts.map(d=>`<button class="gq-pill ${gqState.domiFilter===d?'on':''}" data-gq-domi="${d}">${domiLabels[d]}</button>`).join('')}</div>
+    </div>
+    <div class="gq-filter">
+      <label>Τρόπος ανάπτυξης</label>
+      <div class="gq-pills">${troposOpts.map(t=>`<button class="gq-pill ${gqState.troposFilter===t?'on':''}" data-gq-tropos="${t}">${troposLabels[t]}</button>`).join('')}</div>
+    </div>
+    <div class="gq-filter">
+      <label>Αριθμός ερωτήσεων</label>
+      <div class="gq-pills">${counts.map(c=>`<button class="gq-pill ${gqState.countFilter===c?'on':''}" data-gq-count="${c}">${countLabels[c]}</button>`).join('')}</div>
+    </div>
+    <div class="gq-info ${cnt===0?'warn':''}">${cnt===0?'⚠️ Δεν υπάρχουν ερωτήσεις με αυτά τα φίλτρα':`✅ <strong>${cnt}</strong> ερωτήσεις διαθέσιμες`}</div>
+    <button class="btn-gq-start" id="btnGQStart" ${cnt===0?'disabled':''}>Ξεκίνα ⚡</button>
+    <button class="btn-sec" id="btnHomeFromGQ" style="margin-top:8px">↩ Αρχική</button>
+  </div>`;
+}
+
+// ── RENDER GQ QUIZ ──
+function renderGQQuiz() {
+  const q = gqState.questions[gqState.idx];
+  const prog = ((gqState.idx+1)/gqState.questions.length)*100;
+  const isMulti = q.gqTropos.length > 1;
+
+  let html = `<div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span class="ph main" style="background:#ede9fe;color:#7c3aed">⚡ Γρήγορο Quiz</span>
+      <span style="color:var(--muted);font-size:.83rem">${gqState.idx+1} / ${gqState.questions.length}</span>
+    </div>
+    <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:${prog}%;background:#7c3aed"></div></div></div>
+  </div>
+  <div class="card">
+    <p class="exc-lbl">Ερώτηση</p>
+    <p class="q-txt">Να εντοπίσεις τη δομή και τον τρόπο${isMulti?' / τρόπους':''} ανάπτυξης της παραγράφου.</p>
+    <div class="exc">${q.excerpt}</div>
+    <div class="gq-q-wrap">
+      <div>
+        <p class="gq-col-hdr">Δομή</p>
+        ${['Διμερής','Τριμερής'].map(d => {
+          let cls = 'gq-btn';
+          if (gqState.answered) {
+            if (d === q.gqDomi) cls += ' ok';
+            else if (d === gqState.selDomi && d !== q.gqDomi) cls += ' ko';
+          } else {
+            if (gqState.selDomi === d) cls += ' sel';
+          }
+          return `<button class="${cls}" data-gq-sel-domi="${d}" ${gqState.answered?'disabled':''}>${d}</button>`;
+        }).join('')}
+      </div>
+      <div>
+        <p class="gq-col-hdr">Τρόπος ανάπτυξης${isMulti?' <span style=\"font-size:.7rem;color:var(--muted)\">(επίλεξε '+q.gqTropos.length+')</span>':''}</p>
+        ${GQ_TROPOI.map(t => {
+          let cls = 'gq-btn';
+          if (gqState.answered) {
+            if (q.gqTropos.includes(t)) cls += ' ok';
+            else if (gqState.selTropoi.includes(t)) cls += ' ko';
+          } else {
+            if (gqState.selTropoi.includes(t)) cls += ' sel';
+          }
+          return `<button class="${cls}" data-gq-sel-tropos="${t}" ${gqState.answered?'disabled':''}>${t}</button>`;
+        }).join('')}
+      </div>
+    </div>
+  </div>`;
+  return html;
+}
+
+// ── RENDER GQ RESULTS ──
+function renderGQResults() {
+  const total = gqState.questions.length;
+  const pct = Math.round((gqState.score/total)*100);
+  const emoji = pct>=80?'🎉':pct>=60?'👍':'📚';
+  return `<div class="card" style="text-align:center;padding:28px 20px">
+    <div style="font-size:2.8rem;margin-bottom:10px">${emoji}</div>
+    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.4rem;margin-bottom:16px">Ολοκλήρωσες!</h2>
+    <div class="score-box" style="background:#ede9fe">
+      <p class="score-big" style="color:#7c3aed">${gqState.score} / ${total}</p>
+      <p class="score-pct">${pct}%</p>
+    </div>
+    <div class="gq-score">
+      <div class="gq-sc g"><p>Σωστές</p><p>${gqState.score}</p></div>
+      <div class="gq-sc r"><p>Λάθος</p><p>${gqState.wrong}</p></div>
+      <div class="gq-sc a"><p>Ποσοστό</p><p>${pct}%</p></div>
+    </div>
+    <button class="btn-gq-start" id="btnGQAgain" style="margin-bottom:8px">🔄 Ξανά</button>
+    <button class="btn-sec" id="btnGQNewSel">⚙️ Νέα επιλογή</button>
+    <button class="btn-sec" id="btnHomeFromGQR" style="margin-top:6px">↩ Αρχική</button>
+  </div>`;
 }
 
 // ══════════════════════════════════════════════
