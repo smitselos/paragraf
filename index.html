@@ -382,9 +382,12 @@ function getFiltered(diff) {
 
 function getDiagnosticQuestions() {
   // Ερωτήσεις με diagOrder !== null, ταξινομημένες κατά αριθμό
-  return allQ
+  const result = allQ
     .filter(q => q.diagOrder !== null && !isNaN(q.diagOrder))
     .sort((a,b) => a.diagOrder - b.diagOrder);
+  console.log('DEBUG diagQ:', result.length, result.map(q=>q.id+':'+q.diagOrder));
+  console.log('DEBUG allQ diagOrders:', allQ.map(q=>q.id+':'+JSON.stringify(q.diagOrder)));
+  return result;
 }
 
 function pickQuestions(pool, n) {
