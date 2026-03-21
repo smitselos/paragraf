@@ -155,11 +155,13 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .dd-item.ok{border-color:var(--green);background:var(--green-l);cursor:default;color:#065f46;font-weight:600}
 .dd-item.ko{border-color:var(--red);background:var(--red-l);cursor:default;color:#7f1d1d}
 /* Drop slots — Στήλη Β */
-.dd-slot{padding:10px 13px;border:2px dashed var(--border);border-radius:9px;font-size:.855rem;background:#fafafa;min-height:44px;display:flex;align-items:center;color:var(--muted);font-style:italic;transition:all .15s;user-select:none;-webkit-user-select:none}
+.dd-slot-row{display:flex;align-items:center;gap:10px}
+.dd-slot{padding:8px 12px;border:2px dashed var(--border);border-radius:9px;font-size:.82rem;background:#fafafa;min-height:40px;min-width:110px;max-width:140px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-style:italic;transition:all .15s;user-select:none;-webkit-user-select:none;text-align:center}
 .dd-slot.over{border-color:var(--indigo);background:var(--indigo-l);border-style:solid}
 .dd-slot.filled{border-color:var(--indigo);border-style:solid;background:var(--indigo-l);color:var(--ink);font-style:normal;font-weight:600}
 .dd-slot.ok{border-color:var(--green);border-style:solid;background:var(--green-l);color:#065f46;font-style:normal;font-weight:600}
 .dd-slot.ko{border-color:var(--red);border-style:solid;background:var(--red-l);color:#7f1d1d;font-style:normal}
+.dd-slot-label{font-size:.855rem;color:var(--ink2);flex:1}
 .dd-correct-show{margin-top:12px;padding:12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0}
 .dd-correct-show p{font-size:.78rem;color:#065f46;font-weight:600;margin-bottom:8px}
 .dd-correct-row{display:grid;grid-template-columns:1fr 20px 1fr;gap:4px;align-items:center;margin-bottom:4px;font-size:.83rem}
@@ -913,7 +915,11 @@ function renderDD(q) {
     shuffledRight.forEach(({r,i})=>{
       const usedByLeft = Object.entries(state.ddPairs).find(([,ri])=>ri===i);
       const isFilled = usedByLeft !== undefined;
-      html += `<div class="dd-slot ${isFilled?'filled':''}" data-dd-ri="${i}" data-dd-label="${r.replace(/"/g,'&quot;')}">${isFilled ? r : '— σύρε εδώ —'}</div>`;
+      const filledText = isFilled ? r : '— σύρε —';
+      html += `<div class="dd-slot-row">
+        <div class="dd-slot ${isFilled?'filled':''}" data-dd-ri="${i}" data-dd-label="${r.replace(/"/g,'&quot;')}">${filledText}</div>
+        <span class="dd-slot-label">${r}</span>
+      </div>`;
     });
     html += '</div></div>';
     html += '</div>';
