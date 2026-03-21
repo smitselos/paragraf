@@ -309,9 +309,7 @@ function parseCSVLine(line) {
 }
 
 function parseCSV(csv) {
-  const lines = csv.replace(/
-/g,'').split('
-').filter(l=>l.trim());
+  const lines = csv.replace(/\r/g,'').split('\n').filter(l=>l.trim());
   if (lines.length < 2) return [];
   const hdrs = parseCSVLine(lines[0]).map(h=>h.trim());
   const data = [];
