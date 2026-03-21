@@ -203,8 +203,12 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .btn-check:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
 .btn-next{width:100%;padding:13px;border:none;border-radius:var(--r);background:var(--green);color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px;transition:background .15s}
 .btn-next:hover{background:#047857}
-.btn-next.countdown{background:var(--green);position:relative;overflow:hidden;cursor:pointer}
-@keyframes cbfill{from{width:0%}to{width:100%}}
+.btn-next-wrap{position:relative;margin-top:10px}
+.btn-next-wrap .btn-next{width:100%;margin-top:0}
+.btn-progress{height:4px;background:#e2e2f0;border-radius:0 0 var(--r) var(--r);overflow:hidden;margin-top:0}
+.btn-progress-fill{height:100%;width:0%;background:#065f46;transition:none}
+
+to{width:100%}}
 .btn-sec{width:100%;padding:11px;border:2px solid var(--border);border-radius:var(--r);background:var(--white);color:var(--ink2);font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;transition:all .15s}
 .btn-sec:hover{border-color:#94a3b8}
 
@@ -522,6 +526,8 @@ function checkAnswer(q, answer) {
     const norm = s => s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
     const accepted = q.correct.split('|').map(s=>norm(s));
     const ans = norm(answer);
+    if (!ans) return false;
+    if (!ans) return false;
     return accepted.some(a => a===ans || a.includes(ans) || ans.includes(a));
   }
   if (q.type==='CLK') {
@@ -957,7 +963,7 @@ function canCheck(q) {
     if (q.type==='MC'||q.type==='YN') return state.answer!==null;
     if (q.type==='CLK') return state.clkSelected.length>0;
     if (q.type==='DD') return Object.keys(state.ddPairs).length===q.leftItems.length;
-    if (q.type==='GAP') return true;
+    if (q.type==='GAP') return !!(state.answer && state.answer.trim());
   }
   return false;
 }
