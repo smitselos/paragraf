@@ -262,6 +262,9 @@ to{width:100%}}
 .gq-btn.ok{border-color:var(--green);background:var(--green);color:#fff;font-weight:600}
 .gq-btn.ko{border-color:var(--red);background:var(--red);color:#fff;font-weight:600}
 @media(max-width:500px){.gq-q-wrap{grid-template-columns:1fr}}
+.home-card.c5{border-color:#e11d48;background:linear-gradient(135deg,#fff1f2,#fff)}
+.home-card.c5 .hc-icon-wrap{background:#ffe4e6;border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
+.home-card.c5 .hc-arrow{color:#e11d48}
 </style>
 </head>
 <body>
@@ -684,7 +687,7 @@ function renderHome() {
       <button class="home-card c5" id="btnGQ">
         <div class="hc-icon-wrap">⚡</div>
         <p class="hc-title">Γρήγορο Quiz</p>
-        <p class="hc-desc">Εντόπισε τη δομή και τον τρόπο ανάπτυξης — άμεση απάντηση, χωρίς ανατροφοδότηση.</p>
+        <p class="hc-desc">Για δυνατούς λύτες...</p>
         <span class="hc-arrow">Γρήγορα →</span>
       </button>
 
@@ -1424,8 +1427,22 @@ function gqCheckAndAdvance() {
   const ok = checkGQAnswer(q);
   if (ok) gqState.score++; else gqState.wrong++;
   render();
+  // Ήχος
+  try {
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    if (ok) { osc.frequency.setValueAtTime(880, ctx.currentTime); osc.frequency.setValueAtTime(1100, ctx.currentTime+0.1); }
+    else { osc.frequency.setValueAtTime(220, ctx.currentTime); osc.frequency.setValueAtTime(180, ctx.currentTime+0.15); }
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.4);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime+0.4);
+  } catch(e) {}
   // Αυτόματη μετάβαση σε 1.5 δευτερόλεπτα
   if (gqState.autoTimer) clearTimeout(gqState.autoTimer);
+  // Ήχος
+  try { playSound(ok ? 'correct' : 'wrong'); } catch(e) {}
   gqState.autoTimer = setTimeout(() => {
     if (gqState.idx < gqState.questions.length - 1) {
       gqState.idx++;
@@ -1436,7 +1453,7 @@ function gqCheckAndAdvance() {
       state.screen = 'gq_results';
     }
     render();
-  }, 1500);
+  }, 3000);
 }
 
 // ══════════════════════════════════════════════
@@ -1620,6 +1637,7 @@ function renderGQQuiz() {
     + '<span style="color:var(--muted);font-size:.83rem">' + (gqState.idx+1) + ' / ' + gqState.questions.length + '</span>'
     + '</div>'
     + '<div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:' + prog + '%;background:#7c3aed"></div></div></div>'
+    + (gqState.answered ? ('<div style="text-align:right;margin-top:8px"><span style="font-size:1.4rem;font-weight:700;color:' + (checkGQAnswer(gqState.questions[gqState.idx])?'var(--green)':'var(--red)') + '">' + (checkGQAnswer(gqState.questions[gqState.idx])?'✓':'✕') + '</span></div>') : '')
     + '</div>'
     + '<div class="card">'
     + '<p class="exc-lbl">Ερώτηση</p>'
@@ -1628,6 +1646,11 @@ function renderGQQuiz() {
     + '<div class="gq-q-wrap">'
     + '<div><p class="gq-col-hdr">Δομή</p>' + domiHtml + '</div>'
     + '<div><p class="gq-col-hdr">Τρόπος ανάπτυξης' + multiHint + '</p>' + troposHtml + '</div>'
+    + (gqState.answered ? (
+        checkGQAnswer(q)
+          ? '<div style="text-align:center;padding:10px 0"><span style="font-size:2rem">✅</span><p style="color:var(--green);font-weight:700;font-size:1.1rem">Σωστά!</p></div>'
+          : '<div style="text-align:center;padding:10px 0"><span style="font-size:2rem">❌</span><p style="color:var(--red);font-weight:700;font-size:1.1rem">Λάθος!</p></div>'
+      ) : '')
     + '</div>'
     + '</div>';
 }
