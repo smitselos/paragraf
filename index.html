@@ -254,14 +254,29 @@ to{width:100%}}
 }
 
 /* ══ ΓΡΗΓΟΡΟ QUIZ BUTTONS ══ */
-.gq-q-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-.gq-col-hdr{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;display:block}
-.gq-btn{width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:10px;background:var(--white);text-align:left;cursor:pointer;font-size:.9rem;font-family:inherit;color:var(--ink);transition:all .15s;margin-bottom:7px;display:block}
+.gq-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.gq-card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:18px;border:2px solid transparent;transition:all .3s}
+.gq-card.ok{border-color:var(--green);background:var(--green-l)}
+.gq-card.ko{border-color:var(--red);background:var(--red-l)}
+.gq-card h3{font-size:.95rem;font-weight:700;color:var(--ink);margin-bottom:12px}
+.gq-card-hint{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:10px}
+.gq-tropos-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gq-btn{width:100%;padding:11px 14px;border:2px solid var(--border);border-radius:10px;background:var(--white);text-align:center;cursor:pointer;font-size:.875rem;font-family:inherit;color:var(--ink);transition:all .15s;display:block;position:relative}
 .gq-btn:hover:not([disabled]){border-color:#7c3aed;background:#faf5ff}
 .gq-btn.sel{border-color:#7c3aed;background:#ede9fe;font-weight:600}
 .gq-btn.ok{border-color:var(--green);background:var(--green);color:#fff;font-weight:600}
 .gq-btn.ko{border-color:var(--red);background:var(--red);color:#fff;font-weight:600}
-@media(max-width:500px){.gq-q-wrap{grid-template-columns:1fr}}
+.gq-domi-btn{width:100%;padding:13px 14px;border:2px solid var(--border);border-radius:10px;background:var(--white);text-align:left;cursor:pointer;font-size:.9rem;font-family:inherit;color:var(--ink);transition:all .15s;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;position:relative}
+.gq-domi-btn:hover:not([disabled]){border-color:#7c3aed;background:#faf5ff}
+.gq-domi-btn.sel{border-color:#7c3aed;background:#ede9fe;font-weight:600}
+.gq-domi-btn.ok{border-color:var(--green);background:var(--green);color:#fff;font-weight:600}
+.gq-domi-btn.ko{border-color:var(--red);background:var(--red);color:#fff;font-weight:600}
+.gq-domi-hint{font-size:.75rem;opacity:.7}
+.gq-badge{position:absolute;top:6px;right:8px;font-size:.8rem;font-weight:700}
+.btn-gq-check{width:100%;padding:13px;border:none;border-radius:var(--r);background:#7c3aed;color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:14px;transition:background .15s}
+.btn-gq-check:hover{background:#6d28d9}
+.btn-gq-check:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
+@media(max-width:600px){.gq-cards{grid-template-columns:1fr}.gq-tropos-grid{grid-template-columns:1fr 1fr}}
 .home-card.c5{border-color:#e11d48;background:linear-gradient(135deg,#fff1f2,#fff)}
 .home-card.c5 .hc-icon-wrap{background:#ffe4e6;border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
 .home-card.c5 .hc-arrow{color:#e11d48}
@@ -1378,7 +1393,7 @@ function attachEvents() {
     b.addEventListener('click', () => {
       if (gqState.answered) return;
       gqState.selDomi = b.dataset.gqSelDomi;
-      gqCheckAndAdvance();
+      render();
     }));
 
   // Επιλογή τρόπου
@@ -1394,8 +1409,12 @@ function attachEvents() {
         if (gqState.selTropoi.length < needed) gqState.selTropoi.push(t);
         else gqState.selTropoi[needed-1] = t;
       }
-      gqCheckAndAdvance();
+      render();
     }));
+
+  // Έλεγχος κουμπί
+  const btnGQCheck = document.getElementById('btnGQCheck');
+  if (btnGQCheck) btnGQCheck.addEventListener('click', () => gqCheckAndAdvance());
 
   // Αποτελέσματα buttons
   const btnGQAgain = document.getElementById('btnGQAgain');
@@ -1600,11 +1619,12 @@ function renderGQQuiz() {
   const q = gqState.questions[gqState.idx];
   const prog = ((gqState.idx+1)/gqState.questions.length)*100;
   const isMulti = q.gqTropos.length > 1;
+  const canCheck = gqState.selDomi && gqState.selTropoi.length >= q.gqTropos.length;
 
   // Δομή κουμπιά
   let domiHtml = '';
-  ['Διμερής','Τριμερής'].forEach(d => {
-    let cls = 'gq-btn';
+  [['Τριμερής','με κατακλείδα'],['Διμερής','χωρίς κατακλείδα']].forEach(([d,hint]) => {
+    let cls = 'gq-domi-btn';
     if (gqState.answered) {
       if (d === q.gqDomi) cls += ' ok';
       else if (d === gqState.selDomi && d !== q.gqDomi) cls += ' ko';
@@ -1612,7 +1632,13 @@ function renderGQQuiz() {
       if (gqState.selDomi === d) cls += ' sel';
     }
     const dis = gqState.answered ? 'disabled' : '';
-    domiHtml += '<button class="' + cls + '" data-gq-sel-domi="' + d + '" ' + dis + '>' + d + '</button>';
+    let badge = '';
+    if (gqState.answered) {
+      if (d === q.gqDomi && d === gqState.selDomi) badge = '<span class="gq-badge">✓</span>';
+      else if (d === gqState.selDomi && d !== q.gqDomi) badge = '<span class="gq-badge">✗</span>';
+    }
+    domiHtml += '<button class="' + cls + '" data-gq-sel-domi="' + d + '" ' + dis + '>'
+      + d + '<span class="gq-domi-hint">(' + hint + ')</span>' + badge + '</button>';
   });
 
   // Τρόπος κουμπιά
@@ -1621,15 +1647,24 @@ function renderGQQuiz() {
     let cls = 'gq-btn';
     if (gqState.answered) {
       if (q.gqTropos.includes(t)) cls += ' ok';
-      else if (gqState.selTropoi.includes(t)) cls += ' ko';
+      else if (gqState.selTropoi.includes(t) && !q.gqTropos.includes(t)) cls += ' ko';
     } else {
       if (gqState.selTropoi.includes(t)) cls += ' sel';
     }
     const dis = gqState.answered ? 'disabled' : '';
-    troposHtml += '<button class="' + cls + '" data-gq-sel-tropos="' + t + '" ' + dis + '>' + t + '</button>';
+    let tbadge = '';
+    if (gqState.answered) {
+      if (q.gqTropos.includes(t) && gqState.selTropoi.includes(t)) tbadge = '<span class="gq-badge">✓</span>';
+      else if (gqState.selTropoi.includes(t) && !q.gqTropos.includes(t)) tbadge = '<span class="gq-badge">✗</span>';
+    }
+    troposHtml += '<button class="' + cls + '" data-gq-sel-tropos="' + t + '" ' + dis + '>' + t + tbadge + '</button>';
   });
 
-  const multiHint = isMulti ? ' <span style="font-size:.7rem;color:var(--muted)">(επίλεξε ' + q.gqTropos.length + ')</span>' : '';
+  const multiHint = isMulti
+    ? '<p class="gq-card-hint">💡 Επίλεξε με τη σειρά: 1ος = κύριος, 2ος = δευτερεύων (αν υπάρχει)</p>'
+    : '';
+
+  const feedbackHtml = '';
 
   return '<div class="card">'
     + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
@@ -1637,21 +1672,20 @@ function renderGQQuiz() {
     + '<span style="color:var(--muted);font-size:.83rem">' + (gqState.idx+1) + ' / ' + gqState.questions.length + '</span>'
     + '</div>'
     + '<div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:' + prog + '%;background:#7c3aed"></div></div></div>'
-    + (gqState.answered ? ('<div style="text-align:right;margin-top:8px"><span style="font-size:1.4rem;font-weight:700;color:' + (checkGQAnswer(gqState.questions[gqState.idx])?'var(--green)':'var(--red)') + '">' + (checkGQAnswer(gqState.questions[gqState.idx])?'✓':'✕') + '</span></div>') : '')
     + '</div>'
     + '<div class="card">'
     + '<p class="exc-lbl">Ερώτηση</p>'
     + '<p class="q-txt">Να εντοπίσεις τη δομή και τον τρόπο' + (isMulti?' / τρόπους':'') + ' ανάπτυξης της παραγράφου.</p>'
     + '<div class="exc">' + q.excerpt + '</div>'
-    + '<div class="gq-q-wrap">'
-    + '<div><p class="gq-col-hdr">Δομή</p>' + domiHtml + '</div>'
-    + '<div><p class="gq-col-hdr">Τρόπος ανάπτυξης' + multiHint + '</p>' + troposHtml + '</div>'
-    + (gqState.answered ? (
-        checkGQAnswer(q)
-          ? '<div style="text-align:center;padding:10px 0"><span style="font-size:2rem">✅</span><p style="color:var(--green);font-weight:700;font-size:1.1rem">Σωστά!</p></div>'
-          : '<div style="text-align:center;padding:10px 0"><span style="font-size:2rem">❌</span><p style="color:var(--red);font-weight:700;font-size:1.1rem">Λάθος!</p></div>'
-      ) : '')
+    + '<div class="gq-cards">'
+    + '<div class="gq-card ' + (gqState.answered ? (gqState.selDomi===q.gqDomi?'ok':'ko') : '') + '"><h3>1️⃣ Ποια είναι η δομή;</h3>' + domiHtml + '</div>'
+    + '<div class="gq-card ' + (gqState.answered ? (q.gqTropos.every(t=>gqState.selTropoi.includes(t))&&gqState.selTropoi.length===q.gqTropos.length?'ok':'ko') : '') + '"><h3>2️⃣ Ποιος είναι ο τρόπος ανάπτυξης;</h3>' + multiHint
+    + '<div class="gq-tropos-grid">' + troposHtml + '</div></div>'
     + '</div>'
+    + feedbackHtml
+    + (!gqState.answered
+        ? '<button class="btn-gq-check" id="btnGQCheck" ' + (canCheck?'':'disabled') + '>Έλεγχος Απάντησης</button>'
+        : '')
     + '</div>';
 }
 
