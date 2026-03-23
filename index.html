@@ -117,9 +117,9 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .ph.deep{background:var(--red-l);color:var(--red)}
 .ph.diag{background:var(--teal-l);color:var(--teal)}
 
-/* excerpt */
+/* excerpt — βελτιωμένο για κινητό */
 .exc-lbl{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--indigo);margin-bottom:8px}
-.exc{font-family:'IBM Plex Serif',serif;background:linear-gradient(135deg,#f8f8ff,#f0f0fa);border-left:3px solid var(--indigo);border-radius:0 8px 8px 0;padding:15px 18px;line-height:1.85;font-size:.96rem;color:var(--ink);text-align:justify;margin-bottom:0}
+.exc{font-family:'IBM Plex Serif',serif;background:linear-gradient(135deg,#f8f8ff,#f0f0fa);border-left:3px solid var(--indigo);border-radius:0 8px 8px 0;padding:15px 18px;line-height:1.9;font-size:1rem;color:var(--ink);text-align:justify;margin-bottom:0}
 .exc.clk{cursor:default}
 .tok{cursor:pointer;padding:1px 3px;border-radius:3px;transition:background .12s}
 .tok:hover{background:var(--indigo-l)}
@@ -152,8 +152,8 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .opt-badge{position:absolute;top:6px;right:8px;font-size:.8rem;font-weight:700;line-height:1}
 
 /* GAP */
-.exc-gap{font-family:'IBM Plex Serif',serif;background:linear-gradient(135deg,#f8f8ff,#f0f0fa);border-left:3px solid var(--indigo);border-radius:0 8px 8px 0;padding:15px 18px;line-height:2.1;font-size:.96rem;color:var(--ink);text-align:justify;margin-bottom:14px}
-.gap-inp{display:inline-block;border:none;border-bottom:2px solid var(--indigo);background:transparent;font-family:'IBM Plex Serif',serif;font-size:.96rem;color:var(--indigo);outline:none;min-width:120px;padding:0 4px;text-align:center}
+.exc-gap{font-family:'IBM Plex Serif',serif;background:linear-gradient(135deg,#f8f8ff,#f0f0fa);border-left:3px solid var(--indigo);border-radius:0 8px 8px 0;padding:15px 18px;line-height:2.2;font-size:1rem;color:var(--ink);text-align:justify;margin-bottom:14px}
+.gap-inp{display:inline-block;border:none;border-bottom:2px solid var(--indigo);background:transparent;font-family:'IBM Plex Serif',serif;font-size:1rem;color:var(--indigo);outline:none;min-width:120px;padding:0 4px;text-align:center}
 .gap-inp:disabled{color:var(--green);border-color:var(--green)}
 .gap-inp.ko{color:var(--red);border-color:var(--red)}
 
@@ -240,11 +240,15 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 @media(max-width:600px){
   .score-grid{grid-template-columns:1fr}
   .home-cards{grid-template-columns:1fr}
+  /* κινητό: ελαφρά μεγαλύτερο excerpt */
+  .exc{font-size:1.05rem;line-height:1.95;padding:14px 15px}
+  .exc-gap{font-size:1.05rem;line-height:2.3;padding:14px 15px}
+  .gap-inp{font-size:1.05rem}
 }
 
 /* ══ ΓΡΗΓΟΡΟ QUIZ ══ */
 .gq-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:0}
-.gq-card{background:#fafafa;border-radius:var(--r);padding:18px;border:2px solid var(--border);transition:all .3s}
+.gq-card{background:#f5f5f5;border-radius:var(--r);padding:18px;border:2px solid var(--border);transition:all .3s}
 .gq-card.answered-ok{border-color:var(--green);background:var(--green-l)}
 .gq-card.answered-ko{border-color:var(--red);background:var(--red-l)}
 .gq-card h3{font-size:.95rem;font-weight:700;color:var(--ink);margin-bottom:12px}
@@ -619,7 +623,6 @@ function renderHome() {
 // ══════════════════════════════════════════════
 // SHARED: QUESTION CARD + ANSWERS CARD BUILDER
 // ══════════════════════════════════════════════
-// Builds the QUESTION card (excerpt + question text)
 function buildQuestionCard(q, phaseLabel, phaseClass, idx, total, prog, extra) {
   const steps = extra && extra.steps ? extra.steps : '';
   const isTeal = extra && extra.teal;
@@ -635,7 +638,6 @@ function buildQuestionCard(q, phaseLabel, phaseClass, idx, total, prog, extra) {
     </div>
   </div>`;
 
-  // Theory toggle (not for diagnostic)
   if (extra && extra.showTheory !== undefined) {
     html += `<button class="theory-toggle" id="btnTheory">${state.showTheory?'▼':'▶'} Βοήθεια: Θεωρητικό Πλαίσιο</button>`;
     if (state.showTheory) {
@@ -659,7 +661,6 @@ function buildQuestionCard(q, phaseLabel, phaseClass, idx, total, prog, extra) {
     }
   }
 
-  // QUESTION card
   html += `<div class="card">`;
   if (q.excerpt) {
     html += `<p class="exc-lbl">Απόσπασμα κειμένου</p>`;
@@ -675,7 +676,6 @@ function buildQuestionCard(q, phaseLabel, phaseClass, idx, total, prog, extra) {
   return html;
 }
 
-// Builds the ANSWERS card
 function buildAnswersCard(q, isAnswered, isOk) {
   let cardClass = 'answers-card';
   if (isAnswered) cardClass += isOk ? ' answered-ok' : ' answered-ko';
@@ -685,7 +685,6 @@ function buildAnswersCard(q, isAnswered, isOk) {
   if (q.type==='MC' || q.type==='YN') html += renderMC(q);
   else if (q.type==='DD') html += renderDD(q);
   else if (q.type==='GAP') html += renderGAPInput(q);
-  // CLK has no separate answers card content (clicks happen in excerpt)
 
   if (isAnswered) {
     html += `<div class="fb ${isOk?'ok':'ko'}">
@@ -837,7 +836,6 @@ function renderRetry() {
 
   let html = buildQuestionCard(q, `Ανατροφοδότηση — ${CAT_NAMES[q.cat]||''}`, 'retry', state.idx, state.quizQ.length, prog, {});
 
-  // answers card with theory on wrong
   let cardClass = 'answers-card';
   if (state.answered) cardClass += isOk ? ' answered-ok' : ' answered-ko';
   html += `<div class="${cardClass}" id="answersCard">`;
@@ -944,7 +942,6 @@ function renderMC(q) {
       } else if (isSelected && !isCorrect) {
         cls += ' ko'; badge = '<span class="opt-badge">✕</span>';
       } else if (isCorrect && !answeredCorrectly) {
-        // Show correct answer in green (neutral) when user was wrong
         cls += ' neutral-ok';
       }
     } else {
@@ -959,8 +956,7 @@ function renderMC(q) {
 }
 
 function renderGAPInput(q) {
-  // GAP input rendered in answers card (not excerpt)
-  if (q.excerpt) return ''; // already shown in question card via renderExcerptGAP
+  if (q.excerpt) return '';
   return `<input class="gap-inp" id="gapInp" type="text" placeholder="Συμπλήρωσε…" style="width:100%;margin-top:4px" autocomplete="off" ${state.answered?'disabled':''}>`;
 }
 
@@ -1148,7 +1144,6 @@ function renderGQQuiz() {
   const domiResult = gqState.answered ? (gqState.selDomi === q.gqDomi) : null;
   const tropoiResult = gqState.answered ? (q.gqTropos.every(t=>gqState.selTropoi.includes(t)) && gqState.selTropoi.length===q.gqTropos.length) : null;
 
-  // Δομή κουμπιά
   let domiHtml = '';
   [['Τριμερής','με κατακλείδα'],['Διμερής','χωρίς κατακλείδα']].forEach(([d,hint]) => {
     let cls = 'gq-domi-btn';
@@ -1164,7 +1159,6 @@ function renderGQQuiz() {
     domiHtml += `<button class="${cls}" data-gq-sel-domi="${d}" ${dis}>${d}<span class="gq-domi-hint">(${hint})</span>${badge}</button>`;
   });
 
-  // Τρόπος κουμπιά
   let troposHtml = '';
   GQ_TROPOI.forEach(t => {
     let cls = 'gq-btn';
@@ -1183,7 +1177,6 @@ function renderGQQuiz() {
   });
 
   return `
-  <!-- Progress card -->
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
       <span class="ph main" style="background:#ede9fe;color:#7c3aed">⚡ Γρήγορο Quiz</span>
@@ -1192,22 +1185,18 @@ function renderGQQuiz() {
     <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:${prog}%;background:#7c3aed"></div></div></div>
   </div>
 
-  <!-- Κείμενο card -->
   <div class="card">
     <p class="exc-lbl">Απόσπασμα κειμένου</p>
     <div class="exc">${q.excerpt}</div>
     <p style="margin-top:14px;font-size:.875rem;font-weight:600;color:var(--ink)">Να εντοπίσεις τη δομή και τον τρόπο${isMulti?' / τρόπους':''} ανάπτυξης της παραγράφου.</p>
   </div>
 
-  <!-- Επιλογές card -->
   <div class="answers-card${gqState.answered ? (domiResult && tropoiResult ? ' answered-ok' : ' answered-ko') : ''}" id="answersCard">
     <div class="gq-cards">
-      <!-- Δομή -->
       <div class="gq-card${gqState.answered ? (domiResult ? ' answered-ok' : ' answered-ko') : ''}">
         <h3>1️⃣ Ποια είναι η δομή;</h3>
         ${domiHtml}
       </div>
-      <!-- Τρόπος -->
       <div class="gq-card${gqState.answered ? (tropoiResult ? ' answered-ok' : ' answered-ko') : ''}">
         <h3>2️⃣ Ποιος είναι ο τρόπος ανάπτυξης;</h3>
         ${isMulti ? '<p class="gq-card-hint">💡 Επίλεξε με τη σειρά: 1ος = κύριος, 2ος = δευτερεύων</p>' : ''}
@@ -1254,7 +1243,6 @@ function attachEvents() {
   const btnHdrHome = document.getElementById('btnHdrHome');
   if (btnHdrHome) btnHdrHome.addEventListener('click', () => { state.screen='home'; render(); });
 
-  // HOME
   const btnSL1 = document.getElementById('btnStartL1');
   if (btnSL1) btnSL1.addEventListener('click', () => startQuiz(1));
   const btnDiag = document.getElementById('btnDiag');
@@ -1266,7 +1254,6 @@ function attachEvents() {
   const btnGQ = document.getElementById('btnGQ');
   if (btnGQ) btnGQ.addEventListener('click', () => { state.screen='gq_select'; render(); });
 
-  // SELECTION
   document.querySelectorAll('[data-cat]').forEach(b => b.addEventListener('click', () => { state.selectedCat=b.dataset.cat; render(); }));
   const btnStartCat = document.getElementById('btnStartCat');
   if (btnStartCat) btnStartCat.addEventListener('click', () => {
@@ -1287,15 +1274,12 @@ function attachEvents() {
   const btnStart = document.getElementById('btnStart');
   if (btnStart) btnStart.addEventListener('click', () => startQuiz(state.difficulty));
 
-  // THEORY
   const btnTh = document.getElementById('btnTheory');
   if (btnTh) btnTh.addEventListener('click', () => { state.showTheory=!state.showTheory; render(); });
 
-  // MC/YN options
   document.querySelectorAll('[data-opt]').forEach(b =>
     b.addEventListener('click', () => { if(!state.answered){ state.answer=b.dataset.opt; render(); } }));
 
-  // CLK
   document.querySelectorAll('[data-word]').forEach(b =>
     b.addEventListener('click', () => {
       if (state.answered) return;
@@ -1311,7 +1295,6 @@ function attachEvents() {
       render();
     }));
 
-  // DD
   let _ddDrag = null, _ddChip = null;
   document.querySelectorAll('[data-dd-li]').forEach(el => {
     const li = parseInt(el.dataset.ddLi);
@@ -1348,7 +1331,6 @@ function attachEvents() {
     });
   });
 
-  // GAP input
   const gapInp = document.getElementById('gapInp');
   if (gapInp) {
     if (state.answer) gapInp.value = state.answer;
@@ -1356,18 +1338,15 @@ function attachEvents() {
     gapInp.addEventListener('keydown', e=>{ if(e.key==='Enter'&&state.answer) doCheck(); });
   }
 
-  // Check / Next
   const btnCheck = document.getElementById('btnCheck');
   if (btnCheck) btnCheck.addEventListener('click', doCheck);
   const btnNext = document.getElementById('btnNext');
   if (btnNext) btnNext.addEventListener('click', doNext);
 
-  // Retry
   document.querySelectorAll('[data-retry-cat]').forEach(b => b.addEventListener('click', ()=> startRetry(parseInt(b.dataset.retryCat))));
   const btnNQ = document.getElementById('btnNewQuiz');
   if (btnNQ) btnNQ.addEventListener('click', () => { state.screen='home'; render(); });
 
-  // GQ Filters
   document.querySelectorAll('[data-gq-domi]').forEach(b => b.addEventListener('click', () => { gqState.domiFilter=b.dataset.gqDomi; render(); }));
   document.querySelectorAll('[data-gq-tropos]').forEach(b => b.addEventListener('click', () => { gqState.troposFilter=b.dataset.gqTropos; render(); }));
   document.querySelectorAll('[data-gq-count]').forEach(b => b.addEventListener('click', () => {
