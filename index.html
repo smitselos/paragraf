@@ -117,7 +117,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .ph.deep{background:var(--red-l);color:var(--red)}
 .ph.diag{background:var(--teal-l);color:var(--teal)}
 
-/* excerpt — βελτιωμένο για κινητό */
+/* excerpt */
 .exc-lbl{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--indigo);margin-bottom:8px}
 .exc{font-family:'IBM Plex Serif',serif;background:linear-gradient(135deg,#f8f8ff,#f0f0fa);border-left:3px solid var(--indigo);border-radius:0 8px 8px 0;padding:15px 18px;line-height:1.9;font-size:1rem;color:var(--ink);text-align:justify;margin-bottom:0}
 .exc.clk{cursor:default}
@@ -200,7 +200,6 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .btn-check:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
 .btn-next{width:100%;padding:13px;border:none;border-radius:var(--r);background:var(--green);color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px;transition:background .15s}
 .btn-next:hover{background:#047857}
-
 .btn-sec{width:100%;padding:11px;border:2px solid var(--border);border-radius:var(--r);background:var(--white);color:var(--ink2);font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;transition:all .15s}
 .btn-sec:hover{border-color:#94a3b8}
 
@@ -240,7 +239,6 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 @media(max-width:600px){
   .score-grid{grid-template-columns:1fr}
   .home-cards{grid-template-columns:1fr}
-  /* κινητό: ελαφρά μεγαλύτερο excerpt */
   .exc{font-size:1.05rem;line-height:1.95;padding:14px 15px}
   .exc-gap{font-size:1.05rem;line-height:2.3;padding:14px 15px}
   .gap-inp{font-size:1.05rem}
@@ -960,6 +958,9 @@ function renderGAPInput(q) {
   return `<input class="gap-inp" id="gapInp" type="text" placeholder="Συμπλήρωσε…" style="width:100%;margin-top:4px" autocomplete="off" ${state.answered?'disabled':''}>`;
 }
 
+// ══════════════════════════════════════════════
+// CLK — ΔΙΟΡΘΩΜΕΝΗ ΕΚΔΟΣΗ
+// ══════════════════════════════════════════════
 function renderExcerptCLK(q) {
   const targets = q.targets.map(t=>t.trim().toLowerCase());
   const text = q.excerpt;
@@ -986,12 +987,12 @@ function renderExcerptCLK(q) {
     const isSelWord = !phraseTarget && state.clkSelected.some(s=>s.toLowerCase()===clean);
     const isSelected = isSelPhrase || isSelWord;
     let cls = 'tok';
-   if (state.answered) {
-  if (isAnyTarget && isSelected) cls += ' hit';
-  else if (!isAnyTarget && isSelected) cls += ' miss';
-  else if (isAnyTarget && !isSelected) cls += ' hit';
+    if (state.answered) {
+      if (isAnyTarget && isSelected) cls += ' hit';        // κλικαρισμένη + σωστή → πράσινο
+      else if (!isAnyTarget && isSelected) cls += ' miss'; // κλικαρισμένη + λάθος → κόκκινο
+      else if (isAnyTarget && !isSelected) cls += ' hit';  // σωστή αλλά άκλικαριστη → πράσινο
     } else {
-      if (isSelected) cls += ' sel';
+      if (isSelected) cls += ' sel';                       // πριν έλεγχο → μπλε
     }
     if (isAnyTarget || isSelected) {
       const dataAttr = phraseTarget
