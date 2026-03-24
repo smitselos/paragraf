@@ -986,9 +986,11 @@ function renderExcerptCLK(q) {
     const isSelWord = !phraseTarget && state.clkSelected.some(s=>s.toLowerCase()===clean);
     const isSelected = isSelPhrase || isSelWord;
     let cls = 'tok';
-    if (state.answered) {
-      if (isAnyTarget) cls += ' hit';
-      else if (isSelected) cls += ' miss';
+   if (state.answered) {
+  if (isAnyTarget && isSelected) cls += ' hit';
+  else if (!isAnyTarget && isSelected) cls += ' miss';
+  else if (isAnyTarget && !isSelected) cls += ' hit';
+}
     } else {
       if (isSelected) cls += ' sel';
     }
