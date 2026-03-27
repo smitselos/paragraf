@@ -544,6 +544,10 @@ function canCheckAdp(q) {
 // ADAPTIVE LOGIC
 // ══════════════════════════════════════════════
 function startAdaptive() {
+  if (!catOrder.length) {
+    alert('Δεν υπάρχουν ερωτήσεις με στήλη Βήμα στο sheet. Πρόσθεσε τιμές όπως 1.1, 1.2 κλπ.');
+    return;
+  }
   adp.catIdx=0; adp.catLog={}; adp.totalCorrect=0; adp.totalAnswered=0; adp.usedIds={};
   mainQueueLog={};
   startCatMain();
@@ -551,6 +555,7 @@ function startAdaptive() {
 
 function startCatMain() {
   const catKey = catOrder[adp.catIdx];
+  if (!catKey) { state.screen='adp_results'; render(); return; }
   if (!adp.usedIds[catKey]) adp.usedIds[catKey]=new Set();
   const qs = getQuestionsForCat(catKey, 3, [...adp.usedIds[catKey]]);
   if (!qs.length) { adp.catLog[catKey]='pass'; advanceToNextCat(); return; }
@@ -887,7 +892,7 @@ function parseCSV(csv) {
     obj.rightItems = [obj['Δεξιά 1'],   obj['Δεξιά 2'],   obj['Δεξιά 3'],   obj['Δεξιά 4']  ].filter(Boolean);
     obj.targets = obj['Λέξη-Στόχος'] ? obj['Λέξη-Στόχος'].split('|').map(t=>t.trim()).filter(Boolean) : [];
     obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
-    obj.catKey = parseCatKey(obj['Βήμα']);
+    obj.catKey = obj['Κατηγορία'] ? String(parseFloat(obj['Κατηγορία'])).replace(/\.0$/,'') : null;
     obj.gqDomi  = (obj['Δομή']||'').trim() || null;
     obj.gqTropos = obj['Τρόπος'] ? obj['Τρόπος'].split(',').map(s=>s.trim()).filter(Boolean) : null;
     obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
