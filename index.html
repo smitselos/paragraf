@@ -42,91 +42,73 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .spin{width:42px;height:42px;border:3px solid var(--border);border-top-color:var(--indigo);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 14px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ══ HOME SCREEN ══ */
+/* HOME */
 .home-title{font-family:'IBM Plex Serif',serif;font-size:1.6rem;font-weight:600;margin-bottom:6px}
 .home-sub{color:var(--muted);font-size:.9rem;margin-bottom:28px}
 .home-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:8px}
 .home-card{border-radius:var(--r);padding:24px 20px;cursor:pointer;border:2px solid transparent;transition:all .2s;text-align:left;font-family:inherit;background:var(--white);box-shadow:var(--sh)}
 .home-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(79,70,229,.13)}
-.home-card .hc-icon{font-size:2rem;margin-bottom:12px;display:block}
+.home-card .hc-icon-wrap{border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
 .home-card .hc-title{font-family:'IBM Plex Serif',serif;font-size:1.05rem;font-weight:600;margin-bottom:6px;color:var(--ink)}
 .home-card .hc-desc{font-size:.82rem;color:var(--muted);line-height:1.5}
+.home-card .hc-arrow{display:inline-block;margin-top:14px;font-size:.8rem;font-weight:600}
 .home-card.c1{border-color:var(--green);background:linear-gradient(135deg,#f0fdf4,#fff)}
-.home-card.c1 .hc-icon-wrap{background:var(--green-l);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
-.home-card.c2{border-color:var(--teal);background:linear-gradient(135deg,#f0f9ff,#fff)}
-.home-card.c2 .hc-icon-wrap{background:var(--teal-l);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
-.home-card.c3{border-color:var(--indigo);background:linear-gradient(135deg,var(--indigo-l),#fff)}
-.home-card.c3 .hc-icon-wrap{background:var(--indigo-l);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
-.home-card .hc-arrow{display:inline-block;margin-top:14px;font-size:.8rem;font-weight:600;color:var(--muted)}
+.home-card.c1 .hc-icon-wrap{background:var(--green-l)}
 .home-card.c1 .hc-arrow{color:var(--green)}
+.home-card.c2{border-color:var(--teal);background:linear-gradient(135deg,#f0f9ff,#fff)}
+.home-card.c2 .hc-icon-wrap{background:var(--teal-l)}
 .home-card.c2 .hc-arrow{color:var(--teal)}
+.home-card.c3{border-color:var(--indigo);background:linear-gradient(135deg,var(--indigo-l),#fff)}
+.home-card.c3 .hc-icon-wrap{background:var(--indigo-l)}
 .home-card.c3 .hc-arrow{color:var(--indigo)}
 .home-card.c4{border-color:var(--amber);background:linear-gradient(135deg,var(--amber-l),#fff)}
-.home-card.c4 .hc-icon-wrap{background:var(--amber-l);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
+.home-card.c4 .hc-icon-wrap{background:var(--amber-l)}
 .home-card.c4 .hc-arrow{color:var(--amber)}
-.home-card.c4{border-color:var(--amber);background:linear-gradient(135deg,var(--amber-l),#fff)}
-.home-card.c4 .hc-icon-wrap{background:var(--amber-l);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
-.home-card.c4 .hc-arrow{color:var(--amber)}
+.home-card.c5{border-color:#e11d48;background:linear-gradient(135deg,#fff1f2,#fff)}
+.home-card.c5 .hc-icon-wrap{background:#ffe4e6}
+.home-card.c5 .hc-arrow{color:#e11d48}
 
-/* ══ DIAGNOSTIC ══ */
+/* ══ ADAPTIVE LEARNING SCREEN ══ */
+.adp-header{background:linear-gradient(135deg,var(--indigo),var(--indigo-d));color:#fff;border-radius:var(--r);padding:20px 22px;margin-bottom:14px;box-shadow:var(--sh)}
+.adp-header h2{font-family:'IBM Plex Serif',serif;font-size:1.2rem;font-weight:600;margin-bottom:4px}
+.adp-header p{font-size:.82rem;opacity:.85}
 
-
-
-
-.diag-steps{display:flex;gap:6px;justify-content:center;margin:16px 0 4px;flex-wrap:wrap}
-.diag-step{width:28px;height:6px;border-radius:999px;background:var(--border);transition:background .3s}
-.diag-step.done{background:var(--teal)}
-.diag-step.active{background:var(--indigo)}
-
-/* diagnostic result */
-.diag-result{text-align:center;padding:16px 0}
-.diag-result .dr-icon{font-size:3rem;margin-bottom:12px}
-.diag-result h2{font-family:'IBM Plex Serif',serif;font-size:1.4rem;font-weight:600;margin-bottom:8px}
-.diag-result p{color:var(--muted);font-size:.9rem;margin-bottom:6px}
-.level-badge{display:inline-block;padding:8px 24px;border-radius:999px;font-size:1rem;font-weight:700;margin:10px 0 16px}
-.level-badge.l1{background:var(--amber-l);color:#92400e}
-.level-badge.l2{background:var(--indigo-l);color:var(--indigo-d)}
-.level-badge.l3{background:var(--green-l);color:#065f46}
-.score-diag{font-size:.875rem;color:var(--muted);margin-bottom:18px}
-
-/* selection */
-.sel-title{font-family:'IBM Plex Serif',serif;font-size:1.5rem;font-weight:600;margin-bottom:6px}
-.sel-sub{color:var(--muted);margin-bottom:22px;font-size:.9rem}
-.fg{margin-bottom:16px}
-.fg label{display:block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
-.pills{display:flex;flex-wrap:wrap;gap:8px}
-.pill{padding:7px 16px;border:2px solid var(--border);border-radius:999px;background:var(--white);cursor:pointer;font-size:.875rem;font-family:inherit;transition:all .15s;color:var(--ink2)}
-.pill:hover{border-color:#94a3b8}
-.pill.on{border-color:var(--indigo);background:var(--indigo);color:#fff;font-weight:600}
-.info{background:var(--indigo-l);border-radius:8px;padding:11px 15px;font-size:.875rem;color:var(--indigo-d);margin:14px 0;font-weight:500}
-.info.warn{background:var(--amber-l);color:#78350f}
-.btn-go{width:100%;padding:14px;border:none;border-radius:var(--r);background:var(--indigo);color:#fff;font-size:1rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:6px;transition:background .15s}
-.btn-go:hover{background:var(--indigo-d)}
-.btn-go:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
-.btn-go.green{background:var(--green)}
-.btn-go.green:hover{background:#047857}
-.btn-go.teal{background:var(--teal)}
-.btn-go.teal:hover{background:#0e7490}
-
-/* progress */
-.prog-wrap{margin-bottom:16px}
-
-
-
-.prog-bar{background:var(--border);border-radius:999px;height:5px;overflow:hidden}
-.prog-fill{background:var(--indigo);height:100%;transition:width .4s ease}
-.prog-fill.teal{background:var(--teal)}
+/* Category map */
+.cat-map{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.cat-node{display:flex;flex-direction:column;align-items:center;gap:4px}
+.cat-dot{width:38px;height:38px;border-radius:50%;border:3px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;background:var(--white);color:var(--muted);transition:all .3s;position:relative}
+.cat-dot.active{border-color:var(--indigo);background:var(--indigo);color:#fff;box-shadow:0 0 0 4px rgba(79,70,229,.2)}
+.cat-dot.done{border-color:var(--green);background:var(--green-l);color:#065f46}
+.cat-dot.failed{border-color:var(--amber);background:var(--amber-l);color:#78350f}
+.cat-dot.locked{background:#f1f1f8;color:#aaa}
+.cat-dot-lbl{font-size:.68rem;color:var(--muted);font-weight:600}
+.cat-arrow{color:var(--border);font-size:1.1rem;line-height:38px;margin-top:0}
 
 /* phase badge */
 .ph{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
 .ph.main{background:var(--indigo-l);color:var(--indigo)}
 .ph.retry{background:var(--amber-l);color:var(--amber)}
-.ph.deep{background:var(--red-l);color:var(--red)}
+.ph.fb{background:var(--red-l);color:var(--red)}
 .ph.diag{background:var(--teal-l);color:var(--teal)}
+.ph.done{background:var(--green-l);color:var(--green)}
+
+/* progress dots */
+.prog-dots{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.prog-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);background:var(--white);transition:all .2s;display:flex;align-items:center;justify-content:center;font-size:.6rem}
+.prog-dot.ok{background:var(--green);border-color:var(--green);color:#fff}
+.prog-dot.ko{background:var(--red);border-color:var(--red);color:#fff}
+.prog-dot.cur{border-color:var(--indigo);background:var(--indigo-l)}
+
+/* progress bar */
+.prog-wrap{margin-bottom:16px}
+.prog-bar{background:var(--border);border-radius:999px;height:5px;overflow:hidden}
+.prog-fill{background:var(--indigo);height:100%;transition:width .4s ease}
+.prog-fill.green{background:var(--green)}
+.prog-fill.amber{background:var(--amber)}
 
 /* excerpt */
 .exc-lbl{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--indigo);margin-bottom:8px}
-.exc{font-family:'IBM Plex Serif',serif;background:linear-gradient(135deg,#f8f8ff,#f0f0fa);border-left:3px solid var(--indigo);border-radius:0 8px 8px 0;padding:15px 18px;line-height:1.85;font-size:.96rem;color:var(--ink);text-align:justify;margin-bottom:16px}
+.exc{font-family:'IBM Plex Serif',serif;background:linear-gradient(135deg,#f8f8ff,#f0f0fa);border-left:3px solid var(--indigo);border-radius:0 8px 8px 0;padding:15px 18px;line-height:1.9;font-size:1rem;color:var(--ink);text-align:justify;margin-bottom:0}
 .exc.clk{cursor:default}
 .tok{cursor:pointer;padding:1px 3px;border-radius:3px;transition:background .12s}
 .tok:hover{background:var(--indigo-l)}
@@ -138,37 +120,39 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .q-lbl{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:6px}
 .q-txt{font-size:.98rem;font-weight:600;color:var(--ink);margin-bottom:14px;line-height:1.5}
 
-/* MC/YN options */
+/* answers card */
+.answers-card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:22px;margin-bottom:14px;border-top:3px solid var(--border);transition:border-color .3s}
+.answers-card.answered-ok{border-top-color:var(--green);background:linear-gradient(to bottom,#f0fdf4,var(--white))}
+.answers-card.answered-ko{border-top-color:var(--red);background:linear-gradient(to bottom,#fef2f2,var(--white))}
+
+/* MC/YN */
 .opts{display:flex;flex-direction:column;gap:7px}
-.opt{padding:11px 15px;border:2px solid var(--border);border-radius:10px;background:var(--white);text-align:left;cursor:pointer;font-size:.9rem;font-family:inherit;color:var(--ink);transition:all .15s;display:flex;align-items:center;gap:10px}
-.opt:hover:not(:disabled){border-color:#94a3b8}
+.opt{padding:11px 15px;border:2px solid var(--border);border-radius:10px;background:var(--white);text-align:left;cursor:pointer;font-size:.9rem;font-family:inherit;color:var(--ink);transition:all .2s;display:flex;align-items:center;gap:10px;position:relative}
+.opt:hover:not(:disabled){border-color:#94a3b8;transform:translateX(2px)}
 .opt.sel{border-color:var(--indigo);background:var(--indigo-l)}
-.opt.ok{border-color:var(--green);background:var(--green);color:#fff;font-weight:600}
-.opt.ko{border-color:var(--red);background:var(--red);color:#fff;font-weight:600}
+.opt.ok{border-color:var(--green);background:var(--green);color:#fff;font-weight:600;transform:none}
+.opt.ko{border-color:var(--red);background:var(--red);color:#fff;font-weight:600;transform:none}
+.opt.neutral-ok{border-color:var(--green);background:var(--green-l);color:#065f46;font-weight:600}
 .opt:disabled{cursor:default}
 .opt-k{min-width:22px;height:22px;border-radius:50%;background:var(--border);color:var(--ink2);font-size:.72rem;font-weight:700;text-align:center;line-height:22px;flex-shrink:0}
 .opt.ok .opt-k,.opt.ko .opt-k{background:rgba(255,255,255,.3);color:#fff}
-.opt{position:relative}
+.opt.neutral-ok .opt-k{background:rgba(5,150,105,.2);color:#065f46}
 .opt-badge{position:absolute;top:6px;right:8px;font-size:.8rem;font-weight:700;line-height:1}
-.opt.ok .opt-badge-ok{display:inline}
-.opt.ko .opt-badge-ko{display:inline}
 
 /* GAP */
-.exc-gap{font-family:'IBM Plex Serif',serif;background:linear-gradient(135deg,#f8f8ff,#f0f0fa);border-left:3px solid var(--indigo);border-radius:0 8px 8px 0;padding:15px 18px;line-height:2.1;font-size:.96rem;color:var(--ink);text-align:justify;margin-bottom:14px}
-.gap-inp{display:inline-block;border:none;border-bottom:2px solid var(--indigo);background:transparent;font-family:'IBM Plex Serif',serif;font-size:.96rem;color:var(--indigo);outline:none;min-width:120px;padding:0 4px;text-align:center}
+.exc-gap{font-family:'IBM Plex Serif',serif;background:linear-gradient(135deg,#f8f8ff,#f0f0fa);border-left:3px solid var(--indigo);border-radius:0 8px 8px 0;padding:15px 18px;line-height:2.2;font-size:1rem;color:var(--ink);text-align:justify;margin-bottom:14px}
+.gap-inp{display:inline-block;border:none;border-bottom:2px solid var(--indigo);background:transparent;font-family:'IBM Plex Serif',serif;font-size:1rem;color:var(--indigo);outline:none;min-width:120px;padding:0 4px;text-align:center}
 .gap-inp:disabled{color:var(--green);border-color:var(--green)}
 .gap-inp.ko{color:var(--red);border-color:var(--red)}
 
 /* DD */
 .dd-wrap{width:100%}
 .dd-hint{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:12px}
-/* Chips — Στήλη Α */
 .dd-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;min-height:44px;padding:10px;background:#f8f8ff;border-radius:10px;border:2px dashed var(--border)}
 .dd-chip{padding:8px 16px;border:2px solid var(--indigo);border-radius:999px;font-size:.875rem;background:var(--white);cursor:grab;font-family:inherit;color:var(--ink);user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;transition:all .15s;white-space:nowrap}
 .dd-chip:hover{background:var(--indigo-l)}
 .dd-chip.dragging{opacity:.4;cursor:grabbing}
 .dd-chip.used{opacity:.35;cursor:default;border-style:dashed}
-/* Slots */
 .dd-slots{display:flex;flex-direction:column;gap:8px}
 .dd-slot-row{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center}
 .dd-slot-lbl{font-size:.875rem;font-weight:600;color:var(--ink2);white-space:nowrap;min-width:100px}
@@ -178,106 +162,31 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .dd-slot.filled:hover{background:#dde4ff}
 .dd-slot.ok{border-color:var(--green);border-style:solid;background:var(--green-l);color:#065f46;font-style:normal;font-weight:600}
 .dd-slot.ko{border-color:var(--red);border-style:solid;background:var(--red-l);color:#7f1d1d;font-style:normal}
-/* Result */
 .dd-correct-show{margin-top:12px;padding:12px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0}
 .dd-correct-show p{font-size:.78rem;color:#065f46;font-weight:600;margin-bottom:8px}
 .dd-correct-row{display:grid;grid-template-columns:1fr 20px 1fr;gap:4px;align-items:center;margin-bottom:4px;font-size:.83rem}
 .dd-correct-row .dl{padding:6px 10px;background:var(--green-l);border-radius:6px;color:#065f46}
 .dd-correct-row .dr{padding:6px 10px;background:var(--green-l);border-radius:6px;color:#065f46}
 .dd-correct-row .da{text-align:center;color:var(--muted)}
-@media(max-width:480px){
-  .dd-slot-row{grid-template-columns:1fr}
-  .dd-slot-lbl{font-size:.8rem}
-}
+@media(max-width:480px){.dd-slot-row{grid-template-columns:1fr}.dd-slot-lbl{font-size:.8rem}}
 
 /* feedback */
-.fb{border-radius:var(--r);padding:14px 16px;margin-top:14px;font-size:.875rem;line-height:1.65}
-.fb.ok{background:var(--green-l);border-left:3px solid var(--green)}
-.fb.ko{background:var(--red-l);border-left:3px solid var(--red)}
+.fb-box{border-radius:var(--r);padding:14px 16px;margin-top:14px;font-size:.875rem;line-height:1.65}
+.fb-box.ok{background:var(--green-l);border-left:3px solid var(--green)}
+.fb-box.ko{background:var(--red-l);border-left:3px solid var(--red)}
 .fb-title{font-weight:700;margin-bottom:5px;font-size:.9rem}
-.fb.ok .fb-title{color:#065f46}
-.fb.ko .fb-title{color:#7f1d1d}
-.fb p{color:var(--ink2)}
+.fb-box.ok .fb-title{color:#065f46}
+.fb-box.ko .fb-title{color:#7f1d1d}
+.fb-box p{color:var(--ink2)}
 
-/* buttons */
-.btn-check{width:100%;padding:13px;border:none;border-radius:var(--r);background:var(--indigo);color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px;transition:background .15s}
-.btn-check:hover{background:var(--indigo-d)}
-.btn-check:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
-.btn-next{width:100%;padding:13px;border:none;border-radius:var(--r);background:var(--green);color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px;transition:background .15s}
-.btn-next:hover{background:#047857}
-
-
-
-
-
-to{width:100%}}
-.btn-sec{width:100%;padding:11px;border:2px solid var(--border);border-radius:var(--r);background:var(--white);color:var(--ink2);font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;transition:all .15s}
-.btn-sec:hover{border-color:#94a3b8}
-
-/* results */
-.res-top{text-align:center;padding:20px 0 14px}
-.res-emoji{font-size:3rem;margin-bottom:10px}
-.res-title{font-family:'IBM Plex Serif',serif;font-size:1.5rem;font-weight:600}
-.score-box{background:var(--indigo-l);border-radius:var(--r);padding:18px;text-align:center;margin:14px 0}
-.score-big{font-size:2.8rem;font-weight:700;color:var(--indigo);line-height:1}
-.score-pct{color:var(--muted);font-size:.95rem;margin-top:3px}
-.score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
-.sc{padding:12px;border-radius:10px;text-align:center}
-.sc p:first-child{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
-.sc p:last-child{font-size:1.3rem;font-weight:700}
-.sc.g{background:var(--green-l)} .sc.g p{color:#065f46}
-.sc.r{background:var(--red-l)} .sc.r p{color:#7f1d1d}
-.sc.a{background:var(--amber-l)} .sc.a p{color:#78350f}
-
-/* retry */
-.retry-title{font-family:'IBM Plex Serif',serif;font-size:1.05rem;font-weight:600;margin-bottom:10px}
-.retry-cat{background:var(--amber-l);border:1px solid #fcd34d;border-radius:10px;padding:13px 15px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.retry-cat-name{font-weight:600;color:#78350f;font-size:.875rem}
-.retry-cat-errors{font-size:.78rem;color:#92400e}
-.btn-retry{padding:7px 16px;border:none;border-radius:8px;background:var(--amber);color:#fff;font-size:.835rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
-.btn-retry:hover{background:#b45309}
-
-/* theory */
+/* theory box */
 .theory-box{background:var(--amber-l);border:1px solid #fcd34d;border-radius:var(--r);padding:14px 16px;margin-bottom:14px;font-size:.855rem}
 .theory-box h4{color:#92400e;margin-bottom:8px;font-size:.875rem}
 .theory-box ul{margin-left:16px;color:#78350f}
 .theory-box li{margin-bottom:3px}
-.theory-needed{background:var(--red-l);border:1px solid #fca5a5;border-radius:var(--r);padding:14px 16px;margin-top:10px}
-.theory-needed h4{color:#7f1d1d;margin-bottom:6px;font-size:.875rem;font-weight:700}
-.theory-needed p{color:#991b1b;font-size:.855rem}
 .theory-toggle{background:none;border:none;color:var(--indigo);cursor:pointer;font-size:.83rem;font-weight:500;padding:4px 0;margin-bottom:6px;font-family:inherit}
 
-@media(max-width:600px){
-  .score-grid{grid-template-columns:1fr}
-  
-  .home-cards{grid-template-columns:1fr}
-}
-
-/* ══ ADAPTIVE LEARNING ══ */
-.adp-header{background:linear-gradient(135deg,var(--indigo),var(--indigo-d));color:#fff;border-radius:var(--r);padding:20px 22px;margin-bottom:14px;box-shadow:var(--sh)}
-.adp-header h2{font-family:'IBM Plex Serif',serif;font-size:1.2rem;font-weight:600;margin-bottom:4px}
-.adp-header p{font-size:.82rem;opacity:.85}
-.cat-map{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;align-items:center}
-.cat-node{display:flex;flex-direction:column;align-items:center;gap:4px}
-.cat-dot{width:38px;height:38px;border-radius:50%;border:3px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;background:var(--white);color:var(--muted);transition:all .3s}
-.cat-dot.active{border-color:var(--indigo);background:var(--indigo);color:#fff;box-shadow:0 0 0 4px rgba(79,70,229,.2)}
-.cat-dot.done{border-color:var(--green);background:var(--green-l);color:#065f46}
-.cat-dot.failed{border-color:var(--amber);background:var(--amber-l);color:#78350f}
-.cat-dot.locked{background:#f1f1f8;color:#aaa}
-.cat-dot-lbl{font-size:.68rem;color:var(--muted);font-weight:600}
-.cat-arrow{color:var(--border);font-size:1.1rem;line-height:38px}
-.prog-dots{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
-.prog-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);background:var(--white);transition:all .2s;display:flex;align-items:center;justify-content:center;font-size:.6rem}
-.prog-dot.ok{background:var(--green);border-color:var(--green);color:#fff}
-.prog-dot.ko{background:var(--red);border-color:var(--red);color:#fff}
-.prog-dot.cur{border-color:var(--indigo);background:var(--indigo-l)}
-.answers-card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:22px;margin-bottom:14px;border-top:3px solid var(--border);transition:border-color .3s}
-.answers-card.answered-ok{border-top-color:var(--green);background:linear-gradient(to bottom,#f0fdf4,var(--white))}
-.answers-card.answered-ko{border-top-color:var(--red);background:linear-gradient(to bottom,#fef2f2,var(--white))}
-.opt{position:relative}
-.opt-badge{position:absolute;top:6px;right:8px;font-size:.8rem;font-weight:700;line-height:1}
-.opt.neutral-ok{border-color:var(--green);background:var(--green-l);color:#065f46;font-weight:600}
-.opt.neutral-ok .opt-k{background:rgba(5,150,105,.2);color:#065f46}
+/* theory needed */
 .theory-needed{background:var(--red-l);border:1px solid #fca5a5;border-radius:var(--r);padding:18px 20px;margin-top:14px}
 .theory-needed h4{color:#7f1d1d;margin-bottom:10px;font-size:1rem;font-weight:700}
 .theory-needed p{color:#991b1b;font-size:.875rem;margin-bottom:14px}
@@ -289,6 +198,37 @@ to{width:100%}}
 .tn-btn.retry:hover{background:#b45309}
 .tn-btn.skip{background:var(--indigo);color:#fff}
 .tn-btn.skip:hover{background:var(--indigo-d)}
+
+/* cat complete */
+.cat-complete{background:var(--green-l);border:2px solid var(--green);border-radius:var(--r);padding:18px 22px;margin-bottom:14px;text-align:center}
+.cat-complete h3{color:#065f46;font-family:'IBM Plex Serif',serif;font-size:1.1rem;margin-bottom:6px}
+.cat-complete p{color:#047857;font-size:.875rem}
+
+/* buttons */
+.btn-check{width:100%;padding:13px;border:none;border-radius:var(--r);background:var(--indigo);color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px;transition:background .15s}
+.btn-check:hover{background:var(--indigo-d)}
+.btn-check:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
+.btn-next{width:100%;padding:13px;border:none;border-radius:var(--r);background:var(--green);color:#fff;font-size:.98rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px;transition:background .15s}
+.btn-next:hover{background:#047857}
+.btn-sec{width:100%;padding:11px;border:2px solid var(--border);border-radius:var(--r);background:var(--white);color:var(--ink2);font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;transition:all .15s}
+.btn-sec:hover{border-color:#94a3b8}
+.btn-go{width:100%;padding:14px;border:none;border-radius:var(--r);background:var(--indigo);color:#fff;font-size:1rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:6px;transition:background .15s}
+.btn-go:hover{background:var(--indigo-d)}
+.btn-go:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
+
+/* final results */
+.score-box{background:var(--indigo-l);border-radius:var(--r);padding:18px;text-align:center;margin:14px 0}
+.score-big{font-size:2.8rem;font-weight:700;color:var(--indigo);line-height:1}
+.score-pct{color:var(--muted);font-size:.95rem;margin-top:3px}
+.score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.sc{padding:12px;border-radius:10px;text-align:center}
+.sc p:first-child{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.sc p:last-child{font-size:1.3rem;font-weight:700}
+.sc.g{background:var(--green-l)} .sc.g p{color:#065f46}
+.sc.r{background:var(--red-l)} .sc.r p{color:#7f1d1d}
+.sc.a{background:var(--amber-l)} .sc.a p{color:#78350f}
+
+/* cat summary row */
 .cat-summary-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:10px;margin-bottom:7px;font-size:.875rem}
 .cat-summary-row.pass{background:var(--green-l);border:1px solid #bbf7d0}
 .cat-summary-row.skip{background:var(--amber-l);border:1px solid #fcd34d}
@@ -298,9 +238,20 @@ to{width:100%}}
 .cat-summary-row .cs-badge{font-size:.75rem;padding:2px 8px;border-radius:999px;font-weight:700}
 .cat-summary-row.pass .cs-badge{background:#bbf7d0;color:#065f46}
 .cat-summary-row.skip .cs-badge{background:#fcd34d;color:#78350f}
-.ph.fb{background:var(--red-l);color:var(--red)}
-.ph.diag{background:var(--teal-l);color:var(--teal)}
-.ph.done{background:var(--green-l);color:var(--green)}
+
+/* info */
+.info{background:var(--indigo-l);border-radius:8px;padding:11px 15px;font-size:.875rem;color:var(--indigo-d);margin:14px 0;font-weight:500}
+.info.warn{background:var(--amber-l);color:#78350f}
+.info.success{background:var(--green-l);color:#065f46}
+
+@media(max-width:600px){
+  .score-grid{grid-template-columns:1fr}
+  .home-cards{grid-template-columns:1fr}
+  .exc{font-size:1.05rem;line-height:1.95;padding:14px 15px}
+  .exc-gap{font-size:1.05rem;line-height:2.3;padding:14px 15px}
+  .gap-inp{font-size:1.05rem}
+  .tn-choices{flex-direction:column}
+}
 </style>
 </head>
 <body>
@@ -318,14 +269,11 @@ to{width:100%}}
   </div>
   <div id="app"><div class="card loading"><div class="spin"></div><p style="color:var(--muted)">Φόρτωση ερωτήσεων…</p></div></div>
 </div>
-<footer style="text-align:center;margin-top:32px;padding:16px;font-size:.78rem;color:var(--muted);font-family:'IBM Plex Sans',sans-serif">
+<footer style="text-align:center;margin-top:32px;padding:16px;font-size:.78rem;color:var(--muted)">
   © Α &amp; Σ Μητσέλος, 2026
 </footer>
 
 <script>
-// ══════════════════════════════════════════════
-// CONFIG
-// ══════════════════════════════════════════════
 // ══════════════════════════════════════════════
 // AUDIO
 // ══════════════════════════════════════════════
@@ -336,520 +284,77 @@ function playSound(type) {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
+    osc.connect(gain); gain.connect(ctx.destination);
     if (type === 'correct') {
-      // Δύο νότες ανοδικές
-      osc.frequency.setValueAtTime(523, ctx.currentTime);       // C5
-      osc.frequency.setValueAtTime(659, ctx.currentTime + 0.12); // E5
+      osc.frequency.setValueAtTime(523, ctx.currentTime);
+      osc.frequency.setValueAtTime(659, ctx.currentTime + 0.12);
       gain.gain.setValueAtTime(0.3, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.4);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4);
     } else {
-      // Μία νότα κατεβατή
       osc.frequency.setValueAtTime(330, ctx.currentTime);
       osc.frequency.setValueAtTime(220, ctx.currentTime + 0.15);
       gain.gain.setValueAtTime(0.3, ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.35);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.35);
     }
   } catch(e) {}
 }
 
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRvQNTsoPcU08XK8mT56x6m-5T0zigqVnyB27VOeXpJnv8smyhKDQChQ9r55jBQN9pDCHB9Fs2W0SAi/pub?gid=1446071944&single=true&output=csv';
-const QUIZ_PER_SESSION = 10;
 
-// Ποσοστά διαγνωστικού
-const DIAG_THRESHOLDS = { high: 80, mid: 50 }; // >=80% → επ.3, >=50% → επ.2, <50% → επ.1
-
-const CAT_SHORT = {
-  1:['Τριμερής δομή: Θεματική περίοδος → Σχόλια → Κατακλείδα','Διμερής δομή: Θεματική περίοδος → Σχόλια (χωρίς κατακλείδα)','Κατακλείδα = τελευταία περίοδος ΜΟΝΟ αν αποτελεί συνολικό συμπέρασμα'],
-  2:'Αιτιολόγηση: ο συντάκτης παραθέτει επιχειρήματα/λογικούς συλλογισμούς για να αποδείξει μια θέση. Δείκτες: γιατί, διότι, επειδή, αφού, εφόσον, μιας και, καθώς κ.λπ.',
-  3:'Αίτιο-αποτέλεσμα: ο συντάκτης εξηγεί τις αιτίες εμφάνισης ενός φαινομένου ή τα αποτελέσματά του (αίτια → αποτελέσματα). Δείκτες: λόγω, εξαιτίας, με αποτέλεσμα, προκαλεί, οδηγεί σε κ.λπ.',
-  4:'Διαίρεση: ο συντάκτης διαιρεί μια έννοια στα επιμέρους μέρη/είδη της με βάση κάποιο κριτήριο (διαιρετική βάση). Δείκτες: διακρίνεται, διαιρείται, το πρώτο, το δεύτερο κ.λπ.',
-  5:'Σύγκριση-αντίθεση: ο συντάκτης συγκρίνει ή αντιπαραθέτει δύο όρους αναδεικνύοντας ομοιότητες και διαφορές. Δείκτες: παρόμοια, το ίδιο, ενώ, αντίθετα, ωστόσο, από τη μια… από την άλλη κ.λπ.',
-  6:'Ορισμός: ο συντάκτης προσδιορίζει επακριβώς μια έννοια (οριστέα = γένος + ειδοποιός διαφορά). Δείκτες: είναι, ορίζεται, καλείται, σημαίνει κ.λπ.',
-  7:'Παραδείγματα: ο συντάκτης παραθέτει συγκεκριμένες, αντιπροσωπευτικές περιπτώσεις που τεκμηριώνουν μια θέση ή βοηθούν στην κατανόησή της. Δείκτες: για παράδειγμα, λόγου χάρη, ενδεικτικά, όπως, π.χ. κ.λπ.',
-  8:'Αναλογία: ο συντάκτης παραλληλίζει δύο διαφορετικά φαινόμενα βοηθώντας τον αναγνώστη να κατανοήσει το ασαφές ή άγνωστο από αυτά. Δείκτες: όπως… έτσι και, μοιάζει, θυμίζει, σαν κ.λπ.',
-  9:'Συνδυασμός μεθόδων: χρησιμοποιούνται περισσότεροι τρόποι· διακρίνεται βασικός (κύρια πρόθεση) και δευτερεύων (συμπληρωματικός). Κάθε χωρίο → έναν μόνο τρόπο.'
-};
-
+// ══════════════════════════════════════════════
+// THEORY DATA
+// ══════════════════════════════════════════════
 const CAT_NAMES = {
-  1:'Δομή Παραγράφου',
-  2:'Αιτιολόγηση',
-  3:'Αίτιο-Αποτέλεσμα',
-  4:'Διαίρεση',
-  5:'Σύγκριση-Αντίθεση',
-  6:'Ορισμός',
-  7:'Παραδείγματα',
-  8:'Αναλογία',
-  9:'Συνδυασμός Μεθόδων'
+  1:'Δομή Παραγράφου', 2:'Αιτιολόγηση', 3:'Αίτιο-Αποτέλεσμα',
+  4:'Διαίρεση', 5:'Σύγκριση-Αντίθεση', 6:'Ορισμός',
+  7:'Παραδείγματα', 8:'Αναλογία', 9:'Συνδυασμός Μεθόδων'
 };
-
 const CAT_THEORY = {
-  // Δομή παραγράφου
-  1:[
-    '📌 Τριμερής: Θεματική περίοδος → Σχόλια-λεπτομέρειες → Κατακλείδα',
-    '📌 Διμερής: Θεματική περίοδος → Σχόλια (χωρίς κατακλείδα)',
-    '⚠️ Κατακλείδα = τελευταία περίοδος ΜΟΝΟ αν είναι συνολικό συμπέρασμα — αν προσθέτει νέο επιχείρημα ανήκει στα σχόλια'
-  ],
-  // Αιτιολόγηση
-  2:[
-    '📌 Θεματική περίοδος: διατυπώνει θέση/άποψη προς απόδειξη',
-    '📌 Σχόλια: επιχειρήματα που αποδεικνύουν τη θέση',
-    '🎯 Στόχος: πειθώ | Δείκτες: γιατί, διότι, επειδή, αφού, εφόσον',
-    '⚠️ Κριτήριο: η θέση αμφισβητείται → αιτιολόγηση (≠ αίτιο-αποτέλεσμα)'
-  ],
-  // Αίτιο-αποτέλεσμα
-  3:[
-    '📌 Θεματική περίοδος: παρουσιάζει φαινόμενο ως δεδομένο (δεν το αμφισβητεί)',
-    '📌 Σχόλια: αίτια που το προκαλούν ή αποτελέσματα που προκύπτουν',
-    '🎯 Στόχος: εξήγηση/ερμηνεία | Δείκτες: λόγω, εξαιτίας, με αποτέλεσμα, οδηγεί σε',
-    '⚠️ Κριτήριο: το φαινόμενο είναι δεδομένο → αίτιο-αποτέλεσμα (≠ αιτιολόγηση)'
-  ],
-  // Διαίρεση
-  4:[
-    '📌 Μία έννοια (διαιρετέα) χωρίζεται με κριτήριο (διαιρετική βάση) σε είδη/μέρη',
-    '📌 Τα είδη/μέρη παρουσιάζονται αναλυτικά',
-    '🎯 Στόχος: φωτισμός έννοιας σε όλες τις πτυχές της',
-    '⚠️ Κριτήριο: μία έννοια → διαίρεση | δύο έννοιες → σύγκριση-αντίθεση'
-  ],
-  // Σύγκριση-αντίθεση
-  5:[
-    '📌 Σύγκριση/αντίθεση δύο όρων του ίδιου είδους',
-    '🎯 Στόχος: ανάδειξη ομοιοτήτων ή/και διαφορών',
-    '🔍 Δείκτες: παρόμοια, το ίδιο, ενώ, αντίθετα, ωστόσο, από τη μια… από την άλλη',
-    '⚠️ Κριτήριο: δύο έννοιες → σύγκριση-αντίθεση | μία έννοια → διαίρεση'
-  ],
-  // Ορισμός
-  6:[
-    '📌 Προσδιορισμός έννοιας: Οριστέα = Γένος + Ειδοποιός διαφορά',
-    '🎯 Στόχος: οριοθέτηση/προσδιορισμός της έννοιας',
-    '🔍 Δείκτες: είναι, ορίζεται, καλείται, σημαίνει, εννοείται',
-    '⚠️ Επεξήγηση ορισμού ≠ δεύτερος τρόπος — δεύτερος τρόπος μόνο αν υπάρχει διαίρεση, παραδείγματα κ.λπ.'
-  ],
-  // Παραδείγματα
-  7:[
-    '📌 Παράθεση συγκεκριμένων, αντιπροσωπευτικών περιπτώσεων',
-    '🎯 Στόχος: τεκμηρίωση θέσης ή επεξήγηση αφηρημένης έννοιας',
-    '🔍 Δείκτες: για παράδειγμα, λόγου χάρη, ενδεικτικά, όπως, π.χ.',
-    '⚠️ Κριτήριο: ίδιο πεδίο → παραδείγματα | διαφορετικό πεδίο → αναλογία'
-  ],
-  // Αναλογία
-  8:[
-    '📌 Παραλληλισμός με έναν γνωστό όρο από διαφορετικό πεδίο',
-    '🎯 Στόχος: κατανόηση αφηρημένης/δύσκολης έννοιας μέσω παραλληλισμού',
-    '🔍 Δείκτες: όπως… έτσι και, μοιάζει, θυμίζει, σαν, λες και',
-    '⚠️ Κριτήριο: διαφορετικό πεδίο → αναλογία | ίδιο πεδίο → παραδείγματα'
-  ],
-  // Συνδυασμός μεθόδων
-  9:[
-    '📌 Χρήση δύο (σπάνια τριών) τρόπων ανάπτυξης στην ίδια παράγραφο',
-    '📌 Βασικός τρόπος: υπηρετεί την κύρια πρόθεση | Δευτερεύων: συμπληρωματικός',
-    '⚠️ Κάθε χωρίο ανήκει σε ΈΝΑΝ μόνο τρόπο — δεν επικαλύπτονται',
-    '⚠️ Η κατακλείδα δεν εξετάζεται στους τρόπους ανάπτυξης'
-  ]
+  1:['📌 Τριμερής: Θεματική περίοδος → Σχόλια-λεπτομέρειες → Κατακλείδα','📌 Διμερής: Θεματική περίοδος → Σχόλια (χωρίς κατακλείδα)','⚠️ Κατακλείδα = τελευταία περίοδος ΜΟΝΟ αν είναι συνολικό συμπέρασμα — αν προσθέτει νέο επιχείρημα ανήκει στα σχόλια'],
+  2:['📌 Θεματική περίοδος: διατυπώνει θέση/άποψη προς απόδειξη','📌 Σχόλια: επιχειρήματα που αποδεικνύουν τη θέση','🎯 Στόχος: πειθώ | Δείκτες: γιατί, διότι, επειδή, αφού, εφόσον','⚠️ Κριτήριο: στόχος η πειθώ → αιτιολόγηση (≠ αίτιο-αποτέλεσμα)'],
+  3:['📌 Θεματική περίοδος: παρουσιάζει φαινόμενο ως δεδομένο','📌 Σχόλια: αίτια ή αποτελέσματα του φαινομένου','🎯 Στόχος: εξήγηση/ερμηνεία | Δείκτες: λόγω, εξαιτίας, με αποτέλεσμα','⚠️ Το φαινόμενο είναι δεδομένο → αίτιο-αποτέλεσμα (≠ αιτιολόγηση)'],
+  4:['📌 Μία έννοια (διαιρετέα) χωρίζεται με κριτήριο σε είδη/μέρη','🎯 Στόχος: φωτισμός έννοιας σε όλες τις πτυχές της','⚠️ Μία έννοια → διαίρεση | Δύο έννοιες → σύγκριση-αντίθεση'],
+  5:['📌 Σύγκριση/αντίθεση δύο όρων του ίδιου είδους','🔍 Δείκτες: παρόμοια, ενώ, αντίθετα, ωστόσο','⚠️ Δύο έννοιες → σύγκριση | Μία → διαίρεση'],
+  6:['📌 Οριστέα = Γένος + Ειδοποιός διαφορά','🔍 Δείκτες: είναι, ορίζεται, καλείται, σημαίνει','⚠️ Επεξήγηση ορισμού ≠ δεύτερος τρόπος'],
+  7:['📌 Παράθεση συγκεκριμένων, αντιπροσωπευτικών περιπτώσεων','🔍 Δείκτες: για παράδειγμα, λόγου χάρη, π.χ.','⚠️ Ίδιο πεδίο → παραδείγματα | Διαφορετικό → αναλογία'],
+  8:['📌 Παραλληλισμός με γνωστό όρο από διαφορετικό πεδίο','🔍 Δείκτες: όπως… έτσι και, μοιάζει, σαν','⚠️ Διαφορετικό πεδίο → αναλογία | Ίδιο → παραδείγματα'],
+  9:['📌 Χρήση 2 τρόπων: Βασικός + Δευτερεύων','📌 Κάθε χωρίο ανήκει σε ΈΝΑΝ μόνο τρόπο','⚠️ Πάνω από 3 τρόπους δεν αναζητάμε']
 };
 
 // ══════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════
 let allQ = [];
-let state = {
-  screen: 'loading',      // loading | home | diagnostic | diag_result | selection | quiz | results | retry | done
-  difficulty: null,
-  quizQ: [],
-  idx: 0,
+let catsByKey = {}; // key "1.1" → [q,q,q,...]
+let catOrder = [];  // sorted keys ["1.1","1.2",...]
+
+// Adaptive Learning State
+let adp = {
+  catIdx: 0,           // index into catOrder
+  // per-round state
+  queue: [],           // current question queue
+  qIdx: 0,
   answer: null,
   answered: false,
-  phase: 'main',          // main | retry | diag
-  wrongByCat: {},
-  retryWrongByCat: {},
-  showTheory: false,
-  score: 0,
-  diagScore: 0,
-  diagTotal: 0,
-  diagLevel: null,        // 1 | 2 | 3 — αποτέλεσμα διαγνωστικού
-  ddSelected: null,
-  ddPairs: {},
-  clkSelected: [],
-  selectedCat: null,
-};
-
-
-// ══════════════════════════════════════════════
-// ADAPTIVE STATE
-// ══════════════════════════════════════════════
-let catsByKey = {};
-let catOrder = [];
-
-let adp = {
-  catIdx: 0,
-  queue: [], qIdx: 0,
-  answer: null, answered: false,
   ddPairs: {}, ddSelected: null, clkSelected: [],
   showTheory: false,
   _autoTimer: null,
-  roundResults: [],
+  // round tracking
+  roundResults: [],    // true/false per question in current round
+  // phase: 'main' | 'retry1' | 'retry2' | 'theory_wall'
   phase: 'main',
-  retry1WrongIdx: [],
-  catLog: {},
-  totalCorrect: 0, totalAnswered: 0,
-  usedIds: {},
+  retry1WrongIdx: [],  // indices of wrong answers from main round
+  retry2WrongIdx: [],  // indices of wrong in retry1
+  // global tracking
+  catLog: {},          // "1.1" → 'pass' | 'skip'
+  totalCorrect: 0,
+  totalAnswered: 0,
+  usedIds: {},         // catKey → Set of used question IDs
 };
-let mainQueueLog = {};
 
-function parseCatKey(raw) {
-  if (!raw) return null;
-  const s = String(raw).trim();
-  if (s.match(/^\d{4}[.\-\/]/)) return null;
-  const f = parseFloat(s);
-  if (!isNaN(f)) return String(Math.round(f * 10) / 10).replace(/\.0$/,'');
-  return s;
-}
-
-function getQuestionsForCat(catKey, n, excludeIds=[]) {
-  const pool = (catsByKey[catKey]||[]).filter(q => !excludeIds.includes(q.id));
-  return shuffle(pool).slice(0, n);
-}
-
-function getCatDisplayName(catKey) { return 'Βήμα ' + catKey; }
-
-function getCatTheoryName(catKey) {
-  return CAT_NAMES[parseInt(catKey)] || ('Θέμα ' + catKey);
-}
-
-function getTheoryKeysForCat(catKey) {
-  const n = parseInt(catKey.split('.')[0]);
-  return CAT_THEORY[n] ? [n] : [];
-}
-
-function canCheckAdp(q) {
-  if (adp.answered) return false;
-  if (q.type==='MC'||q.type==='YN') return adp.answer!==null;
-  if (q.type==='CLK') return adp.clkSelected.length>0;
-  if (q.type==='DD') {
-    const cp = parseCorrectDD(q.correct, q.leftItems, q.rightItems)||{};
-    const activeRights = Object.values(cp).map(Number);
-    if (activeRights.length===1) return adp.ddPairs['mc']!==undefined;
-    return Object.keys(adp.ddPairs).filter(k=>k!=='mc').length===Object.keys(cp).length;
-  }
-  if (q.type==='GAP') return !!(adp.answer && adp.answer.trim());
-  return false;
-}
-
-// ══════════════════════════════════════════════
-// ADAPTIVE LOGIC
-// ══════════════════════════════════════════════
-function startAdaptive() {
-  console.log('startAdaptive called, catOrder:', catOrder, 'allQ length:', allQ.length);
-  if (!catOrder.length) {
-    document.getElementById('app').innerHTML = '<div class="card" style="padding:30px;text-align:center"><p style="color:var(--red);font-size:1rem">⚠️ Δεν βρέθηκαν ερωτήσεις με τιμή στη στήλη <strong>Κατηγορία</strong>.<br>Έλεγξε ότι το sheet έχει δημοσιευτεί και ότι οι τιμές είναι σωστές.</p><button class="btn-sec" onclick="state.screen=\'home\';render()">↩ Αρχική</button></div>';
-    return;
-  }
-  adp.catIdx=0; adp.catLog={}; adp.totalCorrect=0; adp.totalAnswered=0; adp.usedIds={};
-  mainQueueLog={};
-  startCatMain();
-}
-
-function startCatMain() {
-  const catKey = catOrder[adp.catIdx];
-  console.log('startCatMain, catKey:', catKey, 'catIdx:', adp.catIdx);
-  if (!catKey) { state.screen='adp_results'; render(); return; }
-  if (!adp.usedIds[catKey]) adp.usedIds[catKey]=new Set();
-  const qs = getQuestionsForCat(catKey, 3, [...adp.usedIds[catKey]]);
-  if (!qs.length) { adp.catLog[catKey]='pass'; advanceToNextCat(); return; }
-  qs.forEach(q=>adp.usedIds[catKey].add(q.id));
-  mainQueueLog[catKey] = [...qs];
-  adp.queue=qs; adp.qIdx=0;
-  adp.answer=null; adp.answered=false;
-  adp.ddPairs={}; adp.ddSelected=null; adp.clkSelected=[];
-  adp.roundResults=[]; adp.phase='main'; adp.showTheory=false;
-  state.screen='adaptive'; render();
-}
-
-function startCatRetry1(wrongIdxs) {
-  const catKey = catOrder[adp.catIdx];
-  const extra = getQuestionsForCat(catKey, 2, [...adp.usedIds[catKey]]);
-  if (!extra.length) { adp.catLog[catKey]='skip'; state.screen='theory_wall'; render(); return; }
-  extra.forEach(q=>adp.usedIds[catKey].add(q.id));
-  adp.queue=extra; adp.qIdx=0;
-  adp.answer=null; adp.answered=false;
-  adp.ddPairs={}; adp.ddSelected=null; adp.clkSelected=[];
-  adp.roundResults=[]; adp.retry1WrongIdx=wrongIdxs;
-  adp.phase='retry1'; adp.showTheory=false;
-  state.screen='adaptive'; render();
-}
-
-function startCatRetry2(wrongQs) {
-  const catKey = catOrder[adp.catIdx];
-  const extra = getQuestionsForCat(catKey, 1, [...adp.usedIds[catKey]]);
-  extra.forEach(q=>adp.usedIds[catKey].add(q.id));
-  const queue = shuffle([...wrongQs,...extra]);
-  if (!queue.length) { adp.catLog[catKey]='skip'; state.screen='theory_wall'; render(); return; }
-  adp.queue=queue; adp.qIdx=0;
-  adp.answer=null; adp.answered=false;
-  adp.ddPairs={}; adp.ddSelected=null; adp.clkSelected=[];
-  adp.roundResults=[]; adp.phase='retry2'; adp.showTheory=false;
-  state.screen='adaptive'; render();
-}
-
-function finishRound() {
-  const catKey = catOrder[adp.catIdx];
-  const wrong = adp.roundResults.filter(b=>!b).length;
-  if (adp.phase==='main') {
-    if (wrong===0) { adp.catLog[catKey]='pass'; advanceToNextCat(); }
-    else { const wi=adp.roundResults.map((r,i)=>r?null:i).filter(i=>i!==null); startCatRetry1(wi); }
-  } else if (adp.phase==='retry1') {
-    const wrongQs = adp.roundResults.map((r,i)=>r?null:adp.queue[i]).filter(Boolean);
-    if (wrong===0) {
-      const origMain=(mainQueueLog[catKey]||[]).filter((_,i)=>adp.retry1WrongIdx.includes(i));
-      startCatRetry2(origMain);
-    } else {
-      startCatRetry2(wrongQs);
-    }
-  } else if (adp.phase==='retry2') {
-    if (wrong===0) { adp.catLog[catKey]='pass'; advanceToNextCat(); }
-    else { adp.catLog[catKey]='skip'; state.screen='theory_wall'; render(); }
-  }
-}
-
-function advanceToNextCat() {
-  if (adp.catIdx < catOrder.length-1) { adp.catIdx++; state.screen='cat_transition'; render(); }
-  else { state.screen='adp_results'; render(); }
-}
-
-// ══════════════════════════════════════════════
-// ADAPTIVE RENDERERS
-// ══════════════════════════════════════════════
-function renderCatMap() {
-  let html = '<div class="cat-map">';
-  catOrder.forEach((key,i)=>{
-    const status=adp.catLog[key]; const isActive=i===adp.catIdx;
-    let cls='cat-dot locked'; let icon=key;
-    if(status==='pass'){cls='cat-dot done';icon='✓';}
-    else if(status==='skip'){cls='cat-dot failed';icon='!';}
-    else if(isActive){cls='cat-dot active';icon=key;}
-    else if(i<adp.catIdx){cls='cat-dot done';icon='✓';}
-    html+=`<div class="cat-node"><div class="${cls}">${icon}</div><span class="cat-dot-lbl">${key}</span></div>`;
-    if(i<catOrder.length-1) html+=`<div class="cat-arrow" style="margin-bottom:14px">›</div>`;
-  });
-  html+='</div>'; return html;
-}
-
-function renderAdaptive() {
-  console.log('renderAdaptive called, catIdx:', adp.catIdx, 'queue:', adp.queue.length);
-  const catKey = catOrder[adp.catIdx];
-  const q = adp.queue[adp.qIdx];
-  if (!q) return '<div class="card"><p>Σφάλμα.</p></div>';
-  const totalInRound = adp.queue.length;
-  const isOk = adp.answered ? checkAnswer(q, adp.answer) : false;
-  let phaseLabel, phaseClass;
-  if(adp.phase==='main'){phaseLabel='Βήμα '+catKey;phaseClass='main';}
-  else if(adp.phase==='retry1'){phaseLabel='Ανατροφοδότηση — Βήμα '+catKey;phaseClass='retry';}
-  else{phaseLabel='Επανέλεγχος — Βήμα '+catKey;phaseClass='fb';}
-  let dots='';
-  for(let i=0;i<totalInRound;i++){
-    let cls='prog-dot';
-    if(i<adp.roundResults.length) cls+=adp.roundResults[i]?' ok':' ko';
-    else if(i===adp.qIdx) cls+=' cur';
-    const icon=i<adp.roundResults.length?(adp.roundResults[i]?'✓':'✕'):(i===adp.qIdx?'●':'');
-    dots+=`<div class="${cls}">${icon}</div>`;
-  }
-  let theoryHtml='';
-  if(adp.phase!=='main'){
-    theoryHtml=`<button class="theory-toggle" id="btnTheoryAdp">${adp.showTheory?'▼':'▶'} Βοήθεια: Θεωρητικό Πλαίσιο</button>`;
-    if(adp.showTheory){
-      const keys=getTheoryKeysForCat(catKey);
-      if(keys.length){
-        theoryHtml+='<div class="theory-box"><h4>📚 Θεωρητικό Πλαίσιο</h4><ul>';
-        keys.forEach(k=>{if(CAT_THEORY[k])CAT_THEORY[k].forEach(t=>{theoryHtml+=`<li>${t}</li>`;});});
-        theoryHtml+='</ul></div>';
-      }
-    }
-  }
-  let html=`
-  <div class="adp-header">
-    <h2>Βήμα-Βήμα</h2>
-    <p>Βήμα ${catKey} <span style='opacity:.7;font-size:.8rem'>(${adp.catIdx+1} / ${catOrder.length})</span></p>
-  </div>
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <span class="ph ${phaseClass}">${phaseLabel}</span>
-      <span style="color:var(--muted);font-size:.83rem">${adp.qIdx+1} / ${totalInRound}</span>
-    </div>
-    <div class="prog-dots">${dots}</div>
-    ${renderCatMap()}
-  </div>
-  ${theoryHtml}
-  <div class="card">
-    ${q.excerpt?`<p class="exc-lbl">Απόσπασμα κειμένου</p>${renderExcerptAdp(q)}`:''}
-    <p class="q-lbl" style="margin-top:${q.excerpt?'14px':'0'}">${qTypeLabel(q.type)}</p>
-    <p class="q-txt">${q.q}</p>
-    ${q.type==='CLK'?'<p style="font-size:.8rem;color:var(--muted);font-style:italic;margin-top:4px">Κάντε κλικ στις λέξεις/φράσεις στο απόσπασμα παραπάνω.</p>':''}
-  </div>`;
-  let cardClass='answers-card';
-  if(adp.answered) cardClass+=isOk?' answered-ok':' answered-ko';
-  html+=`<div class="${cardClass}" id="answersCardAdp">`;
-  if(q.type==='MC'||q.type==='YN') html+=renderMCAdp(q);
-  else if(q.type==='DD') html+=renderDDAdp(q);
-  else if(q.type==='GAP') html+=renderGAPInputAdp(q);
-  if(adp.answered){
-    html+=`<div class="fb ${isOk?'ok':'ko'}"><p class="fb-title">${isOk?'✅ Σωστά!':'❌ Λάθος'}</p>${!isOk?`<p>${getFeedback(q,adp.answer)||''}</p>`:''}</div>`;
-    const isLast=adp.qIdx===adp.queue.length-1;
-    const delay=isOk?2:4;
-    html+=`<button class="btn-next" id="btnNextAdp" style="opacity:.7;font-size:.85rem;padding:10px">
-      ${isLast?'Αξιολόγηση τώρα →':'Επόμενη τώρα →'}
-      <span style="font-size:.75rem;opacity:.7;margin-left:6px">(αυτόματα σε ${delay}″)</span>
-    </button>`;
-  } else {
-    html+=`<button class="btn-check" id="btnCheckAdp" ${canCheckAdp(q)?'':'disabled'}>Έλεγξε</button>`;
-  }
-  html+='</div>'; return html;
-}
-
-function renderExcerptAdp(q) {
-  // Reuse existing renderers with adp state swap
-  const savedState = {...state};
-  state.clkSelected = adp.clkSelected;
-  state.answered = adp.answered;
-  state.ddPairs = adp.ddPairs;
-  state.answer = adp.answer;
-  let html;
-  if(q.type==='CLK') html=renderExcerptCLK(q);
-  else if(q.type==='GAP') html=renderExcerptGAP(q);
-  else html=`<div class="exc">${q.excerpt}</div>`;
-  state.clkSelected=savedState.clkSelected;
-  state.answered=savedState.answered;
-  state.ddPairs=savedState.ddPairs;
-  state.answer=savedState.answer;
-  return html;
-}
-
-function renderMCAdp(q) {
-  const keys=['Α','Β','Γ','Δ'];
-  const vals=[q.optA,q.optB,q.optC,q.optD].filter(Boolean);
-  let html='<div class="opts">';
-  vals.forEach((v,i)=>{
-    const k=keys[i]; let cls='opt'; let badge='';
-    if(adp.answered){
-      const isCorrect=k===q.correct.trim().toUpperCase();
-      const isSelected=k===adp.answer;
-      const answeredCorrectly=adp.answer===q.correct.trim().toUpperCase();
-      if(isSelected&&isCorrect){cls+=' ok';badge='<span class="opt-badge">✓</span>';}
-      else if(isSelected&&!isCorrect){cls+=' ko';badge='<span class="opt-badge">✕</span>';}
-      else if(isCorrect&&!answeredCorrectly) cls+=' neutral-ok';
-    } else { if(adp.answer===k) cls+=' sel'; }
-    html+=`<button class="${cls}" data-adp-opt="${k}" ${adp.answered?'disabled':''}><span class="opt-k">${k}</span>${v}${badge}</button>`;
-  });
-  return html+'</div>';
-}
-
-function renderGAPInputAdp(q) {
-  if(q.excerpt) return '';
-  return `<input class="gap-inp" id="gapInpAdp" type="text" placeholder="Συμπλήρωσε…" style="width:100%;margin-top:4px" autocomplete="off" ${adp.answered?'disabled':''}>`;
-}
-
-function renderDDAdp(q) {
-  // Swap state temporarily
-  const saved={answered:state.answered,ddPairs:state.ddPairs,ddSelected:state.ddSelected};
-  state.answered=adp.answered; state.ddPairs=adp.ddPairs; state.ddSelected=adp.ddSelected;
-  const html=renderDD(q);
-  state.answered=saved.answered; state.ddPairs=saved.ddPairs; state.ddSelected=saved.ddSelected;
-  return html.replace(/data-dd-li=/g,'data-adp-dd-li=').replace(/data-dd-ri=/g,'data-adp-dd-ri=');
-}
-
-function renderCatTransition() {
-  const prevKey=catOrder[adp.catIdx-1];
-  const nextKey=catOrder[adp.catIdx];
-  return `<div class="card" style="text-align:center;padding:32px 22px">
-    <div style="font-size:2.5rem;margin-bottom:12px">✅</div>
-    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.3rem;margin-bottom:8px">Βήμα ${prevKey} ολοκληρώθηκε!</h2>
-    <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px">Μπράβο! Συνέχεια στο βήμα <strong>${nextKey}</strong>.</p>
-    ${renderCatMap()}
-    <button class="btn-go" id="btnNextCat" style="margin-top:16px">Συνέχεια στο Βήμα ${nextKey} →</button>
-    <button class="btn-sec" id="btnHomeFromAdp">↩ Αρχική</button>
-  </div>`;
-}
-
-function renderTheoryWall() {
-  const catKey=catOrder[adp.catIdx];
-  const theoryKeys=getTheoryKeysForCat(catKey);
-  let theoryItems='';
-  theoryKeys.forEach(k=>{
-    if(CAT_THEORY[k]){
-      theoryItems+=`<p style="font-weight:700;margin-bottom:6px;color:#7f1d1d">${CAT_NAMES[k]||''}</p>`;
-      theoryItems+='<ul>'+CAT_THEORY[k].map(t=>`<li>${t}</li>`).join('')+'</ul>';
-    }
-  });
-  return `<div class="card"><div class="theory-needed">
-    <h4>📖 Χρειάζεται να ξαναδείς τη θεωρία</h4>
-    <p>Φαίνεται ότι χρειάζεσαι επανάληψη στο <strong>${getCatDisplayName(catKey)}</strong>: <em>${getCatTheoryName(catKey)}</em></p>
-    ${theoryItems?`<div style="margin:10px 0 14px">${theoryItems}</div>`:''}
-    <p style="font-weight:600;margin-bottom:12px;color:#7f1d1d">Θέλεις να επαναλάβεις ή να συνεχίσεις στο επόμενο βήμα;</p>
-    <div class="tn-choices">
-      <button class="tn-btn retry" id="btnRetryAgain">🔄 Επανάληψη</button>
-      <button class="tn-btn skip" id="btnSkipToNext">${adp.catIdx<catOrder.length-1?'⏭ Επόμενο βήμα':'🏁 Ολοκλήρωση'}</button>
-    </div>
-  </div></div>`;
-}
-
-function renderAdpResults() {
-  const passed=Object.values(adp.catLog).filter(v=>v==='pass').length;
-  const skipped=Object.values(adp.catLog).filter(v=>v==='skip').length;
-  const total=catOrder.length;
-  const pct=Math.round((passed/total)*100);
-  const emoji=pct>=80?'🎉':pct>=60?'👍':'📚';
-  let catRows=catOrder.map(key=>{
-    const status=adp.catLog[key]||'incomplete';
-    const cls=status==='pass'?'pass':'skip';
-    const badge=status==='pass'?'✅ Επιτυχία':status==='skip'?'⚠️ Χρειάζεται μελέτη':'—';
-    return `<div class="cat-summary-row ${cls}"><span class="cs-name">${getCatDisplayName(key)}: ${getCatTheoryName(key)}</span><span class="cs-badge">${badge}</span></div>`;
-  }).join('');
-  return `<div class="card" style="text-align:center;padding:28px 22px">
-    <div style="font-size:2.8rem;margin-bottom:10px">${emoji}</div>
-    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.4rem;margin-bottom:16px">Ολοκλήρωσες το Βήμα-Βήμα!</h2>
-    <div class="score-box"><p class="score-big">${passed} / ${total}</p><p class="score-pct">κατηγορίες επιτυχία (${pct}%)</p></div>
-    <div class="score-grid" style="margin:14px 0">
-      <div class="sc g"><p>Επιτυχία</p><p>${passed}</p></div>
-      <div class="sc r"><p>Χρειάζεται μελέτη</p><p>${skipped}</p></div>
-      <div class="sc a"><p>Σύνολο</p><p>${total}</p></div>
-    </div>
-  </div>
-  <div class="card"><p style="font-weight:700;margin-bottom:12px">Ανά βήμα:</p>${catRows}</div>
-  <button class="btn-sec" id="btnNewAdp" style="margin-top:4px">🔄 Νέα προσπάθεια</button>
-  <button class="btn-sec" id="btnHomeFromRes2">↩ Αρχική</button>`;
-}
-
-// ══════════════════════════════════════════════
-// ADAPTIVE ACTIONS
-// ══════════════════════════════════════════════
-function doCheckAdp() {
-  const q=adp.queue[adp.qIdx];
-  if(q.type==='GAP'){const inp=document.getElementById('gapInpAdp');adp.answer=inp?inp.value.trim():adp.answer;}
-  if(q.type==='CLK') adp.answer=[...adp.clkSelected];
-  if(q.type==='DD') adp.answer={...adp.ddPairs};
-  adp.answered=true;
-  const ok=checkAnswer(q,adp.answer);
-  adp.roundResults.push(ok); adp.totalAnswered++;
-  if(ok) adp.totalCorrect++;
-  render(); playSound(ok?'correct':'wrong');
-  if(adp._autoTimer) clearTimeout(adp._autoTimer);
-  adp._autoTimer=setTimeout(()=>{if(adp.answered) doNextAdp();}, ok?2000:4000);
-}
-
-function doNextAdp() {
-  if(adp._autoTimer){clearTimeout(adp._autoTimer);adp._autoTimer=null;}
-  if(adp.qIdx<adp.queue.length-1){
-    adp.qIdx++; adp.answer=null; adp.answered=false;
-    adp.ddPairs={}; adp.ddSelected=null; adp.clkSelected=[];
-    render();
-  } else {
-    finishRound();
-  }
-}
+let screen = 'loading';
 
 // ══════════════════════════════════════════════
 // CSV PARSING
@@ -865,6 +370,14 @@ function parseCSVLine(line) {
   res.push(cur.trim()); return res;
 }
 
+function parseCatKey(raw) {
+  if (!raw) return null;
+  // Handle date-like strings "2026-01-01" or datetime objects serialized as strings
+  const m = String(raw).match(/(\d{4})[.\-\/](\d{1,2})[.\-\/](\d{1,2})/);
+  if (m) return `${parseInt(m[2])}.${parseInt(m[3])}`;
+  return String(raw).trim();
+}
+
 function parseCSV(csv) {
   const lines = csv.replace(/\r/g,'').split('\n').filter(l=>l.trim());
   if (lines.length < 2) return [];
@@ -878,12 +391,10 @@ function parseCSV(csv) {
       obj[h] = (v===''||v.toLowerCase()==='null'||v.toLowerCase()==='false') ? null : v;
     });
     if (!obj['Ενεργό'] || obj['Ενεργό'].toUpperCase()==='FALSE') continue;
-    if (!obj['Τύπος'] || !obj['Κείμενο Ερώτησης']) continue;
-    obj.cat = parseInt(obj['Κατηγορία']) || 0;
-    obj.catKey = obj['Κατηγορία'] ? String(obj['Κατηγορία']).trim().replace(/\.0$/,'') : null;
+    if (!obj['Τύπος'] || !obj['Κατηγορία'] || !obj['Κείμενο Ερώτησης']) continue;
+    obj.catKey = parseCatKey(obj['Κατηγορία']);
     obj.diff = parseInt(obj['Δυσκολία']) || 1;
-    const diagRaw = (obj['Διαγνωστική']||'').toString().trim(); const diagNum = parseFloat(diagRaw); obj.diagOrder = (!diagRaw || isNaN(diagNum)) ? null : Math.round(diagNum);
-    obj.quizId = obj['Quiz_ID'];
+    obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
     obj.id = obj['ID'];
     obj.type = obj['Τύπος'].trim().toUpperCase();
     obj.q = obj['Κείμενο Ερώτησης'];
@@ -893,15 +404,8 @@ function parseCSV(csv) {
     obj.optC = obj['Επιλογή Γ'] || null;
     obj.optD = obj['Επιλογή Δ'] || null;
     obj.leftItems  = [obj['Αριστερά 1'],obj['Αριστερά 2'],obj['Αριστερά 3'],obj['Αριστερά 4']].filter(Boolean);
-    obj.rightItems = [obj['Δεξιά 1'],   obj['Δεξιά 2'],   obj['Δεξιά 3'],   obj['Δεξιά 4']  ].filter(Boolean);
+    obj.rightItems = [obj['Δεξιά 1'],obj['Δεξιά 2'],obj['Δεξιά 3'],obj['Δεξιά 4']].filter(Boolean);
     obj.targets = obj['Λέξη-Στόχος'] ? obj['Λέξη-Στόχος'].split('|').map(t=>t.trim()).filter(Boolean) : [];
-    obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
-    obj.catKey = obj['Κατηγορία'] ? String(parseFloat(obj['Κατηγορία'])).replace(/\.0$/,'') : null;
-    obj.gqDomi  = (obj['Δομή']||'').trim() || null;
-    obj.gqTropos = obj['Τρόπος'] ? obj['Τρόπος'].split(',').map(s=>s.trim()).filter(Boolean) : null;
-    obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
-    obj.gqDomi  = (obj['Δομή']||'').trim() || null;
-    obj.gqTropos = obj['Τρόπος'] ? obj['Τρόπος'].split(',').map(s=>s.trim()).filter(Boolean) : null;
     obj.correct = (obj['Σωστή Απάντηση']||'').trim();
     obj.fb = [obj['Διόρθωση 1'],obj['Διόρθωση 2'],obj['Διόρθωση 3'],obj['Διόρθωση 4']];
     data.push(obj);
@@ -919,20 +423,22 @@ async function loadData() {
     const csv = await r.text();
     allQ = parseCSV(csv);
     if (!allQ.length) throw new Error('Δεν βρέθηκαν ερωτήσεις');
-    // Build catsByKey for adaptive learning
+
+    // Build catsByKey
     catsByKey = {};
     allQ.forEach(q => {
       if (!q.catKey) return;
       if (!catsByKey[q.catKey]) catsByKey[q.catKey] = [];
       catsByKey[q.catKey].push(q);
     });
+    // Sort categories numerically
     catOrder = Object.keys(catsByKey).sort((a,b) => {
-      const [a1,a2=[0]] = a.split('.').map(Number);
-      const [b1,b2=[0]] = b.split('.').map(Number);
+      const [a1,a2] = a.split('.').map(Number);
+      const [b1,b2] = b.split('.').map(Number);
       return a1!==b1 ? a1-b1 : a2-b2;
     });
 
-    state.screen = 'home';
+    screen = 'home';
   } catch(e) {
     document.getElementById('app').innerHTML = `
       <div class="card" style="text-align:center;padding:40px">
@@ -954,55 +460,31 @@ function shuffle(arr) {
   return a;
 }
 
-function getFiltered(diff) {
-  return allQ.filter(q => diff==='all' || q.diff===parseInt(diff));
+function getTheoryKeysForCat(catKey) {
+  // catKey like "1.1", "2.2" — first number maps to CAT_NAMES
+  const n = parseInt(catKey.split('.')[0]);
+  return CAT_THEORY[n] ? [n] : [];
 }
 
-function getDiagnosticQuestions() {
-  // Ερωτήσεις με diagOrder !== null, ταξινομημένες κατά αριθμό
-  return allQ
-    .filter(q => q.diagOrder !== null && !isNaN(q.diagOrder))
-    .sort((a,b) => a.diagOrder - b.diagOrder);
+function getCatDisplayName(catKey) {
+  const [maj, min] = catKey.split('.');
+  const base = CAT_NAMES[parseInt(maj)] || `Θέμα ${maj}`;
+  return `${base} (${catKey})`;
 }
 
-function pickQuestions(pool, n) {
-  const byType = {};
-  pool.forEach(q => { if(!byType[q.type]) byType[q.type]=[]; byType[q.type].push(q); });
-  const types = Object.keys(byType);
-  let picked = [];
-  types.forEach(t => { const sh=shuffle(byType[t]); if(sh.length) picked.push(sh[0]); });
-  const pickedIds = new Set(picked.map(q=>q.id));
-  const rest = shuffle(pool.filter(q=>!pickedIds.has(q.id)));
-  for(const q of rest) { if(picked.length>=n) break; picked.push(q); }
-  return shuffle(picked).slice(0,n);
-}
-
-function calcDiagLevel(correct, total) {
-  if (total === 0) return 1;
-  const pct = (correct / total) * 100;
-  if (pct >= DIAG_THRESHOLDS.high) return 3;
-  if (pct >= DIAG_THRESHOLDS.mid) return 2;
-  return 1;
-}
-
-function getFeedback(q, answer) {
-  if (q.type==='MC') {
-    const map = {Α:0,Β:1,Γ:2,Δ:3};
-    const idx = map[answer] ?? 0;
-    return q.fb[idx] || q.fb.find(f=>f) || null;
-  }
-  return q.fb[0] || null;
+function getQuestionsForCat(catKey, n, excludeIds=[]) {
+  const pool = (catsByKey[catKey]||[]).filter(q => !excludeIds.includes(q.id));
+  return shuffle(pool).slice(0, n);
 }
 
 function checkAnswer(q, answer) {
   if (q.type==='MC' || q.type==='YN') {
-    return q.correct.trim().toUpperCase() === answer.trim().toUpperCase();
+    return q.correct.trim().toUpperCase() === (answer||'').trim().toUpperCase();
   }
   if (q.type==='GAP') {
     const norm = s => s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
     const accepted = q.correct.split('|').map(s=>norm(s));
-    const ans = norm(answer);
-    if (!ans) return false;
+    const ans = norm(answer||'');
     if (!ans) return false;
     return accepted.some(a => a===ans || a.includes(ans) || ans.includes(a));
   }
@@ -1028,8 +510,8 @@ function parseCorrectDD(correctStr, lefts, rights) {
   const pairs = correctStr.split('|').map(s=>s.trim()).filter(Boolean);
   for(const p of pairs) {
     const [l,r] = p.split('→').map(s=>s.trim());
-    const li = lefts.findIndex(x=>x && (x.trim()===l || 'Αριστερά '+(lefts.indexOf(x)+1)===l));
-    const ri = rights.findIndex(x=>x && (x.trim()===r || 'Δεξιά '+(rights.indexOf(x)+1)===r));
+    const li = lefts.findIndex(x=>x && x.trim()===l);
+    const ri = rights.findIndex(x=>x && x.trim()===r);
     if(li!==-1 && ri!==-1) result[li]=ri;
   }
   if(!Object.keys(result).length) {
@@ -1041,415 +523,406 @@ function parseCorrectDD(correctStr, lefts, rights) {
   return result;
 }
 
+function getFeedback(q, answer) {
+  if (q.type==='MC') {
+    const map = {Α:0,Β:1,Γ:2,Δ:3};
+    const idx = map[(answer||'').toUpperCase()] ?? 0;
+    return q.fb[idx] || q.fb.find(f=>f) || null;
+  }
+  return q.fb[0] || null;
+}
+
+function canCheck(q) {
+  if (adp.answered) return false;
+  if (q.type==='MC'||q.type==='YN') return adp.answer!==null;
+  if (q.type==='CLK') return adp.clkSelected.length>0;
+  if (q.type==='DD') return Object.keys(adp.ddPairs).length===q.leftItems.length;
+  if (q.type==='GAP') return !!(adp.answer && adp.answer.trim());
+  return false;
+}
+
+// ══════════════════════════════════════════════
+// ADAPTIVE LOGIC
+// ══════════════════════════════════════════════
+function startAdaptive() {
+  adp.catIdx = 0;
+  adp.catLog = {};
+  adp.totalCorrect = 0;
+  adp.totalAnswered = 0;
+  adp.usedIds = {};
+  startCatMain();
+}
+
+function startCatMain() {
+  const catKey = catOrder[adp.catIdx];
+  if (!adp.usedIds[catKey]) adp.usedIds[catKey] = new Set();
+  const qs = getQuestionsForCat(catKey, 3, [...adp.usedIds[catKey]]);
+  // If no questions at all → skip this category silently
+  if (!qs.length) { adp.catLog[catKey]='pass'; advanceToNextCat(); return; }
+  qs.forEach(q => adp.usedIds[catKey].add(q.id));
+  adp.queue = qs;
+  adp.qIdx = 0;
+  adp.answer = null; adp.answered = false;
+  adp.ddPairs = {}; adp.ddSelected = null; adp.clkSelected = [];
+  adp.roundResults = [];
+  adp.phase = 'main';
+  adp.showTheory = false;
+  screen = 'adaptive';
+  render();
+}
+
+function startCatRetry1(wrongIdxs) {
+  const catKey = catOrder[adp.catIdx];
+  const extra = getQuestionsForCat(catKey, 2, [...adp.usedIds[catKey]]);
+  // No more questions → παράλειψη retry1, κατευθείαν τείχος θεωρίας
+  if (!extra.length) { adp.catLog[catKey]='skip'; screen='theory_wall'; render(); return; }
+  extra.forEach(q => adp.usedIds[catKey].add(q.id));
+  adp.queue = extra;
+  adp.qIdx = 0;
+  adp.answer = null; adp.answered = false;
+  adp.ddPairs = {}; adp.ddSelected = null; adp.clkSelected = [];
+  adp.roundResults = [];
+  adp.retry1WrongIdx = wrongIdxs;
+  adp.phase = 'retry1';
+  adp.showTheory = false;
+  screen = 'adaptive';
+  render();
+}
+
+function startCatRetry2(wrongQs) {
+  const catKey = catOrder[adp.catIdx];
+  const extra = getQuestionsForCat(catKey, 1, [...adp.usedIds[catKey]]);
+  extra.forEach(q => adp.usedIds[catKey].add(q.id));
+  const queue = shuffle([...wrongQs, ...extra]);
+  // No questions to give → παράλειψη retry2, κατευθείαν τείχος θεωρίας
+  if (!queue.length) { adp.catLog[catKey]='skip'; screen='theory_wall'; render(); return; }
+  adp.queue = queue;
+  adp.qIdx = 0;
+  adp.answer = null; adp.answered = false;
+  adp.ddPairs = {}; adp.ddSelected = null; adp.clkSelected = [];
+  adp.roundResults = [];
+  adp.phase = 'retry2';
+  adp.showTheory = false;
+  screen = 'adaptive';
+  render();
+}
+
+function finishRound() {
+  const catKey = catOrder[adp.catIdx];
+  const correct = adp.roundResults.filter(Boolean).length;
+  const wrong = adp.roundResults.filter(b=>!b).length;
+
+  if (adp.phase === 'main') {
+    if (wrong === 0) {
+      adp.catLog[catKey] = 'pass';
+      advanceToNextCat();
+    } else {
+      const wrongIdxs = adp.roundResults.map((r,i)=>r?null:i).filter(i=>i!==null);
+      startCatRetry1(wrongIdxs);
+    }
+  } else if (adp.phase === 'retry1') {
+    if (wrong === 0) {
+      const origMain = getQuestionsFromLog(catKey, adp.retry1WrongIdx);
+      startCatRetry2(origMain);
+    } else {
+      // At least 1 wrong in retry1 → give 1 new + those wrong in retry1
+      const wrongQs = adp.roundResults.map((r,i)=>r?null:adp.queue[i]).filter(Boolean);
+      startCatRetry2(wrongQs);
+    }
+  } else if (adp.phase === 'retry2') {
+    if (wrong === 0) {
+      // All retry2 correct → pass and move on
+      adp.catLog[catKey] = 'pass';
+      advanceToNextCat();
+    } else {
+      // Still wrong → theory wall
+      adp.catLog[catKey] = 'skip';
+      screen = 'theory_wall';
+      render();
+    }
+  }
+}
+
+// Helper: get questions from the main round by index (we store main queue in a log)
+let mainQueueLog = {}; // catKey → queue from main round
+function getQuestionsFromLog(catKey, wrongIdxs) {
+  const mq = mainQueueLog[catKey] || [];
+  return wrongIdxs.map(i => mq[i]).filter(Boolean);
+}
+
+function advanceToNextCat() {
+  if (adp.catIdx < catOrder.length - 1) {
+    adp.catIdx++;
+    screen = 'cat_transition';
+    render();
+  } else {
+    screen = 'adp_results';
+    render();
+  }
+}
+
 // ══════════════════════════════════════════════
 // RENDER
 // ══════════════════════════════════════════════
 function render() {
   const app = document.getElementById('app');
   const badge = document.getElementById('hdrBadge');
-  // Εμφάνιση/απόκρυψη home button
   const homeBtn = document.getElementById('btnHdrHome');
   if (homeBtn) {
-    if (state.screen === 'home') homeBtn.classList.remove('visible');
+    if (screen === 'home') homeBtn.classList.remove('visible');
     else homeBtn.classList.add('visible');
   }
-  switch(state.screen) {
-    case 'home':        badge.textContent='Αρχική';        app.innerHTML=renderHome(); break;
-    case 'diagnostic':  badge.textContent=`Διαγνωστικό ${state.idx+1}/${state.quizQ.length}`; app.innerHTML=renderDiagnostic(); break;
-    case 'diag_result': badge.textContent='Αποτέλεσμα';   app.innerHTML=renderDiagResult(); break;
-    case 'selection':   badge.textContent='Επιλογή';      app.innerHTML=renderSelection(); break;
-    case 'cat_selection': badge.textContent='Κατηγορία';  app.innerHTML=renderCatSelection(); break;
-    case 'quiz':        badge.textContent=`${state.idx+1}/${state.quizQ.length}`; app.innerHTML=renderQuiz(); break;
-    case 'results':     badge.textContent='Αποτελέσματα'; app.innerHTML=renderResults(); break;
-    case 'retry':       badge.textContent='Ανατροφοδότηση'; app.innerHTML=renderRetry(); break;
-    case 'done':        badge.textContent='Τέλος';        app.innerHTML=renderDone(); break;
-    case 'gq_select':   badge.textContent='Γρήγορο Quiz';  app.innerHTML=renderGQSelect(); break;
-    case 'gq_quiz':     badge.textContent=`⚡ ${gqState.idx+1}/${gqState.questions.length}`; app.innerHTML=renderGQQuiz(); break;
-    case 'gq_results':  badge.textContent='Αποτέλεσμα';   app.innerHTML=renderGQResults(); break;
+
+  switch(screen) {
+    case 'home':           badge.textContent='Αρχική';          app.innerHTML=renderHome(); break;
+    case 'adaptive':       badge.textContent=renderBadgeAdp();  app.innerHTML=renderAdaptive(); break;
+    case 'cat_transition': badge.textContent='Επόμενο βήμα';    app.innerHTML=renderCatTransition(); break;
+    case 'theory_wall':    badge.textContent='Θεωρία';          app.innerHTML=renderTheoryWall(); break;
+    case 'adp_results':    badge.textContent='Αποτελέσματα';    app.innerHTML=renderAdpResults(); break;
   }
   attachEvents();
 }
 
-// ── HOME ──────────────────────────────────────
+function renderBadgeAdp() {
+  const catKey = catOrder[adp.catIdx] || '—';
+  return `Βήμα ${catKey}`;
+}
+
+// ══════════════════════════════════════════════
+// HOME
+// ══════════════════════════════════════════════
 function renderHome() {
-  const diagQ = getDiagnosticQuestions();
-  const diagAvail = diagQ.length > 0;
+  const totalCats = catOrder.length;
   return `
   <div class="card">
     <p class="home-title">Καλωσήρθες!</p>
-    <p class="home-sub">Επίλεξε πώς θέλεις να ξεκινήσεις</p>
+    <p class="home-sub">Εξάσκηση με προσαρμοστική μάθηση</p>
     <div class="home-cards">
-
       <button class="home-card c1" id="btnStartAdp">
         <div class="hc-icon-wrap">🎯</div>
         <p class="hc-title">Βήμα-Βήμα</p>
-        <p class="hc-desc">Προσαρμοστική μάθηση. Ξεκινάς από το Βήμα 1 και η εφαρμογή σε καθοδηγεί ανάλογα με τις απαντήσεις σου.</p>
-        <span class="hc-arrow">Ξεκίνα →</span>
+        <p class="hc-desc">Ξεκίνα από την αρχή με προσαρμοστική μάθηση. Η εφαρμογή σε καθοδηγεί ανάλογα με τις απαντήσεις σου.</p>
+        <span class="hc-arrow">${totalCats} κατηγορίες →</span>
       </button>
-
-      <button class="home-card c2" id="btnDiag" ${!diagAvail?'style="opacity:.5;cursor:not-allowed"':''}>
-        <div class="hc-icon-wrap">🔍</div>
-        <p class="hc-title">Βρες το επίπεδό σου</p>
-        <p class="hc-desc">Απάντησε ${diagAvail?diagQ.length:'μερικές'} διαγνωστικές ερωτήσεις και ξεκίνα στο κατάλληλο επίπεδο.</p>
-        <span class="hc-arrow">${diagAvail?diagQ.length+' ερωτήσεις →':'Δεν υπάρχουν διαγνωστικές'}</span>
-      </button>
-
-      <button class="home-card c3" id="btnSel">
-        <div class="hc-icon-wrap">⚙️</div>
-        <p class="hc-title">Επίλεξε επίπεδο</p>
-        <p class="hc-desc">Επίλεξε εσύ το επίπεδο δυσκολίας που θέλεις να εξασκηθείς.</p>
-        <span class="hc-arrow">Επιλογή →</span>
-      </button>
-
-      <button class="home-card c4" id="btnCat">
-        <div class="hc-icon-wrap">📂</div>
-        <p class="hc-title">Επίλεξε τύπο ερώτησης</p>
-        <p class="hc-desc">Εξάσκηση σε συγκεκριμένο τύπο ερωτήσεων ανεξαρτήτως επιπέδου.</p>
-        <span class="hc-arrow">Κατηγορίες →</span>
-      </button>
-
-      <button class="home-card c5" id="btnGQ">
-        <div class="hc-icon-wrap">⚡</div>
-        <p class="hc-title">Γρήγορο Quiz</p>
-        <p class="hc-desc">Εντόπισε τη δομή και τον τρόπο ανάπτυξης — άμεση απάντηση, χωρίς ανατροφοδότηση.</p>
-        <span class="hc-arrow">Γρήγορα →</span>
-      </button>
-
     </div>
-  </div>`;
-}
-
-// ── DIAGNOSTIC ────────────────────────────────
-function renderDiagnostic() {
-  const q = state.quizQ[state.idx];
-  const prog = ((state.idx+1)/state.quizQ.length)*100;
-
-  // step indicators
-  const steps = state.quizQ.map((_,i) => {
-    let cls = 'diag-step';
-    if (i < state.idx) cls += ' done';
-    else if (i === state.idx) cls += ' active';
-    return `<div class="${cls}"></div>`;
-  }).join('');
-
-  let html = `
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <span class="ph diag">Διαγνωστικό</span>
-      <span style="color:var(--muted);font-size:.83rem">${state.idx+1} / ${state.quizQ.length}</span>
+    <div class="info" style="margin-top:10px">
+      <strong>Πώς λειτουργεί:</strong> 3 ερωτήσεις ανά κατηγορία. Αν τις απαντήσεις όλες σωστά, προχωράς. Αν όχι, λαμβάνεις ανατροφοδότηση.
     </div>
-    <div class="diag-steps">${steps}</div>
-    <div class="prog-wrap" style="margin-top:10px">
-      <div class="prog-bar"><div class="prog-fill teal" style="width:${prog}%"></div></div>
-    </div>
-  </div>`;
-
-  html += `<div class="card">`;
-  if (q.excerpt) {
-    html += `<p class="exc-lbl">Απόσπασμα κειμένου</p>`;
-    if (q.type==='CLK') html += renderExcerptCLK(q);
-    else if (q.type==='GAP') html += renderExcerptGAP(q);
-    else html += `<div class="exc">${q.excerpt}</div>`;
-  }
-  html += `<p class="q-lbl">${qTypeLabel(q.type)}</p>`;
-  html += `<p class="q-txt">${q.q}</p>`;
-  if (q.type==='MC'||q.type==='YN') html += renderMC(q);
-  else if (q.type==='CLK') html += `<p style="font-size:.8rem;color:var(--muted);font-style:italic">Κάντε κλικ στις λέξεις στο απόσπασμα.</p>`;
-  else if (q.type==='DD') html += renderDD(q);
-
-  if (state.answered) {
-    const ok = checkAnswer(q, state.answer);
-    html += `<div class="fb ${ok?'ok':'ko'}">
-      <p class="fb-title">${ok?'✅ Σωστά!':'❌ Λάθος'}</p>
-      ${!ok?`<p>${getFeedback(q,state.answer)||''}</p>`:''}
-    </div>`;
-    const isLast = state.idx===state.quizQ.length-1;
-    const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
-    html += `<button class="btn-next" id="btnNext">${isLast?'Δες το αποτέλεσμα →':'Επόμενη →'}</button>`;
-  } else {
-    html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
-  }
-  html += `</div>`;
-  return html;
-}
-
-// ── DIAGNOSTIC RESULT ─────────────────────────
-function renderDiagResult() {
-  const pct = Math.round((state.diagScore / state.diagTotal) * 100);
-  const lvl = state.diagLevel;
-  const icons = {1:'📘',2:'📗',3:'📕'};
-  const labels = {1:'Επίπεδο 1',2:'Επίπεδο 2',3:'Επίπεδο 3'};
-  const classes = {1:'l1',2:'l2',3:'l3'};
-  const msgs = {
-    1:`Ξεκινάς από το <strong>Επίπεδο 1</strong>. Δεν πειράζει — η πρακτική εξάσκηση θα σε φέρει ψηλά!`,
-    2:`Καλή βάση! Ξεκινάς από το <strong>Επίπεδο 2</strong>.`,
-    3:`Εξαιρετική επίδοση! Ξεκινάς κατευθείαν από το <strong>Επίπεδο 3</strong>.`
-  };
-  return `
-  <div class="card">
-    <div class="diag-result">
-      <div class="dr-icon">${icons[lvl]}</div>
-      <h2>Αποτέλεσμα Διαγνωστικού</h2>
-      <p class="score-diag">${state.diagScore} / ${state.diagTotal} σωστές (${pct}%)</p>
-      <div class="level-badge ${classes[lvl]}">${labels[lvl]}</div>
-      <p style="color:var(--ink2);font-size:.9rem;margin-bottom:20px">${msgs[lvl]}</p>
-      <button class="btn-go ${lvl===3?'green':lvl===2?'':''}" id="btnStartFromDiag">Ξεκίνα το Quiz →</button>
-      <button class="btn-sec" id="btnHomeFromDiag" style="margin-top:8px">↩ Αρχική</button>
-    </div>
-  </div>`;
-}
-
-// ── TYPE SELECTION ────────────────────────────
-const TYPE_NAMES = {
-  'MC':'Πολλαπλής επιλογής',
-  'YN':'Ναι / Όχι',
-  'GAP':'Συμπλήρωση κενού',
-  'CLK':'Εντοπισμός λέξης',
-  'DD':'Αντιστοίχιση'
-};
-
-function renderCatSelection() {
-  const sel = state.selectedCat;
-  const typeCounts = {};
-  Object.keys(TYPE_NAMES).forEach(t => {
-    typeCounts[t] = allQ.filter(q=>q.type===t).length;
-  });
-  let html = '<div class="card"><p class="sel-title">📂 Επίλεξε Τύπο Ερώτησης</p><p class="sel-sub">Εξάσκηση ανά τύπο ερώτησης — όλα τα επίπεδα</p><div class="fg"><label>Τύπος ερώτησης</label><div class="pills">';
-  Object.entries(TYPE_NAMES).forEach(([t,name]) => {
-    const cnt = typeCounts[t]||0;
-    if (!cnt) return;
-    html += `<button class="pill ${sel===t?'on':''}" data-cat="${t}">${name} <span style="opacity:.7;font-size:.75rem">(${cnt})</span></button>`;
-  });
-  html += '</div></div>';
-  const cnt = sel ? (typeCounts[sel]||0) : 0;
-  html += `<div class="info ${cnt===0&&sel?'warn':''}">${!sel?'👆 Επίλεξε τύπο ερώτησης':cnt===0?'⚠️ Δεν υπάρχουν ερωτήσεις':`✅ <strong>${cnt}</strong> ερωτήσεις — θα εμφανιστούν ${Math.min(cnt,QUIZ_PER_SESSION)}`}</div>`;
-  html += `<button class="btn-go" id="btnStartCat" ${!sel||!cnt?'disabled':''}>Ξεκινήστε →</button>`;
-  html += '<button class="btn-sec" id="btnHomeFromCat">↩ Αρχική</button>';
-  html += '</div>';
-  return html;
-}
-
-
-// ── SELECTION ──────────────────────────────────
-function renderSelection() {
-  const counts = {1: getFiltered(1).length, 2: getFiltered(2).length, 3: getFiltered(3).length, all: allQ.length};
-  const sel = state.difficulty;
-  const cnt = sel ? (counts[sel]||0) : 0;
-  return `
-  <div class="card">
-    <p class="sel-title">⚙️ Επίλεξε Επίπεδο</p>
-    <p class="sel-sub">Νεοελληνική Γλώσσα — Επίλεξε επίπεδο δυσκολίας</p>
-    <div class="fg">
-      <label>Επίπεδο δυσκολίας</label>
-      <div class="pills">
-        <button class="pill ${sel===1?'on':''}" data-diff="1">Επίπεδο 1 <span style="opacity:.7;font-size:.75rem">(${counts[1]} ερωτ.)</span></button>
-        <button class="pill ${sel===2?'on':''}" data-diff="2">Επίπεδο 2 <span style="opacity:.7;font-size:.75rem">(${counts[2]} ερωτ.)</span></button>
-        <button class="pill ${sel===3?'on':''}" data-diff="3">Επίπεδο 3 <span style="opacity:.7;font-size:.75rem">(${counts[3]||0} ερωτ.)</span></button>
-        <button class="pill ${sel==='all'?'on':''}" data-diff="all">Όλα <span style="opacity:.7;font-size:.75rem">(${counts.all} ερωτ.)</span></button>
-      </div>
-    </div>
-    <div class="info ${cnt===0&&sel?'warn':''}" id="cntInfo">
-      ${!sel ? '👆 Επίλεξε επίπεδο για να ξεκινήσεις' :
-        cnt===0 ? '⚠️ Δεν υπάρχουν ερωτήσεις για αυτό το επίπεδο' :
-        `✅ Βρέθηκαν <strong>${cnt}</strong> ερωτήσεις — θα εμφανιστούν ${Math.min(cnt, QUIZ_PER_SESSION)}`}
-    </div>
-    <button class="btn-go" id="btnStart" ${!sel||cnt===0?'disabled':''}>Ξεκινήστε το Quiz →</button>
-    <button class="btn-sec" id="btnHomeFromSel">↩ Αρχική</button>
-  </div>`;
-}
-
-// ── QUIZ ────────────────────────────────────────
-function renderQuiz() {
-  const q = state.quizQ[state.idx];
-  const prog = ((state.idx+1)/state.quizQ.length)*100;
-  const phaseLabel = state.phase==='main' ? 'Κύρια Φάση' : 'Ανατροφοδότηση';
-  const phaseClass = state.phase==='main' ? 'main' : 'retry';
-
-  let html = `
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <span class="ph ${phaseClass}">${phaseLabel}</span>
-      <span style="color:var(--muted);font-size:.83rem">${state.idx+1} / ${state.quizQ.length}</span>
-    </div>
-    <div class="prog-wrap">
-      <div class="prog-bar"><div class="prog-fill" style="width:${prog}%"></div></div>
-    </div>
-  </div>`;
-
-  html += `<button class="theory-toggle" id="btnTheory">${state.showTheory?'▼':'▶'} Θεωρητικό Πλαίσιο (Βοήθεια)</button>`;
-  if (state.showTheory) {
-    const keys = (q.theoryKeys && q.theoryKeys.length) ? q.theoryKeys : (CAT_THEORY[q.cat] ? [q.cat] : []);
-    if (keys.length) {
-      html += '<div class="theory-box">';
-      keys.forEach(k => {
-        if (!CAT_SHORT[k]) return;
-        const val = CAT_SHORT[k];
-        if (Array.isArray(val)) {
-          html += `<p style="margin-bottom:4px"><strong>${CAT_NAMES[k]||''}</strong></p>`;
-          html += '<ul style="margin:0 0 8px 16px">' + val.map(v=>`<li style="font-size:.83rem;color:#78350f;margin-bottom:2px">${v}</li>`).join('') + '</ul>';
-        } else {
-          // Αφαιρώ το όνομα από την αρχή του val αν επαναλαμβάνεται
-const namePrefix = (CAT_NAMES[k]||'') + ': ';
-const cleanVal = val.startsWith(namePrefix) ? val.slice(namePrefix.length) : val;
-html += `<p style="margin-bottom:6px"><strong>${CAT_NAMES[k]||''}</strong>: ${cleanVal}</p>`;
-        }
-      });
-      html += '</div>';
-    }
-  }
-
-  html += `<div class="card">`;
-  if (q.excerpt) {
-    html += `<p class="exc-lbl">Απόσπασμα κειμένου</p>`;
-    if (q.type==='CLK') html += renderExcerptCLK(q);
-    else if (q.type==='GAP') html += renderExcerptGAP(q);
-    else html += `<div class="exc">${q.excerpt}</div>`;
-  }
-  html += `<p class="q-lbl">${qTypeLabel(q.type)}</p>`;
-  html += `<p class="q-txt">${q.q}</p>`;
-  if (q.type==='MC'||q.type==='YN') html += renderMC(q);
-  else if (q.type==='CLK') html += `<p style="font-size:.8rem;color:var(--muted);font-style:italic">Κάντε κλικ στις λέξεις/φράσεις στο απόσπασμα παραπάνω.</p>`;
-  else if (q.type==='DD') html += renderDD(q);
-
-  if (state.answered) {
-    const ok = checkAnswer(q, state.answer);
-    html += `<div class="fb ${ok?'ok':'ko'}">
-      <p class="fb-title">${ok?'✅ Σωστά!':'❌ Λάθος'}</p>
-      ${!ok ? `<p>${getFeedback(q,state.answer)||''}</p>` : ''}
-    </div>`;
-    const isLast = state.idx===state.quizQ.length-1;
-    html += `<button class="btn-next" id="btnNext">${isLast?(state.phase==='main'?'Δες τα αποτελέσματα →':'Επόμενη κατηγορία →'):'Επόμενη ερώτηση →'}</button>`;
-  } else {
-    html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
-  }
-  html += `</div>`;
-  return html;
-}
-
-// ── RESULTS ─────────────────────────────────────
-function renderResults() {
-  const total = state.quizQ.length;
-  const pct = Math.round((state.score/total)*100);
-  const emoji = pct>=80?'🎉':pct>=60?'👍':'📚';
-  const catErrors = Object.entries(state.wrongByCat).filter(([,ids])=>ids.length>0);
-  const catWrong = Object.values(state.wrongByCat).flat().length;
-
-  let html = `
-  <div class="card">
-    <div class="res-top">
-      <div class="res-emoji">${emoji}</div>
-      <h2 class="res-title">Ολοκλήρωσες το Quiz!</h2>
-    </div>
-    <div class="score-box">
-      <p class="score-big">${state.score} / ${total}</p>
-      <p class="score-pct">${pct}%</p>
-    </div>
-    <div class="score-grid">
-      <div class="sc g"><p>Σωστές</p><p>${state.score}</p></div>
-      <div class="sc r"><p>Λάθος</p><p>${catWrong}</p></div>
-      <div class="sc a"><p>Ποσοστό</p><p>${pct}%</p></div>
-    </div>
-  </div>`;
-
-  if (catErrors.length > 0) {
-    html += `<div class="card">
-      <p class="retry-title">📌 Ανατροφοδότηση ανά κατηγορία λαθών</p>`;
-    catErrors.forEach(([cat, ids]) => {
-      html += `<div class="retry-cat">
-        <div>
-          <p class="retry-cat-name">${CAT_NAMES[cat]||'Κατηγορία '+cat}</p>
-          <p class="retry-cat-errors">${ids.length} λάθος/η</p>
-        </div>
-        <button class="btn-retry" data-retry-cat="${cat}">Εξάσκηση →</button>
-      </div>`;
-    });
-    html += `<p style="font-size:.8rem;color:var(--muted);margin-top:8px">Για κάθε κατηγορία θα εμφανιστούν 3 νέες ερωτήσεις.</p>`;
-    html += `</div>`;
-  } else {
-    html += `<div class="card" style="text-align:center;padding:20px">
-      <p style="color:var(--green);font-weight:600;font-size:1rem">🎯 Μηδέν λάθη — Άριστη επίδοση!</p>
-    </div>`;
-  }
-
-  html += `<button class="btn-sec" id="btnNewQuiz" style="margin-top:4px">↩ Αρχική</button>`;
-  return html;
-}
-
-// ── RETRY ────────────────────────────────────────
-function renderRetry() {
-  const q = state.quizQ[state.idx];
-  const prog = ((state.idx+1)/state.quizQ.length)*100;
-
-  let html = `
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <span class="ph retry">Ανατροφοδότηση — ${CAT_NAMES[q.cat]||''}</span>
-      <span style="color:var(--muted);font-size:.83rem">${state.idx+1} / ${state.quizQ.length}</span>
-    </div>
-    <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:${prog}%"></div></div></div>
-  </div>`;
-
-  html += `<div class="card">`;
-  if (q.excerpt) {
-    html += `<p class="exc-lbl">Απόσπασμα</p>`;
-    if (q.type==='CLK') html += renderExcerptCLK(q);
-    else if (q.type==='GAP') html += renderExcerptGAP(q);
-    else html += `<div class="exc">${q.excerpt}</div>`;
-  }
-  html += `<p class="q-lbl">${qTypeLabel(q.type)}</p>`;
-  html += `<p class="q-txt">${q.q}</p>`;
-  if (q.type==='MC'||q.type==='YN') html += renderMC(q);
-  else if (q.type==='CLK') html += `<p style="font-size:.8rem;color:var(--muted);font-style:italic">Κάντε κλικ στις λέξεις στο απόσπασμα.</p>`;
-  else if (q.type==='DD') html += renderDD(q);
-
-  if (state.answered) {
-    const ok = checkAnswer(q, state.answer);
-    html += `<div class="fb ${ok?'ok':'ko'}">
-      <p class="fb-title">${ok?'✅ Σωστά!':'❌ Λάθος'}</p>
-      ${!ok?`<p>${getFeedback(q,state.answer)||''}</p>`:''}
-    </div>`;
-    if (!ok && CAT_THEORY[q.cat]) {
-      html += `<div class="theory-needed">
-        <h4>📖 Μελέτησε τη θεωρία</h4>
-        <p><strong>${CAT_NAMES[q.cat]||''}</strong></p>
-        <ul style="margin:8px 0 0 16px;">${CAT_THEORY[q.cat].map(t=>`<li style="font-size:.83rem;color:#991b1b;margin-bottom:3px">${t}</li>`).join('')}</ul>
-      </div>`;
-    }
-    const isLast = state.idx===state.quizQ.length-1;
-    const ok2 = checkAnswer(state.quizQ[state.idx], state.answer);
-    html += `<button class="btn-next" id="btnNext">${isLast?'Τέλος ανατροφοδότησης →':'Επόμενη →'}</button>`;
-  } else {
-    html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
-  }
-  html += `</div>`;
-  return html;
-}
-
-// ── DONE ──────────────────────────────────────────
-function renderDone() {
-  return `<div class="card" style="text-align:center;padding:36px 20px">
-    <div style="font-size:2.8rem;margin-bottom:14px">🏁</div>
-    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.5rem;margin-bottom:8px">Ολοκληρώθηκε!</h2>
-    <p style="color:var(--muted);margin-bottom:24px">Έχεις ολοκληρώσει την κύρια φάση και την ανατροφοδότηση.</p>
-    <button class="btn-go" id="btnNewQuiz">↩ Αρχική</button>
   </div>`;
 }
 
 // ══════════════════════════════════════════════
-// SHARED RENDERERS
+// CAT MAP (progress visualization)
+// ══════════════════════════════════════════════
+function renderCatMap() {
+  let html = '<div class="cat-map" style="align-items:center">';
+  catOrder.forEach((key, i) => {
+    const status = adp.catLog[key];
+    const isActive = i === adp.catIdx;
+    let cls = 'cat-dot locked';
+    let icon = key;
+    if (status === 'pass') { cls='cat-dot done'; icon='✓'; }
+    else if (status === 'skip') { cls='cat-dot failed'; icon='!'; }
+    else if (isActive) { cls='cat-dot active'; icon=key; }
+    else if (i < adp.catIdx) { cls='cat-dot done'; icon='✓'; }
+    html += `<div class="cat-node">
+      <div class="${cls}">${icon}</div>
+      <span class="cat-dot-lbl">${key}</span>
+    </div>`;
+    if (i < catOrder.length-1) html += `<div class="cat-arrow" style="margin-bottom:14px">›</div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+// ══════════════════════════════════════════════
+// ADAPTIVE QUIZ SCREEN
+// ══════════════════════════════════════════════
+function renderAdaptive() {
+  const catKey = catOrder[adp.catIdx];
+  const q = adp.queue[adp.qIdx];
+  if (!q) return '<div class="card"><p>Σφάλμα: δεν βρέθηκε ερώτηση.</p></div>';
+
+  const totalInRound = adp.queue.length;
+  const isOk = adp.answered ? checkAnswer(q, adp.answer) : false;
+
+  // Phase label
+  let phaseLabel, phaseClass;
+  if (adp.phase === 'main') { phaseLabel=`Κατηγορία ${catKey}`; phaseClass='main'; }
+  else if (adp.phase === 'retry1') { phaseLabel=`Ανατροφοδότηση ${catKey}`; phaseClass='retry'; }
+  else { phaseLabel=`Επανέλεγχος ${catKey}`; phaseClass='fb'; }
+
+  // Progress dots
+  let dots = '';
+  for (let i=0; i<totalInRound; i++) {
+    let cls = 'prog-dot';
+    if (i < adp.roundResults.length) cls += adp.roundResults[i] ? ' ok' : ' ko';
+    else if (i === adp.qIdx) cls += ' cur';
+    const icon = i < adp.roundResults.length ? (adp.roundResults[i]?'✓':'✕') : (i===adp.qIdx?'●':'');
+    dots += `<div class="${cls}">${icon}</div>`;
+  }
+
+  // Theory toggle
+  let theoryHtml = '';
+  if (adp.phase !== 'main') {
+    theoryHtml = `<button class="theory-toggle" id="btnTheory">${adp.showTheory?'▼':'▶'} Βοήθεια: Θεωρητικό Πλαίσιο</button>`;
+    if (adp.showTheory) {
+      const keys = getTheoryKeysForCat(catKey);
+      if (keys.length) {
+        theoryHtml += '<div class="theory-box"><h4>📚 Θεωρητικό Πλαίσιο</h4><ul>';
+        keys.forEach(k => {
+          if (CAT_THEORY[k]) CAT_THEORY[k].forEach(t => { theoryHtml += `<li>${t}</li>`; });
+        });
+        theoryHtml += '</ul></div>';
+      }
+    }
+  }
+
+  let html = `
+  <div class="adp-header">
+    <h2>Βήμα-Βήμα</h2>
+    <p>${getCatDisplayName(catKey)}</p>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span class="ph ${phaseClass}">${phaseLabel}</span>
+      <span style="color:var(--muted);font-size:.83rem">${adp.qIdx+1} / ${totalInRound}</span>
+    </div>
+    <div class="prog-dots">${dots}</div>
+    ${renderCatMap()}
+  </div>
+
+  ${theoryHtml}
+
+  <div class="card">
+    ${q.excerpt ? `<p class="exc-lbl">Απόσπασμα κειμένου</p>${renderExcerpt(q)}` : ''}
+    <p class="q-lbl" style="margin-top:${q.excerpt?'14px':'0'}">${qTypeLabel(q.type)}</p>
+    <p class="q-txt">${q.q}</p>
+    ${q.type==='CLK' ? '<p style="font-size:.8rem;color:var(--muted);font-style:italic;margin-top:4px">Κάντε κλικ στις λέξεις/φράσεις στο απόσπασμα παραπάνω.</p>' : ''}
+  </div>`;
+
+  // Answers card
+  let cardClass = 'answers-card';
+  if (adp.answered) cardClass += isOk ? ' answered-ok' : ' answered-ko';
+  html += `<div class="${cardClass}" id="answersCard">`;
+  if (q.type==='MC'||q.type==='YN') html += renderMC(q);
+  else if (q.type==='DD') html += renderDD(q);
+  else if (q.type==='GAP') html += renderGAPInput(q);
+
+  if (adp.answered) {
+    html += `<div class="fb-box ${isOk?'ok':'ko'}">
+      <p class="fb-title">${isOk?'✅ Σωστά!':'❌ Λάθος'}</p>
+      ${!isOk ? `<p>${getFeedback(q, adp.answer)||''}</p>` : ''}
+    </div>`;
+    const isLast = adp.qIdx === adp.queue.length-1;
+    html += `<button class="btn-next" id="btnNext">${isLast ? 'Αξιολόγηση κατηγορίας →' : 'Επόμενη ερώτηση →'}</button>`;
+  } else {
+    html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+// ══════════════════════════════════════════════
+// CAT TRANSITION
+// ══════════════════════════════════════════════
+function renderCatTransition() {
+  const prevKey = catOrder[adp.catIdx-1];
+  const nextKey = catOrder[adp.catIdx];
+  return `
+  <div class="card" style="text-align:center;padding:32px 22px">
+    <div style="font-size:2.5rem;margin-bottom:12px">✅</div>
+    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.3rem;margin-bottom:8px">Κατηγορία ${prevKey} ολοκληρώθηκε!</h2>
+    <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px">Μπράβο! Μπορείς να συνεχίσεις στην κατηγορία <strong>${nextKey}</strong>.</p>
+    ${renderCatMap()}
+    <button class="btn-go" id="btnNextCat" style="margin-top:16px">Συνέχεια στο ${nextKey} →</button>
+    <button class="btn-sec" id="btnHomeFromAdp">↩ Αρχική</button>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════
+// THEORY WALL
+// ══════════════════════════════════════════════
+function renderTheoryWall() {
+  const catKey = catOrder[adp.catIdx];
+  const theoryKeys = getTheoryKeysForCat(catKey);
+  let theoryItems = '';
+  theoryKeys.forEach(k => {
+    if (CAT_THEORY[k]) {
+      theoryItems += `<p style="font-weight:700;margin-bottom:6px;color:#7f1d1d">${CAT_NAMES[k]||''}</p>`;
+      theoryItems += '<ul>' + CAT_THEORY[k].map(t=>`<li>${t}</li>`).join('') + '</ul>';
+    }
+  });
+
+  return `
+  <div class="card">
+    <div class="theory-needed">
+      <h4>📖 Χρειάζεται να ξαναδείς τη θεωρία</h4>
+      <p>Φαίνεται ότι χρειάζεσαι επανάληψη στο θέμα: <strong>${getCatDisplayName(catKey)}</strong></p>
+      ${theoryItems ? `<div style="margin:10px 0 14px">${theoryItems}</div>` : ''}
+      <p style="font-weight:600;margin-bottom:12px;color:#7f1d1d">Θέλεις να επαναλάβεις την προσπάθεια ή να συνεχίσεις στο επόμενο βήμα;</p>
+      <div class="tn-choices">
+        <button class="tn-btn retry" id="btnRetryAgain">🔄 Επανάληψη της κατηγορίας</button>
+        <button class="tn-btn skip" id="btnSkipToNext">${adp.catIdx < catOrder.length-1 ? '⏭ Συνέχεια στο επόμενο βήμα' : '🏁 Ολοκλήρωση'}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════
+// FINAL RESULTS
+// ══════════════════════════════════════════════
+function renderAdpResults() {
+  const passed = Object.values(adp.catLog).filter(v=>v==='pass').length;
+  const skipped = Object.values(adp.catLog).filter(v=>v==='skip').length;
+  const total = catOrder.length;
+  const pct = Math.round((passed/total)*100);
+  const emoji = pct>=80?'🎉':pct>=60?'👍':'📚';
+
+  let catRows = catOrder.map(key => {
+    const status = adp.catLog[key] || 'incomplete';
+    const cls = status==='pass' ? 'pass' : 'skip';
+    const badge = status==='pass' ? '✅ Επιτυχία' : status==='skip' ? '⚠️ Χρειάζεται μελέτη' : '—';
+    return `<div class="cat-summary-row ${cls}">
+      <span class="cs-name">${getCatDisplayName(key)}</span>
+      <span class="cs-badge">${badge}</span>
+    </div>`;
+  }).join('');
+
+  return `
+  <div class="card" style="text-align:center;padding:28px 22px">
+    <div style="font-size:2.8rem;margin-bottom:10px">${emoji}</div>
+    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.4rem;margin-bottom:16px">Ολοκλήρωσες το Βήμα-Βήμα!</h2>
+    <div class="score-box">
+      <p class="score-big">${passed} / ${total}</p>
+      <p class="score-pct">κατηγορίες με επιτυχία (${pct}%)</p>
+    </div>
+    <div class="score-grid" style="margin:14px 0">
+      <div class="sc g"><p>Επιτυχία</p><p>${passed}</p></div>
+      <div class="sc r"><p>Χρειάζεται μελέτη</p><p>${skipped}</p></div>
+      <div class="sc a"><p>Σύνολο</p><p>${total}</p></div>
+    </div>
+  </div>
+  <div class="card">
+    <p style="font-weight:700;margin-bottom:12px">Ανά κατηγορία:</p>
+    ${catRows}
+  </div>
+  <button class="btn-sec" id="btnNewAdp" style="margin-top:4px">🔄 Νέα προσπάθεια από την αρχή</button>
+  <button class="btn-sec" id="btnHomeFromRes">↩ Αρχική</button>`;
+}
+
+// ══════════════════════════════════════════════
+// QUESTION RENDERERS
 // ══════════════════════════════════════════════
 function qTypeLabel(type) {
   return type==='CLK'?'Εντοπισμός':type==='DD'?'Αντιστοίχιση':type==='GAP'?'Συμπλήρωση κενού':type==='YN'?'Ναι / Όχι':'Πολλαπλή επιλογή';
 }
 
-function canCheck(q) {
-  if (!state.answered) {
-    if (q.type==='MC'||q.type==='YN') return state.answer!==null;
-    if (q.type==='CLK') return state.clkSelected.length>0;
-    if (q.type==='DD') return Object.keys(state.ddPairs).length===q.leftItems.length;
-    if (q.type==='GAP') return !!(state.answer && state.answer.trim());
-  }
-  return false;
+function renderExcerpt(q) {
+  if (q.type==='CLK') return renderExcerptCLK(q);
+  if (q.type==='GAP') return renderExcerptGAP(q);
+  return `<div class="exc">${q.excerpt}</div>`;
 }
 
 function renderMC(q) {
@@ -1458,28 +931,18 @@ function renderMC(q) {
   let html = '<div class="opts">';
   vals.forEach((v,i) => {
     const k = keys[i];
-    let cls = 'opt';
-    if (state.answered) {
-      if (k===q.correct.trim().toUpperCase()) cls+=' ok';
-      else if (k===state.answer) cls+=' ko';
-    } else {
-      if (state.answer===k) cls+=' sel';
-    }
-    let badge = '';
-    if (state.answered) {
+    let cls = 'opt'; let badge = '';
+    if (adp.answered) {
       const isCorrect = k===q.correct.trim().toUpperCase();
-      const isSelected = k===state.answer;
-      const answeredCorrectly = state.answer===q.correct.trim().toUpperCase();
-      if (isSelected && !isCorrect) {
-        // Λάθος επιλογή → ✕
-        badge = '<span class="opt-badge opt-badge-ko">✕</span>';
-      } else if (isCorrect && answeredCorrectly) {
-        // Σωστή επιλογή & απαντήθηκε σωστά → ✓
-        badge = '<span class="opt-badge opt-badge-ok">✓</span>';
-      }
-      // Αν λάθος: η σωστή εμφανίζεται πράσινη χωρίς badge
+      const isSelected = k===adp.answer;
+      const answeredCorrectly = adp.answer===q.correct.trim().toUpperCase();
+      if (isSelected && isCorrect) { cls+=' ok'; badge='<span class="opt-badge">✓</span>'; }
+      else if (isSelected && !isCorrect) { cls+=' ko'; badge='<span class="opt-badge">✕</span>'; }
+      else if (isCorrect && !answeredCorrectly) cls+=' neutral-ok';
+    } else {
+      if (adp.answer===k) cls+=' sel';
     }
-    html += `<button class="${cls}" data-opt="${k}" ${state.answered?'disabled':''}>
+    html += `<button class="${cls}" data-opt="${k}" ${adp.answered?'disabled':''}>
       <span class="opt-k">${k}</span>${v}${badge}
     </button>`;
   });
@@ -1487,53 +950,43 @@ function renderMC(q) {
   return html;
 }
 
+function renderGAPInput(q) {
+  if (q.excerpt) return '';
+  return `<input class="gap-inp" id="gapInp" type="text" placeholder="Συμπλήρωσε…" style="width:100%;margin-top:4px" autocomplete="off" ${adp.answered?'disabled':''}>`;
+}
+
 function renderExcerptCLK(q) {
   const targets = q.targets.map(t=>t.trim().toLowerCase());
   const text = q.excerpt;
-  // Tokenize: λέξεις και κενά
   const tokens = text.split(/(\s+)/);
-  // Φτιάχνω λίστα μόνο με λέξεις (χωρίς whitespace) για να βρίσκω φράσεις
   const words = tokens.map(t => /^\s+$/.test(t) ? null : t.replace(/[.,;:!?«»"'()\[\]]/g,'').toLowerCase());
-
-  // Για κάθε token: αν είναι μέρος φράσης-στόχου, το σημειώνω με data-phrase
-  // Χτίζω ευρετήριο: wordIdx → phraseKey (το πλήρες target)
-  const wordPhraseMap = {}; // wordIdx → target string
+  const wordPhraseMap = {};
   targets.forEach(target => {
     const parts = target.split(' ').filter(Boolean);
-    if (parts.length <= 1) return; // μεμονωμένες λέξεις χειρίζονται κανονικά
-    // Ψάχνω στη λίστα words για τη φράση
-    const wordOnlyIdxs = tokens.reduce((acc, t, i) => { if (!/^\s+$/.test(t)) acc.push(i); return acc; }, []);
-    for (let wi = 0; wi <= wordOnlyIdxs.length - parts.length; wi++) {
-      const match = parts.every((p, pi) => words[wordOnlyIdxs[wi+pi]] === p);
-      if (match) {
-        for (let pi = 0; pi < parts.length; pi++) {
-          wordPhraseMap[wordOnlyIdxs[wi+pi]] = target;
-        }
-      }
+    if (parts.length <= 1) return;
+    const wordOnlyIdxs = tokens.reduce((acc,t,i)=>{ if(!/^\s+$/.test(t)) acc.push(i); return acc; },[]);
+    for (let wi=0; wi<=wordOnlyIdxs.length-parts.length; wi++) {
+      const match = parts.every((p,pi)=>words[wordOnlyIdxs[wi+pi]]===p);
+      if (match) { for(let pi=0;pi<parts.length;pi++) wordPhraseMap[wordOnlyIdxs[wi+pi]]=target; }
     }
   });
-
   let html = '<div class="exc clk" id="excClk">';
-  tokens.forEach((tok, ti) => {
-    if (/^\s+$/.test(tok)) { html += tok; return; }
+  tokens.forEach((tok,ti) => {
+    if (/^\s+$/.test(tok)) { html+=tok; return; }
     const clean = words[ti];
-    const phraseTarget = wordPhraseMap[ti]; // αν ανήκει σε φράση
+    const phraseTarget = wordPhraseMap[ti];
     const isSingleTarget = targets.includes(clean);
     const isAnyTarget = phraseTarget || isSingleTarget;
-
-    // Έλεγχος αν επιλεγμένο
-    const isSelPhrase = phraseTarget && state.clkSelected.includes(phraseTarget);
-    const isSelWord = !phraseTarget && state.clkSelected.some(s=>s.toLowerCase()===clean);
+    const isSelPhrase = phraseTarget && adp.clkSelected.includes(phraseTarget);
+    const isSelWord = !phraseTarget && adp.clkSelected.some(s=>s.toLowerCase()===clean);
     const isSelected = isSelPhrase || isSelWord;
-
     let cls = 'tok';
-    if (state.answered) {
-      if (isAnyTarget) cls += ' hit';
-      else if (isSelected) cls += ' miss';
+    if (adp.answered) {
+      if (isAnyTarget) cls+=' hit';
+      else if (!isAnyTarget && isSelected) cls+=' miss';
     } else {
-      if (isSelected) cls += ' sel';
+      if (isSelected) cls+=' sel';
     }
-    // Μόνο τα targets είναι κλικάρισμα
     if (isAnyTarget || isSelected) {
       const dataAttr = phraseTarget
         ? `data-phrase="${phraseTarget.replace(/"/g,'&quot;')}" data-word="${tok.replace(/"/g,'&quot;')}"`
@@ -1552,40 +1005,30 @@ function renderExcerptGAP(q) {
   const GAP_MARKER = '__________';
   const parts = q.excerpt.split(GAP_MARKER);
   if (parts.length < 2) {
-    const parts2 = q.excerpt.split('_____');
-    if (parts2.length >= 2) {
-      return `<div class="exc-gap">${parts2[0]}<input class="gap-inp" id="gapInp" type="text" placeholder="…" autocomplete="off" ${state.answered?'disabled':''}>${parts2.slice(1).join('_____')}</div>`;
-    }
-    return `<div class="exc">${q.excerpt}</div><input class="gap-inp" id="gapInp" type="text" placeholder="Συμπλήρωσε…" style="width:100%;margin-top:10px" autocomplete="off" ${state.answered?'disabled':''}>`;
+    const p2 = q.excerpt.split('_____');
+    if (p2.length>=2) return `<div class="exc-gap">${p2[0]}<input class="gap-inp" id="gapInp" type="text" placeholder="…" autocomplete="off" ${adp.answered?'disabled':''}>${p2.slice(1).join('_____')}</div>`;
+    return `<div class="exc">${q.excerpt}</div>`;
   }
-  return `<div class="exc-gap">${parts[0]}<input class="gap-inp" id="gapInp" type="text" placeholder="…" autocomplete="off" ${state.answered?'disabled':''}>${parts.slice(1).join(GAP_MARKER)}</div>`;
+  return `<div class="exc-gap">${parts[0]}<input class="gap-inp" id="gapInp" type="text" placeholder="…" autocomplete="off" ${adp.answered?'disabled':''}>${parts.slice(1).join(GAP_MARKER)}</div>`;
 }
 
 function renderDD(q) {
-  if (!q._shuffledRight) {
-    q._shuffledRight = shuffle(q.rightItems.map((r,i)=>({r,i})));
-  }
+  if (!q._shuffledRight) q._shuffledRight = shuffle(q.rightItems.map((r,i)=>({r,i})));
   const shuffledRight = q._shuffledRight;
   let html = '<div class="dd-wrap">';
-
-  if (state.answered) {
-    // Αποτέλεσμα
+  if (adp.answered) {
     const correctPairs = parseCorrectDD(q.correct, q.leftItems, q.rightItems);
     html += '<div class="dd-slots">';
     shuffledRight.forEach(({r,i}) => {
-      const usedByLeft = Object.entries(state.ddPairs).find(([,ri])=>ri===i);
+      const usedByLeft = Object.entries(adp.ddPairs).find(([,ri])=>ri===i);
       const li = usedByLeft ? parseInt(usedByLeft[0]) : null;
       const filledText = li !== null ? q.leftItems[li] : '—';
       const correctRi = li !== null ? correctPairs?.[li] : null;
       const isOk = correctRi === i;
-      html += `<div class="dd-slot-row">
-        <span class="dd-slot-lbl">${r}</span>
-        <div class="dd-slot ${isOk?'ok':'ko'}">${filledText}</div>
-      </div>`;
+      html += `<div class="dd-slot-row"><span class="dd-slot-lbl">${r}</span><div class="dd-slot ${isOk?'ok':'ko'}">${filledText}</div></div>`;
     });
     html += '</div>';
-    // Σωστές αν λάθος
-    const allOk = q.leftItems.every((_,li)=>state.ddPairs[li]===correctPairs?.[li]);
+    const allOk = q.leftItems.every((_,li)=>adp.ddPairs[li]===correctPairs?.[li]);
     if (!allOk && correctPairs) {
       html += '<div class="dd-correct-show"><p>✅ Σωστές αντιστοιχίσεις:</p>';
       q.leftItems.forEach((l,li)=>{
@@ -1595,589 +1038,193 @@ function renderDD(q) {
       html += '</div>';
     }
   } else {
-    // Chips πάνω
-    html += '<p class="dd-hint">🖱️ Σύρε κάθε chip στη σωστή θέση · Κινητό: πάτα chip → πάτα θέση</p>';
+    html += '<p class="dd-hint">🖱️ Σύρε chip στη σωστή θέση · Κινητό: πάτα chip → πάτα θέση</p>';
     html += '<div class="dd-chips">';
     q.leftItems.forEach((l,li)=>{
-      const used = state.ddPairs[li] !== undefined;
+      const used = adp.ddPairs[li] !== undefined;
       html += `<div class="dd-chip ${used?'used':''}" draggable="${!used}" data-dd-li="${li}">${l}</div>`;
     });
-    html += '</div>';
-    // Slots κάτω με ετικέτα αριστερά
-    html += '<div class="dd-slots">';
+    html += '</div><div class="dd-slots">';
     shuffledRight.forEach(({r,i})=>{
-      const usedByLeft = Object.entries(state.ddPairs).find(([,ri])=>ri===i);
+      const usedByLeft = Object.entries(adp.ddPairs).find(([,ri])=>ri===i);
       const isFilled = usedByLeft !== undefined;
       const filledLi = isFilled ? parseInt(usedByLeft[0]) : null;
       const filledText = isFilled ? q.leftItems[filledLi] : '↓ τοποθέτησε εδώ';
-      html += `<div class="dd-slot-row">
-        <span class="dd-slot-lbl">${r}</span>
-        <div class="dd-slot ${isFilled?'filled':''}" data-dd-ri="${i}" data-dd-label="${r.replace(/"/g,'&quot;')}">${filledText}</div>
-      </div>`;
+      html += `<div class="dd-slot-row"><span class="dd-slot-lbl">${r}</span><div class="dd-slot ${isFilled?'filled':''}" data-dd-ri="${i}">${filledText}</div></div>`;
     });
     html += '</div>';
   }
-
   html += '</div>';
   return html;
 }
-
 
 // ══════════════════════════════════════════════
 // EVENTS
 // ══════════════════════════════════════════════
 function attachEvents() {
   const btnMute = document.getElementById('btnMute');
-  if (btnMute) btnMute.addEventListener('click', () => {
-    audioMuted = !audioMuted;
-    btnMute.textContent = audioMuted ? '🔇' : '🔊';
-    btnMute.title = audioMuted ? 'Ενεργοποίηση ήχου' : 'Σίγαση';
+  if (btnMute) btnMute.addEventListener('click', ()=>{
+    audioMuted=!audioMuted; btnMute.textContent=audioMuted?'🔇':'🔊';
   });
   const btnHdrHome = document.getElementById('btnHdrHome');
-  if (btnHdrHome) btnHdrHome.addEventListener('click', () => { state.screen='home'; render(); });
+  if (btnHdrHome) btnHdrHome.addEventListener('click', ()=>{ screen='home'; render(); });
 
+  // Home
   const btnStartAdp = document.getElementById('btnStartAdp');
   if (btnStartAdp) btnStartAdp.addEventListener('click', startAdaptive);
-  const btnDiag = document.getElementById('btnDiag');
-  if (btnDiag) btnDiag.addEventListener('click', () => { const dq=getDiagnosticQuestions(); if(!dq.length)return; startDiagnostic(dq); });
-  const btnSel = document.getElementById('btnSel');
-  if (btnSel) btnSel.addEventListener('click', () => { state.screen='selection'; state.difficulty=null; render(); });
 
-  const btnCat = document.getElementById('btnCat');
-  if (btnCat) btnCat.addEventListener('click', () => { state.screen='cat_selection'; state.selectedCat=null; render(); });
-
-  // Cat selection pills
-  document.querySelectorAll('[data-cat]').forEach(b =>
-    b.addEventListener('click', () => { state.selectedCat=b.dataset.cat; render(); }));
-
-  // Start cat quiz
-  const btnStartCat = document.getElementById('btnStartCat');
-  if (btnStartCat) btnStartCat.addEventListener('click', () => {
-    const pool = allQ.filter(q=>q.type===state.selectedCat);
-    resetQuizState();
-    state.quizQ = pickQuestions(pool, QUIZ_PER_SESSION);
-    state.difficulty = 'all';
-    state.phase = 'main';
-    state.screen = 'quiz';
-    render();
-  });
-
-  // Back home from cat
-  const btnHomeFromCat = document.getElementById('btnHomeFromCat');
-  if (btnHomeFromCat) btnHomeFromCat.addEventListener('click', () => { state.screen='home'; render(); });
-
-  // HOME back buttons
-  const btnHS = document.getElementById('btnHomeFromSel');
-  if (btnHS) btnHS.addEventListener('click', () => { state.screen='home'; render(); });
-  const btnHD = document.getElementById('btnHomeFromDiag');
-  if (btnHD) btnHD.addEventListener('click', () => { state.screen='home'; render(); });
-
-  // DIAG RESULT
-  const btnSD = document.getElementById('btnStartFromDiag');
-  if (btnSD) btnSD.addEventListener('click', () => startQuiz(state.diagLevel));
-
-  // SELECTION difficulty pills
-  document.querySelectorAll('[data-diff]').forEach(b =>
-    b.addEventListener('click', () => {
-      state.difficulty = isNaN(b.dataset.diff) ? b.dataset.diff : parseInt(b.dataset.diff);
-      render();
-    }));
-  const btnStart = document.getElementById('btnStart');
-  if (btnStart) btnStart.addEventListener('click', () => startQuiz(state.difficulty));
-
-  // THEORY TOGGLE
+  // Theory toggle
   const btnTh = document.getElementById('btnTheory');
-  if (btnTh) btnTh.addEventListener('click', () => { state.showTheory=!state.showTheory; render(); });
+  if (btnTh) btnTh.addEventListener('click', ()=>{ adp.showTheory=!adp.showTheory; render(); });
 
   // MC/YN options
   document.querySelectorAll('[data-opt]').forEach(b =>
-    b.addEventListener('click', () => { if(!state.answered){ state.answer=b.dataset.opt; render(); } }));
+    b.addEventListener('click', ()=>{ if(!adp.answered){ adp.answer=b.dataset.opt; render(); } }));
 
-  // CLK words
+  // CLK tokens
   document.querySelectorAll('[data-word]').forEach(b =>
-    b.addEventListener('click', () => {
-      if (state.answered) return;
+    b.addEventListener('click', ()=>{
+      if (adp.answered) return;
       if (b.dataset.phrase) {
         const phrase = b.dataset.phrase;
-        const idx2 = state.clkSelected.indexOf(phrase);
-        if (idx2!==-1) state.clkSelected.splice(idx2,1);
-        else state.clkSelected.push(phrase);
+        const idx = adp.clkSelected.indexOf(phrase);
+        if (idx!==-1) adp.clkSelected.splice(idx,1); else adp.clkSelected.push(phrase);
       } else {
         const w = b.dataset.word.replace(/[.,;:!?«»"'()\[\]]/g,'').trim();
-        const idx2 = state.clkSelected.indexOf(w);
-        if (idx2!==-1) state.clkSelected.splice(idx2,1);
-        else state.clkSelected.push(w);
+        const idx = adp.clkSelected.indexOf(w);
+        if (idx!==-1) adp.clkSelected.splice(idx,1); else adp.clkSelected.push(w);
       }
       render();
     }));
 
-  // DD — Drag & Drop + κλικ για κινητό
+  // DD drag & drop
   let _ddDrag = null, _ddChip = null;
   document.querySelectorAll('[data-dd-li]').forEach(el => {
     const li = parseInt(el.dataset.ddLi);
     if (el.classList.contains('used')) return;
-    el.addEventListener('dragstart', e => {
-      _ddDrag=li; _ddChip=null; el.classList.add('dragging');
-      e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',String(li));
-    });
-    el.addEventListener('dragend', () => el.classList.remove('dragging'));
-    el.addEventListener('click', () => {
-      if (state.answered) return;
+    el.addEventListener('dragstart', e=>{ _ddDrag=li; el.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; e.dataTransfer.setData('text/plain',String(li)); });
+    el.addEventListener('dragend', ()=>el.classList.remove('dragging'));
+    el.addEventListener('click', ()=>{
+      if (adp.answered) return;
       if (_ddChip===li) { _ddChip=null; document.querySelectorAll('[data-dd-li]').forEach(c=>c.classList.remove('dragging')); }
       else { _ddChip=li; document.querySelectorAll('[data-dd-li]').forEach(c=>c.classList.remove('dragging')); el.classList.add('dragging'); }
     });
   });
   document.querySelectorAll('[data-dd-ri]').forEach(slot => {
     const ri = parseInt(slot.dataset.ddRi);
-    slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('over'); });
-    slot.addEventListener('dragleave', () => slot.classList.remove('over'));
-    slot.addEventListener('drop', e => {
+    slot.addEventListener('dragover', e=>{ e.preventDefault(); slot.classList.add('over'); });
+    slot.addEventListener('dragleave', ()=>slot.classList.remove('over'));
+    slot.addEventListener('drop', e=>{
       e.preventDefault(); slot.classList.remove('over');
       if (_ddDrag===null) return;
-      Object.keys(state.ddPairs).forEach(k=>{ if(state.ddPairs[k]===ri) delete state.ddPairs[k]; });
-      state.ddPairs[_ddDrag]=ri; _ddDrag=null; render();
+      Object.keys(adp.ddPairs).forEach(k=>{ if(adp.ddPairs[k]===ri) delete adp.ddPairs[k]; });
+      adp.ddPairs[_ddDrag]=ri; _ddDrag=null; render();
     });
-    slot.addEventListener('click', () => {
-      if (state.answered) return;
+    slot.addEventListener('click', ()=>{
+      if (adp.answered) return;
       if (_ddChip!==null) {
-        Object.keys(state.ddPairs).forEach(k=>{ if(state.ddPairs[k]===ri) delete state.ddPairs[k]; });
-        state.ddPairs[_ddChip]=ri; _ddChip=null;
+        Object.keys(adp.ddPairs).forEach(k=>{ if(adp.ddPairs[k]===ri) delete adp.ddPairs[k]; });
+        adp.ddPairs[_ddChip]=ri; _ddChip=null;
         document.querySelectorAll('[data-dd-li]').forEach(c=>c.classList.remove('dragging'));
         render();
       } else {
-        const ub = Object.entries(state.ddPairs).find(([,v])=>v===ri);
-        if (ub) { delete state.ddPairs[parseInt(ub[0])]; render(); }
+        const ub = Object.entries(adp.ddPairs).find(([,v])=>v===ri);
+        if (ub) { delete adp.ddPairs[parseInt(ub[0])]; render(); }
       }
     });
   });
 
+  // GAP input
   const gapInp = document.getElementById('gapInp');
   if (gapInp) {
-    if (state.answer) gapInp.value = state.answer;
-    gapInp.addEventListener('input', ()=>{ state.answer = gapInp.value; const btn=document.getElementById('btnCheck'); if(btn) btn.disabled=!state.answer.trim(); });
-    gapInp.addEventListener('keydown', e=>{ if(e.key==='Enter'&&state.answer) doCheck(); });
+    if (adp.answer) gapInp.value = adp.answer;
+    gapInp.addEventListener('input', ()=>{ adp.answer=gapInp.value; const btn=document.getElementById('btnCheck'); if(btn) btn.disabled=!adp.answer.trim(); });
+    gapInp.addEventListener('keydown', e=>{ if(e.key==='Enter'&&adp.answer) doCheck(); });
   }
+
+  // Check / Next
   const btnCheck = document.getElementById('btnCheck');
   if (btnCheck) btnCheck.addEventListener('click', doCheck);
   const btnNext = document.getElementById('btnNext');
   if (btnNext) btnNext.addEventListener('click', doNext);
-  document.querySelectorAll('[data-retry-cat]').forEach(b => b.addEventListener('click', ()=> startRetry(parseInt(b.dataset.retryCat))));
-  const btnNQ = document.getElementById('btnNewQuiz');
-  if (btnNQ) btnNQ.addEventListener('click', () => { state.screen='home'; render(); });
 
-  // ══ ΓΡΗΓΟΡΟ QUIZ EVENTS ══
-  const btnGQ = document.getElementById('btnGQ');
-  if (btnGQ) btnGQ.addEventListener('click', () => { state.screen='gq_select'; render(); });
+  // Transitions
+  const btnNextCat = document.getElementById('btnNextCat');
+  if (btnNextCat) btnNextCat.addEventListener('click', startCatMain);
+  const btnHomeFromAdp = document.getElementById('btnHomeFromAdp');
+  if (btnHomeFromAdp) btnHomeFromAdp.addEventListener('click', ()=>{ screen='home'; render(); });
 
-  // Φίλτρα
-  // ── ADAPTIVE EVENTS ──
-  document.querySelectorAll('[data-adp-opt]').forEach(b=>
-    b.addEventListener('click',()=>{ if(!adp.answered){adp.answer=b.dataset.adpOpt; render();} }));
-  document.querySelectorAll('[data-word]').forEach(b=>{
-    // already handled for state — also handle for adp if screen==='adaptive'
+  // Theory wall choices
+  const btnRetryAgain = document.getElementById('btnRetryAgain');
+  if (btnRetryAgain) btnRetryAgain.addEventListener('click', ()=>{
+    // Reset usedIds for this cat and start fresh
+    const catKey = catOrder[adp.catIdx];
+    adp.usedIds[catKey] = new Set();
+    adp.catLog[catKey] = undefined;
+    delete adp.catLog[catKey];
+    mainQueueLog[catKey] = null;
+    startCatMain();
   });
-  const btnCheckAdp=document.getElementById('btnCheckAdp');
-  if(btnCheckAdp) btnCheckAdp.addEventListener('click', doCheckAdp);
-  const btnNextAdp=document.getElementById('btnNextAdp');
-  if(btnNextAdp) btnNextAdp.addEventListener('click', doNextAdp);
-  const btnTheoryAdp=document.getElementById('btnTheoryAdp');
-  if(btnTheoryAdp) btnTheoryAdp.addEventListener('click',()=>{adp.showTheory=!adp.showTheory;render();});
-  const btnNextCat=document.getElementById('btnNextCat');
-  if(btnNextCat) btnNextCat.addEventListener('click', startCatMain);
-  const btnHomeFromAdp=document.getElementById('btnHomeFromAdp');
-  if(btnHomeFromAdp) btnHomeFromAdp.addEventListener('click',()=>{state.screen='home';render();});
-  const btnRetryAgain=document.getElementById('btnRetryAgain');
-  if(btnRetryAgain) btnRetryAgain.addEventListener('click',()=>{
-    const catKey=catOrder[adp.catIdx];
-    adp.usedIds[catKey]=new Set(); delete adp.catLog[catKey];
-    mainQueueLog[catKey]=null; startCatMain();
-  });
-  const btnSkipToNext=document.getElementById('btnSkipToNext');
-  if(btnSkipToNext) btnSkipToNext.addEventListener('click',()=>{
-    if(adp.catIdx<catOrder.length-1){adp.catIdx++;state.screen='cat_transition';}
-    else{state.screen='adp_results';} render();
-  });
-  const btnNewAdp=document.getElementById('btnNewAdp');
-  if(btnNewAdp) btnNewAdp.addEventListener('click', startAdaptive);
-  const btnHomeFromRes2=document.getElementById('btnHomeFromRes2');
-  if(btnHomeFromRes2) btnHomeFromRes2.addEventListener('click',()=>{state.screen='home';render();});
-
-  // Adaptive CLK
-  if(state.screen==='adaptive'){
-    document.querySelectorAll('[data-word]').forEach(b=>
-      b.addEventListener('click',()=>{
-        if(adp.answered) return;
-        if(b.dataset.phrase){
-          const p=b.dataset.phrase; const i=adp.clkSelected.indexOf(p);
-          if(i!==-1) adp.clkSelected.splice(i,1); else adp.clkSelected.push(p);
-        } else {
-          const w=b.dataset.word.replace(/[.,;:!?«»"'()\[\]]/g,'').trim();
-          const i=adp.clkSelected.indexOf(w);
-          if(i!==-1) adp.clkSelected.splice(i,1); else adp.clkSelected.push(w);
-        }
-        render();
-      }));
-    // Adaptive GAP
-    const gapAdp=document.getElementById('gapInpAdp');
-    if(gapAdp){
-      if(adp.answer) gapAdp.value=adp.answer;
-      gapAdp.addEventListener('input',()=>{adp.answer=gapAdp.value;const b=document.getElementById('btnCheckAdp');if(b)b.disabled=!adp.answer.trim();});
-      gapAdp.addEventListener('keydown',e=>{if(e.key==='Enter'&&adp.answer) doCheckAdp();});
-    }
-    // Adaptive DD
-    let _adpDrag=null,_adpChip=null;
-    document.querySelectorAll('[data-adp-dd-li]').forEach(el=>{
-      const li=parseInt(el.dataset.adpDdLi);
-      el.addEventListener('dragstart',e=>{_adpDrag=li;el.classList.add('dragging');e.dataTransfer.setData('text/plain',String(li));});
-      el.addEventListener('dragend',()=>el.classList.remove('dragging'));
-      el.addEventListener('click',()=>{
-        if(adp.answered) return;
-        if(_adpChip===li){_adpChip=null;document.querySelectorAll('[data-adp-dd-li]').forEach(c=>c.classList.remove('dragging'));}
-        else{_adpChip=li;document.querySelectorAll('[data-adp-dd-li]').forEach(c=>c.classList.remove('dragging'));el.classList.add('dragging');}
-      });
-    });
-    document.querySelectorAll('[data-adp-dd-ri]').forEach(slot=>{
-      const ri=parseInt(slot.dataset.adpDdRi);
-      slot.addEventListener('dragover',e=>{e.preventDefault();slot.classList.add('over');});
-      slot.addEventListener('dragleave',()=>slot.classList.remove('over'));
-      slot.addEventListener('drop',e=>{
-        e.preventDefault();slot.classList.remove('over');
-        if(_adpDrag===null) return;
-        Object.keys(adp.ddPairs).forEach(k=>{if(adp.ddPairs[k]===ri) delete adp.ddPairs[k];});
-        adp.ddPairs[_adpDrag]=ri;_adpDrag=null;render();
-      });
-      slot.addEventListener('click',()=>{
-        if(adp.answered) return;
-        if(_adpChip!==null){
-          Object.keys(adp.ddPairs).forEach(k=>{if(adp.ddPairs[k]===ri) delete adp.ddPairs[k];});
-          adp.ddPairs[_adpChip]=ri;_adpChip=null;
-          document.querySelectorAll('[data-adp-dd-li]').forEach(c=>c.classList.remove('dragging'));
-          render();
-        } else {
-          const ub=Object.entries(adp.ddPairs).find(([,v])=>v===ri);
-          if(ub){delete adp.ddPairs[parseInt(ub[0])];render();}
-        }
-      });
-    });
-  }
-
-  document.querySelectorAll('[data-gq-domi]').forEach(b =>
-    b.addEventListener('click', () => { gqState.domiFilter=b.dataset.gqDomi; render(); }));
-  document.querySelectorAll('[data-gq-tropos]').forEach(b =>
-    b.addEventListener('click', () => { gqState.troposFilter=b.dataset.gqTropos; render(); }));
-  document.querySelectorAll('[data-gq-count]').forEach(b =>
-    b.addEventListener('click', () => {
-      const v = b.dataset.gqCount;
-      gqState.countFilter = v==='all'?'all':parseInt(v);
-      render();
-    }));
-
-  // Εκκίνηση
-  const btnGQStart = document.getElementById('btnGQStart');
-  if (btnGQStart) btnGQStart.addEventListener('click', () => {
-    const pool = shuffle(getGQFiltered());
-    const n = gqState.countFilter==='all' ? pool.length : Math.min(gqState.countFilter, pool.length);
-    gqState.questions = pool.slice(0, n);
-    gqState.idx = 0;
-    gqState.selDomi = null;
-    gqState.selTropoi = [];
-    gqState.answered = false;
-    gqState.score = 0;
-    gqState.wrong = 0;
-    state.screen = 'gq_quiz';
+  const btnSkipToNext = document.getElementById('btnSkipToNext');
+  if (btnSkipToNext) btnSkipToNext.addEventListener('click', ()=>{
+    if (adp.catIdx < catOrder.length-1) { adp.catIdx++; screen='cat_transition'; }
+    else { screen='adp_results'; }
     render();
   });
 
-  // Επιλογή δομής
-  document.querySelectorAll('[data-gq-sel-domi]').forEach(b =>
-    b.addEventListener('click', () => {
-      if (gqState.answered) return;
-      gqState.selDomi = b.dataset.gqSelDomi;
-      gqCheckAndAdvance();
-    }));
-
-  // Επιλογή τρόπου
-  document.querySelectorAll('[data-gq-sel-tropos]').forEach(b =>
-    b.addEventListener('click', () => {
-      if (gqState.answered) return;
-      const t = b.dataset.gqSelTropos;
-      const q = gqState.questions[gqState.idx];
-      const needed = q.gqTropos.length;
-      const idx2 = gqState.selTropoi.indexOf(t);
-      if (idx2 !== -1) gqState.selTropoi.splice(idx2, 1);
-      else {
-        if (gqState.selTropoi.length < needed) gqState.selTropoi.push(t);
-        else gqState.selTropoi[needed-1] = t;
-      }
-      gqCheckAndAdvance();
-    }));
-
-  // Αποτελέσματα buttons
-  const btnGQAgain = document.getElementById('btnGQAgain');
-  if (btnGQAgain) btnGQAgain.addEventListener('click', () => {
-    const pool = shuffle(getGQFiltered());
-    const n = gqState.countFilter==='all' ? pool.length : Math.min(gqState.countFilter, pool.length);
-    gqState.questions = pool.slice(0, n);
-    gqState.idx = 0; gqState.selDomi=null; gqState.selTropoi=[];
-    gqState.answered=false; gqState.score=0; gqState.wrong=0;
-    state.screen='gq_quiz'; render();
-  });
-  const btnGQNewSel = document.getElementById('btnGQNewSel');
-  if (btnGQNewSel) btnGQNewSel.addEventListener('click', () => { state.screen='gq_select'; render(); });
-  const btnHomeGQ = document.getElementById('btnHomeFromGQ');
-  if (btnHomeGQ) btnHomeGQ.addEventListener('click', () => { state.screen='home'; render(); });
-  const btnHomeGQR = document.getElementById('btnHomeFromGQR');
-  if (btnHomeGQR) btnHomeGQR.addEventListener('click', () => { state.screen='home'; render(); });
-}
-
-function gqCheckAndAdvance() {
-  const q = gqState.questions[gqState.idx];
-  const needed = q.gqTropos.length;
-  // Ελέγχω αν έχουν επιλεγεί και δομή και τρόποι
-  if (!gqState.selDomi || gqState.selTropoi.length < needed) {
-    render(); return;
-  }
-  // Αξιολόγηση
-  gqState.answered = true;
-  const ok = checkGQAnswer(q);
-  if (ok) gqState.score++; else gqState.wrong++;
-  render();
-  // Αυτόματη μετάβαση σε 1.5 δευτερόλεπτα
-  if (gqState.autoTimer) clearTimeout(gqState.autoTimer);
-  gqState.autoTimer = setTimeout(() => {
-    if (gqState.idx < gqState.questions.length - 1) {
-      gqState.idx++;
-      gqState.selDomi = null;
-      gqState.selTropoi = [];
-      gqState.answered = false;
-    } else {
-      state.screen = 'gq_results';
-    }
-    render();
-  }, 1500);
+  // Results
+  const btnNewAdp = document.getElementById('btnNewAdp');
+  if (btnNewAdp) btnNewAdp.addEventListener('click', startAdaptive);
+  const btnHomeFromRes = document.getElementById('btnHomeFromRes');
+  if (btnHomeFromRes) btnHomeFromRes.addEventListener('click', ()=>{ screen='home'; render(); });
 }
 
 // ══════════════════════════════════════════════
-// ACTIONS
+// CHECK / NEXT ACTIONS
 // ══════════════════════════════════════════════
-function resetQuizState() {
-  if (state._autoNextTimer) { clearTimeout(state._autoNextTimer); state._autoNextTimer=null; }
-  state.idx=0; state.answer=null; state.answered=false;
-  state.ddPairs={}; state.ddSelected=null; state.clkSelected=[];
-  state.showTheory=false; state.score=0; state.wrongByCat={};
-}
-
-function startDiagnostic(diagQ) {
-  resetQuizState(); state.quizQ=diagQ; state.phase='diag';
-  state.diagScore=0; state.diagTotal=diagQ.length; state.screen='diagnostic'; render();
-}
-
-function startQuiz(diff) {
-  const pool = getFiltered(diff); resetQuizState();
-  state.quizQ=pickQuestions(pool,QUIZ_PER_SESSION); state.difficulty=diff;
-  state.phase='main'; state.screen='quiz'; render();
-}
-
 function doCheck() {
-  const q = state.quizQ[state.idx];
-  if (q.type==='GAP') { const inp=document.getElementById('gapInp'); state.answer=inp?inp.value.trim():state.answer; }
-  if (q.type==='CLK') state.answer=[...state.clkSelected];
-  if (q.type==='DD') state.answer={...state.ddPairs};
-  state.answered=true;
-  const ok = checkAnswer(q, state.answer);
-  if (state.phase==='diag') { if(ok) state.diagScore++; }
-  else if (ok) { state.score++; }
-  else if (state.phase==='main') {
-    if (!state.wrongByCat[q.cat]) state.wrongByCat[q.cat]=[];
-    state.wrongByCat[q.cat].push(q.id);
-  }
+  const q = adp.queue[adp.qIdx];
+  if (q.type==='GAP') { const inp=document.getElementById('gapInp'); adp.answer=inp?inp.value.trim():adp.answer; }
+  if (q.type==='CLK') adp.answer=[...adp.clkSelected];
+  if (q.type==='DD') adp.answer={...adp.ddPairs};
+  adp.answered = true;
+  const ok = checkAnswer(q, adp.answer);
+  adp.roundResults.push(ok);
+  adp.totalAnswered++;
+  if (ok) adp.totalCorrect++;
   render();
   playSound(ok ? 'correct' : 'wrong');
   if (ok) {
-    state._autoNextTimer = setTimeout(() => { if(state.answered) doNext(); }, 3500);
-
+    if (adp._autoTimer) clearTimeout(adp._autoTimer);
+    adp._autoTimer = setTimeout(()=>{ if(adp.answered) doNext(); }, 3500);
   }
 }
 
 function doNext() {
-  if (state._autoNextTimer) { clearTimeout(state._autoNextTimer); state._autoNextTimer=null; }
-  if (state.idx < state.quizQ.length-1) {
-    state.idx++; state.answer=null; state.answered=false;
-    state.ddPairs={}; state.ddSelected=null; state.clkSelected=[]; render();
+  if (adp._autoTimer) { clearTimeout(adp._autoTimer); adp._autoTimer=null; }
+
+  // Store main queue for retry reference
+  if (adp.phase === 'main') {
+    const catKey = catOrder[adp.catIdx];
+    if (!mainQueueLog[catKey]) mainQueueLog[catKey] = [...adp.queue];
+  }
+
+  if (adp.qIdx < adp.queue.length-1) {
+    // More questions in this round
+    adp.qIdx++;
+    adp.answer=null; adp.answered=false;
+    adp.ddPairs={}; adp.ddSelected=null; adp.clkSelected=[];
+    render();
   } else {
-    if (state.phase==='diag') { state.diagLevel=calcDiagLevel(state.diagScore,state.diagTotal); state.screen='diag_result'; render(); }
-    else if (state.phase==='main') { state.screen='results'; render(); }
-    else { state.screen='done'; render(); }
+    // Round finished — evaluate
+    finishRound();
   }
-}
-
-function startRetry(cat) {
-  const wrongIds=state.wrongByCat[cat]||[];
-  const sameWrong=allQ.filter(q=>wrongIds.includes(q.id));
-  const samePool=allQ.filter(q=>q.cat===cat&&!wrongIds.includes(q.id));
-  const extra=shuffle(samePool).slice(0,2);
-  const retrySet=shuffle([...sameWrong.slice(0,1),...extra]).slice(0,3);
-  if (!retrySet.length) return;
-  state.quizQ=retrySet; state.idx=0; state.answer=null; state.answered=false;
-  state.phase='retry'; state.ddPairs={}; state.ddSelected=null; state.clkSelected=[];
-  state.score=0; state.screen='retry'; render();
-}
-
-// ══════════════════════════════════════════════
-// ΓΡΗΓΟΡΟ QUIZ — STATE & HELPERS
-// ══════════════════════════════════════════════
-const GQ_TROPOI = ['Παραδείγματα','Αιτιολόγηση','Αίτιο-αποτέλεσμα','Διαίρεση','Σύγκριση-αντίθεση','Αναλογία','Ορισμός','Συνδυασμός μεθόδων'];
-
-let gqState = {
-  domiFilter: 'all',
-  troposFilter: 'all',
-  countFilter: 10,
-  questions: [],
-  idx: 0,
-  selDomi: null,
-  selTropoi: [],
-  answered: false,
-  score: 0,
-  wrong: 0,
-  autoTimer: null,
-};
-
-function getGQPool() {
-  return allQ.filter(q => q.gqDomi && q.gqTropos && q.gqTropos.length > 0 && q.excerpt);
-}
-
-function getGQFiltered() {
-  let pool = getGQPool();
-  if (gqState.domiFilter !== 'all') pool = pool.filter(q => q.gqDomi === gqState.domiFilter);
-  if (gqState.troposFilter !== 'all') {
-    if (gqState.troposFilter === 'syndyasmos') pool = pool.filter(q => q.gqTropos.length > 1);
-    else pool = pool.filter(q => q.gqTropos.includes(gqState.troposFilter));
-  }
-  return pool;
-}
-
-function checkGQAnswer(q) {
-  const domiOk = gqState.selDomi === q.gqDomi;
-  const tropoiOk = q.gqTropos.every(t => gqState.selTropoi.includes(t)) && gqState.selTropoi.length === q.gqTropos.length;
-  return domiOk && tropoiOk;
-}
-
-// ── RENDER GQ SELECT ──
-function renderGQSelect() {
-  const pool = getGQFiltered();
-  const cnt = pool.length;
-  const domiOpts = ['all','Διμερής','Τριμερής'];
-  const domiLabels = {'all':'Όλες','Διμερής':'Διμερής','Τριμερής':'Τριμερής'};
-  const troposOpts = ['all',...GQ_TROPOI,'syndyasmos'];
-  const troposLabels = {'all':'Όλοι','syndyasmos':'Συνδυασμός'};
-  GQ_TROPOI.forEach(t => troposLabels[t]=t);
-  const counts = [1,10,20,'all'];
-  const countLabels = {1:'1',10:'10',20:'20','all':'Όλες'};
-
-  return `
-  <div class="card">
-    <p class="sel-title" style="color:#7c3aed">⚡ Γρήγορο Quiz</p>
-    <p class="sel-sub">Εντόπισε τη δομή και τον τρόπο ανάπτυξης</p>
-    <div class="fg" style="margin-top:18px">
-      <label>Δομή</label>
-      <div class="pills">${domiOpts.map(d=>`<button class="pill ${gqState.domiFilter===d?'on':''}" data-gq-domi="${d}">${domiLabels[d]}</button>`).join('')}</div>
-    </div>
-    <div class="fg">
-      <label>Τρόπος ανάπτυξης</label>
-      <div class="pills">${troposOpts.map(t=>`<button class="pill ${gqState.troposFilter===t?'on':''}" data-gq-tropos="${t}">${troposLabels[t]}</button>`).join('')}</div>
-    </div>
-    <div class="fg">
-      <label>Αριθμός ερωτήσεων</label>
-      <div class="pills">${counts.map(c=>`<button class="pill ${gqState.countFilter===c?'on':''}" data-gq-count="${c}">${countLabels[c]}</button>`).join('')}</div>
-    </div>
-    <div class="info ${cnt===0?'warn':''}">${cnt===0?'⚠️ Δεν υπάρχουν ερωτήσεις με αυτά τα φίλτρα':`✅ <strong>${cnt}</strong> ερωτήσεις διαθέσιμες`}</div>
-    <button class="btn-go" id="btnGQStart" style="background:#7c3aed" ${cnt===0?'disabled':''}>Ξεκίνα ⚡</button>
-    <button class="btn-sec" id="btnHomeFromGQ" style="margin-top:8px">↩ Αρχική</button>
-  </div>`;
-}
-
-// ── RENDER GQ QUIZ ──
-function renderGQQuiz() {
-  const q = gqState.questions[gqState.idx];
-  const prog = ((gqState.idx+1)/gqState.questions.length)*100;
-  const isMulti = q.gqTropos.length > 1;
-
-  // Δομή κουμπιά
-  let domiHtml = '';
-  ['Διμερής','Τριμερής'].forEach(d => {
-    let cls = 'gq-btn';
-    if (gqState.answered) {
-      if (d === q.gqDomi) cls += ' ok';
-      else if (d === gqState.selDomi && d !== q.gqDomi) cls += ' ko';
-    } else {
-      if (gqState.selDomi === d) cls += ' sel';
-    }
-    const dis = gqState.answered ? 'disabled' : '';
-    domiHtml += '<button class="' + cls + '" data-gq-sel-domi="' + d + '" ' + dis + '>' + d + '</button>';
-  });
-
-  // Τρόπος κουμπιά
-  let troposHtml = '';
-  GQ_TROPOI.forEach(t => {
-    let cls = 'gq-btn';
-    if (gqState.answered) {
-      if (q.gqTropos.includes(t)) cls += ' ok';
-      else if (gqState.selTropoi.includes(t)) cls += ' ko';
-    } else {
-      if (gqState.selTropoi.includes(t)) cls += ' sel';
-    }
-    const dis = gqState.answered ? 'disabled' : '';
-    troposHtml += '<button class="' + cls + '" data-gq-sel-tropos="' + t + '" ' + dis + '>' + t + '</button>';
-  });
-
-  const multiHint = isMulti ? ' <span style="font-size:.7rem;color:var(--muted)">(επίλεξε ' + q.gqTropos.length + ')</span>' : '';
-
-  return '<div class="card">'
-    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
-    + '<span class="ph main" style="background:#ede9fe;color:#7c3aed">⚡ Γρήγορο Quiz</span>'
-    + '<span style="color:var(--muted);font-size:.83rem">' + (gqState.idx+1) + ' / ' + gqState.questions.length + '</span>'
-    + '</div>'
-    + '<div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:' + prog + '%;background:#7c3aed"></div></div></div>'
-    + '</div>'
-    + '<div class="card">'
-    + '<p class="exc-lbl">Ερώτηση</p>'
-    + '<p class="q-txt">Να εντοπίσεις τη δομή και τον τρόπο' + (isMulti?' / τρόπους':'') + ' ανάπτυξης της παραγράφου.</p>'
-    + '<div class="exc">' + q.excerpt + '</div>'
-    + '<div class="gq-q-wrap">'
-    + '<div><p class="gq-col-hdr">Δομή</p>' + domiHtml + '</div>'
-    + '<div><p class="gq-col-hdr">Τρόπος ανάπτυξης' + multiHint + '</p>' + troposHtml + '</div>'
-    + '</div>'
-    + '</div>';
-}
-
-// ── RENDER GQ RESULTS ──
-function renderGQResults() {
-  const total = gqState.questions.length;
-  const pct = Math.round((gqState.score/total)*100);
-  const emoji = pct>=80?'🎉':pct>=60?'👍':'📚';
-  return `<div class="card" style="text-align:center;padding:28px 20px">
-    <div style="font-size:2.8rem;margin-bottom:10px">${emoji}</div>
-    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.4rem;margin-bottom:16px">Ολοκλήρωσες!</h2>
-    <div class="score-box" style="background:#ede9fe">
-      <p class="score-big" style="color:#7c3aed">${gqState.score} / ${total}</p>
-      <p class="score-pct">${pct}%</p>
-    </div>
-    <div class="gq-score">
-      <div class="gq-sc g"><p>Σωστές</p><p>${gqState.score}</p></div>
-      <div class="gq-sc r"><p>Λάθος</p><p>${gqState.wrong}</p></div>
-      <div class="gq-sc a"><p>Ποσοστό</p><p>${pct}%</p></div>
-    </div>
-    <button class="btn-gq-start" id="btnGQAgain" style="margin-bottom:8px">🔄 Ξανά</button>
-    <button class="btn-sec" id="btnGQNewSel">⚙️ Νέα επιλογή</button>
-    <button class="btn-sec" id="btnHomeFromGQR" style="margin-top:6px">↩ Αρχική</button>
-  </div>`;
 }
 
 // ══════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════
 loadData();
-
 </script>
 </body>
 </html>
