@@ -556,6 +556,7 @@ function startAdaptive() {
 
 function startCatMain() {
   const catKey = catOrder[adp.catIdx];
+  console.log('startCatMain, catKey:', catKey, 'catIdx:', adp.catIdx);
   if (!catKey) { state.screen='adp_results'; render(); return; }
   if (!adp.usedIds[catKey]) adp.usedIds[catKey]=new Set();
   const qs = getQuestionsForCat(catKey, 3, [...adp.usedIds[catKey]]);
@@ -639,6 +640,7 @@ function renderCatMap() {
 }
 
 function renderAdaptive() {
+  console.log('renderAdaptive called, catIdx:', adp.catIdx, 'queue:', adp.queue.length);
   const catKey = catOrder[adp.catIdx];
   const q = adp.queue[adp.qIdx];
   if (!q) return '<div class="card"><p>Σφάλμα.</p></div>';
