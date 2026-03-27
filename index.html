@@ -536,7 +536,11 @@ function canCheck(q) {
   if (adp.answered) return false;
   if (q.type==='MC'||q.type==='YN') return adp.answer!==null;
   if (q.type==='CLK') return adp.clkSelected.length>0;
-  if (q.type==='DD') return Object.keys(adp.ddPairs).length===q.leftItems.length;
+  if (q.type==='DD') {
+    const cp = parseCorrectDD(q.correct, q.leftItems, q.rightItems);
+    const needed = cp ? Object.keys(cp).length : q.leftItems.length;
+    return Object.keys(adp.ddPairs).length === needed;
+  }
   if (q.type==='GAP') return !!(adp.answer && adp.answer.trim());
   return false;
 }
@@ -816,7 +820,11 @@ function renderAdaptive() {
       ${!isOk ? `<p>${getFeedback(q, adp.answer)||''}</p>` : ''}
     </div>`;
     const isLast = adp.qIdx === adp.queue.length-1;
-    html += `<button class="btn-next" id="btnNext">${isLast ? 'Αξιολόγηση κατηγορίας →' : 'Επόμενη ερώτηση →'}</button>`;
+    const delay = checkAnswer(adp.queue[adp.qIdx], adp.answer) ? 2 : 4;
+    html += `<button class="btn-next" id="btnNext" style="opacity:.7;font-size:.85rem;padding:10px">
+      ${isLast ? 'Αξιολόγηση τώρα →' : 'Επόμενη τώρα →'}
+      <span style="font-size:.75rem;opacity:.7;margin-left:6px">(αυτόματα σε ${delay}″)</span>
+    </button>`;
   } else {
     html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
   }
@@ -1002,47 +1010,63 @@ function renderExcerptCLK(q) {
 
 function renderExcerptGAP(q) {
   if (!q.excerpt) return '';
-  const GAP_MARKER = '__________';
-  const parts = q.excerpt.split(GAP_MARKER);
-  if (parts.length < 2) {
-    const p2 = q.excerpt.split('_____');
-    if (p2.length>=2) return `<div class="exc-gap">${p2[0]}<input class="gap-inp" id="gapInp" type="text" placeholder="…" autocomplete="off" ${adp.answered?'disabled':''}>${p2.slice(1).join('_____')}</div>`;
-    return `<div class="exc">${q.excerpt}</div>`;
+  // Try standard gap markers
+  const markers = ['__________','_____','___'];
+  for (const m of markers) {
+    if (q.excerpt.includes(m)) {
+      const parts = q.excerpt.split(m);
+      return `<div class="exc-gap">${parts[0]}<input class="gap-inp" id="gapInp" type="text" placeholder="…" autocomplete="off" ${adp.answered?'disabled':''}>${parts.slice(1).join(m)}</div>`;
+    }
   }
-  return `<div class="exc-gap">${parts[0]}<input class="gap-inp" id="gapInp" type="text" placeholder="…" autocomplete="off" ${adp.answered?'disabled':''}>${parts.slice(1).join(GAP_MARKER)}</div>`;
+  // No marker: try to blank out the first accepted answer word in the text
+  const firstCorrect = q.correct.split('|')[0].trim();
+  if (firstCorrect && q.excerpt.includes(firstCorrect)) {
+    const idx = q.excerpt.indexOf(firstCorrect);
+    const before = q.excerpt.slice(0, idx);
+    const after = q.excerpt.slice(idx + firstCorrect.length);
+    return `<div class="exc-gap">${before}<input class="gap-inp" id="gapInp" type="text" placeholder="…" autocomplete="off" ${adp.answered?'disabled':''}>${after}</div>`;
+  }
+  // Fallback: show full excerpt, input appears below via renderGAPInput
+  return `<div class="exc" style="margin-bottom:14px">${q.excerpt}</div>`;
 }
 
 function renderDD(q) {
-  if (!q._shuffledRight) q._shuffledRight = shuffle(q.rightItems.map((r,i)=>({r,i})));
+  const correctPairs = parseCorrectDD(q.correct, q.leftItems, q.rightItems) || {};
+  // Only show left chips that participate in correct pairs
+  const activeLeftIdxs = Object.keys(correctPairs).map(Number);
+  // Only show right slots that are targets in correct pairs
+  const activeRightIdxs = Object.values(correctPairs).map(Number);
+  if (!q._shuffledRight) {
+    q._shuffledRight = shuffle(q.rightItems.map((r,i)=>({r,i})).filter(({i})=>activeRightIdxs.includes(i)));
+  }
   const shuffledRight = q._shuffledRight;
   let html = '<div class="dd-wrap">';
   if (adp.answered) {
-    const correctPairs = parseCorrectDD(q.correct, q.leftItems, q.rightItems);
     html += '<div class="dd-slots">';
     shuffledRight.forEach(({r,i}) => {
       const usedByLeft = Object.entries(adp.ddPairs).find(([,ri])=>ri===i);
       const li = usedByLeft ? parseInt(usedByLeft[0]) : null;
       const filledText = li !== null ? q.leftItems[li] : '—';
-      const correctRi = li !== null ? correctPairs?.[li] : null;
+      const correctRi = li !== null ? correctPairs[li] : null;
       const isOk = correctRi === i;
       html += `<div class="dd-slot-row"><span class="dd-slot-lbl">${r}</span><div class="dd-slot ${isOk?'ok':'ko'}">${filledText}</div></div>`;
     });
     html += '</div>';
-    const allOk = q.leftItems.every((_,li)=>adp.ddPairs[li]===correctPairs?.[li]);
-    if (!allOk && correctPairs) {
+    const allOk = activeLeftIdxs.every(li=>adp.ddPairs[li]===correctPairs[li]);
+    if (!allOk) {
       html += '<div class="dd-correct-show"><p>✅ Σωστές αντιστοιχίσεις:</p>';
-      q.leftItems.forEach((l,li)=>{
+      activeLeftIdxs.forEach(li=>{
         const ri = correctPairs[li];
-        html += `<div class="dd-correct-row"><div class="dl">${l}</div><div class="da">→</div><div class="dr">${q.rightItems[ri]||'—'}</div></div>`;
+        html += `<div class="dd-correct-row"><div class="dl">${q.leftItems[li]}</div><div class="da">→</div><div class="dr">${q.rightItems[ri]||'—'}</div></div>`;
       });
       html += '</div>';
     }
   } else {
     html += '<p class="dd-hint">🖱️ Σύρε chip στη σωστή θέση · Κινητό: πάτα chip → πάτα θέση</p>';
     html += '<div class="dd-chips">';
-    q.leftItems.forEach((l,li)=>{
+    activeLeftIdxs.forEach(li=>{
       const used = adp.ddPairs[li] !== undefined;
-      html += `<div class="dd-chip ${used?'used':''}" draggable="${!used}" data-dd-li="${li}">${l}</div>`;
+      html += `<div class="dd-chip ${used?'used':''}" draggable="${!used}" data-dd-li="${li}">${q.leftItems[li]}</div>`;
     });
     html += '</div><div class="dd-slots">';
     shuffledRight.forEach(({r,i})=>{
@@ -1194,10 +1218,9 @@ function doCheck() {
   if (ok) adp.totalCorrect++;
   render();
   playSound(ok ? 'correct' : 'wrong');
-  if (ok) {
-    if (adp._autoTimer) clearTimeout(adp._autoTimer);
-    adp._autoTimer = setTimeout(()=>{ if(adp.answered) doNext(); }, 3500);
-  }
+  if (adp._autoTimer) clearTimeout(adp._autoTimer);
+  const delay = ok ? 2000 : 4000;
+  adp._autoTimer = setTimeout(()=>{ if(adp.answered) doNext(); }, delay);
 }
 
 function doNext() {
