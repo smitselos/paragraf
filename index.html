@@ -878,8 +878,9 @@ function parseCSV(csv) {
       obj[h] = (v===''||v.toLowerCase()==='null'||v.toLowerCase()==='false') ? null : v;
     });
     if (!obj['Ενεργό'] || obj['Ενεργό'].toUpperCase()==='FALSE') continue;
-    if (!obj['Τύπος'] || !obj['Κατηγορία'] || !obj['Κείμενο Ερώτησης']) continue;
+    if (!obj['Τύπος'] || !obj['Κείμενο Ερώτησης']) continue;
     obj.cat = parseInt(obj['Κατηγορία']) || 0;
+    obj.catKey = obj['Κατηγορία'] ? String(obj['Κατηγορία']).trim().replace(/\.0$/,'') : null;
     obj.diff = parseInt(obj['Δυσκολία']) || 1;
     const diagRaw = (obj['Διαγνωστική']||'').toString().trim(); const diagNum = parseFloat(diagRaw); obj.diagOrder = (!diagRaw || isNaN(diagNum)) ? null : Math.round(diagNum);
     obj.quizId = obj['Quiz_ID'];
