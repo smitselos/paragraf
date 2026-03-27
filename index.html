@@ -394,7 +394,7 @@ function parseCSV(csv) {
       obj[h] = (v===''||v.toLowerCase()==='null'||v.toLowerCase()==='false') ? null : v;
     });
     if (!obj['Ενεργό'] || obj['Ενεργό'].toUpperCase()==='FALSE') continue;
-    if (!obj['Τύπος'] || !obj['Βήμα'] || !obj['Κείμενο Ερώτησης']) continue;
+    if (!obj['Τύπος'] || !obj['Κατηγορία'] || !obj['Κείμενο Ερώτησης']) continue;
     obj.catKey = parseCatKey(obj['Κατηγορία']);
     obj.diff = parseInt(obj['Δυσκολία']) || 1;
     obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
