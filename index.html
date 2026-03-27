@@ -372,10 +372,13 @@ function parseCSVLine(line) {
 
 function parseCatKey(raw) {
   if (!raw) return null;
-  // Handle date-like strings "2026-01-01" or datetime objects serialized as strings
-  const m = String(raw).match(/(\d{4})[.\-\/](\d{1,2})[.\-\/](\d{1,2})/);
-  if (m) return `${parseInt(m[2])}.${parseInt(m[3])}`;
-  return String(raw).trim();
+  const s = String(raw).trim();
+  // Handle date-like strings "2026-01-03" → ignore, treat as invalid
+  if (s.match(/^\d{4}[.\-\/]/)) return null;
+  // Float like "1.0" → "1"
+  const f = parseFloat(s);
+  if (!isNaN(f)) return String(Math.round(f));
+  return s;
 }
 
 function parseCSV(csv) {
@@ -391,8 +394,8 @@ function parseCSV(csv) {
       obj[h] = (v===''||v.toLowerCase()==='null'||v.toLowerCase()==='false') ? null : v;
     });
     if (!obj['Ενεργό'] || obj['Ενεργό'].toUpperCase()==='FALSE') continue;
-    if (!obj['Τύπος'] || !obj['Κατηγορία'] || !obj['Κείμενο Ερώτησης']) continue;
-    obj.catKey = parseCatKey(obj['Κατηγορία']);
+    if (!obj['Τύπος'] || !obj['Βήμα'] || !obj['Κείμενο Ερώτησης']) continue;
+    obj.catKey = parseCatKey(obj['Βήμα']);
     obj.diff = parseInt(obj['Δυσκολία']) || 1;
     obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
     obj.id = obj['ID'];
@@ -467,9 +470,11 @@ function getTheoryKeysForCat(catKey) {
 }
 
 function getCatDisplayName(catKey) {
-  const [maj, min] = catKey.split('.');
-  const base = CAT_NAMES[parseInt(maj)] || `Θέμα ${maj}`;
-  return `${base} (${catKey})`;
+  return `Βήμα ${catKey}`;
+}
+
+function getCatTheoryName(catKey) {
+  return CAT_NAMES[parseInt(catKey)] || `Θέμα ${catKey}`;
 }
 
 function getQuestionsForCat(catKey, n, excludeIds=[]) {
@@ -496,10 +501,16 @@ function checkAnswer(q, answer) {
   if (q.type==='DD') {
     const correctPairs = parseCorrectDD(q.correct, q.leftItems, q.rightItems);
     if (!correctPairs) return false;
+    const activeRights = Object.values(correctPairs).map(Number);
+    if (activeRights.length === 1) {
+      const correctLi = parseInt(Object.keys(correctPairs)[0]);
+      return (answer||{})['mc'] === correctLi;
+    }
     for(const [li, ri] of Object.entries(answer||{})) {
+      if(li==='mc') continue;
       if(correctPairs[parseInt(li)] !== parseInt(ri)) return false;
     }
-    return Object.keys(answer||{}).length === q.leftItems.length;
+    return Object.keys(answer||{}).filter(k=>k!=='mc').length === Object.keys(correctPairs).length;
   }
   return false;
 }
@@ -537,9 +548,11 @@ function canCheck(q) {
   if (q.type==='MC'||q.type==='YN') return adp.answer!==null;
   if (q.type==='CLK') return adp.clkSelected.length>0;
   if (q.type==='DD') {
-    const cp = parseCorrectDD(q.correct, q.leftItems, q.rightItems);
-    const needed = cp ? Object.keys(cp).length : q.leftItems.length;
-    return Object.keys(adp.ddPairs).length === needed;
+    const cp = parseCorrectDD(q.correct, q.leftItems, q.rightItems) || {};
+    const activeRights = Object.values(cp).map(Number);
+    if (activeRights.length === 1) return adp.ddPairs['mc'] !== undefined;
+    const needed = Object.keys(cp).length;
+    return Object.keys(adp.ddPairs).filter(k=>k!=='mc').length === needed;
   }
   if (q.type==='GAP') return !!(adp.answer && adp.answer.trim());
   return false;
@@ -683,13 +696,237 @@ function render() {
     case 'cat_transition': badge.textContent='Επόμενο βήμα';    app.innerHTML=renderCatTransition(); break;
     case 'theory_wall':    badge.textContent='Θεωρία';          app.innerHTML=renderTheoryWall(); break;
     case 'adp_results':    badge.textContent='Αποτελέσματα';    app.innerHTML=renderAdpResults(); break;
+    case 'sel_quiz':       badge.textContent=`Επ.${selState.level} — ${selState.idx+1}/${selState.questions.length}`; app.innerHTML=renderSelQuiz(); break;
+    case 'sel_results':    badge.textContent='Αποτέλεσμα';         app.innerHTML=renderSelResults(); break;
+    case 'present':        badge.textContent='Παρουσίαση';         app.innerHTML=renderPresent(); break;
+    case 'cat_selection':  badge.textContent='Εστίαση';            app.innerHTML=renderCatSelection(); break;
   }
   attachEvents();
 }
 
 function renderBadgeAdp() {
   const catKey = catOrder[adp.catIdx] || '—';
-  return `Βήμα ${catKey}`;
+  return `Βήμα ${catKey} / ${catOrder.length}`;
+}
+
+// ══════════════════════════════════════════════
+// SELECTION QUIZ (Επίπεδο 1 / Επίπεδο 2)
+// ══════════════════════════════════════════════
+let selState = { level: 1, questions: [], idx: 0, answer: null, answered: false,
+  ddPairs:{}, clkSelected:[], roundResults:[], score:0, _autoTimer:null, selectedCat:null };
+
+const TYPE_NAMES = {
+  'MC':'Πολλαπλής επιλογής','YN':'Ναι / Όχι',
+  'GAP':'Συμπλήρωση κενού','CLK':'Εντοπισμός λέξης','DD':'Αντιστοίχιση'
+};
+
+function startSelQuiz(level) {
+  const pool = allQ.filter(q => q.diff === level);
+  selState.level = level;
+  selState.questions = shuffle(pool).slice(0, 10);
+  selState.idx = 0; selState.answer = null; selState.answered = false;
+  selState.ddPairs = {}; selState.clkSelected = [];
+  selState.roundResults = []; selState.score = 0;
+  screen = 'sel_quiz';
+  render();
+}
+
+function renderSelQuiz() {
+  const q = selState.questions[selState.idx];
+  if (!q) return '<div class="card"><p>Δεν υπάρχουν ερωτήσεις για αυτό το επίπεδο.</p><button class="btn-sec" id="btnHomeFromSel">↩ Αρχική</button></div>';
+  const total = selState.questions.length;
+  const prog = ((selState.idx+1)/total)*100;
+  const isOk = selState.answered ? checkAnswerSel(q, selState.answer) : false;
+
+  let dots = '';
+  for (let i=0; i<total; i++) {
+    let cls='prog-dot';
+    if (i < selState.roundResults.length) cls += selState.roundResults[i]?' ok':' ko';
+    else if (i===selState.idx) cls+=' cur';
+    const icon = i < selState.roundResults.length ? (selState.roundResults[i]?'✓':'✕') : (i===selState.idx?'●':'');
+    dots += `<div class="${cls}">${icon}</div>`;
+  }
+
+  let html = `
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span class="ph main">Επίπεδο ${selState.level}</span>
+      <span style="color:var(--muted);font-size:.83rem">${selState.idx+1} / ${total}</span>
+    </div>
+    <div class="prog-dots">${dots}</div>
+    <div class="prog-wrap"><div class="prog-bar"><div class="prog-fill" style="width:${prog}%"></div></div></div>
+  </div>
+  <div class="card">
+    ${q.excerpt ? `<p class="exc-lbl">Απόσπασμα κειμένου</p>${renderExcerptSel(q)}` : ''}
+    <p class="q-lbl" style="margin-top:${q.excerpt?'14px':'0'}">${qTypeLabel(q.type)}</p>
+    <p class="q-txt">${q.q}</p>
+    ${q.type==='CLK'?'<p style="font-size:.8rem;color:var(--muted);font-style:italic;margin-top:4px">Κάντε κλικ στις λέξεις/φράσεις στο απόσπασμα παραπάνω.</p>':''}
+  </div>`;
+
+  let cardClass = 'answers-card';
+  if (selState.answered) cardClass += isOk ? ' answered-ok' : ' answered-ko';
+  html += `<div class="${cardClass}" id="answersCard">`;
+  if (q.type==='MC'||q.type==='YN') html += renderMCSel(q);
+  else if (q.type==='DD') html += renderDDSel(q);
+  else if (q.type==='GAP') html += renderGAPInputSel(q);
+
+  if (selState.answered) {
+    html += `<div class="fb-box ${isOk?'ok':'ko'}">
+      <p class="fb-title">${isOk?'✅ Σωστά!':'❌ Λάθος'}</p>
+      ${!isOk?`<p>${getFeedback(q,selState.answer)||''}</p>`:''}
+    </div>`;
+    const delay = isOk ? 2 : 4;
+    html += `<button class="btn-next" id="btnNextSel" style="opacity:.7;font-size:.85rem;padding:10px">
+      ${selState.idx===total-1?'Αποτελέσματα':'Επόμενη τώρα →'}
+      <span style="font-size:.75rem;opacity:.7;margin-left:6px">(αυτόματα σε ${delay}″)</span>
+    </button>`;
+  } else {
+    html += `<button class="btn-check" id="btnCheckSel" ${canCheckSel(q)?'':'disabled'}>Έλεγξε</button>`;
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderSelResults() {
+  const total = selState.questions.length;
+  const pct = Math.round((selState.score/total)*100);
+  const emoji = pct>=80?'🎉':pct>=60?'👍':'📚';
+  return `<div class="card" style="text-align:center;padding:28px 22px">
+    <div style="font-size:2.8rem;margin-bottom:10px">${emoji}</div>
+    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.4rem;margin-bottom:16px">Ολοκλήρωσες!</h2>
+    <div class="score-box">
+      <p class="score-big">${selState.score} / ${total}</p>
+      <p class="score-pct">${pct}%</p>
+    </div>
+    <div class="score-grid" style="margin-top:12px">
+      <div class="sc g"><p>Σωστές</p><p>${selState.score}</p></div>
+      <div class="sc r"><p>Λάθος</p><p>${total-selState.score}</p></div>
+      <div class="sc a"><p>Ποσοστό</p><p>${pct}%</p></div>
+    </div>
+    <button class="btn-go" id="btnSelAgain" style="margin-top:4px">🔄 Ξανά (Επίπεδο ${selState.level})</button>
+    <button class="btn-sec" id="btnHomeFromSelR">↩ Αρχική</button>
+  </div>`;
+}
+
+function canCheckSel(q) {
+  if (selState.answered) return false;
+  if (q.type==='MC'||q.type==='YN') return selState.answer!==null;
+  if (q.type==='CLK') return selState.clkSelected.length>0;
+  if (q.type==='DD') {
+    const cp = parseCorrectDD(q.correct, q.leftItems, q.rightItems)||{};
+    const activeRights = Object.values(cp).map(Number);
+    if (activeRights.length===1) return selState.ddPairs['mc']!==undefined;
+    return Object.keys(selState.ddPairs).filter(k=>k!=='mc').length===Object.keys(cp).length;
+  }
+  if (q.type==='GAP') return !!(selState.answer&&selState.answer.trim());
+  return false;
+}
+
+function checkAnswerSel(q, answer) {
+  // reuse same logic as adp but with provided answer
+  const saved = adp.answer;
+  adp.answer = answer;
+  const result = checkAnswer(q, answer);
+  adp.answer = saved;
+  return result;
+}
+
+function renderExcerptSel(q) {
+  if (q.type==='CLK') return renderExcerptCLKSel(q);
+  if (q.type==='GAP') return renderExcerptGAPSel(q);
+  return `<div class="exc">${q.excerpt}</div>`;
+}
+
+function renderMCSel(q) {
+  const keys=['Α','Β','Γ','Δ'];
+  const vals=[q.optA,q.optB,q.optC,q.optD].filter(Boolean);
+  let html='<div class="opts">';
+  vals.forEach((v,i)=>{
+    const k=keys[i]; let cls='opt'; let badge='';
+    if (selState.answered) {
+      const isCorrect=k===q.correct.trim().toUpperCase();
+      const isSelected=k===selState.answer;
+      const answeredCorrectly=selState.answer===q.correct.trim().toUpperCase();
+      if(isSelected&&isCorrect){cls+=' ok';badge='<span class="opt-badge">✓</span>';}
+      else if(isSelected&&!isCorrect){cls+=' ko';badge='<span class="opt-badge">✕</span>';}
+      else if(isCorrect&&!answeredCorrectly)cls+=' neutral-ok';
+    } else { if(selState.answer===k)cls+=' sel'; }
+    html+=`<button class="${cls}" data-sel-opt="${k}" ${selState.answered?'disabled':''}><span class="opt-k">${k}</span>${v}${badge}</button>`;
+  });
+  return html+'</div>';
+}
+
+function renderGAPInputSel(q) {
+  if (q.excerpt) return '';
+  return `<input class="gap-inp" id="gapInpSel" type="text" placeholder="Συμπλήρωσε…" style="width:100%;margin-top:4px" autocomplete="off" ${selState.answered?'disabled':''}>`;
+}
+
+function renderExcerptCLKSel(q) {
+  // reuse adp CLK renderer temporarily by swapping state
+  const savedSel = selState.clkSelected;
+  const savedAdpSel = adp.clkSelected;
+  const savedAdpAns = adp.answered;
+  adp.clkSelected = selState.clkSelected;
+  adp.answered = selState.answered;
+  const html = renderExcerptCLK(q);
+  adp.clkSelected = savedAdpSel;
+  adp.answered = savedAdpAns;
+  return html.replace(/data-word=/g,'data-sel-word=').replace(/data-phrase=/g,'data-sel-phrase=');
+}
+
+function renderExcerptGAPSel(q) {
+  if (!q.excerpt) return '';
+  const markers = ['__________','_____','___'];
+  for (const m of markers) {
+    if (q.excerpt.includes(m)) {
+      const parts = q.excerpt.split(m);
+      return `<div class="exc-gap">${parts[0]}<input class="gap-inp" id="gapInpSel" type="text" placeholder="…" autocomplete="off" ${selState.answered?'disabled':''}>${parts.slice(1).join(m)}</div>`;
+    }
+  }
+  const firstCorrect = q.correct.split('|')[0].trim();
+  if (firstCorrect && q.excerpt.includes(firstCorrect)) {
+    const idx = q.excerpt.indexOf(firstCorrect);
+    return `<div class="exc-gap">${q.excerpt.slice(0,idx)}<input class="gap-inp" id="gapInpSel" type="text" placeholder="…" autocomplete="off" ${selState.answered?'disabled':''}>${q.excerpt.slice(idx+firstCorrect.length)}</div>`;
+  }
+  return `<div class="exc" style="margin-bottom:14px">${q.excerpt}</div>`;
+}
+
+function renderDDSel(q) {
+  // Swap adp.ddPairs with selState.ddPairs temporarily
+  const savedPairs = adp.ddPairs;
+  const savedAnswered = adp.answered;
+  adp.ddPairs = selState.ddPairs;
+  adp.answered = selState.answered;
+  const html = renderDD(q);
+  adp.ddPairs = savedPairs;
+  adp.answered = savedAnswered;
+  return html;
+}
+
+function doCheckSel() {
+  const q = selState.questions[selState.idx];
+  if (q.type==='GAP') { const inp=document.getElementById('gapInpSel'); selState.answer=inp?inp.value.trim():selState.answer; }
+  if (q.type==='CLK') selState.answer=[...selState.clkSelected];
+  if (q.type==='DD') selState.answer={...selState.ddPairs};
+  selState.answered=true;
+  const ok=checkAnswerSel(q,selState.answer);
+  selState.roundResults.push(ok);
+  if(ok) selState.score++;
+  render();
+  playSound(ok?'correct':'wrong');
+  if(selState._autoTimer) clearTimeout(selState._autoTimer);
+  selState._autoTimer = setTimeout(()=>{ if(selState.answered) doNextSel(); }, ok?2000:4000);
+}
+
+function doNextSel() {
+  if(selState._autoTimer){clearTimeout(selState._autoTimer);selState._autoTimer=null;}
+  if(selState.idx < selState.questions.length-1){
+    selState.idx++; selState.answer=null; selState.answered=false;
+    selState.ddPairs={}; selState.clkSelected=[];
+    render();
+  } else {
+    screen='sel_results'; render();
+  }
 }
 
 // ══════════════════════════════════════════════
@@ -699,18 +936,51 @@ function renderHome() {
   const totalCats = catOrder.length;
   return `
   <div class="card">
-    <p class="home-title">Καλωσήρθες!</p>
-    <p class="home-sub">Εξάσκηση με προσαρμοστική μάθηση</p>
-    <div class="home-cards">
+    <p class="home-title">Παράγραφος</p>
+    <p class="home-sub">Νεοελληνική Γλώσσα — Επίλεξε τρόπο εξάσκησης</p>
+
+    <div class="home-cards" style="margin-bottom:4px">
       <button class="home-card c1" id="btnStartAdp">
         <div class="hc-icon-wrap">🎯</div>
         <p class="hc-title">Βήμα-Βήμα</p>
-        <p class="hc-desc">Ξεκίνα από την αρχή με προσαρμοστική μάθηση. Η εφαρμογή σε καθοδηγεί ανάλογα με τις απαντήσεις σου.</p>
-        <span class="hc-arrow">${totalCats} κατηγορίες →</span>
+        <p class="hc-desc">Προσαρμοστική μάθηση. Ξεκινάς από το Βήμα 1 και η εφαρμογή σε καθοδηγεί ανάλογα με τις απαντήσεις σου.</p>
+        <span class="hc-arrow">${totalCats} βήματα →</span>
+      </button>
+      <button class="home-card c5" id="btnGQ">
+        <div class="hc-icon-wrap">⚡</div>
+        <p class="hc-title">Εξάσκηση</p>
+        <p class="hc-desc">Εντόπισε γρήγορα τη δομή και τον τρόπο ανάπτυξης. Χωρίς ανατροφοδότηση.</p>
+        <span class="hc-arrow">Για δυνατούς λύτες →</span>
       </button>
     </div>
-    <div class="info" style="margin-top:10px">
-      <strong>Πώς λειτουργεί:</strong> 3 ερωτήσεις ανά κατηγορία. Αν τις απαντήσεις όλες σωστά, προχωράς. Αν όχι, λαμβάνεις ανατροφοδότηση.
+
+    <hr style="border:none;border-top:1px solid var(--border);margin:16px 0 14px">
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+      <button class="home-card c3" id="btnSelL1" style="padding:16px 14px">
+        <div class="hc-icon-wrap" style="width:36px;height:36px;font-size:1.1rem">📘</div>
+        <p class="hc-title" style="font-size:.9rem">Επιλογή — Επίπεδο 1</p>
+        <p class="hc-desc" style="font-size:.78rem">Βασικές ερωτήσεις — εντοπισμός δομής και τρόπου ανάπτυξης.</p>
+        <span class="hc-arrow" style="font-size:.75rem">Επίπεδο 1 →</span>
+      </button>
+      <button class="home-card c2" id="btnSelL2" style="padding:16px 14px">
+        <div class="hc-icon-wrap" style="width:36px;height:36px;font-size:1.1rem">📗</div>
+        <p class="hc-title" style="font-size:.9rem">Επιλογή — Επίπεδο 2</p>
+        <p class="hc-desc" style="font-size:.78rem">Πιο σύνθετες ερωτήσεις — αντιστοίχιση, εντοπισμός, κλπ.</p>
+        <span class="hc-arrow" style="font-size:.75rem">Επίπεδο 2 →</span>
+      </button>
+      <button class="home-card c4" id="btnCat" style="padding:16px 14px">
+        <div class="hc-icon-wrap" style="width:36px;height:36px;font-size:1.1rem">📂</div>
+        <p class="hc-title" style="font-size:.9rem">Εστίαση</p>
+        <p class="hc-desc" style="font-size:.78rem">Εξάσκηση σε συγκεκριμένο τύπο ερώτησης.</p>
+        <span class="hc-arrow" style="font-size:.75rem">Τύπος ερώτησης →</span>
+      </button>
+      <button class="home-card" id="btnPresent" style="padding:16px 14px;border:2px solid #7c3aed;background:linear-gradient(135deg,#ede9fe,#fff)">
+        <div class="hc-icon-wrap" style="width:36px;height:36px;font-size:1.1rem;background:#ede9fe">🖥️</div>
+        <p class="hc-title" style="font-size:.9rem;color:var(--ink)">Παρουσίαση</p>
+        <p class="hc-desc" style="font-size:.78rem">Για τον εκπαιδευτικό — φιλτράρισμα και προβολή.</p>
+        <span class="hc-arrow" style="font-size:.75rem;color:#7c3aed">Εκπαιδευτικός →</span>
+      </button>
     </div>
   </div>`;
 }
@@ -752,9 +1022,9 @@ function renderAdaptive() {
 
   // Phase label
   let phaseLabel, phaseClass;
-  if (adp.phase === 'main') { phaseLabel=`Κατηγορία ${catKey}`; phaseClass='main'; }
-  else if (adp.phase === 'retry1') { phaseLabel=`Ανατροφοδότηση ${catKey}`; phaseClass='retry'; }
-  else { phaseLabel=`Επανέλεγχος ${catKey}`; phaseClass='fb'; }
+  if (adp.phase === 'main') { phaseLabel=`Βήμα ${catKey}`; phaseClass='main'; }
+  else if (adp.phase === 'retry1') { phaseLabel=`Ανατροφοδότηση — Βήμα ${catKey}`; phaseClass='retry'; }
+  else { phaseLabel=`Επανέλεγχος — Βήμα ${catKey}`; phaseClass='fb'; }
 
   // Progress dots
   let dots = '';
@@ -785,7 +1055,7 @@ function renderAdaptive() {
   let html = `
   <div class="adp-header">
     <h2>Βήμα-Βήμα</h2>
-    <p>${getCatDisplayName(catKey)}</p>
+    <p>Βήμα ${catKey} <span style='opacity:.7;font-size:.8rem'>(${adp.catIdx+1} / ${catOrder.length})</span></p>
   </div>
 
   <div class="card">
@@ -841,10 +1111,10 @@ function renderCatTransition() {
   return `
   <div class="card" style="text-align:center;padding:32px 22px">
     <div style="font-size:2.5rem;margin-bottom:12px">✅</div>
-    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.3rem;margin-bottom:8px">Κατηγορία ${prevKey} ολοκληρώθηκε!</h2>
-    <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px">Μπράβο! Μπορείς να συνεχίσεις στην κατηγορία <strong>${nextKey}</strong>.</p>
+    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.3rem;margin-bottom:8px">Βήμα ${prevKey} ολοκληρώθηκε!</h2>
+    <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px">Μπράβο! Μπορείς να συνεχίσεις στην βήμα <strong>${nextKey}</strong>.</p>
     ${renderCatMap()}
-    <button class="btn-go" id="btnNextCat" style="margin-top:16px">Συνέχεια στο ${nextKey} →</button>
+    <button class="btn-go" id="btnNextCat" style="margin-top:16px">Συνέχεια στο Βήμα ${nextKey} →</button>
     <button class="btn-sec" id="btnHomeFromAdp">↩ Αρχική</button>
   </div>`;
 }
@@ -867,11 +1137,11 @@ function renderTheoryWall() {
   <div class="card">
     <div class="theory-needed">
       <h4>📖 Χρειάζεται να ξαναδείς τη θεωρία</h4>
-      <p>Φαίνεται ότι χρειάζεσαι επανάληψη στο θέμα: <strong>${getCatDisplayName(catKey)}</strong></p>
+      <p>Φαίνεται ότι χρειάζεσαι επανάληψη στο <strong>${getCatDisplayName(catKey)}</strong>: <em>${getCatTheoryName(catKey)}</em></p>
       ${theoryItems ? `<div style="margin:10px 0 14px">${theoryItems}</div>` : ''}
       <p style="font-weight:600;margin-bottom:12px;color:#7f1d1d">Θέλεις να επαναλάβεις την προσπάθεια ή να συνεχίσεις στο επόμενο βήμα;</p>
       <div class="tn-choices">
-        <button class="tn-btn retry" id="btnRetryAgain">🔄 Επανάληψη της κατηγορίας</button>
+        <button class="tn-btn retry" id="btnRetryAgain">🔄 Επανάληψη της βήμας</button>
         <button class="tn-btn skip" id="btnSkipToNext">${adp.catIdx < catOrder.length-1 ? '⏭ Συνέχεια στο επόμενο βήμα' : '🏁 Ολοκλήρωση'}</button>
       </div>
     </div>
@@ -893,7 +1163,7 @@ function renderAdpResults() {
     const cls = status==='pass' ? 'pass' : 'skip';
     const badge = status==='pass' ? '✅ Επιτυχία' : status==='skip' ? '⚠️ Χρειάζεται μελέτη' : '—';
     return `<div class="cat-summary-row ${cls}">
-      <span class="cs-name">${getCatDisplayName(key)}</span>
+      <span class="cs-name">${getCatDisplayName(key)}: ${getCatTheoryName(key)}</span>
       <span class="cs-badge">${badge}</span>
     </div>`;
   }).join('');
@@ -913,7 +1183,7 @@ function renderAdpResults() {
     </div>
   </div>
   <div class="card">
-    <p style="font-weight:700;margin-bottom:12px">Ανά κατηγορία:</p>
+    <p style="font-weight:700;margin-bottom:12px">Ανά βήμα:</p>
     ${catRows}
   </div>
   <button class="btn-sec" id="btnNewAdp" style="margin-top:4px">🔄 Νέα προσπάθεια από την αρχή</button>
@@ -1032,10 +1302,41 @@ function renderExcerptGAP(q) {
 
 function renderDD(q) {
   const correctPairs = parseCorrectDD(q.correct, q.leftItems, q.rightItems) || {};
-  // Only show left chips that participate in correct pairs
   const activeLeftIdxs = Object.keys(correctPairs).map(Number);
-  // Only show right slots that are targets in correct pairs
   const activeRightIdxs = Object.values(correctPairs).map(Number);
+
+  // ── Single-slot: render as MC (all left items as options, one right label as prompt) ──
+  if (activeRightIdxs.length === 1) {
+    const ri = activeRightIdxs[0];
+    const slotLabel = q.rightItems[ri];
+    const correctLi = activeLeftIdxs[0];
+    // Use all left items as options (shuffled once)
+    if (!q._mcOpts) q._mcOpts = shuffle(q.leftItems.map((l,i)=>({l,i})).filter(({l})=>l));
+    const keys = ['Α','Β','Γ','Δ'];
+    let html = `<p style="font-size:.875rem;font-weight:600;color:var(--ink2);margin-bottom:10px">Ποιο απόσπασμα ανήκει στη θέση: <strong>${slotLabel}</strong>;</p>`;
+    html += '<div class="opts">';
+    q._mcOpts.forEach(({l,i}, optIdx) => {
+      const k = keys[optIdx] || String(optIdx+1);
+      const isCorrect = i === correctLi;
+      const isSelected = adp.ddPairs['mc'] === i;
+      let cls = 'opt';
+      let badge = '';
+      if (adp.answered) {
+        if (isSelected && isCorrect) { cls+=' ok'; badge='<span class="opt-badge">✓</span>'; }
+        else if (isSelected && !isCorrect) { cls+=' ko'; badge='<span class="opt-badge">✕</span>'; }
+        else if (isCorrect) cls+=' neutral-ok';
+      } else {
+        if (isSelected) cls+=' sel';
+      }
+      html += `<button class="${cls}" data-dd-mc="${i}" ${adp.answered?'disabled':''}>
+        <span class="opt-k">${k}</span>${l}${badge}
+      </button>`;
+    });
+    html += '</div>';
+    return html;
+  }
+
+  // ── Multi-slot: standard drag & drop ──
   if (!q._shuffledRight) {
     q._shuffledRight = shuffle(q.rightItems.map((r,i)=>({r,i})).filter(({i})=>activeRightIdxs.includes(i)));
   }
@@ -1044,7 +1345,7 @@ function renderDD(q) {
   if (adp.answered) {
     html += '<div class="dd-slots">';
     shuffledRight.forEach(({r,i}) => {
-      const usedByLeft = Object.entries(adp.ddPairs).find(([,ri])=>ri===i);
+      const usedByLeft = Object.entries(adp.ddPairs).find(([k,ri])=>k!=='mc'&&ri===i);
       const li = usedByLeft ? parseInt(usedByLeft[0]) : null;
       const filledText = li !== null ? q.leftItems[li] : '—';
       const correctRi = li !== null ? correctPairs[li] : null;
@@ -1070,7 +1371,7 @@ function renderDD(q) {
     });
     html += '</div><div class="dd-slots">';
     shuffledRight.forEach(({r,i})=>{
-      const usedByLeft = Object.entries(adp.ddPairs).find(([,ri])=>ri===i);
+      const usedByLeft = Object.entries(adp.ddPairs).find(([k,ri])=>k!=='mc'&&ri===i);
       const isFilled = usedByLeft !== undefined;
       const filledLi = isFilled ? parseInt(usedByLeft[0]) : null;
       const filledText = isFilled ? q.leftItems[filledLi] : '↓ τοποθέτησε εδώ';
@@ -1096,6 +1397,58 @@ function attachEvents() {
   // Home
   const btnStartAdp = document.getElementById('btnStartAdp');
   if (btnStartAdp) btnStartAdp.addEventListener('click', startAdaptive);
+  const btnGQHome = document.getElementById('btnGQ');
+  if (btnGQHome) btnGQHome.addEventListener('click', ()=>{ screen='gq_select'; render(); });
+  const btnSelL1 = document.getElementById('btnSelL1');
+  if (btnSelL1) btnSelL1.addEventListener('click', ()=>startSelQuiz(1));
+  const btnSelL2 = document.getElementById('btnSelL2');
+  if (btnSelL2) btnSelL2.addEventListener('click', ()=>startSelQuiz(2));
+  const btnCatHome = document.getElementById('btnCat');
+  if (btnCatHome) btnCatHome.addEventListener('click', ()=>{ screen='cat_selection'; selState.selectedCat=null; render(); });
+  const btnPresent = document.getElementById('btnPresent');
+  if (btnPresent) btnPresent.addEventListener('click', ()=>{ screen='present'; render(); });
+
+  // Sel quiz
+  document.querySelectorAll('[data-sel-opt]').forEach(b=>
+    b.addEventListener('click',()=>{ if(!selState.answered){selState.answer=b.dataset.selOpt; render();} }));
+  document.querySelectorAll('[data-sel-word]').forEach(b=>
+    b.addEventListener('click',()=>{
+      if(selState.answered) return;
+      const w=b.dataset.selWord.replace(/[.,;:!?«»"'()\[\]]/g,'').trim();
+      const idx=selState.clkSelected.indexOf(w);
+      if(idx!==-1) selState.clkSelected.splice(idx,1); else selState.clkSelected.push(w);
+      render();
+    }));
+  const gapInpSel=document.getElementById('gapInpSel');
+  if(gapInpSel){
+    if(selState.answer) gapInpSel.value=selState.answer;
+    gapInpSel.addEventListener('input',()=>{ selState.answer=gapInpSel.value; const b=document.getElementById('btnCheckSel'); if(b) b.disabled=!selState.answer.trim(); });
+    gapInpSel.addEventListener('keydown',e=>{ if(e.key==='Enter'&&selState.answer) doCheckSel(); });
+  }
+  const btnCheckSel=document.getElementById('btnCheckSel');
+  if(btnCheckSel) btnCheckSel.addEventListener('click',doCheckSel);
+  const btnNextSel=document.getElementById('btnNextSel');
+  if(btnNextSel) btnNextSel.addEventListener('click',doNextSel);
+  const btnSelAgain=document.getElementById('btnSelAgain');
+  if(btnSelAgain) btnSelAgain.addEventListener('click',()=>startSelQuiz(selState.level));
+  const btnHomeFromSelR=document.getElementById('btnHomeFromSelR');
+  if(btnHomeFromSelR) btnHomeFromSelR.addEventListener('click',()=>{ screen='home'; render(); });
+  const btnHomeFromSel=document.getElementById('btnHomeFromSel');
+  if(btnHomeFromSel) btnHomeFromSel.addEventListener('click',()=>{ screen='home'; render(); });
+  const btnHomeFromPresent=document.getElementById('btnHomeFromPresent');
+  if(btnHomeFromPresent) btnHomeFromPresent.addEventListener('click',()=>{ screen='home'; render(); });
+  const btnHomeFromCat=document.getElementById('btnHomeFromCat');
+  if(btnHomeFromCat) btnHomeFromCat.addEventListener('click',()=>{ screen='home'; render(); });
+  document.querySelectorAll('[data-cat-sel]').forEach(b=>
+    b.addEventListener('click',()=>{ selState.selectedCat=b.dataset.catSel; render(); }));
+  const btnStartCatSel=document.getElementById('btnStartCatSel');
+  if(btnStartCatSel) btnStartCatSel.addEventListener('click',()=>{
+    const pool=allQ.filter(q=>q.type===selState.selectedCat);
+    selState.level=0; selState.questions=shuffle(pool).slice(0,10);
+    selState.idx=0; selState.answer=null; selState.answered=false;
+    selState.ddPairs={}; selState.clkSelected=[]; selState.roundResults=[]; selState.score=0;
+    screen='sel_quiz'; render();
+  });
 
   // Theory toggle
   const btnTh = document.getElementById('btnTheory');
@@ -1118,6 +1471,16 @@ function attachEvents() {
         const idx = adp.clkSelected.indexOf(w);
         if (idx!==-1) adp.clkSelected.splice(idx,1); else adp.clkSelected.push(w);
       }
+      render();
+    }));
+
+  // DD single-slot MC
+  document.querySelectorAll('[data-dd-mc]').forEach(b =>
+    b.addEventListener('click', ()=>{
+      if (adp.answered) return;
+      adp.ddPairs['mc'] = parseInt(b.dataset.ddMc);
+      const btnCheck = document.getElementById('btnCheck');
+      if (btnCheck) btnCheck.disabled = false;
       render();
     }));
 
@@ -1202,6 +1565,50 @@ function attachEvents() {
   const btnHomeFromRes = document.getElementById('btnHomeFromRes');
   if (btnHomeFromRes) btnHomeFromRes.addEventListener('click', ()=>{ screen='home'; render(); });
 }
+
+// ══════════════════════════════════════════════
+// PRESENT (placeholder)
+// ══════════════════════════════════════════════
+function renderPresent() {
+  return `<div class="card" style="text-align:center;padding:36px 20px">
+    <div style="font-size:2.5rem;margin-bottom:12px">🖥️</div>
+    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.3rem;margin-bottom:8px">Παρουσίαση</h2>
+    <p style="color:var(--muted);font-size:.9rem;margin-bottom:24px">Αυτή η λειτουργία είναι υπό κατασκευή.</p>
+    <button class="btn-sec" id="btnHomeFromPresent">↩ Αρχική</button>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════
+// CAT SELECTION (Εστίαση)
+// ══════════════════════════════════════════════
+function renderCatSelection() {
+  const sel = selState.selectedCat;
+  const TYPE_NAMES_LOCAL = {'MC':'Πολλαπλής επιλογής','YN':'Ναι / Όχι','GAP':'Συμπλήρωση κενού','CLK':'Εντοπισμός λέξης','DD':'Αντιστοίχιση'};
+  const typeCounts = {};
+  Object.keys(TYPE_NAMES_LOCAL).forEach(t=>{ typeCounts[t]=allQ.filter(q=>q.type===t).length; });
+  const cnt = sel ? (typeCounts[sel]||0) : 0;
+  let pillsHtml = '';
+  Object.entries(TYPE_NAMES_LOCAL).forEach(([t,name])=>{
+    const c=typeCounts[t]||0; if(!c) return;
+    pillsHtml += `<button class="pill ${sel===t?'on':''}" data-cat-sel="${t}">${name} <span style="opacity:.7;font-size:.75rem">(${c})</span></button>`;
+  });
+  const infoHtml = !sel ? '👆 Επίλεξε τύπο ερώτησης'
+    : cnt===0 ? '⚠️ Δεν υπάρχουν ερωτήσεις'
+    : `✅ <strong>${cnt}</strong> ερωτήσεις — θα εμφανιστούν ${Math.min(cnt,10)}`;
+  return `
+  <div class="card">
+    <p style="font-family:'IBM Plex Serif',serif;font-size:1.3rem;font-weight:600;margin-bottom:6px">📂 Εστίαση</p>
+    <p style="color:var(--muted);font-size:.875rem;margin-bottom:18px">Εξάσκηση σε συγκεκριμένο τύπο ερώτησης</p>
+    <div style="margin-bottom:12px">
+      <p style="font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px">Τύπος ερώτησης</p>
+      <div class="pills">${pillsHtml}</div>
+    </div>
+    <div class="info ${cnt===0&&sel?'warn':''}">${infoHtml}</div>
+    <button class="btn-go" id="btnStartCatSel" ${!sel||!cnt?'disabled':''}>Ξεκίνα →</button>
+    <button class="btn-sec" id="btnHomeFromCat">↩ Αρχική</button>
+  </div>`;
+}
+
 
 // ══════════════════════════════════════════════
 // CHECK / NEXT ACTIONS
