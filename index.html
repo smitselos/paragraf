@@ -544,8 +544,9 @@ function canCheckAdp(q) {
 // ADAPTIVE LOGIC
 // ══════════════════════════════════════════════
 function startAdaptive() {
+  console.log('startAdaptive called, catOrder:', catOrder, 'allQ length:', allQ.length);
   if (!catOrder.length) {
-    alert('Δεν υπάρχουν ερωτήσεις με στήλη Βήμα στο sheet. Πρόσθεσε τιμές όπως 1.1, 1.2 κλπ.');
+    document.getElementById('app').innerHTML = '<div class="card" style="padding:30px;text-align:center"><p style="color:var(--red);font-size:1rem">⚠️ Δεν βρέθηκαν ερωτήσεις με τιμή στη στήλη <strong>Κατηγορία</strong>.<br>Έλεγξε ότι το sheet έχει δημοσιευτεί και ότι οι τιμές είναι σωστές.</p><button class="btn-sec" onclick="state.screen=\'home\';render()">↩ Αρχική</button></div>';
     return;
   }
   adp.catIdx=0; adp.catLog={}; adp.totalCorrect=0; adp.totalAnswered=0; adp.usedIds={};
