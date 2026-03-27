@@ -252,9 +252,55 @@ to{width:100%}}
   
   .home-cards{grid-template-columns:1fr}
 }
-.home-card.c5{border-color:#e11d48;background:linear-gradient(135deg,#fff1f2,#fff)}
-.home-card.c5 .hc-icon-wrap{background:#ffe4e6;border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
-.home-card.c5 .hc-arrow{color:#e11d48}
+
+/* ══ ADAPTIVE LEARNING ══ */
+.adp-header{background:linear-gradient(135deg,var(--indigo),var(--indigo-d));color:#fff;border-radius:var(--r);padding:20px 22px;margin-bottom:14px;box-shadow:var(--sh)}
+.adp-header h2{font-family:'IBM Plex Serif',serif;font-size:1.2rem;font-weight:600;margin-bottom:4px}
+.adp-header p{font-size:.82rem;opacity:.85}
+.cat-map{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;align-items:center}
+.cat-node{display:flex;flex-direction:column;align-items:center;gap:4px}
+.cat-dot{width:38px;height:38px;border-radius:50%;border:3px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;background:var(--white);color:var(--muted);transition:all .3s}
+.cat-dot.active{border-color:var(--indigo);background:var(--indigo);color:#fff;box-shadow:0 0 0 4px rgba(79,70,229,.2)}
+.cat-dot.done{border-color:var(--green);background:var(--green-l);color:#065f46}
+.cat-dot.failed{border-color:var(--amber);background:var(--amber-l);color:#78350f}
+.cat-dot.locked{background:#f1f1f8;color:#aaa}
+.cat-dot-lbl{font-size:.68rem;color:var(--muted);font-weight:600}
+.cat-arrow{color:var(--border);font-size:1.1rem;line-height:38px}
+.prog-dots{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.prog-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);background:var(--white);transition:all .2s;display:flex;align-items:center;justify-content:center;font-size:.6rem}
+.prog-dot.ok{background:var(--green);border-color:var(--green);color:#fff}
+.prog-dot.ko{background:var(--red);border-color:var(--red);color:#fff}
+.prog-dot.cur{border-color:var(--indigo);background:var(--indigo-l)}
+.answers-card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:22px;margin-bottom:14px;border-top:3px solid var(--border);transition:border-color .3s}
+.answers-card.answered-ok{border-top-color:var(--green);background:linear-gradient(to bottom,#f0fdf4,var(--white))}
+.answers-card.answered-ko{border-top-color:var(--red);background:linear-gradient(to bottom,#fef2f2,var(--white))}
+.opt{position:relative}
+.opt-badge{position:absolute;top:6px;right:8px;font-size:.8rem;font-weight:700;line-height:1}
+.opt.neutral-ok{border-color:var(--green);background:var(--green-l);color:#065f46;font-weight:600}
+.opt.neutral-ok .opt-k{background:rgba(5,150,105,.2);color:#065f46}
+.theory-needed{background:var(--red-l);border:1px solid #fca5a5;border-radius:var(--r);padding:18px 20px;margin-top:14px}
+.theory-needed h4{color:#7f1d1d;margin-bottom:10px;font-size:1rem;font-weight:700}
+.theory-needed p{color:#991b1b;font-size:.875rem;margin-bottom:14px}
+.theory-needed ul{margin:0 0 14px 16px;color:#991b1b}
+.theory-needed li{font-size:.835rem;margin-bottom:3px}
+.tn-choices{display:flex;gap:10px;flex-wrap:wrap}
+.tn-btn{flex:1;min-width:140px;padding:12px;border:none;border-radius:var(--r);font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s}
+.tn-btn.retry{background:var(--amber);color:#fff}
+.tn-btn.retry:hover{background:#b45309}
+.tn-btn.skip{background:var(--indigo);color:#fff}
+.tn-btn.skip:hover{background:var(--indigo-d)}
+.cat-summary-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-radius:10px;margin-bottom:7px;font-size:.875rem}
+.cat-summary-row.pass{background:var(--green-l);border:1px solid #bbf7d0}
+.cat-summary-row.skip{background:var(--amber-l);border:1px solid #fcd34d}
+.cat-summary-row .cs-name{font-weight:600}
+.cat-summary-row.pass .cs-name{color:#065f46}
+.cat-summary-row.skip .cs-name{color:#78350f}
+.cat-summary-row .cs-badge{font-size:.75rem;padding:2px 8px;border-radius:999px;font-weight:700}
+.cat-summary-row.pass .cs-badge{background:#bbf7d0;color:#065f46}
+.cat-summary-row.skip .cs-badge{background:#fcd34d;color:#78350f}
+.ph.fb{background:var(--red-l);color:var(--red)}
+.ph.diag{background:var(--teal-l);color:var(--teal)}
+.ph.done{background:var(--green-l);color:var(--green)}
 </style>
 </head>
 <body>
@@ -432,6 +478,371 @@ let state = {
   selectedCat: null,
 };
 
+
+// ══════════════════════════════════════════════
+// ADAPTIVE STATE
+// ══════════════════════════════════════════════
+let catsByKey = {};
+let catOrder = [];
+
+let adp = {
+  catIdx: 0,
+  queue: [], qIdx: 0,
+  answer: null, answered: false,
+  ddPairs: {}, ddSelected: null, clkSelected: [],
+  showTheory: false,
+  _autoTimer: null,
+  roundResults: [],
+  phase: 'main',
+  retry1WrongIdx: [],
+  catLog: {},
+  totalCorrect: 0, totalAnswered: 0,
+  usedIds: {},
+};
+let mainQueueLog = {};
+
+function parseCatKey(raw) {
+  if (!raw) return null;
+  const s = String(raw).trim();
+  if (s.match(/^\d{4}[.\-\/]/)) return null;
+  const f = parseFloat(s);
+  if (!isNaN(f)) return String(Math.round(f * 10) / 10).replace(/\.0$/,'');
+  return s;
+}
+
+function getQuestionsForCat(catKey, n, excludeIds=[]) {
+  const pool = (catsByKey[catKey]||[]).filter(q => !excludeIds.includes(q.id));
+  return shuffle(pool).slice(0, n);
+}
+
+function getCatDisplayName(catKey) { return 'Βήμα ' + catKey; }
+
+function getCatTheoryName(catKey) {
+  return CAT_NAMES[parseInt(catKey)] || ('Θέμα ' + catKey);
+}
+
+function getTheoryKeysForCat(catKey) {
+  const n = parseInt(catKey.split('.')[0]);
+  return CAT_THEORY[n] ? [n] : [];
+}
+
+function canCheckAdp(q) {
+  if (adp.answered) return false;
+  if (q.type==='MC'||q.type==='YN') return adp.answer!==null;
+  if (q.type==='CLK') return adp.clkSelected.length>0;
+  if (q.type==='DD') {
+    const cp = parseCorrectDD(q.correct, q.leftItems, q.rightItems)||{};
+    const activeRights = Object.values(cp).map(Number);
+    if (activeRights.length===1) return adp.ddPairs['mc']!==undefined;
+    return Object.keys(adp.ddPairs).filter(k=>k!=='mc').length===Object.keys(cp).length;
+  }
+  if (q.type==='GAP') return !!(adp.answer && adp.answer.trim());
+  return false;
+}
+
+// ══════════════════════════════════════════════
+// ADAPTIVE LOGIC
+// ══════════════════════════════════════════════
+function startAdaptive() {
+  adp.catIdx=0; adp.catLog={}; adp.totalCorrect=0; adp.totalAnswered=0; adp.usedIds={};
+  mainQueueLog={};
+  startCatMain();
+}
+
+function startCatMain() {
+  const catKey = catOrder[adp.catIdx];
+  if (!adp.usedIds[catKey]) adp.usedIds[catKey]=new Set();
+  const qs = getQuestionsForCat(catKey, 3, [...adp.usedIds[catKey]]);
+  if (!qs.length) { adp.catLog[catKey]='pass'; advanceToNextCat(); return; }
+  qs.forEach(q=>adp.usedIds[catKey].add(q.id));
+  mainQueueLog[catKey] = [...qs];
+  adp.queue=qs; adp.qIdx=0;
+  adp.answer=null; adp.answered=false;
+  adp.ddPairs={}; adp.ddSelected=null; adp.clkSelected=[];
+  adp.roundResults=[]; adp.phase='main'; adp.showTheory=false;
+  state.screen='adaptive'; render();
+}
+
+function startCatRetry1(wrongIdxs) {
+  const catKey = catOrder[adp.catIdx];
+  const extra = getQuestionsForCat(catKey, 2, [...adp.usedIds[catKey]]);
+  if (!extra.length) { adp.catLog[catKey]='skip'; state.screen='theory_wall'; render(); return; }
+  extra.forEach(q=>adp.usedIds[catKey].add(q.id));
+  adp.queue=extra; adp.qIdx=0;
+  adp.answer=null; adp.answered=false;
+  adp.ddPairs={}; adp.ddSelected=null; adp.clkSelected=[];
+  adp.roundResults=[]; adp.retry1WrongIdx=wrongIdxs;
+  adp.phase='retry1'; adp.showTheory=false;
+  state.screen='adaptive'; render();
+}
+
+function startCatRetry2(wrongQs) {
+  const catKey = catOrder[adp.catIdx];
+  const extra = getQuestionsForCat(catKey, 1, [...adp.usedIds[catKey]]);
+  extra.forEach(q=>adp.usedIds[catKey].add(q.id));
+  const queue = shuffle([...wrongQs,...extra]);
+  if (!queue.length) { adp.catLog[catKey]='skip'; state.screen='theory_wall'; render(); return; }
+  adp.queue=queue; adp.qIdx=0;
+  adp.answer=null; adp.answered=false;
+  adp.ddPairs={}; adp.ddSelected=null; adp.clkSelected=[];
+  adp.roundResults=[]; adp.phase='retry2'; adp.showTheory=false;
+  state.screen='adaptive'; render();
+}
+
+function finishRound() {
+  const catKey = catOrder[adp.catIdx];
+  const wrong = adp.roundResults.filter(b=>!b).length;
+  if (adp.phase==='main') {
+    if (wrong===0) { adp.catLog[catKey]='pass'; advanceToNextCat(); }
+    else { const wi=adp.roundResults.map((r,i)=>r?null:i).filter(i=>i!==null); startCatRetry1(wi); }
+  } else if (adp.phase==='retry1') {
+    const wrongQs = adp.roundResults.map((r,i)=>r?null:adp.queue[i]).filter(Boolean);
+    if (wrong===0) {
+      const origMain=(mainQueueLog[catKey]||[]).filter((_,i)=>adp.retry1WrongIdx.includes(i));
+      startCatRetry2(origMain);
+    } else {
+      startCatRetry2(wrongQs);
+    }
+  } else if (adp.phase==='retry2') {
+    if (wrong===0) { adp.catLog[catKey]='pass'; advanceToNextCat(); }
+    else { adp.catLog[catKey]='skip'; state.screen='theory_wall'; render(); }
+  }
+}
+
+function advanceToNextCat() {
+  if (adp.catIdx < catOrder.length-1) { adp.catIdx++; state.screen='cat_transition'; render(); }
+  else { state.screen='adp_results'; render(); }
+}
+
+// ══════════════════════════════════════════════
+// ADAPTIVE RENDERERS
+// ══════════════════════════════════════════════
+function renderCatMap() {
+  let html = '<div class="cat-map">';
+  catOrder.forEach((key,i)=>{
+    const status=adp.catLog[key]; const isActive=i===adp.catIdx;
+    let cls='cat-dot locked'; let icon=key;
+    if(status==='pass'){cls='cat-dot done';icon='✓';}
+    else if(status==='skip'){cls='cat-dot failed';icon='!';}
+    else if(isActive){cls='cat-dot active';icon=key;}
+    else if(i<adp.catIdx){cls='cat-dot done';icon='✓';}
+    html+=`<div class="cat-node"><div class="${cls}">${icon}</div><span class="cat-dot-lbl">${key}</span></div>`;
+    if(i<catOrder.length-1) html+=`<div class="cat-arrow" style="margin-bottom:14px">›</div>`;
+  });
+  html+='</div>'; return html;
+}
+
+function renderAdaptive() {
+  const catKey = catOrder[adp.catIdx];
+  const q = adp.queue[adp.qIdx];
+  if (!q) return '<div class="card"><p>Σφάλμα.</p></div>';
+  const totalInRound = adp.queue.length;
+  const isOk = adp.answered ? checkAnswer(q, adp.answer) : false;
+  let phaseLabel, phaseClass;
+  if(adp.phase==='main'){phaseLabel='Βήμα '+catKey;phaseClass='main';}
+  else if(adp.phase==='retry1'){phaseLabel='Ανατροφοδότηση — Βήμα '+catKey;phaseClass='retry';}
+  else{phaseLabel='Επανέλεγχος — Βήμα '+catKey;phaseClass='fb';}
+  let dots='';
+  for(let i=0;i<totalInRound;i++){
+    let cls='prog-dot';
+    if(i<adp.roundResults.length) cls+=adp.roundResults[i]?' ok':' ko';
+    else if(i===adp.qIdx) cls+=' cur';
+    const icon=i<adp.roundResults.length?(adp.roundResults[i]?'✓':'✕'):(i===adp.qIdx?'●':'');
+    dots+=`<div class="${cls}">${icon}</div>`;
+  }
+  let theoryHtml='';
+  if(adp.phase!=='main'){
+    theoryHtml=`<button class="theory-toggle" id="btnTheoryAdp">${adp.showTheory?'▼':'▶'} Βοήθεια: Θεωρητικό Πλαίσιο</button>`;
+    if(adp.showTheory){
+      const keys=getTheoryKeysForCat(catKey);
+      if(keys.length){
+        theoryHtml+='<div class="theory-box"><h4>📚 Θεωρητικό Πλαίσιο</h4><ul>';
+        keys.forEach(k=>{if(CAT_THEORY[k])CAT_THEORY[k].forEach(t=>{theoryHtml+=`<li>${t}</li>`;});});
+        theoryHtml+='</ul></div>';
+      }
+    }
+  }
+  let html=`
+  <div class="adp-header">
+    <h2>Βήμα-Βήμα</h2>
+    <p>Βήμα ${catKey} <span style='opacity:.7;font-size:.8rem'>(${adp.catIdx+1} / ${catOrder.length})</span></p>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span class="ph ${phaseClass}">${phaseLabel}</span>
+      <span style="color:var(--muted);font-size:.83rem">${adp.qIdx+1} / ${totalInRound}</span>
+    </div>
+    <div class="prog-dots">${dots}</div>
+    ${renderCatMap()}
+  </div>
+  ${theoryHtml}
+  <div class="card">
+    ${q.excerpt?`<p class="exc-lbl">Απόσπασμα κειμένου</p>${renderExcerptAdp(q)}`:''}
+    <p class="q-lbl" style="margin-top:${q.excerpt?'14px':'0'}">${qTypeLabel(q.type)}</p>
+    <p class="q-txt">${q.q}</p>
+    ${q.type==='CLK'?'<p style="font-size:.8rem;color:var(--muted);font-style:italic;margin-top:4px">Κάντε κλικ στις λέξεις/φράσεις στο απόσπασμα παραπάνω.</p>':''}
+  </div>`;
+  let cardClass='answers-card';
+  if(adp.answered) cardClass+=isOk?' answered-ok':' answered-ko';
+  html+=`<div class="${cardClass}" id="answersCardAdp">`;
+  if(q.type==='MC'||q.type==='YN') html+=renderMCAdp(q);
+  else if(q.type==='DD') html+=renderDDAdp(q);
+  else if(q.type==='GAP') html+=renderGAPInputAdp(q);
+  if(adp.answered){
+    html+=`<div class="fb ${isOk?'ok':'ko'}"><p class="fb-title">${isOk?'✅ Σωστά!':'❌ Λάθος'}</p>${!isOk?`<p>${getFeedback(q,adp.answer)||''}</p>`:''}</div>`;
+    const isLast=adp.qIdx===adp.queue.length-1;
+    const delay=isOk?2:4;
+    html+=`<button class="btn-next" id="btnNextAdp" style="opacity:.7;font-size:.85rem;padding:10px">
+      ${isLast?'Αξιολόγηση τώρα →':'Επόμενη τώρα →'}
+      <span style="font-size:.75rem;opacity:.7;margin-left:6px">(αυτόματα σε ${delay}″)</span>
+    </button>`;
+  } else {
+    html+=`<button class="btn-check" id="btnCheckAdp" ${canCheckAdp(q)?'':'disabled'}>Έλεγξε</button>`;
+  }
+  html+='</div>'; return html;
+}
+
+function renderExcerptAdp(q) {
+  // Reuse existing renderers with adp state swap
+  const savedState = {...state};
+  state.clkSelected = adp.clkSelected;
+  state.answered = adp.answered;
+  state.ddPairs = adp.ddPairs;
+  state.answer = adp.answer;
+  let html;
+  if(q.type==='CLK') html=renderExcerptCLK(q);
+  else if(q.type==='GAP') html=renderExcerptGAP(q);
+  else html=`<div class="exc">${q.excerpt}</div>`;
+  state.clkSelected=savedState.clkSelected;
+  state.answered=savedState.answered;
+  state.ddPairs=savedState.ddPairs;
+  state.answer=savedState.answer;
+  return html;
+}
+
+function renderMCAdp(q) {
+  const keys=['Α','Β','Γ','Δ'];
+  const vals=[q.optA,q.optB,q.optC,q.optD].filter(Boolean);
+  let html='<div class="opts">';
+  vals.forEach((v,i)=>{
+    const k=keys[i]; let cls='opt'; let badge='';
+    if(adp.answered){
+      const isCorrect=k===q.correct.trim().toUpperCase();
+      const isSelected=k===adp.answer;
+      const answeredCorrectly=adp.answer===q.correct.trim().toUpperCase();
+      if(isSelected&&isCorrect){cls+=' ok';badge='<span class="opt-badge">✓</span>';}
+      else if(isSelected&&!isCorrect){cls+=' ko';badge='<span class="opt-badge">✕</span>';}
+      else if(isCorrect&&!answeredCorrectly) cls+=' neutral-ok';
+    } else { if(adp.answer===k) cls+=' sel'; }
+    html+=`<button class="${cls}" data-adp-opt="${k}" ${adp.answered?'disabled':''}><span class="opt-k">${k}</span>${v}${badge}</button>`;
+  });
+  return html+'</div>';
+}
+
+function renderGAPInputAdp(q) {
+  if(q.excerpt) return '';
+  return `<input class="gap-inp" id="gapInpAdp" type="text" placeholder="Συμπλήρωσε…" style="width:100%;margin-top:4px" autocomplete="off" ${adp.answered?'disabled':''}>`;
+}
+
+function renderDDAdp(q) {
+  // Swap state temporarily
+  const saved={answered:state.answered,ddPairs:state.ddPairs,ddSelected:state.ddSelected};
+  state.answered=adp.answered; state.ddPairs=adp.ddPairs; state.ddSelected=adp.ddSelected;
+  const html=renderDD(q);
+  state.answered=saved.answered; state.ddPairs=saved.ddPairs; state.ddSelected=saved.ddSelected;
+  return html.replace(/data-dd-li=/g,'data-adp-dd-li=').replace(/data-dd-ri=/g,'data-adp-dd-ri=');
+}
+
+function renderCatTransition() {
+  const prevKey=catOrder[adp.catIdx-1];
+  const nextKey=catOrder[adp.catIdx];
+  return `<div class="card" style="text-align:center;padding:32px 22px">
+    <div style="font-size:2.5rem;margin-bottom:12px">✅</div>
+    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.3rem;margin-bottom:8px">Βήμα ${prevKey} ολοκληρώθηκε!</h2>
+    <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px">Μπράβο! Συνέχεια στο βήμα <strong>${nextKey}</strong>.</p>
+    ${renderCatMap()}
+    <button class="btn-go" id="btnNextCat" style="margin-top:16px">Συνέχεια στο Βήμα ${nextKey} →</button>
+    <button class="btn-sec" id="btnHomeFromAdp">↩ Αρχική</button>
+  </div>`;
+}
+
+function renderTheoryWall() {
+  const catKey=catOrder[adp.catIdx];
+  const theoryKeys=getTheoryKeysForCat(catKey);
+  let theoryItems='';
+  theoryKeys.forEach(k=>{
+    if(CAT_THEORY[k]){
+      theoryItems+=`<p style="font-weight:700;margin-bottom:6px;color:#7f1d1d">${CAT_NAMES[k]||''}</p>`;
+      theoryItems+='<ul>'+CAT_THEORY[k].map(t=>`<li>${t}</li>`).join('')+'</ul>';
+    }
+  });
+  return `<div class="card"><div class="theory-needed">
+    <h4>📖 Χρειάζεται να ξαναδείς τη θεωρία</h4>
+    <p>Φαίνεται ότι χρειάζεσαι επανάληψη στο <strong>${getCatDisplayName(catKey)}</strong>: <em>${getCatTheoryName(catKey)}</em></p>
+    ${theoryItems?`<div style="margin:10px 0 14px">${theoryItems}</div>`:''}
+    <p style="font-weight:600;margin-bottom:12px;color:#7f1d1d">Θέλεις να επαναλάβεις ή να συνεχίσεις στο επόμενο βήμα;</p>
+    <div class="tn-choices">
+      <button class="tn-btn retry" id="btnRetryAgain">🔄 Επανάληψη</button>
+      <button class="tn-btn skip" id="btnSkipToNext">${adp.catIdx<catOrder.length-1?'⏭ Επόμενο βήμα':'🏁 Ολοκλήρωση'}</button>
+    </div>
+  </div></div>`;
+}
+
+function renderAdpResults() {
+  const passed=Object.values(adp.catLog).filter(v=>v==='pass').length;
+  const skipped=Object.values(adp.catLog).filter(v=>v==='skip').length;
+  const total=catOrder.length;
+  const pct=Math.round((passed/total)*100);
+  const emoji=pct>=80?'🎉':pct>=60?'👍':'📚';
+  let catRows=catOrder.map(key=>{
+    const status=adp.catLog[key]||'incomplete';
+    const cls=status==='pass'?'pass':'skip';
+    const badge=status==='pass'?'✅ Επιτυχία':status==='skip'?'⚠️ Χρειάζεται μελέτη':'—';
+    return `<div class="cat-summary-row ${cls}"><span class="cs-name">${getCatDisplayName(key)}: ${getCatTheoryName(key)}</span><span class="cs-badge">${badge}</span></div>`;
+  }).join('');
+  return `<div class="card" style="text-align:center;padding:28px 22px">
+    <div style="font-size:2.8rem;margin-bottom:10px">${emoji}</div>
+    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.4rem;margin-bottom:16px">Ολοκλήρωσες το Βήμα-Βήμα!</h2>
+    <div class="score-box"><p class="score-big">${passed} / ${total}</p><p class="score-pct">κατηγορίες επιτυχία (${pct}%)</p></div>
+    <div class="score-grid" style="margin:14px 0">
+      <div class="sc g"><p>Επιτυχία</p><p>${passed}</p></div>
+      <div class="sc r"><p>Χρειάζεται μελέτη</p><p>${skipped}</p></div>
+      <div class="sc a"><p>Σύνολο</p><p>${total}</p></div>
+    </div>
+  </div>
+  <div class="card"><p style="font-weight:700;margin-bottom:12px">Ανά βήμα:</p>${catRows}</div>
+  <button class="btn-sec" id="btnNewAdp" style="margin-top:4px">🔄 Νέα προσπάθεια</button>
+  <button class="btn-sec" id="btnHomeFromRes2">↩ Αρχική</button>`;
+}
+
+// ══════════════════════════════════════════════
+// ADAPTIVE ACTIONS
+// ══════════════════════════════════════════════
+function doCheckAdp() {
+  const q=adp.queue[adp.qIdx];
+  if(q.type==='GAP'){const inp=document.getElementById('gapInpAdp');adp.answer=inp?inp.value.trim():adp.answer;}
+  if(q.type==='CLK') adp.answer=[...adp.clkSelected];
+  if(q.type==='DD') adp.answer={...adp.ddPairs};
+  adp.answered=true;
+  const ok=checkAnswer(q,adp.answer);
+  adp.roundResults.push(ok); adp.totalAnswered++;
+  if(ok) adp.totalCorrect++;
+  render(); playSound(ok?'correct':'wrong');
+  if(adp._autoTimer) clearTimeout(adp._autoTimer);
+  adp._autoTimer=setTimeout(()=>{if(adp.answered) doNextAdp();}, ok?2000:4000);
+}
+
+function doNextAdp() {
+  if(adp._autoTimer){clearTimeout(adp._autoTimer);adp._autoTimer=null;}
+  if(adp.qIdx<adp.queue.length-1){
+    adp.qIdx++; adp.answer=null; adp.answered=false;
+    adp.ddPairs={}; adp.ddSelected=null; adp.clkSelected=[];
+    render();
+  } else {
+    finishRound();
+  }
+}
+
 // ══════════════════════════════════════════════
 // CSV PARSING
 // ══════════════════════════════════════════════
@@ -476,6 +887,7 @@ function parseCSV(csv) {
     obj.rightItems = [obj['Δεξιά 1'],   obj['Δεξιά 2'],   obj['Δεξιά 3'],   obj['Δεξιά 4']  ].filter(Boolean);
     obj.targets = obj['Λέξη-Στόχος'] ? obj['Λέξη-Στόχος'].split('|').map(t=>t.trim()).filter(Boolean) : [];
     obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
+    obj.catKey = parseCatKey(obj['Βήμα']);
     obj.gqDomi  = (obj['Δομή']||'').trim() || null;
     obj.gqTropos = obj['Τρόπος'] ? obj['Τρόπος'].split(',').map(s=>s.trim()).filter(Boolean) : null;
     obj.theoryKeys = obj['Θεωρία'] ? obj['Θεωρία'].split(',').map(s=>parseInt(s.trim())).filter(n=>!isNaN(n)) : null;
@@ -498,6 +910,19 @@ async function loadData() {
     const csv = await r.text();
     allQ = parseCSV(csv);
     if (!allQ.length) throw new Error('Δεν βρέθηκαν ερωτήσεις');
+    // Build catsByKey for adaptive learning
+    catsByKey = {};
+    allQ.forEach(q => {
+      if (!q.catKey) return;
+      if (!catsByKey[q.catKey]) catsByKey[q.catKey] = [];
+      catsByKey[q.catKey].push(q);
+    });
+    catOrder = Object.keys(catsByKey).sort((a,b) => {
+      const [a1,a2=[0]] = a.split('.').map(Number);
+      const [b1,b2=[0]] = b.split('.').map(Number);
+      return a1!==b1 ? a1-b1 : a2-b2;
+    });
+
     state.screen = 'home';
   } catch(e) {
     document.getElementById('app').innerHTML = `
@@ -646,10 +1071,10 @@ function renderHome() {
     <p class="home-sub">Επίλεξε πώς θέλεις να ξεκινήσεις</p>
     <div class="home-cards">
 
-      <button class="home-card c1" id="btnStartL1">
-        <div class="hc-icon-wrap">📶</div>
-        <p class="hc-title">Βήμα-βήμα</p>
-        <p class="hc-desc">Μάθε με τη σειρά, βήμα-βήμα. Προχωράς μόνο όταν είσαι έτοιμος.</p>
+      <button class="home-card c1" id="btnStartAdp">
+        <div class="hc-icon-wrap">🎯</div>
+        <p class="hc-title">Βήμα-Βήμα</p>
+        <p class="hc-desc">Προσαρμοστική μάθηση. Ξεκινάς από το Βήμα 1 και η εφαρμογή σε καθοδηγεί ανάλογα με τις απαντήσεις σου.</p>
         <span class="hc-arrow">Ξεκίνα →</span>
       </button>
 
@@ -1202,8 +1627,8 @@ function attachEvents() {
   const btnHdrHome = document.getElementById('btnHdrHome');
   if (btnHdrHome) btnHdrHome.addEventListener('click', () => { state.screen='home'; render(); });
 
-  const btnSL1 = document.getElementById('btnStartL1');
-  if (btnSL1) btnSL1.addEventListener('click', () => startQuiz(1));
+  const btnStartAdp = document.getElementById('btnStartAdp');
+  if (btnStartAdp) btnStartAdp.addEventListener('click', startAdaptive);
   const btnDiag = document.getElementById('btnDiag');
   if (btnDiag) btnDiag.addEventListener('click', () => { const dq=getDiagnosticQuestions(); if(!dq.length)return; startDiagnostic(dq); });
   const btnSel = document.getElementById('btnSel');
@@ -1336,6 +1761,97 @@ function attachEvents() {
   if (btnGQ) btnGQ.addEventListener('click', () => { state.screen='gq_select'; render(); });
 
   // Φίλτρα
+  // ── ADAPTIVE EVENTS ──
+  document.querySelectorAll('[data-adp-opt]').forEach(b=>
+    b.addEventListener('click',()=>{ if(!adp.answered){adp.answer=b.dataset.adpOpt; render();} }));
+  document.querySelectorAll('[data-word]').forEach(b=>{
+    // already handled for state — also handle for adp if screen==='adaptive'
+  });
+  const btnCheckAdp=document.getElementById('btnCheckAdp');
+  if(btnCheckAdp) btnCheckAdp.addEventListener('click', doCheckAdp);
+  const btnNextAdp=document.getElementById('btnNextAdp');
+  if(btnNextAdp) btnNextAdp.addEventListener('click', doNextAdp);
+  const btnTheoryAdp=document.getElementById('btnTheoryAdp');
+  if(btnTheoryAdp) btnTheoryAdp.addEventListener('click',()=>{adp.showTheory=!adp.showTheory;render();});
+  const btnNextCat=document.getElementById('btnNextCat');
+  if(btnNextCat) btnNextCat.addEventListener('click', startCatMain);
+  const btnHomeFromAdp=document.getElementById('btnHomeFromAdp');
+  if(btnHomeFromAdp) btnHomeFromAdp.addEventListener('click',()=>{state.screen='home';render();});
+  const btnRetryAgain=document.getElementById('btnRetryAgain');
+  if(btnRetryAgain) btnRetryAgain.addEventListener('click',()=>{
+    const catKey=catOrder[adp.catIdx];
+    adp.usedIds[catKey]=new Set(); delete adp.catLog[catKey];
+    mainQueueLog[catKey]=null; startCatMain();
+  });
+  const btnSkipToNext=document.getElementById('btnSkipToNext');
+  if(btnSkipToNext) btnSkipToNext.addEventListener('click',()=>{
+    if(adp.catIdx<catOrder.length-1){adp.catIdx++;state.screen='cat_transition';}
+    else{state.screen='adp_results';} render();
+  });
+  const btnNewAdp=document.getElementById('btnNewAdp');
+  if(btnNewAdp) btnNewAdp.addEventListener('click', startAdaptive);
+  const btnHomeFromRes2=document.getElementById('btnHomeFromRes2');
+  if(btnHomeFromRes2) btnHomeFromRes2.addEventListener('click',()=>{state.screen='home';render();});
+
+  // Adaptive CLK
+  if(state.screen==='adaptive'){
+    document.querySelectorAll('[data-word]').forEach(b=>
+      b.addEventListener('click',()=>{
+        if(adp.answered) return;
+        if(b.dataset.phrase){
+          const p=b.dataset.phrase; const i=adp.clkSelected.indexOf(p);
+          if(i!==-1) adp.clkSelected.splice(i,1); else adp.clkSelected.push(p);
+        } else {
+          const w=b.dataset.word.replace(/[.,;:!?«»"'()\[\]]/g,'').trim();
+          const i=adp.clkSelected.indexOf(w);
+          if(i!==-1) adp.clkSelected.splice(i,1); else adp.clkSelected.push(w);
+        }
+        render();
+      }));
+    // Adaptive GAP
+    const gapAdp=document.getElementById('gapInpAdp');
+    if(gapAdp){
+      if(adp.answer) gapAdp.value=adp.answer;
+      gapAdp.addEventListener('input',()=>{adp.answer=gapAdp.value;const b=document.getElementById('btnCheckAdp');if(b)b.disabled=!adp.answer.trim();});
+      gapAdp.addEventListener('keydown',e=>{if(e.key==='Enter'&&adp.answer) doCheckAdp();});
+    }
+    // Adaptive DD
+    let _adpDrag=null,_adpChip=null;
+    document.querySelectorAll('[data-adp-dd-li]').forEach(el=>{
+      const li=parseInt(el.dataset.adpDdLi);
+      el.addEventListener('dragstart',e=>{_adpDrag=li;el.classList.add('dragging');e.dataTransfer.setData('text/plain',String(li));});
+      el.addEventListener('dragend',()=>el.classList.remove('dragging'));
+      el.addEventListener('click',()=>{
+        if(adp.answered) return;
+        if(_adpChip===li){_adpChip=null;document.querySelectorAll('[data-adp-dd-li]').forEach(c=>c.classList.remove('dragging'));}
+        else{_adpChip=li;document.querySelectorAll('[data-adp-dd-li]').forEach(c=>c.classList.remove('dragging'));el.classList.add('dragging');}
+      });
+    });
+    document.querySelectorAll('[data-adp-dd-ri]').forEach(slot=>{
+      const ri=parseInt(slot.dataset.adpDdRi);
+      slot.addEventListener('dragover',e=>{e.preventDefault();slot.classList.add('over');});
+      slot.addEventListener('dragleave',()=>slot.classList.remove('over'));
+      slot.addEventListener('drop',e=>{
+        e.preventDefault();slot.classList.remove('over');
+        if(_adpDrag===null) return;
+        Object.keys(adp.ddPairs).forEach(k=>{if(adp.ddPairs[k]===ri) delete adp.ddPairs[k];});
+        adp.ddPairs[_adpDrag]=ri;_adpDrag=null;render();
+      });
+      slot.addEventListener('click',()=>{
+        if(adp.answered) return;
+        if(_adpChip!==null){
+          Object.keys(adp.ddPairs).forEach(k=>{if(adp.ddPairs[k]===ri) delete adp.ddPairs[k];});
+          adp.ddPairs[_adpChip]=ri;_adpChip=null;
+          document.querySelectorAll('[data-adp-dd-li]').forEach(c=>c.classList.remove('dragging'));
+          render();
+        } else {
+          const ub=Object.entries(adp.ddPairs).find(([,v])=>v===ri);
+          if(ub){delete adp.ddPairs[parseInt(ub[0])];render();}
+        }
+      });
+    });
+  }
+
   document.querySelectorAll('[data-gq-domi]').forEach(b =>
     b.addEventListener('click', () => { gqState.domiFilter=b.dataset.gqDomi; render(); }));
   document.querySelectorAll('[data-gq-tropos]').forEach(b =>
