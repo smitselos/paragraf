@@ -150,8 +150,8 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 /* DD */
 .dd-wrap{width:100%}
 .dd-hint{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:12px}
-.dd-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;min-height:44px;padding:10px;background:#f8f8ff;border-radius:10px;border:2px dashed var(--border)}
-.dd-chip{padding:8px 16px;border:2px solid var(--indigo);border-radius:999px;font-size:.875rem;background:var(--white);cursor:grab;font-family:inherit;color:var(--ink);user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;transition:all .15s;white-space:nowrap}
+.dd-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;min-height:44px;padding:10px;background:#f8f8ff;border-radius:10px;border:2px dashed var(--border);overflow:hidden;width:100%;box-sizing:border-box}
+.dd-chip{padding:8px 14px;border:2px solid var(--indigo);border-radius:12px;font-size:.84rem;background:var(--white);cursor:grab;font-family:inherit;color:var(--ink);user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;transition:all .15s;white-space:normal;word-break:break-word;max-width:100%;box-sizing:border-box;line-height:1.4}
 .dd-chip:hover{background:var(--indigo-l)}
 .dd-chip.dragging{opacity:.4;cursor:grabbing}
 .dd-chip.used{opacity:.35;cursor:default;border-style:dashed}
@@ -1282,45 +1282,52 @@ function renderGAPInput(q) {
 }
 
 function renderExcerptCLK(q) {
-  const targets = q.targets.map(t=>t.trim().toLowerCase());
+  const targets = q.targets.map(t => t.trim().toLowerCase());
   const text = q.excerpt;
   const tokens = text.split(/(\s+)/);
-  const words = tokens.map(t => /^\s+$/.test(t) ? null : t.replace(/[.,;:!?«»"'()\[\]]/g,'').toLowerCase());
+
+  // Καθαρή λέξη για κάθε token
+  const words = tokens.map(t => /^\s+$/.test(t) ? null : t.replace(/[.,;:!?«»"'()\[\]]/g, '').toLowerCase());
+
+  // Χτίζουμε wordPhraseMap: ποιο token ανήκει σε ποια target-φράση
   const wordPhraseMap = {};
+  const wordOnlyIdxs = tokens.reduce((acc, t, i) => { if (!/^\s+$/.test(t)) acc.push(i); return acc; }, []);
   targets.forEach(target => {
     const parts = target.split(' ').filter(Boolean);
     if (parts.length <= 1) return;
-    const wordOnlyIdxs = tokens.reduce((acc,t,i)=>{ if(!/^\s+$/.test(t)) acc.push(i); return acc; },[]);
-    for (let wi=0; wi<=wordOnlyIdxs.length-parts.length; wi++) {
-      const match = parts.every((p,pi)=>words[wordOnlyIdxs[wi+pi]]===p);
-      if (match) { for(let pi=0;pi<parts.length;pi++) wordPhraseMap[wordOnlyIdxs[wi+pi]]=target; }
+    for (let wi = 0; wi <= wordOnlyIdxs.length - parts.length; wi++) {
+      const match = parts.every((p, pi) => words[wordOnlyIdxs[wi + pi]] === p);
+      if (match) { for (let pi = 0; pi < parts.length; pi++) wordPhraseMap[wordOnlyIdxs[wi + pi]] = target; }
     }
   });
+
   let html = '<div class="exc clk" id="excClk">';
-  tokens.forEach((tok,ti) => {
-    if (/^\s+$/.test(tok)) { html+=tok; return; }
+  tokens.forEach((tok, ti) => {
+    if (/^\s+$/.test(tok)) { html += tok; return; }
     const clean = words[ti];
-    const phraseTarget = wordPhraseMap[ti];
-    const isSingleTarget = targets.includes(clean);
-    const isAnyTarget = phraseTarget || isSingleTarget;
+    const phraseTarget = wordPhraseMap[ti];   // φράση-στόχος αν ανήκει σε φράση
+    const isSingleTarget = targets.includes(clean) && !phraseTarget;
+    const isAnyTarget = !!(phraseTarget || isSingleTarget);
+
+    // Έχει επιλεχθεί από τον χρήστη;
     const isSelPhrase = phraseTarget && adp.clkSelected.includes(phraseTarget);
-    const isSelWord = !phraseTarget && adp.clkSelected.some(s=>s.toLowerCase()===clean);
+    const isSelWord = !phraseTarget && adp.clkSelected.some(s => s.toLowerCase() === clean);
     const isSelected = isSelPhrase || isSelWord;
+
     let cls = 'tok';
     if (adp.answered) {
-      if (isAnyTarget) cls+=' hit';
-      else if (!isAnyTarget && isSelected) cls+=' miss';
+      if (isAnyTarget)                   cls += ' hit';   // σωστό → πράσινο
+      else if (isSelected && !isAnyTarget) cls += ' miss'; // επιλέχθηκε λάθος → κόκκινο
+      // υπόλοιπες: αμετάβλητες
     } else {
-      if (isSelected) cls+=' sel';
+      if (isSelected) cls += ' sel'; // επιλεγμένο → μπλε
     }
-    if (isAnyTarget || isSelected) {
-      const dataAttr = phraseTarget
-        ? `data-phrase="${phraseTarget.replace(/"/g,'&quot;')}" data-word="${tok.replace(/"/g,'&quot;')}"`
-        : `data-word="${tok.replace(/"/g,'&quot;')}"`;
-      html += `<span class="${cls}" ${dataAttr}>${tok}</span>`;
-    } else {
-      html += `<span>${tok}</span>`;
-    }
+
+    // ΟΛΕΣ οι λέξεις παίρνουν data-word ώστε να είναι clickable
+    const dataAttr = phraseTarget
+      ? `data-phrase="${phraseTarget.replace(/"/g, '&quot;')}" data-word="${tok.replace(/"/g, '&quot;')}"`
+      : `data-word="${tok.replace(/"/g, '&quot;')}"`;
+    html += `<span class="${cls}" ${dataAttr}>${tok}</span>`;
   });
   html += '</div>';
   return html;
