@@ -35,7 +35,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .app-hdr-right{display:flex;align-items:center;gap:8px}
 
 /* card */
-.card{background:transparent;border-radius:var(--r);padding:22px;margin-bottom:14px}
+.card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:22px;margin-bottom:14px}
 
 /* answers card — λευκό */
 
@@ -71,7 +71,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .home-card.c5 .hc-arrow{color:#e11d48}
 
 /* ══ ADAPTIVE LEARNING SCREEN ══ */
-.adp-header{background:var(--bg);color:var(--ink);border-radius:var(--r);padding:16px 20px;margin-bottom:14px;border:1.5px solid var(--border)}
+.adp-header{background:linear-gradient(135deg,var(--indigo),var(--indigo-d));color:#fff;border-radius:var(--r);padding:16px 20px;margin-bottom:14px;box-shadow:var(--sh)}
 .adp-header h2{font-family:'IBM Plex Serif',serif;font-size:1.2rem;font-weight:600;margin-bottom:4px}
 .adp-header p{font-size:.82rem;opacity:.85}
 
@@ -855,12 +855,12 @@ function renderAdaptive() {
   let html = `
   <div class="adp-header">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      ${stepDots}
-      ${dots}
+      <span style="font-size:.95rem;font-weight:300;color:rgba(255,255,255,.9);letter-spacing:.02em">Παράγραφος</span>
+      <button onclick="screen='home';render();" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 14px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">🏠 Αρχική</button>
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <span class="ph ${phaseClass}" style="margin-bottom:0">${phaseLabel}</span>
-      <button onclick="screen='home';render();" style="background:none;border:1.5px solid var(--border);border-radius:999px;padding:5px 14px;color:var(--ink2);font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s" onmouseover="this.style.borderColor='var(--indigo)';this.style.color='var(--indigo)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink2)'">🏠 Αρχική</button>
+      ${stepDots}
+      ${dots}
     </div>
   </div>
 
