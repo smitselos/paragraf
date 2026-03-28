@@ -806,35 +806,35 @@ function renderAdaptive() {
   else if (adp.phase === 'retry1') { phaseLabel=`Βήμα ${stepNum} · Ανατροφοδότηση`; phaseClass='retry'; }
   else                        { phaseLabel=`Βήμα ${stepNum} · Επανέλεγχος`; phaseClass='fb'; }
 
-  // Κουκίδες βημάτων — χωρίς αριθμούς
-  let stepDots = '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">';
+  // Βήματα ως pills «Βήμα 1», «Βήμα 2» κλπ
+  let stepDots = '<div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">';
   catOrder.forEach((key, i) => {
     const status = adp.catLog[key];
     const isActive = i === adp.catIdx;
-    let bg, border;
-    if (status === 'pass' || i < adp.catIdx) { bg='var(--green)'; border='var(--green)'; }
-    else if (status === 'skip')              { bg='var(--amber)'; border='var(--amber)'; }
-    else if (isActive)                       { bg='var(--red)';   border='var(--red)'; }
-    else                                     { bg='#bbbccc';      border='#bbbccc'; }
-    stepDots += `<div style="width:14px;height:14px;border-radius:50%;background:${bg};border:2px solid ${border};transition:all .3s"></div>`;
+    let bg, color, opacity;
+    if (status === 'pass' || i < adp.catIdx) { bg='var(--green)'; color='#fff'; opacity='1'; }
+    else if (status === 'skip')              { bg='var(--amber)'; color='#fff'; opacity='1'; }
+    else if (isActive)                       { bg='var(--red)';   color='#fff'; opacity='1'; }
+    else                                     { bg='rgba(255,255,255,.15)'; color='rgba(255,255,255,.5)'; opacity='1'; }
+    stepDots += `<div style="background:${bg};color:${color};border-radius:999px;padding:3px 10px;font-size:.7rem;font-weight:700;white-space:nowrap;transition:all .3s">Βήμα ${i+1}</div>`;
   });
   stepDots += '</div>';
 
-  // Κουκίδες ερωτήσεων — χωρίς αριθμούς
+  // Κουκίδες ερωτήσεων — συμπεριλαμβάνουν retry ερωτήσεις στον αριθμό
+  const totalAnsweredSoFar = adp.roundResults.length;
   let dots = '<div style="display:flex;gap:5px;align-items:center">';
   for (let i=0; i<totalInRound; i++) {
-    let bg, border;
+    let bg;
     if (i < adp.roundResults.length) {
       bg = adp.roundResults[i] ? 'var(--green)' : 'var(--red)';
-      border = bg;
     } else if (i === adp.qIdx) {
-      bg = 'var(--red)'; border = 'var(--red)';
+      bg = 'var(--red)';
     } else {
-      bg = '#bbbccc'; border = '#bbbccc';
+      bg = 'rgba(255,255,255,.3)';
     }
-    dots += `<div style="width:10px;height:10px;border-radius:50%;background:${bg};border:2px solid ${border};transition:all .2s"></div>`;
+    dots += `<div style="width:9px;height:9px;border-radius:50%;background:${bg};transition:all .2s"></div>`;
   }
-  dots += `<span style="color:var(--muted);font-size:.78rem;margin-left:4px">${adp.qIdx+1}/${totalInRound}</span></div>`;
+  dots += `<span style="color:rgba(255,255,255,.85);font-size:.78rem;font-weight:600;margin-left:5px">${adp.qIdx+1}/${totalInRound}</span></div>`;
 
   // Theory toggle
   let theoryHtml = '';
