@@ -806,43 +806,42 @@ function renderAdaptive() {
   else if (adp.phase === 'retry1') { phaseLabel=`Βήμα ${stepNum} · Ανατροφοδότηση`; phaseClass='retry'; }
   else                        { phaseLabel=`Βήμα ${stepNum} · Επανέλεγχος`; phaseClass='fb'; }
 
-  // Κουκίδες βημάτων — περίγραμμα + αρίθμηση, χρώματα εναρμονισμένα με σκούρο μπλε header
+  // Κουκίδες βημάτων — περίγραμμα + αρίθμηση
   let stepDots = '<div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">';
   catOrder.forEach((key, i) => {
     const status = adp.catLog[key];
     const isActive = i === adp.catIdx;
     let bg, border, color;
     if (status === 'pass' || i < adp.catIdx) {
-      // Ολοκληρωμένο: μέντα/πράσινο που δένει με το μπλε
-      bg='rgba(52,211,153,.25)'; border='rgba(52,211,153,.8)'; color='rgba(167,243,208,1)';
+      bg='rgba(255,255,255,.2)'; border='rgba(255,255,255,.7)'; color='#fff';
     } else if (status === 'skip') {
-      bg='rgba(251,191,36,.2)'; border='rgba(251,191,36,.7)'; color='rgba(253,230,138,1)';
+      bg='rgba(251,191,36,.3)'; border='rgba(251,191,36,.8)'; color='#fff';
     } else if (isActive) {
-      // Ενεργό: λευκό γεμιστό — ξεχωρίζει καθαρά
-      bg='rgba(255,255,255,.95)'; border='rgba(255,255,255,1)'; color='var(--indigo-d)';
+      bg='rgba(255,255,255,.95)'; border='#fff'; color='var(--indigo-d)';
     } else {
-      // Εκκρεμές: διακριτικό λευκό outline
-      bg='rgba(255,255,255,.06)'; border='rgba(255,255,255,.25)'; color='rgba(255,255,255,.35)';
+      bg='rgba(255,255,255,.07)'; border='rgba(255,255,255,.2)'; color='rgba(255,255,255,.3)';
     }
-    stepDots += `<div style="width:24px;height:24px;border-radius:50%;background:${bg};border:2px solid ${border};color:${color};display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;transition:all .3s">${i+1}</div>`;
+    // checkmark για ολοκληρωμένα
+    const label = (status === 'pass' || i < adp.catIdx) ? '✓' : (i+1);
+    stepDots += `<div style="width:24px;height:24px;border-radius:50%;background:${bg};border:2px solid ${border};color:${color};display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;transition:all .3s">${label}</div>`;
   });
   stepDots += '</div>';
 
-  // Κουκίδες ερωτήσεων — ίδια παλέτα με τα βήματα
+  // Κουκίδες ερωτήσεων
   let dots = '<div style="display:flex;gap:5px;align-items:center">';
   for (let i=0; i<totalInRound; i++) {
     let bg, border;
     if (i < adp.roundResults.length) {
-      if (adp.roundResults[i]) { bg='rgba(52,211,153,.7)';  border='rgba(52,211,153,.9)'; }
-      else                     { bg='rgba(248,113,113,.7)'; border='rgba(248,113,113,.9)'; }
+      if (adp.roundResults[i]) { bg='rgba(255,255,255,.9)'; border='rgba(255,255,255,.9)'; }
+      else                     { bg='rgba(254,202,202,.8)'; border='rgba(254,202,202,.8)'; }
     } else if (i === adp.qIdx) {
-      bg='rgba(255,255,255,.95)'; border='rgba(255,255,255,1)';
+      bg='rgba(255,255,255,.95)'; border='#fff';
     } else {
-      bg='rgba(255,255,255,.06)'; border='rgba(255,255,255,.25)';
+      bg='rgba(255,255,255,.15)'; border='rgba(255,255,255,.2)';
     }
     dots += `<div style="width:9px;height:9px;border-radius:50%;background:${bg};border:2px solid ${border};transition:all .2s"></div>`;
   }
-  dots += `<span style="color:rgba(255,255,255,.75);font-size:.75rem;font-weight:600;margin-left:5px">${adp.qIdx+1}/${totalInRound}</span></div>`;
+  dots += `<span style="color:rgba(255,255,255,.8);font-size:.75rem;font-weight:600;margin-left:5px">${adp.qIdx+1}/${totalInRound}</span></div>`;
 
   // Theory toggle
   let theoryHtml = '';
@@ -874,9 +873,7 @@ function renderAdaptive() {
 
   ${theoryHtml}
 
-  <div style="background:transparent;padding:0 0 14px 0">
-    ${q.excerpt ? renderExcerpt(q) : ''}
-  </div>
+  ${q.excerpt ? `<div class="card" style="margin-bottom:14px">${renderExcerpt(q)}</div>` : ''}
 
   <div class="${'answers-card' + (adp.answered ? (isOk ? ' answered-ok' : ' answered-ko') : '')}" id="answersCard">
     <p class="q-lbl">${qTypeLabel(q.type)}</p>
