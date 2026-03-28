@@ -10,7 +10,7 @@
 <style>
 :root {
   --ink:#1a1a2e; --ink2:#3d3d5c; --muted:#6b6b8a; --border:#e2e2f0;
-  --bg:#f7f7fc; --white:#fff;
+  --bg:#eeeff4; --white:#fff;
   --indigo:#4f46e5; --indigo-l:#eef2ff; --indigo-d:#3730a3;
   --green:#059669; --green-l:#d1fae5;
   --red:#dc2626; --red-l:#fee2e2;
@@ -69,7 +69,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .home-card.c5 .hc-arrow{color:#e11d48}
 
 /* ══ ADAPTIVE LEARNING SCREEN ══ */
-.adp-header{background:linear-gradient(135deg,var(--indigo),var(--indigo-d));color:#fff;border-radius:var(--r);padding:20px 22px;margin-bottom:14px;box-shadow:var(--sh)}
+.adp-header{background:var(--bg);color:var(--ink);border-radius:var(--r);padding:16px 20px;margin-bottom:14px;border:1.5px solid var(--border)}
 .adp-header h2{font-family:'IBM Plex Serif',serif;font-size:1.2rem;font-weight:600;margin-bottom:4px}
 .adp-header p{font-size:.82rem;opacity:.85}
 
@@ -804,22 +804,21 @@ function renderAdaptive() {
   else if (adp.phase === 'retry1') { phaseLabel=`Βήμα ${stepNum} · Ανατροφοδότηση`; phaseClass='retry'; }
   else                        { phaseLabel=`Βήμα ${stepNum} · Επανέλεγχος`; phaseClass='fb'; }
 
-  // Κουκίδες βημάτων (ενσωματωμένες στο header)
+  // Κουκίδες βημάτων — χωρίς αριθμούς
   let stepDots = '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">';
   catOrder.forEach((key, i) => {
     const status = adp.catLog[key];
     const isActive = i === adp.catIdx;
-    let bg, border, color;
-    if (status === 'pass') { bg='var(--green)'; border='var(--green)'; color='#fff'; }
-    else if (status === 'skip') { bg='var(--amber)'; border='var(--amber)'; color='#fff'; }
-    else if (isActive) { bg='rgba(255,255,255,.25)'; border='#fff'; color='#fff'; }
-    else if (i < adp.catIdx) { bg='var(--green)'; border='var(--green)'; color='#fff'; }
-    else { bg='rgba(255,255,255,.1)'; border='rgba(255,255,255,.3)'; color='rgba(255,255,255,.5)'; }
-    stepDots += `<div style="width:26px;height:26px;border-radius:50%;background:${bg};border:2px solid ${border};color:${color};display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;transition:all .3s">${i+1}</div>`;
+    let bg, border;
+    if (status === 'pass' || i < adp.catIdx) { bg='var(--green)'; border='var(--green)'; }
+    else if (status === 'skip')              { bg='var(--amber)'; border='var(--amber)'; }
+    else if (isActive)                       { bg='var(--red)';   border='var(--red)'; }
+    else                                     { bg='#bbbccc';      border='#bbbccc'; }
+    stepDots += `<div style="width:14px;height:14px;border-radius:50%;background:${bg};border:2px solid ${border};transition:all .3s"></div>`;
   });
   stepDots += '</div>';
 
-  // Κουκίδες ερωτήσεων της ομάδας (δεξιά)
+  // Κουκίδες ερωτήσεων — χωρίς αριθμούς
   let dots = '<div style="display:flex;gap:5px;align-items:center">';
   for (let i=0; i<totalInRound; i++) {
     let bg, border;
@@ -827,13 +826,13 @@ function renderAdaptive() {
       bg = adp.roundResults[i] ? 'var(--green)' : 'var(--red)';
       border = bg;
     } else if (i === adp.qIdx) {
-      bg = 'rgba(255,255,255,.25)'; border = '#fff';
+      bg = 'var(--red)'; border = 'var(--red)';
     } else {
-      bg = 'rgba(255,255,255,.1)'; border = 'rgba(255,255,255,.3)';
+      bg = '#bbbccc'; border = '#bbbccc';
     }
     dots += `<div style="width:10px;height:10px;border-radius:50%;background:${bg};border:2px solid ${border};transition:all .2s"></div>`;
   }
-  dots += `<span style="color:rgba(255,255,255,.75);font-size:.78rem;margin-left:4px">${adp.qIdx+1}/${totalInRound}</span></div>`;
+  dots += `<span style="color:var(--muted);font-size:.78rem;margin-left:4px">${adp.qIdx+1}/${totalInRound}</span></div>`;
 
   // Theory toggle
   let theoryHtml = '';
@@ -853,16 +852,13 @@ function renderAdaptive() {
 
   let html = `
   <div class="adp-header">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
       ${stepDots}
-      <span style="font-family:'IBM Plex Serif',serif;font-size:1rem;font-weight:600;color:#fff;opacity:.9;margin:0 auto">Παράγραφος</span>
+      ${dots}
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center">
       <span class="ph ${phaseClass}" style="margin-bottom:0">${phaseLabel}</span>
-      <div style="display:flex;align-items:center;gap:10px">
-        ${dots}
-        <button onclick="screen='home';render();" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 14px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">🏠 Αρχική</button>
-      </div>
+      <button onclick="screen='home';render();" style="background:none;border:1.5px solid var(--border);border-radius:999px;padding:5px 14px;color:var(--ink2);font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s" onmouseover="this.style.borderColor='var(--indigo)';this.style.color='var(--indigo)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink2)'">🏠 Αρχική</button>
     </div>
   </div>
 
