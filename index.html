@@ -996,7 +996,7 @@ function renderAdpResults() {
 function getDrillPool() {
   return allParagraphs.filter(p => {
     if (drll.filterDomi !== 'all' && p.domi !== drll.filterDomi) return false;
-    if (drll.filterTropos !== 'all' && p.tropos !== drll.filterTropos) return false;
+    if (!troposMatches(p, drll.filterTropos)) return false;
     return true;
   });
 }
@@ -1020,7 +1020,7 @@ function doDrillCheck() {
   if (drll.answered) return;
   const p = drll.queue[drll.qIdx];
   const domiOk = drll.answerDomi === p.domi;
-  const troposOk = drll.answerTropos === p.tropos;
+  const troposOk = drll.answerTropos !== null && troposMatches(p, drll.answerTropos);
   drll.answered = true;
   drll.results.push({domiOk, troposOk});
   drll.total++;
@@ -1048,9 +1048,25 @@ function doDrillNext() {
 
 function getDomiOptions() { return ['Τριμερής','Διμερής']; }
 
+// Σταθερές 8 επιλογές τρόπου
 function getTroposOptions() {
-  const troposSet = new Set(allParagraphs.map(p=>p.tropos).filter(Boolean));
-  return [...troposSet].sort();
+  return ['Παραδείγματα','Αιτιολόγηση','Αίτιο-αποτέλεσμα','Διαίρεση','Σύγκριση-αντίθεση','Ορισμός','Αναλογία','Συνδυασμός μεθόδων'];
+}
+
+// Έλεγχος αν παράγραφος ταιριάζει με φίλτρο τρόπου:
+// - Αν φίλτρο = 'all' → όλες
+// - Αν φίλτρο = 'Συνδυασμός μεθόδων' → μόνο παράγραφοι με δύο τρόπους
+// - Αλλιώς → παράγραφοι που περιέχουν τον τρόπο (και ως μόνο και μέσα σε συνδυασμό)
+function troposMatches(p, filter) {
+  if (filter === 'all') return true;
+  const t = (p.tropos || '').toLowerCase();
+  if (filter === 'Συνδυασμός μεθόδων') {
+    // Παράγραφοι που έχουν δύο ή περισσότερους τρόπους (περιέχουν '+' ή ',' ή 'συνδυασμός')
+    return t.includes('+') || t.includes(',') || t.includes('συνδυασμός');
+  }
+  // Ο τρόπος ταιριάζει αν είναι ακριβώς αυτός ή αν είναι μέρος συνδυασμού
+  const fLow = filter.toLowerCase();
+  return t === fLow || t.includes(fLow);
 }
 
 // ══════════════════════════════════════════════
@@ -1069,7 +1085,7 @@ function renderDrillSetup() {
 
   const troposChips = ['all', ...allTropos].map(v => {
     const lbl = v==='all' ? 'Όλοι' : v;
-    const cnt = v==='all' ? allParagraphs.length : allParagraphs.filter(p=>p.tropos===v).length;
+    const cnt = v==='all' ? allParagraphs.length : allParagraphs.filter(p=>troposMatches(p,v)).length;
     return `<button class="fchip ${drll.filterTropos===v?'active':''}" data-drll-tropos="${v}">${lbl} <span class="fchip-count">(${cnt})</span></button>`;
   }).join('');
 
@@ -1081,9 +1097,12 @@ function renderDrillSetup() {
   const actualCount = Math.min(drll.filterCount, pool.length);
 
   return `
-  <div class="drll-header">
-    <h2>⚡ Εξάσκηση</h2>
-    <p>Επίλεξε τα φίλτρα και ξεκίνα</p>
+  <div class="drll-header" style="display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <h2>⚡ Εξάσκηση</h2>
+      <p>Επίλεξε τα φίλτρα και ξεκίνα</p>
+    </div>
+    <button id="btnDrillHome" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 14px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit">🏠 Αρχική</button>
   </div>
   <div class="card">
     <div class="drll-setup-section">
@@ -1106,7 +1125,6 @@ function renderDrillSetup() {
     <button class="btn-go" id="btnDrillStart" ${canStart?'':'disabled'} style="margin-top:6px">
       Ξεκινήστε το Quiz →
     </button>
-    <button class="btn-sec" id="btnDrillHome" style="margin-top:8px">↩ Αρχική</button>
   </div>`;
 }
 
@@ -1152,12 +1170,18 @@ function renderDrill() {
   });
   domiHtml += '</div>';
 
-  // Tropos options
+  // Tropos options — σταθερές 8 επιλογές
+  const TROPOS_OPTS = getTroposOptions();
   let troposHtml = '<div class="drll-opts">';
-  troposOpts.forEach(v => {
+  TROPOS_OPTS.forEach(v => {
     let cls = 'drll-opt';
     if (drll.answered) {
-      const isCorrect = v === p.tropos;
+      // Σωστό: η επιλογή ταιριάζει με τον τρόπο της παραγράφου
+      const isCorrect = troposMatches(p, v) && (
+        v === 'Συνδυασμός μεθόδων'
+          ? troposMatches(p, 'Συνδυασμός μεθόδων')
+          : troposMatches(p, v)
+      );
       const isSelected = v === drll.answerTropos;
       if (isSelected && isCorrect) cls += ' ok';
       else if (isSelected && !isCorrect) cls += ' ko';
@@ -1172,9 +1196,12 @@ function renderDrill() {
   const canCheckDrill = drll.answerDomi !== null && drll.answerTropos !== null && !drll.answered;
 
   return `
-  <div class="drll-header">
-    <h2>⚡ Εξάσκηση</h2>
-    <p>Ανάλυσε την παράγραφο</p>
+  <div class="drll-header" style="display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <h2>⚡ Εξάσκηση</h2>
+      <p>Ανάλυσε την παράγραφο</p>
+    </div>
+    <button onclick="screen='home';render();" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 14px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit">🏠 Αρχική</button>
   </div>
 
   <div class="drll-score-bar">
