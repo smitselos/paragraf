@@ -836,21 +836,43 @@ function renderAdaptive() {
   const totalInRound = adp.queue.length;
   const isOk = adp.answered ? checkAnswer(q, adp.answer) : false;
 
-  // Phase label
+  // Phase label → «Βήμα X» (όχι όνομα κατηγορίας)
+  const stepNum = adp.catIdx + 1;
   let phaseLabel, phaseClass;
-  if (adp.phase === 'main') { phaseLabel=`Κατηγορία ${catKey}`; phaseClass='main'; }
-  else if (adp.phase === 'retry1') { phaseLabel=`Ανατροφοδότηση ${catKey}`; phaseClass='retry'; }
-  else { phaseLabel=`Επανέλεγχος ${catKey}`; phaseClass='fb'; }
+  if (adp.phase === 'main')   { phaseLabel=`Βήμα ${stepNum}`; phaseClass='main'; }
+  else if (adp.phase === 'retry1') { phaseLabel=`Βήμα ${stepNum} · Ανατροφοδότηση`; phaseClass='retry'; }
+  else                        { phaseLabel=`Βήμα ${stepNum} · Επανέλεγχος`; phaseClass='fb'; }
 
-  // Progress dots
-  let dots = '';
+  // Κουκίδες βημάτων (ενσωματωμένες στο header)
+  let stepDots = '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">';
+  catOrder.forEach((key, i) => {
+    const status = adp.catLog[key];
+    const isActive = i === adp.catIdx;
+    let bg, border, color;
+    if (status === 'pass') { bg='var(--green)'; border='var(--green)'; color='#fff'; }
+    else if (status === 'skip') { bg='var(--amber)'; border='var(--amber)'; color='#fff'; }
+    else if (isActive) { bg='rgba(255,255,255,.25)'; border='#fff'; color='#fff'; }
+    else if (i < adp.catIdx) { bg='var(--green)'; border='var(--green)'; color='#fff'; }
+    else { bg='rgba(255,255,255,.1)'; border='rgba(255,255,255,.3)'; color='rgba(255,255,255,.5)'; }
+    stepDots += `<div style="width:26px;height:26px;border-radius:50%;background:${bg};border:2px solid ${border};color:${color};display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;transition:all .3s">${i+1}</div>`;
+  });
+  stepDots += '</div>';
+
+  // Κουκίδες ερωτήσεων της ομάδας (δεξιά)
+  let dots = '<div style="display:flex;gap:5px;align-items:center">';
   for (let i=0; i<totalInRound; i++) {
-    let cls = 'prog-dot';
-    if (i < adp.roundResults.length) cls += adp.roundResults[i] ? ' ok' : ' ko';
-    else if (i === adp.qIdx) cls += ' cur';
-    const icon = i < adp.roundResults.length ? (adp.roundResults[i]?'✓':'✕') : (i===adp.qIdx?'●':'');
-    dots += `<div class="${cls}">${icon}</div>`;
+    let bg, border;
+    if (i < adp.roundResults.length) {
+      bg = adp.roundResults[i] ? 'var(--green)' : 'var(--red)';
+      border = bg;
+    } else if (i === adp.qIdx) {
+      bg = 'rgba(255,255,255,.25)'; border = '#fff';
+    } else {
+      bg = 'rgba(255,255,255,.1)'; border = 'rgba(255,255,255,.3)';
+    }
+    dots += `<div style="width:10px;height:10px;border-radius:50%;background:${bg};border:2px solid ${border};transition:all .2s"></div>`;
   }
+  dots += `<span style="color:rgba(255,255,255,.75);font-size:.78rem;margin-left:4px">${adp.qIdx+1}/${totalInRound}</span></div>`;
 
   // Theory toggle
   let theoryHtml = '';
@@ -870,17 +892,11 @@ function renderAdaptive() {
 
   let html = `
   <div class="adp-header">
-    <h2>Βήμα-Βήμα</h2>
-    <p>${getCatDisplayName(catKey)}</p>
-  </div>
-
-  <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <span class="ph ${phaseClass}">${phaseLabel}</span>
-      <span style="color:var(--muted);font-size:.83rem">${adp.qIdx+1} / ${totalInRound}</span>
+      ${stepDots}
+      ${dots}
     </div>
-    <div class="prog-dots">${dots}</div>
-    ${renderCatMap()}
+    <span class="ph ${phaseClass}" style="margin-bottom:0">${phaseLabel}</span>
   </div>
 
   ${theoryHtml}
@@ -906,7 +922,6 @@ function renderAdaptive() {
       ${!isOk ? `<p>${getFeedback(q, adp.answer)||''}</p>` : ''}
     </div>`;
     const isLast = adp.qIdx === adp.queue.length-1;
-    // Τελευταία ερώτηση → πάντα αυτόματη μετάβαση, χωρίς κουμπί
     if (!isLast) {
       html += `<button class="btn-next" id="btnNext">Επόμενο →</button>`;
     }
@@ -923,13 +938,15 @@ function renderAdaptive() {
 function renderCatTransition() {
   const prevKey = catOrder[adp.catIdx-1];
   const nextKey = catOrder[adp.catIdx];
+  const prevName = getCatDisplayName(prevKey);
+  const nextNum = adp.catIdx + 1;
   return `
   <div class="card" style="text-align:center;padding:32px 22px">
     <div style="font-size:2.5rem;margin-bottom:12px">✅</div>
-    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.3rem;margin-bottom:8px">Κατηγορία ${prevKey} ολοκληρώθηκε!</h2>
-    <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px">Μπράβο! Μπορείς να συνεχίσεις στην κατηγορία <strong>${nextKey}</strong>.</p>
-    ${renderCatMap()}
-    <button class="btn-go" id="btnNextCat" style="margin-top:16px">Συνέχεια στο ${nextKey} →</button>
+    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.3rem;margin-bottom:8px">Βήμα ${adp.catIdx} ολοκληρώθηκε!</h2>
+    <p style="color:var(--muted);font-size:.875rem;margin-bottom:6px">${prevName}</p>
+    <p style="color:var(--muted);font-size:.9rem;margin-bottom:20px">Συνέχεια στο <strong>Βήμα ${nextNum}</strong>.</p>
+    <button class="btn-go" id="btnNextCat" style="margin-top:16px">Συνέχεια →</button>
     <button class="btn-sec" id="btnHomeFromAdp">↩ Αρχική</button>
   </div>`;
 }
@@ -973,12 +990,12 @@ function renderAdpResults() {
   const pct = Math.round((passed/total)*100);
   const emoji = pct>=80?'🎉':pct>=60?'👍':'📚';
 
-  let catRows = catOrder.map(key => {
+  let catRows = catOrder.map((key, i) => {
     const status = adp.catLog[key] || 'incomplete';
     const cls = status==='pass' ? 'pass' : 'skip';
     const badge = status==='pass' ? '✅ Επιτυχία' : status==='skip' ? '⚠️ Χρειάζεται μελέτη' : '—';
     return `<div class="cat-summary-row ${cls}">
-      <span class="cs-name">${getCatDisplayName(key)}</span>
+      <span class="cs-name">Βήμα ${i+1} — ${getCatDisplayName(key)}</span>
       <span class="cs-badge">${badge}</span>
     </div>`;
   }).join('');
