@@ -35,7 +35,9 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .app-hdr-right{display:flex;align-items:center;gap:8px}
 
 /* card */
-.card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:22px;margin-bottom:14px}
+.card{background:transparent;border-radius:var(--r);padding:22px;margin-bottom:14px}
+
+/* answers card — λευκό */
 
 /* loading */
 .loading{text-align:center;padding:60px 20px}
@@ -864,17 +866,15 @@ function renderAdaptive() {
 
   ${theoryHtml}
 
-  <div class="card">
-    ${q.excerpt ? `<p class="exc-lbl">Απόσπασμα κειμένου</p>${renderExcerpt(q)}` : ''}
-    <p class="q-lbl" style="margin-top:${q.excerpt?'14px':'0'}">${qTypeLabel(q.type)}</p>
-    <p class="q-txt">${q.q}</p>
-    ${q.type==='CLK' ? '<p style="font-size:.8rem;color:var(--muted);font-style:italic;margin-top:4px">Κάντε κλικ στις λέξεις/φράσεις στο απόσπασμα παραπάνω.</p>' : ''}
-  </div>`;
+  <div style="background:transparent;padding:0 0 14px 0">
+    ${q.excerpt ? renderExcerpt(q) : ''}
+  </div>
 
-  // Answers card
-  let cardClass = 'answers-card';
-  if (adp.answered) cardClass += isOk ? ' answered-ok' : ' answered-ko';
-  html += `<div class="${cardClass}" id="answersCard">`;
+  <div class="${'answers-card' + (adp.answered ? (isOk ? ' answered-ok' : ' answered-ko') : '')}" id="answersCard">
+    <p class="q-lbl">${qTypeLabel(q.type)}</p>
+    <p class="q-txt">${q.q}</p>
+    ${q.type==='CLK' ? '<p style="font-size:.8rem;color:var(--muted);font-style:italic;margin-bottom:10px">Κάντε κλικ στις λέξεις/φράσεις στο απόσπασμα παραπάνω.</p>' : ''}`;
+
   if (q.type==='MC'||q.type==='YN') html += renderMC(q);
   else if (q.type==='DD') html += renderDD(q);
   else if (q.type==='GAP') html += renderGAPInput(q);
