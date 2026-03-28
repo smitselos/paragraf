@@ -244,6 +244,56 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 .info.warn{background:var(--amber-l);color:#78350f}
 .info.success{background:var(--green-l);color:#065f46}
 
+/* ══ ΕΞΑΣΚΗΣΗ ══ */
+.drll-header{background:linear-gradient(135deg,#0891b2,#0e7490);color:#fff;border-radius:var(--r);padding:20px 22px;margin-bottom:14px;box-shadow:var(--sh)}
+.drll-header h2{font-family:'IBM Plex Serif',serif;font-size:1.2rem;font-weight:600;margin-bottom:4px}
+.drll-header p{font-size:.82rem;opacity:.85}
+
+/* setup filters */
+.drll-setup-section{margin-bottom:20px}
+.drll-setup-section h3{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:10px}
+.filter-chips{display:flex;flex-wrap:wrap;gap:8px}
+.fchip{padding:7px 16px;border:2px solid var(--border);border-radius:999px;background:var(--white);font-size:.84rem;font-family:inherit;color:var(--ink2);cursor:pointer;transition:all .15s;font-weight:500}
+.fchip:hover{border-color:#94a3b8}
+.fchip.active{border-color:var(--teal);background:var(--teal);color:#fff;font-weight:600}
+.fchip-count{font-size:.72rem;opacity:.75;margin-left:3px}
+
+/* drill question layout */
+.drll-para-card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:22px;margin-bottom:14px}
+.drll-para-lbl{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--teal);margin-bottom:10px}
+.drll-para-text{font-family:'IBM Plex Serif',serif;background:linear-gradient(135deg,#f0f9ff,#e0f2fe44);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:16px 20px;line-height:1.95;font-size:1rem;color:var(--ink);text-align:justify}
+
+.drll-questions{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:600px){.drll-questions{grid-template-columns:1fr}}
+.drll-q-card{background:var(--white);border-radius:var(--r);box-shadow:var(--sh);padding:18px;border-top:3px solid var(--border);transition:border-color .3s}
+.drll-q-card.ok{border-top-color:var(--green);background:linear-gradient(to bottom,#f0fdf4,var(--white))}
+.drll-q-card.ko{border-top-color:var(--red);background:linear-gradient(to bottom,#fef2f2,var(--white))}
+.drll-q-num{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px}
+.drll-q-title{font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:12px}
+.drll-opts{display:flex;flex-direction:column;gap:6px}
+.drll-opt{padding:9px 13px;border:2px solid var(--border);border-radius:9px;background:var(--white);text-align:left;cursor:pointer;font-size:.875rem;font-family:inherit;color:var(--ink);transition:all .15s;display:flex;align-items:center;gap:8px}
+.drll-opt:hover:not(:disabled){border-color:#94a3b8;transform:translateX(2px)}
+.drll-opt.sel{border-color:var(--teal);background:var(--teal-l)}
+.drll-opt.ok{border-color:var(--green);background:var(--green);color:#fff;font-weight:600;transform:none}
+.drll-opt.ko{border-color:var(--red);background:var(--red);color:#fff;font-weight:600;transform:none}
+.drll-opt.neutral-ok{border-color:var(--green);background:var(--green-l);color:#065f46;font-weight:600}
+.drll-opt:disabled{cursor:default}
+
+/* drill score bar */
+.drll-score-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--white);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:14px}
+.drll-score-pts{font-size:1.1rem;font-weight:700;color:var(--teal)}
+.drll-score-lbl{font-size:.78rem;color:var(--muted)}
+.drll-prog{display:flex;gap:4px;align-items:center}
+.drll-pd{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);background:var(--white)}
+.drll-pd.ok{background:var(--green);border-color:var(--green)}
+.drll-pd.ko{background:var(--red);border-color:var(--red)}
+.drll-pd.cur{background:var(--teal-l);border-color:var(--teal)}
+
+/* drill results */
+.drll-results-score{background:linear-gradient(135deg,var(--teal-l),#fff);border-radius:var(--r);padding:24px;text-align:center;margin:14px 0;border:2px solid var(--teal)}
+.drll-results-big{font-size:3rem;font-weight:700;color:var(--teal);line-height:1}
+.drll-results-sub{color:var(--muted);font-size:.9rem;margin-top:4px}
+
 @media(max-width:600px){
   .score-grid{grid-template-columns:1fr}
   .home-cards{grid-template-columns:1fr}
@@ -327,6 +377,7 @@ const CAT_THEORY = {
 // STATE
 // ══════════════════════════════════════════════
 let allQ = [];
+let allParagraphs = []; // rows with Απόσπασμα + Δομή + Τρόπος
 let catsByKey = {}; // key "1.1" → [q,q,q,...]
 let catOrder = [];  // sorted keys ["1.1","1.2",...]
 
@@ -352,6 +403,25 @@ let adp = {
   totalCorrect: 0,
   totalAnswered: 0,
   usedIds: {},         // catKey → Set of used question IDs
+};
+
+// ΕΞΑΣΚΗΣΗ state
+let drll = {
+  // setup filters
+  filterDomi: 'all',       // 'all' | 'Διμερής' | 'Τριμερής'
+  filterTropos: 'all',     // 'all' | specific tropos string
+  filterCount: 10,         // 5 | 10 | 20
+  // session
+  queue: [],               // shuffled paragraphs for this session
+  qIdx: 0,
+  answerDomi: null,
+  answerTropos: null,
+  answered: false,
+  _autoTimer: null,
+  // scoring
+  correct: 0,
+  total: 0,
+  results: [],             // {domiOk, troposOk}
 };
 
 let screen = 'loading';
@@ -383,6 +453,7 @@ function parseCSV(csv) {
   if (lines.length < 2) return [];
   const hdrs = parseCSVLine(lines[0]).map(h=>h.trim());
   const data = [];
+  const paragraphs = [];
   for (let i = 1; i < lines.length; i++) {
     const vals = parseCSVLine(lines[i]);
     const obj = {};
@@ -390,6 +461,17 @@ function parseCSV(csv) {
       let v = (vals[idx]||'').trim();
       obj[h] = (v===''||v.toLowerCase()==='null'||v.toLowerCase()==='false') ? null : v;
     });
+
+    // Collect paragraph rows (have Απόσπασμα + Δομή + Τρόπος, regardless of Ενεργό)
+    if (obj['Απόσπασμα'] && obj['Δομή'] && obj['Τρόπος']) {
+      paragraphs.push({
+        id: obj['ID'] || `p${i}`,
+        text: obj['Απόσπασμα'],
+        domi: obj['Δομή'].trim(),
+        tropos: obj['Τρόπος'].trim(),
+      });
+    }
+
     if (!obj['Ενεργό'] || obj['Ενεργό'].toUpperCase()==='FALSE') continue;
     if (!obj['Τύπος'] || !obj['Κατηγορία'] || !obj['Κείμενο Ερώτησης']) continue;
     obj.catKey = parseCatKey(obj['Κατηγορία']);
@@ -410,6 +492,7 @@ function parseCSV(csv) {
     obj.fb = [obj['Διόρθωση 1'],obj['Διόρθωση 2'],obj['Διόρθωση 3'],obj['Διόρθωση 4']];
     data.push(obj);
   }
+  allParagraphs = paragraphs;
   return data;
 }
 
@@ -499,7 +582,7 @@ function checkAnswer(q, answer) {
     for(const [li, ri] of Object.entries(answer||{})) {
       if(correctPairs[parseInt(li)] !== parseInt(ri)) return false;
     }
-    return Object.keys(answer||{}).length === q.leftItems.length;
+    return Object.keys(answer||{}).length === q.rightItems.length;
   }
   return false;
 }
@@ -536,7 +619,7 @@ function canCheck(q) {
   if (adp.answered) return false;
   if (q.type==='MC'||q.type==='YN') return adp.answer!==null;
   if (q.type==='CLK') return adp.clkSelected.length>0;
-  if (q.type==='DD') return Object.keys(adp.ddPairs).length===q.leftItems.length;
+  if (q.type==='DD') return Object.keys(adp.ddPairs).length===q.rightItems.length;
   if (q.type==='GAP') return !!(adp.answer && adp.answer.trim());
   return false;
 }
@@ -679,6 +762,9 @@ function render() {
     case 'cat_transition': badge.textContent='Επόμενο βήμα';    app.innerHTML=renderCatTransition(); break;
     case 'theory_wall':    badge.textContent='Θεωρία';          app.innerHTML=renderTheoryWall(); break;
     case 'adp_results':    badge.textContent='Αποτελέσματα';    app.innerHTML=renderAdpResults(); break;
+    case 'drill_setup':    badge.textContent='Εξάσκηση';        app.innerHTML=renderDrillSetup(); break;
+    case 'drill':          badge.textContent=`Εξάσκηση ${drll.qIdx+1}/${drll.queue.length}`; app.innerHTML=renderDrill(); break;
+    case 'drill_results':  badge.textContent='Αποτελέσματα';    app.innerHTML=renderDrillResults(); break;
   }
   attachEvents();
 }
@@ -693,20 +779,24 @@ function renderBadgeAdp() {
 // ══════════════════════════════════════════════
 function renderHome() {
   const totalCats = catOrder.length;
+  const totalPara = allParagraphs.length;
   return `
   <div class="card">
     <p class="home-title">Καλωσήρθες!</p>
-    <p class="home-sub">Εξάσκηση με προσαρμοστική μάθηση</p>
+    <p class="home-sub">Επίλεξε τρόπο εξάσκησης</p>
     <div class="home-cards">
       <button class="home-card c1" id="btnStartAdp">
         <div class="hc-icon-wrap">🎯</div>
         <p class="hc-title">Βήμα-Βήμα</p>
-        <p class="hc-desc">Ξεκίνα από την αρχή με προσαρμοστική μάθηση. Η εφαρμογή σε καθοδηγεί ανάλογα με τις απαντήσεις σου.</p>
+        <p class="hc-desc">Προσαρμοστική μάθηση. Η εφαρμογή σε καθοδηγεί ανάλογα με τις απαντήσεις σου.</p>
         <span class="hc-arrow">${totalCats} κατηγορίες →</span>
       </button>
-    </div>
-    <div class="info" style="margin-top:10px">
-      <strong>Πώς λειτουργεί:</strong> 3 ερωτήσεις ανά κατηγορία. Αν τις απαντήσεις όλες σωστά, προχωράς. Αν όχι, λαμβάνεις ανατροφοδότηση.
+      <button class="home-card c2" id="btnStartDrill">
+        <div class="hc-icon-wrap">⚡</div>
+        <p class="hc-title">Εξάσκηση</p>
+        <p class="hc-desc">Γρήγορη εξάσκηση σε ανάλυση παραγράφων. Επίλεξε δομή, τρόπο και αριθμό παραγράφων.</p>
+        <span class="hc-arrow">${totalPara} παράγραφοι →</span>
+      </button>
     </div>
   </div>`;
 }
@@ -816,8 +906,8 @@ function renderAdaptive() {
       ${!isOk ? `<p>${getFeedback(q, adp.answer)||''}</p>` : ''}
     </div>`;
     const isLast = adp.qIdx === adp.queue.length-1;
-    // Αν είναι η τελευταία ερώτηση ΚΑΙ η απάντηση σωστή → δεν εμφανίζουμε κουμπί (αυτόματη μετάβαση)
-    if (!(isLast && isOk)) {
+    // Τελευταία ερώτηση → πάντα αυτόματη μετάβαση, χωρίς κουμπί
+    if (!isLast) {
       html += `<button class="btn-next" id="btnNext">Επόμενο →</button>`;
     }
   } else {
@@ -913,6 +1003,254 @@ function renderAdpResults() {
   </div>
   <button class="btn-sec" id="btnNewAdp" style="margin-top:4px">🔄 Νέα προσπάθεια από την αρχή</button>
   <button class="btn-sec" id="btnHomeFromRes">↩ Αρχική</button>`;
+}
+
+// ══════════════════════════════════════════════
+// ΕΞΑΣΚΗΣΗ — SETUP & LOGIC
+// ══════════════════════════════════════════════
+function getDrillPool() {
+  return allParagraphs.filter(p => {
+    if (drll.filterDomi !== 'all' && p.domi !== drll.filterDomi) return false;
+    if (drll.filterTropos !== 'all' && p.tropos !== drll.filterTropos) return false;
+    return true;
+  });
+}
+
+function startDrillSession() {
+  const pool = getDrillPool();
+  drll.queue = shuffle(pool).slice(0, drll.filterCount);
+  drll.qIdx = 0;
+  drll.answerDomi = null;
+  drll.answerTropos = null;
+  drll.answered = false;
+  drll.correct = 0;
+  drll.total = 0;
+  drll.results = [];
+  if (drll._autoTimer) { clearTimeout(drll._autoTimer); drll._autoTimer = null; }
+  screen = 'drill';
+  render();
+}
+
+function doDrillCheck() {
+  if (drll.answered) return;
+  const p = drll.queue[drll.qIdx];
+  const domiOk = drll.answerDomi === p.domi;
+  const troposOk = drll.answerTropos === p.tropos;
+  drll.answered = true;
+  drll.results.push({domiOk, troposOk});
+  drll.total++;
+  if (domiOk) drll.correct++;
+  if (troposOk) drll.correct++;
+  render();
+  playSound(domiOk && troposOk ? 'correct' : 'wrong');
+  if (drll._autoTimer) clearTimeout(drll._autoTimer);
+  drll._autoTimer = setTimeout(() => doDrillNext(), 3000);
+}
+
+function doDrillNext() {
+  if (drll._autoTimer) { clearTimeout(drll._autoTimer); drll._autoTimer = null; }
+  if (drll.qIdx < drll.queue.length - 1) {
+    drll.qIdx++;
+    drll.answerDomi = null;
+    drll.answerTropos = null;
+    drll.answered = false;
+    render();
+  } else {
+    screen = 'drill_results';
+    render();
+  }
+}
+
+function getDomiOptions() { return ['Τριμερής','Διμερής']; }
+
+function getTroposOptions() {
+  const troposSet = new Set(allParagraphs.map(p=>p.tropos).filter(Boolean));
+  return [...troposSet].sort();
+}
+
+// ══════════════════════════════════════════════
+// ΕΞΑΣΚΗΣΗ — RENDER SETUP
+// ══════════════════════════════════════════════
+function renderDrillSetup() {
+  const pool = getDrillPool();
+  const allTropos = getTroposOptions();
+  const counts = [5, 10, 20];
+
+  const domiChips = ['all','Τριμερής','Διμερής'].map(v => {
+    const lbl = v==='all' ? 'Όλες' : v;
+    const cnt = v==='all' ? allParagraphs.length : allParagraphs.filter(p=>p.domi===v).length;
+    return `<button class="fchip ${drll.filterDomi===v?'active':''}" data-drll-domi="${v}">${lbl} <span class="fchip-count">(${cnt})</span></button>`;
+  }).join('');
+
+  const troposChips = ['all', ...allTropos].map(v => {
+    const lbl = v==='all' ? 'Όλοι' : v;
+    const cnt = v==='all' ? allParagraphs.length : allParagraphs.filter(p=>p.tropos===v).length;
+    return `<button class="fchip ${drll.filterTropos===v?'active':''}" data-drll-tropos="${v}">${lbl} <span class="fchip-count">(${cnt})</span></button>`;
+  }).join('');
+
+  const countChips = counts.map(n =>
+    `<button class="fchip ${drll.filterCount===n?'active':''}" data-drll-count="${n}">${n}</button>`
+  ).join('');
+
+  const canStart = pool.length > 0;
+  const actualCount = Math.min(drll.filterCount, pool.length);
+
+  return `
+  <div class="drll-header">
+    <h2>⚡ Εξάσκηση</h2>
+    <p>Επίλεξε τα φίλτρα και ξεκίνα</p>
+  </div>
+  <div class="card">
+    <div class="drll-setup-section">
+      <h3>📐 Δομή</h3>
+      <div class="filter-chips">${domiChips}</div>
+    </div>
+    <div class="drll-setup-section">
+      <h3>📚 Τρόπος Ανάπτυξης</h3>
+      <div class="filter-chips">${troposChips}</div>
+    </div>
+    <div class="drll-setup-section">
+      <h3>🔢 Αριθμός Παραγράφων</h3>
+      <div class="filter-chips">${countChips}</div>
+    </div>
+    <div class="info ${canStart?'success':'warn'}" style="margin-top:4px">
+      ${canStart
+        ? `✅ Βρέθηκαν <strong>${pool.length}</strong> παράγραφοι (θα εμφανιστούν <strong>${actualCount}</strong>)`
+        : '⚠️ Δεν βρέθηκαν παράγραφοι με αυτά τα φίλτρα'}
+    </div>
+    <button class="btn-go" id="btnDrillStart" ${canStart?'':'disabled'} style="margin-top:6px">
+      Ξεκινήστε το Quiz →
+    </button>
+    <button class="btn-sec" id="btnDrillHome" style="margin-top:8px">↩ Αρχική</button>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════
+// ΕΞΑΣΚΗΣΗ — RENDER QUIZ
+// ══════════════════════════════════════════════
+function renderDrill() {
+  const p = drll.queue[drll.qIdx];
+  const total = drll.queue.length;
+  const domiOpts = getDomiOptions();
+  const troposOpts = getTroposOptions();
+  const pct = Math.round(((drll.qIdx) / total) * 100);
+
+  // Progress dots
+  let dots = '';
+  for (let i = 0; i < total; i++) {
+    let cls = 'drll-pd';
+    if (i < drll.results.length) {
+      const r = drll.results[i];
+      cls += (r.domiOk && r.troposOk) ? ' ok' : ' ko';
+    } else if (i === drll.qIdx) cls += ' cur';
+    dots += `<div class="${cls}"></div>`;
+  }
+
+  // Score
+  const maxPossible = drll.total * 2;
+  const scoreDisplay = maxPossible > 0 ? `${drll.correct} / ${maxPossible}` : '—';
+
+  // Domi options
+  let domiHtml = '<div class="drll-opts">';
+  domiOpts.forEach(v => {
+    let cls = 'drll-opt';
+    if (drll.answered) {
+      const isCorrect = v === p.domi;
+      const isSelected = v === drll.answerDomi;
+      if (isSelected && isCorrect) cls += ' ok';
+      else if (isSelected && !isCorrect) cls += ' ko';
+      else if (isCorrect && !isSelected) cls += ' neutral-ok';
+    } else {
+      if (drll.answerDomi === v) cls += ' sel';
+    }
+    domiHtml += `<button class="${cls}" data-drll-domi-ans="${v}" ${drll.answered?'disabled':''}>${v}</button>`;
+  });
+  domiHtml += '</div>';
+
+  // Tropos options
+  let troposHtml = '<div class="drll-opts">';
+  troposOpts.forEach(v => {
+    let cls = 'drll-opt';
+    if (drll.answered) {
+      const isCorrect = v === p.tropos;
+      const isSelected = v === drll.answerTropos;
+      if (isSelected && isCorrect) cls += ' ok';
+      else if (isSelected && !isCorrect) cls += ' ko';
+      else if (isCorrect && !isSelected) cls += ' neutral-ok';
+    } else {
+      if (drll.answerTropos === v) cls += ' sel';
+    }
+    troposHtml += `<button class="${cls}" data-drll-tropos-ans="${v}" ${drll.answered?'disabled':''}>${v}</button>`;
+  });
+  troposHtml += '</div>';
+
+  const canCheckDrill = drll.answerDomi !== null && drll.answerTropos !== null && !drll.answered;
+
+  return `
+  <div class="drll-header">
+    <h2>⚡ Εξάσκηση</h2>
+    <p>Ανάλυσε την παράγραφο</p>
+  </div>
+
+  <div class="drll-score-bar">
+    <div>
+      <div class="drll-score-lbl">Πόντοι</div>
+      <div class="drll-score-pts">${scoreDisplay}</div>
+    </div>
+    <div class="drll-prog">${dots}</div>
+    <div style="text-align:right">
+      <div class="drll-score-lbl">Ερώτηση</div>
+      <div style="font-weight:700;color:var(--ink)">${drll.qIdx+1} / ${total}</div>
+    </div>
+  </div>
+
+  <div class="drll-para-card">
+    <p class="drll-para-lbl">Παράγραφος ${drll.qIdx+1}</p>
+    <div class="drll-para-text">${p.text}</div>
+  </div>
+
+  <div class="drll-questions">
+    <div class="drll-q-card ${drll.answered ? (drll.results[drll.qIdx]?.domiOk ? 'ok' : 'ko') : ''}">
+      <p class="drll-q-num">Ερώτηση 1</p>
+      <p class="drll-q-title">Ποια είναι η δομή της παραγράφου;</p>
+      ${domiHtml}
+    </div>
+    <div class="drll-q-card ${drll.answered ? (drll.results[drll.qIdx]?.troposOk ? 'ok' : 'ko') : ''}">
+      <p class="drll-q-num">Ερώτηση 2</p>
+      <p class="drll-q-title">Ποιος είναι ο τρόπος ανάπτυξης;</p>
+      ${troposHtml}
+    </div>
+  </div>
+
+  ${!drll.answered ? `<button class="btn-check" id="btnDrillCheck" ${canCheckDrill?'':'disabled'}>Έλεγξε</button>` : ''}
+  `;
+}
+
+// ══════════════════════════════════════════════
+// ΕΞΑΣΚΗΣΗ — RENDER RESULTS
+// ══════════════════════════════════════════════
+function renderDrillResults() {
+  const total = drll.queue.length;
+  const maxPoints = total * 2;
+  const pct = maxPoints > 0 ? Math.round((drll.correct / maxPoints) * 100) : 0;
+  const emoji = pct >= 80 ? '🎉' : pct >= 60 ? '👍' : '📚';
+
+  return `
+  <div class="card" style="text-align:center;padding:28px 22px">
+    <div style="font-size:2.8rem;margin-bottom:10px">${emoji}</div>
+    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.4rem;margin-bottom:16px">Τέλος Εξάσκησης!</h2>
+    <div class="drll-results-score">
+      <p class="drll-results-big">${drll.correct} / ${maxPoints}</p>
+      <p class="drll-results-sub">πόντοι (${pct}%)</p>
+    </div>
+    <div class="score-grid" style="margin:14px 0">
+      <div class="sc g"><p>Σωστές</p><p>${drll.correct}</p></div>
+      <div class="sc r"><p>Λάθος</p><p>${maxPoints - drll.correct}</p></div>
+      <div class="sc a"><p>Παράγραφοι</p><p>${total}</p></div>
+    </div>
+  </div>
+  <button class="btn-go" id="btnDrillAgain" style="margin-top:4px">🔄 Νέα εξάσκηση</button>
+  <button class="btn-sec" id="btnDrillHome2" style="margin-top:8px">↩ Αρχική</button>`;
 }
 
 // ══════════════════════════════════════════════
@@ -1075,6 +1413,34 @@ function attachEvents() {
   // Home
   const btnStartAdp = document.getElementById('btnStartAdp');
   if (btnStartAdp) btnStartAdp.addEventListener('click', startAdaptive);
+  const btnStartDrill = document.getElementById('btnStartDrill');
+  if (btnStartDrill) btnStartDrill.addEventListener('click', ()=>{ screen='drill_setup'; render(); });
+
+  // ── ΕΞΑΣΚΗΣΗ setup filters ──
+  document.querySelectorAll('[data-drll-domi]').forEach(b =>
+    b.addEventListener('click', ()=>{ drll.filterDomi=b.dataset.drllDomi; render(); }));
+  document.querySelectorAll('[data-drll-tropos]').forEach(b =>
+    b.addEventListener('click', ()=>{ drll.filterTropos=b.dataset.drllTropos; render(); }));
+  document.querySelectorAll('[data-drll-count]').forEach(b =>
+    b.addEventListener('click', ()=>{ drll.filterCount=parseInt(b.dataset.drllCount); render(); }));
+  const btnDrillStart = document.getElementById('btnDrillStart');
+  if (btnDrillStart) btnDrillStart.addEventListener('click', startDrillSession);
+  const btnDrillHome = document.getElementById('btnDrillHome');
+  if (btnDrillHome) btnDrillHome.addEventListener('click', ()=>{ screen='home'; render(); });
+
+  // ── ΕΞΑΣΚΗΣΗ quiz ──
+  document.querySelectorAll('[data-drll-domi-ans]').forEach(b =>
+    b.addEventListener('click', ()=>{ if(!drll.answered){ drll.answerDomi=b.dataset.drllDomiAns; render(); } }));
+  document.querySelectorAll('[data-drll-tropos-ans]').forEach(b =>
+    b.addEventListener('click', ()=>{ if(!drll.answered){ drll.answerTropos=b.dataset.drllTroposAns; render(); } }));
+  const btnDrillCheck = document.getElementById('btnDrillCheck');
+  if (btnDrillCheck) btnDrillCheck.addEventListener('click', doDrillCheck);
+
+  // ── ΕΞΑΣΚΗΣΗ results ──
+  const btnDrillAgain = document.getElementById('btnDrillAgain');
+  if (btnDrillAgain) btnDrillAgain.addEventListener('click', ()=>{ screen='drill_setup'; render(); });
+  const btnDrillHome2 = document.getElementById('btnDrillHome2');
+  if (btnDrillHome2) btnDrillHome2.addEventListener('click', ()=>{ screen='home'; render(); });
 
   // Theory toggle
   const btnTh = document.getElementById('btnTheory');
@@ -1197,9 +1563,12 @@ function doCheck() {
   if (ok) adp.totalCorrect++;
   render();
   playSound(ok ? 'correct' : 'wrong');
-  if (ok) {
+  const isLast = adp.qIdx === adp.queue.length - 1;
+  const delay = ok ? 2500 : (isLast ? 3500 : 0);
+  // Αυτόματη μετάβαση: αμέσως για ενδιάμεσες σωστές, με καθυστέρηση για λάθος τελευταίας
+  if (ok || isLast) {
     if (adp._autoTimer) clearTimeout(adp._autoTimer);
-    adp._autoTimer = setTimeout(()=>{ if(adp.answered) doNext(); }, 3500);
+    adp._autoTimer = setTimeout(()=>{ if(adp.answered) doNext(); }, delay);
   }
 }
 
