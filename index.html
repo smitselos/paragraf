@@ -816,7 +816,10 @@ function renderAdaptive() {
       ${!isOk ? `<p>${getFeedback(q, adp.answer)||''}</p>` : ''}
     </div>`;
     const isLast = adp.qIdx === adp.queue.length-1;
-    html += `<button class="btn-next" id="btnNext">${isLast ? 'Αξιολόγηση κατηγορίας →' : 'Επόμενη ερώτηση →'}</button>`;
+    // Αν είναι η τελευταία ερώτηση ΚΑΙ η απάντηση σωστή → δεν εμφανίζουμε κουμπί (αυτόματη μετάβαση)
+    if (!(isLast && isOk)) {
+      html += `<button class="btn-next" id="btnNext">Επόμενο →</button>`;
+    }
   } else {
     html += `<button class="btn-check" id="btnCheck" ${canCheck(q)?'':'disabled'}>Έλεγξε</button>`;
   }
