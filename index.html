@@ -51,16 +51,21 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink
 /* HOME */
 .home-title{font-family:'IBM Plex Serif',serif;font-size:1.6rem;font-weight:600;margin-bottom:6px}
 .home-sub{color:var(--muted);font-size:.9rem;margin-bottom:28px}
-.home-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:8px}
+.home-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px}
+@media(max-width:540px){.home-cards{grid-template-columns:1fr}}
 .home-card{border-radius:var(--r);padding:24px 20px;cursor:pointer;border:2px solid transparent;transition:all .2s;text-align:left;font-family:inherit;background:var(--white);box-shadow:var(--sh)}
 .home-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(79,70,229,.13)}
 .home-card .hc-icon-wrap{border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:1.3rem}
 .home-card .hc-title{font-family:'IBM Plex Serif',serif;font-size:1.05rem;font-weight:600;margin-bottom:6px;color:var(--ink)}
 .home-card .hc-desc{font-size:.82rem;color:var(--muted);line-height:1.5}
 .home-card .hc-arrow{display:inline-block;margin-top:14px;font-size:.8rem;font-weight:600}
-.home-card.c1{border-color:var(--green);background:linear-gradient(135deg,#f0fdf4,#fff)}
-.home-card.c1 .hc-icon-wrap{background:var(--green-l)}
-.home-card.c1 .hc-arrow{color:var(--green)}
+/* c1 — αρνητικό: σκούρο background, ανοιχτά γράμματα */
+.home-card.c1{border-color:var(--green);background:linear-gradient(135deg,#064e3b,#065f46);box-shadow:0 4px 20px rgba(6,78,59,.35)}
+.home-card.c1:hover{box-shadow:0 8px 28px rgba(6,78,59,.5)}
+.home-card.c1 .hc-icon-wrap{background:rgba(255,255,255,.15)}
+.home-card.c1 .hc-title{color:#d1fae5}
+.home-card.c1 .hc-desc{color:#6ee7b7}
+.home-card.c1 .hc-arrow{color:#a7f3d0}
 .home-card.c2{border-color:var(--teal);background:linear-gradient(135deg,#f0f9ff,#fff)}
 .home-card.c2 .hc-icon-wrap{background:var(--teal-l)}
 .home-card.c2 .hc-arrow{color:var(--teal)}
