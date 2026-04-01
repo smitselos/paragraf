@@ -390,6 +390,23 @@ let drll = {
 };
 
 
+// ΕΠΙΛΟΓΗ state
+let sel = {
+  filterType: 'all',       // 'all' | 'YN' | 'MC' | 'DD' | 'GAP' | 'CLK'
+  filterDiff: 'all',       // 'all' | 1 | 2 | 3
+  filterCount: 10,         // 10 | 20 | 0 (=all)
+  queue: [],
+  qIdx: 0,
+  answer: null,
+  answered: false,
+  ddPairs: {},
+  clkSelected: [],
+  _autoTimer: null,
+  correct: 0,
+  total: 0,
+  results: [],
+};
+
 // ΠΑΡΟΥΣΙΑΣΗ state (ίδια λογική με Εξάσκηση)
 let prs = {
   filterDomi: 'all',
@@ -743,6 +760,9 @@ function render() {
     case 'drill_setup':    app.innerHTML=renderDrillSetup(); break;
     case 'drill':          app.innerHTML=renderDrill(); break;
     case 'drill_results':  app.innerHTML=renderDrillResults(); break;
+    case 'sel_setup':      app.innerHTML=renderSelSetup(); break;
+    case 'sel':            app.innerHTML=renderSel(); break;
+    case 'sel_results':    app.innerHTML=renderSelResults(); break;
     case 'prs_setup':      app.innerHTML=renderPrsSetup(); break;
     case 'prs':            app.innerHTML=renderPrs(); break;
     case 'prs_results':    app.innerHTML=renderPrsResults(); break;
@@ -761,6 +781,7 @@ function renderBadgeAdp() {
 function renderHome() {
   const totalCats = catOrder.length;
   const totalPara = allParagraphs.length;
+  const totalQ = allQ.length;
   return `
   <div class="card">
     <p class="home-title">Καλωσήρθες!</p>
@@ -777,6 +798,12 @@ function renderHome() {
         <p class="hc-title">Εξάσκηση</p>
         <p class="hc-desc">Γρήγορη εξάσκηση σε ανάλυση παραγράφων. Επίλεξε δομή, τρόπο και αριθμό παραγράφων.</p>
         <span class="hc-arrow">${totalPara} παράγραφοι →</span>
+      </button>
+      <button class="home-card c4" id="btnStartSel">
+        <div class="hc-icon-wrap">🎲</div>
+        <p class="hc-title">Επιλογή</p>
+        <p class="hc-desc">Ελεύθερη εξάσκηση με φίλτρα τύπου ερώτησης και βαθμού δυσκολίας.</p>
+        <span class="hc-arrow">${totalQ} ερωτήσεις →</span>
       </button>
       <button class="home-card c3" id="btnStartPrs">
         <div class="hc-icon-wrap">📽️</div>
@@ -1430,6 +1457,8 @@ function attachEvents() {
   if (btnStartAdp) btnStartAdp.addEventListener('click', startAdaptive);
   const btnStartDrill = document.getElementById('btnStartDrill');
   if (btnStartDrill) btnStartDrill.addEventListener('click', ()=>{ screen='drill_setup'; render(); });
+  const btnStartSel = document.getElementById('btnStartSel');
+  if (btnStartSel) btnStartSel.addEventListener('click', ()=>{ screen='sel_setup'; render(); });
   const btnStartPrs = document.getElementById('btnStartPrs');
   if (btnStartPrs) btnStartPrs.addEventListener('click', ()=>{ screen='prs_setup'; render(); });
 
@@ -1443,6 +1472,61 @@ function attachEvents() {
   const btnDrillHome = document.getElementById('btnDrillHome');
   if (btnDrillHome) btnDrillHome.addEventListener('click', ()=>{ screen='home'; render(); });
   // Παρουσίαση filters
+  // ΕΠΙΛΟΓΗ events
+  document.querySelectorAll('[data-sel-type]').forEach(b =>
+    b.addEventListener('click', ()=>{ sel.filterType=b.dataset.selType; render(); }));
+  document.querySelectorAll('[data-sel-diff]').forEach(b =>
+    b.addEventListener('click', ()=>{ const v=b.dataset.selDiff; sel.filterDiff=v==='all'?'all':parseInt(v); render(); }));
+  document.querySelectorAll('[data-sel-count]').forEach(b =>
+    b.addEventListener('click', ()=>{ sel.filterCount=parseInt(b.dataset.selCount); render(); }));
+  const btnSelHome = document.getElementById('btnSelHome');
+  if (btnSelHome) btnSelHome.addEventListener('click', ()=>{ screen='home'; render(); });
+  const btnSelStart = document.getElementById('btnSelStart');
+  if (btnSelStart) btnSelStart.addEventListener('click', startSelSession);
+  // Sel answer events
+  document.querySelectorAll('[data-sel-mc]').forEach(b =>
+    b.addEventListener('click', ()=>{ if(!sel.answered){ sel.answer=b.dataset.selMc; render(); } }));
+  const selGapInp = document.getElementById('selGapInp');
+  if (selGapInp) {
+    selGapInp.addEventListener('input', ()=>{ sel.answer=selGapInp.value; const btn=document.getElementById('btnSelCheck'); if(btn) btn.disabled=!sel.answer.trim(); });
+    selGapInp.addEventListener('keydown', e=>{ if(e.key==='Enter'&&canSelCheck()) doSelCheck(); });
+  }
+  // CLK tokens
+  document.querySelectorAll('[data-word]').forEach(b => {
+    if (!b.closest('.answers-card') && !b.closest('.card')) return;
+    b.addEventListener('click', ()=>{
+      if (sel.answered) return;
+      const w = b.dataset.word;
+      const idx = sel.clkSelected.indexOf(w);
+      if (idx!==-1) sel.clkSelected.splice(idx,1); else sel.clkSelected.push(w);
+      render();
+    });
+  });
+  // DD sel
+  let _selDdDrag = null;
+  document.querySelectorAll('[data-sel-dd-li]').forEach(el => {
+    const li = parseInt(el.dataset.selDdLi);
+    if (el.classList.contains('used')) return;
+    el.addEventListener('dragstart', e=>{ _selDdDrag=li; el.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
+    el.addEventListener('dragend', ()=>el.classList.remove('dragging'));
+    el.addEventListener('click', ()=>{ if(sel.answered) return; _selDdDrag=li; document.querySelectorAll('[data-sel-dd-li]').forEach(c=>c.classList.remove('dragging')); el.classList.add('dragging'); });
+  });
+  document.querySelectorAll('[data-sel-dd-ri]').forEach(slot => {
+    const ri = parseInt(slot.dataset.selDdRi);
+    slot.addEventListener('dragover', e=>{ e.preventDefault(); slot.classList.add('over'); });
+    slot.addEventListener('dragleave', ()=>slot.classList.remove('over'));
+    slot.addEventListener('drop', e=>{ e.preventDefault(); slot.classList.remove('over'); if(_selDdDrag===null) return; Object.keys(sel.ddPairs).forEach(k=>{ if(sel.ddPairs[k]===ri) delete sel.ddPairs[k]; }); sel.ddPairs[_selDdDrag]=ri; _selDdDrag=null; render(); });
+    slot.addEventListener('click', ()=>{ if(sel.answered) return; if(_selDdDrag!==null){ Object.keys(sel.ddPairs).forEach(k=>{ if(sel.ddPairs[k]===ri) delete sel.ddPairs[k]; }); sel.ddPairs[_selDdDrag]=ri; _selDdDrag=null; document.querySelectorAll('[data-sel-dd-li]').forEach(c=>c.classList.remove('dragging')); render(); } else { const ub=Object.entries(sel.ddPairs).find(([,v])=>v===ri); if(ub){ delete sel.ddPairs[parseInt(ub[0])]; render(); } } });
+  });
+  const btnSelCheck = document.getElementById('btnSelCheck');
+  if (btnSelCheck) btnSelCheck.addEventListener('click', doSelCheck);
+  const btnSelNext = document.getElementById('btnSelNext');
+  if (btnSelNext) btnSelNext.addEventListener('click', doSelNext);
+  const btnSelAgain = document.getElementById('btnSelAgain');
+  if (btnSelAgain) btnSelAgain.addEventListener('click', ()=>{ screen='sel_setup'; render(); });
+  const btnSelHome2 = document.getElementById('btnSelHome2');
+  if (btnSelHome2) btnSelHome2.addEventListener('click', ()=>{ screen='home'; render(); });
+
   document.querySelectorAll('[data-prs-domi]').forEach(b =>
     b.addEventListener('click', ()=>{ prs.filterDomi=b.dataset.prsDomi; render(); }));
   document.querySelectorAll('[data-prs-tropos]').forEach(b =>
@@ -1472,6 +1556,8 @@ function attachEvents() {
   if (btnPrsCheck) btnPrsCheck.addEventListener('click', doPrsCheck);
   const btnPrsSkip = document.getElementById('btnPrsSkip');
   if (btnPrsSkip) btnPrsSkip.addEventListener('click', doPrsSkip);
+  const btnPrsNext = document.getElementById('btnPrsNext');
+  if (btnPrsNext) btnPrsNext.addEventListener('click', doPrsNext);
 
   // ── ΕΞΑΣΚΗΣΗ results ──
   const btnDrillAgain = document.getElementById('btnDrillAgain');
@@ -1636,6 +1722,308 @@ function doNext() {
 
 
 
+
+// ══════════════════════════════════════════════
+// ΕΠΙΛΟΓΗ — SETUP & LOGIC
+// ══════════════════════════════════════════════
+function getSelPool() {
+  return allQ.filter(q => {
+    if (sel.filterType !== 'all' && q.type !== sel.filterType) return false;
+    if (sel.filterDiff !== 'all' && q.diff !== sel.filterDiff) return false;
+    return true;
+  });
+}
+
+function startSelSession() {
+  const pool = getSelPool();
+  const count = sel.filterCount === 0 ? pool.length : sel.filterCount;
+  sel.queue = shuffle(pool).slice(0, count);
+  sel.qIdx = 0;
+  sel.answer = null;
+  sel.answered = false;
+  sel.ddPairs = {};
+  sel.clkSelected = [];
+  sel.correct = 0;
+  sel.total = 0;
+  sel.results = [];
+  if (sel._autoTimer) { clearTimeout(sel._autoTimer); sel._autoTimer = null; }
+  screen = 'sel';
+  render();
+}
+
+function doSelCheck() {
+  if (sel.answered) return;
+  const q = sel.queue[sel.qIdx];
+  if (q.type === 'CLK') sel.answer = [...sel.clkSelected];
+  if (q.type === 'DD') sel.answer = {...sel.ddPairs};
+  const ok = checkAnswer(q, sel.answer);
+  sel.answered = true;
+  sel.results.push({ok});
+  sel.total++;
+  if (ok) sel.correct++;
+  render();
+  playSound(ok ? 'correct' : 'wrong');
+  if (ok) {
+    if (sel._autoTimer) clearTimeout(sel._autoTimer);
+    sel._autoTimer = setTimeout(() => doSelNext(), 2500);
+  }
+}
+
+function doSelNext() {
+  if (sel._autoTimer) { clearTimeout(sel._autoTimer); sel._autoTimer = null; }
+  if (sel.qIdx < sel.queue.length - 1) {
+    sel.qIdx++;
+    sel.answer = null;
+    sel.answered = false;
+    sel.ddPairs = {};
+    sel.clkSelected = [];
+    render();
+  } else {
+    screen = 'sel_results';
+    render();
+  }
+}
+
+function canSelCheck() {
+  const q = sel.queue[sel.qIdx];
+  if (!q || sel.answered) return false;
+  if (q.type === 'MC' || q.type === 'YN') return sel.answer !== null;
+  if (q.type === 'CLK') return sel.clkSelected.length > 0;
+  if (q.type === 'DD') return Object.keys(sel.ddPairs).length === q.rightItems.length;
+  if (q.type === 'GAP') return !!(sel.answer && sel.answer.trim());
+  return false;
+}
+
+// ══════════════════════════════════════════════
+// ΕΠΙΛΟΓΗ — RENDER SETUP
+// ══════════════════════════════════════════════
+function renderSelSetup() {
+  const pool = getSelPool();
+
+  const typeMap = [
+    {v:'all', lbl:'Όλοι'},
+    {v:'YN',  lbl:'Ναι / Όχι'},
+    {v:'MC',  lbl:'Πολλαπλής Επιλογής'},
+    {v:'CLK', lbl:'Εντοπισμός'},
+    {v:'DD',  lbl:'Αντιστοίχιση'},
+    {v:'GAP', lbl:'Συμπλήρωση'},
+  ];
+  const typeChips = typeMap.map(({v, lbl}) => {
+    const cnt = v==='all' ? allQ.length : allQ.filter(q=>q.type===v).length;
+    return `<button class="fchip ${sel.filterType===v?'active':''}" data-sel-type="${v}">${lbl} <span class="fchip-count">(${cnt})</span></button>`;
+  }).join('');
+
+  const diffMap = [
+    {v:'all', lbl:'Όλοι'},
+    {v:1, lbl:'1 — Εύκολος'},
+    {v:2, lbl:'2 — Μέτριος'},
+    {v:3, lbl:'3 — Δύσκολος'},
+  ];
+  const diffChips = diffMap.map(({v, lbl}) => {
+    const cnt = v==='all' ? allQ.length : allQ.filter(q=>q.diff===v).length;
+    return `<button class="fchip ${sel.filterDiff===v?'active':''}" data-sel-diff="${v}">${lbl} <span class="fchip-count">(${cnt})</span></button>`;
+  }).join('');
+
+  const countMap = [{n:10,lbl:'10'},{n:20,lbl:'20'},{n:0,lbl:'Όλες'}];
+  const countChips = countMap.map(({n,lbl}) =>
+    `<button class="fchip ${sel.filterCount===n?'active':''}" data-sel-count="${n}">${lbl}</button>`
+  ).join('');
+
+  const canStart = pool.length > 0;
+  const actualCount = sel.filterCount === 0 ? pool.length : Math.min(sel.filterCount, pool.length);
+
+  return `
+  <div class="adp-header" style="display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <h2>🎲 Επιλογή</h2>
+      <p style="font-size:.82rem;opacity:.85">Επίλεξε φίλτρα και ξεκίνα</p>
+    </div>
+    <button id="btnSelHome" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 14px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit">🏠 Αρχική</button>
+  </div>
+  <div class="card">
+    <div class="drll-setup-section">
+      <h3>❓ Τύπος Ερώτησης</h3>
+      <div class="filter-chips">${typeChips}</div>
+    </div>
+    <div class="drll-setup-section">
+      <h3>⭐ Βαθμός Δυσκολίας</h3>
+      <div class="filter-chips">${diffChips}</div>
+    </div>
+    <div class="drll-setup-section">
+      <h3>🔢 Αριθμός Ερωτήσεων</h3>
+      <div class="filter-chips">${countChips}</div>
+    </div>
+    <div class="info ${canStart?'success':'warn'}" style="margin-top:4px">
+      ${canStart
+        ? `✅ Βρέθηκαν <strong>${pool.length}</strong> ερωτήσεις (θα εμφανιστούν <strong>${actualCount}</strong>)`
+        : '⚠️ Δεν βρέθηκαν ερωτήσεις με αυτά τα φίλτρα'}
+    </div>
+    <button class="btn-go" id="btnSelStart" ${canStart?'':'disabled'} style="margin-top:6px">
+      Ξεκινήστε →
+    </button>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════
+// ΕΠΙΛΟΓΗ — RENDER QUIZ
+// ══════════════════════════════════════════════
+function renderSel() {
+  const q = sel.queue[sel.qIdx];
+  const total = sel.queue.length;
+  const isOk = sel.answered ? checkAnswer(q, sel.answer) : false;
+
+  // Progress dots
+  let dots = '';
+  for (let i = 0; i < total; i++) {
+    let cls = 'drll-pd';
+    if (i < sel.results.length) cls += sel.results[i].ok ? ' ok' : ' ko';
+    else if (i === sel.qIdx) cls += ' cur';
+    dots += `<div class="${cls}"></div>`;
+  }
+
+  const scoreDisplay = sel.total > 0 ? `${sel.correct} / ${sel.total}` : '—';
+
+  // Excerpt
+  let excerptHtml = '';
+  if (q.excerpt) {
+    excerptHtml = `<div class="card" style="margin-bottom:14px">
+      <p class="exc-lbl">Απόσπασμα</p>
+      <div class="exc${q.type==='CLK'?' clk':''}">${renderSelExcerpt(q)}</div>
+    </div>`;
+  }
+
+  // Question body
+  const qBody = renderSelQuestionBody(q);
+  const ok2Check = canSelCheck();
+
+  return `
+  <div class="adp-header" style="display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <h2>🎲 Επιλογή</h2>
+      <p style="font-size:.82rem;opacity:.85">Ερώτηση ${sel.qIdx+1} / ${total}</p>
+    </div>
+    <button onclick="screen='home';render();" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 14px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit">🏠 Αρχική</button>
+  </div>
+
+  <div class="drll-score-bar">
+    <div>
+      <div class="drll-score-lbl">Σωστές</div>
+      <div class="drll-score-pts" style="color:var(--indigo)">${scoreDisplay}</div>
+    </div>
+    <div class="drll-prog">${dots}</div>
+    <div style="text-align:right">
+      <div class="drll-score-lbl">Τύπος</div>
+      <div style="font-weight:700;color:var(--ink);font-size:.82rem">${qTypeLabel(q.type)}</div>
+    </div>
+  </div>
+
+  ${excerptHtml}
+
+  <div class="answers-card ${sel.answered ? (isOk ? 'answered-ok' : 'answered-ko') : ''}">
+    <p class="q-lbl">Ερώτηση</p>
+    <p class="q-txt">${q.q}</p>
+    ${qBody}
+  </div>
+
+  ${!sel.answered
+    ? `<button class="btn-check" id="btnSelCheck" ${ok2Check?'':'disabled'} style="margin-top:10px">Έλεγξε</button>`
+    : (!isOk ? `<button class="btn-next" id="btnSelNext" style="margin-top:10px">Επόμενη →</button>` : '')
+  }
+  `;
+}
+
+function renderSelExcerpt(q) {
+  if (q.type !== 'CLK') return q.excerpt;
+  return q.excerpt.split(/\s+/).map(w => {
+    const clean = w.replace(/[.,;:!?«»"'()\[\]]/g,'').trim();
+    const isTarget = q.targets.map(t=>t.toLowerCase()).includes(clean.toLowerCase());
+    const selState = sel.clkSelected.includes(clean) ? (sel.answered ? (isTarget?'hit':'miss') : 'sel') : '';
+    if (sel.answered && isTarget && !sel.clkSelected.includes(clean)) {
+      return `<span class="tok hit" data-word="${clean}">${w}</span>`;
+    }
+    return `<span class="tok ${selState}" data-word="${clean}">${w}</span>`;
+  }).join(' ');
+}
+
+function renderSelQuestionBody(q) {
+  if (q.type === 'MC' || q.type === 'YN') {
+    const opts = q.type==='YN'
+      ? [{k:'Α',v:'Ναι'},{k:'Β',v:'Όχι'}]
+      : [{k:'Α',v:q.optA},{k:'Β',v:q.optB},{k:'Γ',v:q.optC},{k:'Δ',v:q.optD}].filter(o=>o.v);
+    return '<div class="opts">' + opts.map(o => {
+      let cls = 'opt';
+      if (sel.answered) {
+        const isCorrect = q.correct.trim().toUpperCase() === o.k;
+        const isSelected = sel.answer === o.k;
+        if (isSelected && isCorrect) cls += ' ok';
+        else if (isSelected && !isCorrect) cls += ' ko';
+        else if (isCorrect) cls += ' neutral-ok';
+      } else {
+        if (sel.answer === o.k) cls += ' sel';
+      }
+      return `<button class="${cls}" data-sel-mc="${o.k}" ${sel.answered?'disabled':''}><span class="opt-k">${o.k}</span>${o.v}</button>`;
+    }).join('') + '</div>';
+  }
+  if (q.type === 'GAP') {
+    const val = sel.answer || '';
+    const inputCls = sel.answered ? (checkAnswer(q, val)?'':'ko') : '';
+    const correct = sel.answered && !checkAnswer(q,val) ? `<span style="color:var(--green);font-weight:600;margin-left:8px">→ ${q.correct}</span>` : '';
+    return `<div style="margin-top:8px"><input id="selGapInp" class="gap-inp ${inputCls}" type="text" placeholder="Απάντησε εδώ…" value="${val}" ${sel.answered?'disabled':''} style="min-width:180px">${correct}</div>`;
+  }
+  if (q.type === 'CLK') {
+    return `<p style="color:var(--muted);font-size:.82rem;margin-top:6px">Επίλεξε τις λέξεις-στόχους στο απόσπασμα</p>`;
+  }
+  if (q.type === 'DD') {
+    const correctPairs = sel.answered ? parseCorrectDD(q.correct, q.leftItems, q.rightItems) : null;
+    const chips = q.leftItems.map((item, li) => {
+      const isUsed = sel.ddPairs[li] !== undefined;
+      return `<div class="dd-chip ${isUsed?'used':''}" data-sel-dd-li="${li}" draggable="true">${item}</div>`;
+    }).join('');
+    const slots = q.rightItems.map((item, ri) => {
+      const assignedLi = Object.entries(sel.ddPairs).find(([,v])=>v===ri);
+      const assignedText = assignedLi ? q.leftItems[parseInt(assignedLi[0])] : null;
+      let slotCls = 'dd-slot';
+      if (sel.answered && correctPairs) {
+        const liForRi = Object.entries(correctPairs).find(([,v])=>v===ri);
+        const correctLi = liForRi ? parseInt(liForRi[0]) : null;
+        const actualLi = assignedLi ? parseInt(assignedLi[0]) : null;
+        if (actualLi !== null) slotCls += (actualLi === correctLi ? ' ok' : ' ko');
+      } else if (assignedText) slotCls += ' filled';
+      return `<div class="dd-slot-row">
+        <span class="dd-slot-lbl">${item}</span>
+        <div class="${slotCls}" data-sel-dd-ri="${ri}">${assignedText || '<span style="color:var(--muted);font-style:italic;font-size:.82rem">Σύρε εδώ</span>'}</div>
+      </div>`;
+    }).join('');
+    return `<div class="dd-wrap"><div class="dd-chips">${chips}</div><div class="dd-slots">${slots}</div></div>`;
+  }
+  return '';
+}
+
+// ══════════════════════════════════════════════
+// ΕΠΙΛΟΓΗ — RENDER RESULTS
+// ══════════════════════════════════════════════
+function renderSelResults() {
+  const total = sel.queue.length;
+  const pct = total > 0 ? Math.round((sel.correct / total) * 100) : 0;
+  const emoji = pct >= 80 ? '🎉' : pct >= 60 ? '👍' : '📚';
+  return `
+  <div class="card" style="text-align:center;padding:28px 22px">
+    <div style="font-size:2.8rem;margin-bottom:10px">${emoji}</div>
+    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.4rem;margin-bottom:16px">Τέλος Επιλογής!</h2>
+    <div class="drll-results-score">
+      <p class="drll-results-big">${sel.correct} / ${total}</p>
+      <p class="drll-results-sub">σωστές (${pct}%)</p>
+    </div>
+    <div class="score-grid" style="margin:14px 0">
+      <div class="sc g"><p>Σωστές</p><p>${sel.correct}</p></div>
+      <div class="sc r"><p>Λάθος</p><p>${total - sel.correct}</p></div>
+      <div class="sc a"><p>Ερωτήσεις</p><p>${total}</p></div>
+    </div>
+  </div>
+  <button class="btn-go" id="btnSelAgain" style="margin-top:4px">🔄 Νέα επιλογή</button>
+  <button class="btn-sec" id="btnSelHome2" style="margin-top:8px">↩ Αρχική</button>`;
+}
+
 // ══════════════════════════════════════════════
 // ΠΑΡΟΥΣΙΑΣΗ (αντίγραφο Εξάσκησης)
 // ══════════════════════════════════════════════
@@ -1659,7 +2047,6 @@ function startPrsSession() {
   prs.correct = 0;
   prs.total = 0;
   prs.results = [];
-  if (prs._autoTimer) { clearTimeout(prs._autoTimer); prs._autoTimer = null; }
   screen = 'prs';
   render();
 }
@@ -1676,12 +2063,9 @@ function doPrsCheck() {
   if (troposOk) prs.correct++;
   render();
   playSound(domiOk && troposOk ? 'correct' : 'wrong');
-  if (prs._autoTimer) clearTimeout(prs._autoTimer);
-  prs._autoTimer = setTimeout(() => doDrillNext(), 3000);
 }
 
 function doPrsSkip() {
-  if (prs._autoTimer) { clearTimeout(prs._autoTimer); prs._autoTimer = null; }
   if (prs.qIdx < prs.queue.length - 1) {
     prs.qIdx++;
     prs.answerDomi = null;
@@ -1689,17 +2073,12 @@ function doPrsSkip() {
     prs.answered = false;
     render();
   } else {
-    // Τέλος ουράς — επανεκκίνηση από την αρχή
-    prs.qIdx = 0;
-    prs.answerDomi = null;
-    prs.answerTropos = null;
-    prs.answered = false;
+    screen = 'prs_setup';
     render();
   }
 }
 
 function doPrsNext() {
-  if (prs._autoTimer) { clearTimeout(prs._autoTimer); prs._autoTimer = null; }
   if (prs.qIdx < prs.queue.length - 1) {
     prs.qIdx++;
     prs.answerDomi = null;
@@ -1707,7 +2086,7 @@ function doPrsNext() {
     prs.answered = false;
     render();
   } else {
-    screen = 'prs_results';
+    screen = 'prs_setup';
     render();
   }
 }
@@ -1843,6 +2222,8 @@ function renderPrs() {
     <div class="drll-para-text">${p.text}</div>
   </div>
 
+  ${!prs.answered ? `<button class="btn-sec" id="btnPrsSkip" style="margin-bottom:6px">⏭ Παράλειψε</button>` : ''}
+
   <div class="drll-questions">
     <div class="drll-q-card ${prs.answered ? (prs.results[prs.qIdx]?.domiOk ? 'ok' : 'ko') : ''}">
       <p class="drll-q-num">Ερώτηση 1</p>
@@ -1856,10 +2237,10 @@ function renderPrs() {
     </div>
   </div>
 
-  ${!prs.answered ? `
-    <button class="btn-check" id="btnPrsCheck" ${canCheck?'':'disabled'}>Έλεγξε</button>
-    <button class="btn-sec" id="btnPrsSkip" style="margin-top:8px">⏭ Παράλειψε</button>
-  ` : ''}
+  ${!prs.answered
+    ? `<button class="btn-check" id="btnPrsCheck" ${canCheck?'':'disabled'} style="margin-top:10px">Έλεγξε</button>`
+    : `<button class="btn-next" id="btnPrsNext">Επόμενη →</button>`
+  }
   `;
 }
 
