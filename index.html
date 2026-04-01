@@ -1470,6 +1470,8 @@ function attachEvents() {
     b.addEventListener('click', ()=>{ if(!prs.answered){ prs.answerTropos=b.dataset.prsTroposAns; render(); } }));
   const btnPrsCheck = document.getElementById('btnPrsCheck');
   if (btnPrsCheck) btnPrsCheck.addEventListener('click', doPrsCheck);
+  const btnPrsSkip = document.getElementById('btnPrsSkip');
+  if (btnPrsSkip) btnPrsSkip.addEventListener('click', doPrsSkip);
 
   // ── ΕΞΑΣΚΗΣΗ results ──
   const btnDrillAgain = document.getElementById('btnDrillAgain');
@@ -1678,6 +1680,24 @@ function doPrsCheck() {
   prs._autoTimer = setTimeout(() => doDrillNext(), 3000);
 }
 
+function doPrsSkip() {
+  if (prs._autoTimer) { clearTimeout(prs._autoTimer); prs._autoTimer = null; }
+  if (prs.qIdx < prs.queue.length - 1) {
+    prs.qIdx++;
+    prs.answerDomi = null;
+    prs.answerTropos = null;
+    prs.answered = false;
+    render();
+  } else {
+    // Τέλος ουράς — επανεκκίνηση από την αρχή
+    prs.qIdx = 0;
+    prs.answerDomi = null;
+    prs.answerTropos = null;
+    prs.answered = false;
+    render();
+  }
+}
+
 function doPrsNext() {
   if (prs._autoTimer) { clearTimeout(prs._autoTimer); prs._autoTimer = null; }
   if (prs.qIdx < prs.queue.length - 1) {
@@ -1767,23 +1787,6 @@ function renderPrs() {
   const p = prs.queue[prs.qIdx];
   const total = prs.queue.length;
   const domiOpts = getDomiOptions();
-  const troposOpts = getTroposOptions();
-  const pct = Math.round(((prs.qIdx) / total) * 100);
-
-  // Progress dots
-  let dots = '';
-  for (let i = 0; i < total; i++) {
-    let cls = 'drll-pd';
-    if (i < prs.results.length) {
-      const r = prs.results[i];
-      cls += (r.domiOk && r.troposOk) ? ' ok' : ' ko';
-    } else if (i === prs.qIdx) cls += ' cur';
-    dots += `<div class="${cls}"></div>`;
-  }
-
-  // Score
-  const maxPossible = prs.total * 2;
-  const scoreDisplay = maxPossible > 0 ? `${prs.correct} / ${maxPossible}` : '—';
 
   // Domi options
   let domiHtml = '<div class="drll-opts">';
@@ -1802,13 +1805,12 @@ function renderPrs() {
   });
   domiHtml += '</div>';
 
-  // Tropos options — σταθερές 8 επιλογές
+  // Tropos options
   const TROPOS_OPTS = getTroposOptions();
   let troposHtml = '<div class="drll-opts">';
   TROPOS_OPTS.forEach(v => {
     let cls = 'drll-opt';
     if (prs.answered) {
-      // Σωστό: η επιλογή ταιριάζει με τον τρόπο της παραγράφου
       const isCorrect = troposMatches(p, v) && (
         v === 'Συνδυασμός μεθόδων'
           ? troposMatches(p, 'Συνδυασμός μεθόδων')
@@ -1825,27 +1827,15 @@ function renderPrs() {
   });
   troposHtml += '</div>';
 
-  const canCheckDrill = prs.answerDomi !== null && prs.answerTropos !== null && !prs.answered;
+  const canCheck = prs.answerDomi !== null && prs.answerTropos !== null && !prs.answered;
 
   return `
   <div class="drll-header" style="display:flex;justify-content:space-between;align-items:center">
     <div>
       <h2>📽️ Παρουσίαση</h2>
-      <p>Ανάλυσε την παράγραφο</p>
+      <p>${prs.qIdx+1} / ${total}</p>
     </div>
     <button onclick="screen='home';render();" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 14px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit">🏠 Αρχική</button>
-  </div>
-
-  <div class="drll-score-bar">
-    <div>
-      <div class="drll-score-lbl">Πόντοι</div>
-      <div class="drll-score-pts">${scoreDisplay}</div>
-    </div>
-    <div class="drll-prog">${dots}</div>
-    <div style="text-align:right">
-      <div class="drll-score-lbl">Ερώτηση</div>
-      <div style="font-weight:700;color:var(--ink)">${prs.qIdx+1} / ${total}</div>
-    </div>
   </div>
 
   <div class="drll-para-card">
@@ -1866,7 +1856,10 @@ function renderPrs() {
     </div>
   </div>
 
-  ${!prs.answered ? `<button class="btn-check" id="btnPrsCheck" ${canCheckDrill?'':'disabled'}>Έλεγξε</button>` : ''}
+  ${!prs.answered ? `
+    <button class="btn-check" id="btnPrsCheck" ${canCheck?'':'disabled'}>Έλεγξε</button>
+    <button class="btn-sec" id="btnPrsSkip" style="margin-top:8px">⏭ Παράλειψε</button>
+  ` : ''}
   `;
 }
 
