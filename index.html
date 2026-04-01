@@ -1491,12 +1491,20 @@ function attachEvents() {
     selGapInp.addEventListener('input', ()=>{ sel.answer=selGapInp.value; const btn=document.getElementById('btnSelCheck'); if(btn) btn.disabled=!sel.answer.trim(); });
     selGapInp.addEventListener('keydown', e=>{ if(e.key==='Enter'&&canSelCheck()) doSelCheck(); });
   }
-  // CLK tokens
-  document.querySelectorAll('[data-word]').forEach(b => {
-    if (!b.closest('.answers-card') && !b.closest('.card')) return;
+  // CLK tokens — sel (φράσεις + λέξεις)
+  document.querySelectorAll('[data-sel-phrase]').forEach(b => {
     b.addEventListener('click', ()=>{
       if (sel.answered) return;
-      const w = b.dataset.word;
+      const phrase = b.dataset.selPhrase;
+      const idx = sel.clkSelected.indexOf(phrase);
+      if (idx!==-1) sel.clkSelected.splice(idx,1); else sel.clkSelected.push(phrase);
+      render();
+    });
+  });
+  document.querySelectorAll('[data-sel-word]').forEach(b => {
+    b.addEventListener('click', ()=>{
+      if (sel.answered) return;
+      const w = b.dataset.selWord.replace(/[.,;:!?«»"'()\[\]]/g,'').trim();
       const idx = sel.clkSelected.indexOf(w);
       if (idx!==-1) sel.clkSelected.splice(idx,1); else sel.clkSelected.push(w);
       render();
@@ -1934,15 +1942,49 @@ function renderSel() {
 
 function renderSelExcerpt(q) {
   if (q.type !== 'CLK') return q.excerpt;
-  return q.excerpt.split(/\s+/).map(w => {
-    const clean = w.replace(/[.,;:!?«»"'()\[\]]/g,'').trim();
-    const isTarget = q.targets.map(t=>t.toLowerCase()).includes(clean.toLowerCase());
-    const selState = sel.clkSelected.includes(clean) ? (sel.answered ? (isTarget?'hit':'miss') : 'sel') : '';
-    if (sel.answered && isTarget && !sel.clkSelected.includes(clean)) {
-      return `<span class="tok hit" data-word="${clean}">${w}</span>`;
+  const targets = q.targets.map(t => t.trim().toLowerCase());
+  const text = q.excerpt;
+  const tokens = text.split(/(\s+)/);
+  const words = tokens.map(t => /^\s+$/.test(t) ? null : t.replace(/[.,;:!?«»"'()\[\]]/g, '').toLowerCase());
+
+  // Χτίζουμε wordPhraseMap για φράσεις
+  const wordPhraseMap = {};
+  const wordOnlyIdxs = tokens.reduce((acc, t, i) => { if (!/^\s+$/.test(t)) acc.push(i); return acc; }, []);
+  targets.forEach(target => {
+    const parts = target.split(' ').filter(Boolean);
+    if (parts.length <= 1) return;
+    for (let wi = 0; wi <= wordOnlyIdxs.length - parts.length; wi++) {
+      const match = parts.every((p, pi) => words[wordOnlyIdxs[wi + pi]] === p);
+      if (match) { for (let pi = 0; pi < parts.length; pi++) wordPhraseMap[wordOnlyIdxs[wi + pi]] = target; }
     }
-    return `<span class="tok ${selState}" data-word="${clean}">${w}</span>`;
-  }).join(' ');
+  });
+
+  let html = '';
+  tokens.forEach((tok, ti) => {
+    if (/^\s+$/.test(tok)) { html += tok; return; }
+    const clean = words[ti];
+    const phraseTarget = wordPhraseMap[ti];
+    const isSingleTarget = targets.includes(clean) && !phraseTarget;
+    const isAnyTarget = !!(phraseTarget || isSingleTarget);
+
+    const isSelPhrase = phraseTarget && sel.clkSelected.includes(phraseTarget);
+    const isSelWord = !phraseTarget && sel.clkSelected.some(s => s.toLowerCase() === clean);
+    const isSelected = isSelPhrase || isSelWord;
+
+    let cls = 'tok';
+    if (sel.answered) {
+      if (isAnyTarget) cls += ' hit';
+      else if (isSelected && !isAnyTarget) cls += ' miss';
+    } else {
+      if (isSelected) cls += ' sel';
+    }
+
+    const dataAttr = phraseTarget
+      ? `data-sel-phrase="${phraseTarget.replace(/"/g, '&quot;')}"`
+      : `data-sel-word="${tok.replace(/"/g, '&quot;')}"`;
+    html += `<span class="${cls}" ${dataAttr}>${tok}</span>`;
+  });
+  return html;
 }
 
 function renderSelQuestionBody(q) {
