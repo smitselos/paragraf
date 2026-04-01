@@ -376,21 +376,34 @@ let adp = {
 
 // ΕΞΑΣΚΗΣΗ state
 let drll = {
-  // setup filters
-  filterDomi: 'all',       // 'all' | 'Διμερής' | 'Τριμερής'
-  filterTropos: 'all',     // 'all' | specific tropos string
-  filterCount: 10,         // 5 | 10 | 20
-  // session
-  queue: [],               // shuffled paragraphs for this session
+  filterDiff: 'all',       // 'all' | 1 | 2 | 3
+  filterCount: 10,         // 10 | 20 | 0 (=all)
+  queue: [],
   qIdx: 0,
   answerDomi: null,
   answerTropos: null,
   answered: false,
   _autoTimer: null,
-  // scoring
   correct: 0,
   total: 0,
-  results: [],             // {domiOk, troposOk}
+  results: [],
+};
+
+
+// ΠΑΡΟΥΣΙΑΣΗ state (ίδια λογική με Εξάσκηση)
+let prs = {
+  filterDomi: 'all',
+  filterTropos: 'all',
+  filterCount: 10,
+  queue: [],
+  qIdx: 0,
+  answerDomi: null,
+  answerTropos: null,
+  answered: false,
+  _autoTimer: null,
+  correct: 0,
+  total: 0,
+  results: [],
 };
 
 let screen = 'loading';
@@ -438,6 +451,7 @@ function parseCSV(csv) {
         text: obj['Απόσπασμα'],
         domi: obj['Δομή'].trim(),
         tropos: obj['Τρόπος'].trim(),
+        diff: parseInt(obj['Δυσκολία']) || 1,
       });
     }
 
@@ -728,6 +742,9 @@ function render() {
     case 'drill_setup':    app.innerHTML=renderDrillSetup(); break;
     case 'drill':          app.innerHTML=renderDrill(); break;
     case 'drill_results':  app.innerHTML=renderDrillResults(); break;
+    case 'prs_setup':      app.innerHTML=renderPrsSetup(); break;
+    case 'prs':            app.innerHTML=renderPrs(); break;
+    case 'prs_results':    app.innerHTML=renderPrsResults(); break;
   }
   attachEvents();
 }
@@ -758,6 +775,12 @@ function renderHome() {
         <div class="hc-icon-wrap">⚡</div>
         <p class="hc-title">Εξάσκηση</p>
         <p class="hc-desc">Γρήγορη εξάσκηση σε ανάλυση παραγράφων. Επίλεξε δομή, τρόπο και αριθμό παραγράφων.</p>
+        <span class="hc-arrow">${totalPara} παράγραφοι →</span>
+      </button>
+      <button class="home-card c3" id="btnStartPrs">
+        <div class="hc-icon-wrap">📽️</div>
+        <p class="hc-title">Παρουσίαση</p>
+        <p class="hc-desc">Παρουσίαση παραγράφων στην τάξη. Επίλεξε δομή, τρόπο και αριθμό παραγράφων.</p>
         <span class="hc-arrow">${totalPara} παράγραφοι →</span>
       </button>
     </div>
@@ -995,15 +1018,15 @@ function renderAdpResults() {
 // ══════════════════════════════════════════════
 function getDrillPool() {
   return allParagraphs.filter(p => {
-    if (drll.filterDomi !== 'all' && p.domi !== drll.filterDomi) return false;
-    if (!troposMatches(p, drll.filterTropos)) return false;
+    if (drll.filterDiff !== 'all' && p.diff !== drll.filterDiff) return false;
     return true;
   });
 }
 
 function startDrillSession() {
   const pool = getDrillPool();
-  drll.queue = shuffle(pool).slice(0, drll.filterCount);
+  const count = drll.filterCount === 0 ? pool.length : drll.filterCount;
+  drll.queue = shuffle(pool).slice(0, count);
   drll.qIdx = 0;
   drll.answerDomi = null;
   drll.answerTropos = null;
@@ -1048,23 +1071,16 @@ function doDrillNext() {
 
 function getDomiOptions() { return ['Τριμερής','Διμερής']; }
 
-// Σταθερές 8 επιλογές τρόπου
 function getTroposOptions() {
   return ['Παραδείγματα','Αιτιολόγηση','Αίτιο-αποτέλεσμα','Διαίρεση','Σύγκριση-αντίθεση','Ορισμός','Αναλογία','Συνδυασμός μεθόδων'];
 }
 
-// Έλεγχος αν παράγραφος ταιριάζει με φίλτρο τρόπου:
-// - Αν φίλτρο = 'all' → όλες
-// - Αν φίλτρο = 'Συνδυασμός μεθόδων' → μόνο παράγραφοι με δύο τρόπους
-// - Αλλιώς → παράγραφοι που περιέχουν τον τρόπο (και ως μόνο και μέσα σε συνδυασμό)
 function troposMatches(p, filter) {
   if (filter === 'all') return true;
   const t = (p.tropos || '').toLowerCase();
   if (filter === 'Συνδυασμός μεθόδων') {
-    // Παράγραφοι που έχουν δύο ή περισσότερους τρόπους (περιέχουν '+' ή ',' ή 'συνδυασμός')
     return t.includes('+') || t.includes(',') || t.includes('συνδυασμός');
   }
-  // Ο τρόπος ταιριάζει αν είναι ακριβώς αυτός ή αν είναι μέρος συνδυασμού
   const fLow = filter.toLowerCase();
   return t === fLow || t.includes(fLow);
 }
@@ -1074,44 +1090,38 @@ function troposMatches(p, filter) {
 // ══════════════════════════════════════════════
 function renderDrillSetup() {
   const pool = getDrillPool();
-  const allTropos = getTroposOptions();
-  const counts = [5, 10, 20];
 
-  const domiChips = ['all','Τριμερής','Διμερής'].map(v => {
-    const lbl = v==='all' ? 'Όλες' : v;
-    const cnt = v==='all' ? allParagraphs.length : allParagraphs.filter(p=>p.domi===v).length;
-    return `<button class="fchip ${drll.filterDomi===v?'active':''}" data-drll-domi="${v}">${lbl} <span class="fchip-count">(${cnt})</span></button>`;
+  const diffMap = [
+    {v:'all', lbl:'Όλες'},
+    {v:1, lbl:'1 — Εύκολη'},
+    {v:2, lbl:'2 — Μέτρια'},
+    {v:3, lbl:'3 — Δύσκολη'},
+  ];
+  const diffChips = diffMap.map(({v, lbl}) => {
+    const cnt = v==='all' ? allParagraphs.length : allParagraphs.filter(p=>p.diff===v).length;
+    return `<button class="fchip ${drll.filterDiff===v?'active':''}" data-drll-diff="${v}">${lbl} <span class="fchip-count">(${cnt})</span></button>`;
   }).join('');
 
-  const troposChips = ['all', ...allTropos].map(v => {
-    const lbl = v==='all' ? 'Όλοι' : v;
-    const cnt = v==='all' ? allParagraphs.length : allParagraphs.filter(p=>troposMatches(p,v)).length;
-    return `<button class="fchip ${drll.filterTropos===v?'active':''}" data-drll-tropos="${v}">${lbl} <span class="fchip-count">(${cnt})</span></button>`;
-  }).join('');
-
-  const countChips = counts.map(n =>
-    `<button class="fchip ${drll.filterCount===n?'active':''}" data-drll-count="${n}">${n}</button>`
+  const countMap = [{n:10,lbl:'10'},{n:20,lbl:'20'},{n:0,lbl:'Όλες'}];
+  const countChips = countMap.map(({n,lbl}) =>
+    `<button class="fchip ${drll.filterCount===n?'active':''}" data-drll-count="${n}">${lbl}</button>`
   ).join('');
 
   const canStart = pool.length > 0;
-  const actualCount = Math.min(drll.filterCount, pool.length);
+  const actualCount = drll.filterCount === 0 ? pool.length : Math.min(drll.filterCount, pool.length);
 
   return `
   <div class="drll-header" style="display:flex;justify-content:space-between;align-items:center">
     <div>
       <h2>⚡ Εξάσκηση</h2>
-      <p>Επίλεξε τα φίλτρα και ξεκίνα</p>
+      <p>Επίλεξε φίλτρα και ξεκίνα</p>
     </div>
     <button id="btnDrillHome" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 14px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit">🏠 Αρχική</button>
   </div>
   <div class="card">
     <div class="drll-setup-section">
-      <h3>📐 Δομή</h3>
-      <div class="filter-chips">${domiChips}</div>
-    </div>
-    <div class="drll-setup-section">
-      <h3>📚 Τρόπος Ανάπτυξης</h3>
-      <div class="filter-chips">${troposChips}</div>
+      <h3>⭐ Βαθμός Δυσκολίας</h3>
+      <div class="filter-chips">${diffChips}</div>
     </div>
     <div class="drll-setup-section">
       <h3>🔢 Αριθμός Παραγράφων</h3>
@@ -1119,7 +1129,7 @@ function renderDrillSetup() {
     </div>
     <div class="info ${canStart?'success':'warn'}" style="margin-top:4px">
       ${canStart
-        ? `✅ Βρέθηκαν <strong>${pool.length}</strong> παράγραφοι (θα εμφανιστούν <strong>${actualCount}</strong>)`
+        ? `✅ Διαθέσιμες <strong>${pool.length}</strong> παράγραφοι (θα εμφανιστούν <strong>${actualCount}</strong>)`
         : '⚠️ Δεν βρέθηκαν παράγραφοι με αυτά τα φίλτρα'}
     </div>
     <button class="btn-go" id="btnDrillStart" ${canStart?'':'disabled'} style="margin-top:6px">
@@ -1136,7 +1146,6 @@ function renderDrill() {
   const total = drll.queue.length;
   const domiOpts = getDomiOptions();
   const troposOpts = getTroposOptions();
-  const pct = Math.round(((drll.qIdx) / total) * 100);
 
   // Progress dots
   let dots = '';
@@ -1149,7 +1158,6 @@ function renderDrill() {
     dots += `<div class="${cls}"></div>`;
   }
 
-  // Score
   const maxPossible = drll.total * 2;
   const scoreDisplay = maxPossible > 0 ? `${drll.correct} / ${maxPossible}` : '—';
 
@@ -1170,18 +1178,12 @@ function renderDrill() {
   });
   domiHtml += '</div>';
 
-  // Tropos options — σταθερές 8 επιλογές
-  const TROPOS_OPTS = getTroposOptions();
+  // Tropos options
   let troposHtml = '<div class="drll-opts">';
-  TROPOS_OPTS.forEach(v => {
+  troposOpts.forEach(v => {
     let cls = 'drll-opt';
     if (drll.answered) {
-      // Σωστό: η επιλογή ταιριάζει με τον τρόπο της παραγράφου
-      const isCorrect = troposMatches(p, v) && (
-        v === 'Συνδυασμός μεθόδων'
-          ? troposMatches(p, 'Συνδυασμός μεθόδων')
-          : troposMatches(p, v)
-      );
+      const isCorrect = troposMatches(p, v) && (v === 'Συνδυασμός μεθόδων' ? troposMatches(p,'Συνδυασμός μεθόδων') : troposMatches(p,v));
       const isSelected = v === drll.answerTropos;
       if (isSelected && isCorrect) cls += ' ok';
       else if (isSelected && !isCorrect) cls += ' ko';
@@ -1211,7 +1213,7 @@ function renderDrill() {
     </div>
     <div class="drll-prog">${dots}</div>
     <div style="text-align:right">
-      <div class="drll-score-lbl">Ερώτηση</div>
+      <div class="drll-score-lbl">Παράγραφος</div>
       <div style="font-weight:700;color:var(--ink)">${drll.qIdx+1} / ${total}</div>
     </div>
   </div>
@@ -1427,18 +1429,29 @@ function attachEvents() {
   if (btnStartAdp) btnStartAdp.addEventListener('click', startAdaptive);
   const btnStartDrill = document.getElementById('btnStartDrill');
   if (btnStartDrill) btnStartDrill.addEventListener('click', ()=>{ screen='drill_setup'; render(); });
+  const btnStartPrs = document.getElementById('btnStartPrs');
+  if (btnStartPrs) btnStartPrs.addEventListener('click', ()=>{ screen='prs_setup'; render(); });
 
   // ── ΕΞΑΣΚΗΣΗ setup filters ──
-  document.querySelectorAll('[data-drll-domi]').forEach(b =>
-    b.addEventListener('click', ()=>{ drll.filterDomi=b.dataset.drllDomi; render(); }));
-  document.querySelectorAll('[data-drll-tropos]').forEach(b =>
-    b.addEventListener('click', ()=>{ drll.filterTropos=b.dataset.drllTropos; render(); }));
+  document.querySelectorAll('[data-drll-diff]').forEach(b =>
+    b.addEventListener('click', ()=>{ const v=b.dataset.drllDiff; drll.filterDiff=v==='all'?'all':parseInt(v); render(); }));
   document.querySelectorAll('[data-drll-count]').forEach(b =>
     b.addEventListener('click', ()=>{ drll.filterCount=parseInt(b.dataset.drllCount); render(); }));
   const btnDrillStart = document.getElementById('btnDrillStart');
   if (btnDrillStart) btnDrillStart.addEventListener('click', startDrillSession);
   const btnDrillHome = document.getElementById('btnDrillHome');
   if (btnDrillHome) btnDrillHome.addEventListener('click', ()=>{ screen='home'; render(); });
+  // Παρουσίαση filters
+  document.querySelectorAll('[data-prs-domi]').forEach(b =>
+    b.addEventListener('click', ()=>{ prs.filterDomi=b.dataset.prsDomi; render(); }));
+  document.querySelectorAll('[data-prs-tropos]').forEach(b =>
+    b.addEventListener('click', ()=>{ prs.filterTropos=b.dataset.prsTropos; render(); }));
+  document.querySelectorAll('[data-prs-count]').forEach(b =>
+    b.addEventListener('click', ()=>{ prs.filterCount=parseInt(b.dataset.prsCount); render(); }));
+  const btnPrsStart = document.getElementById('btnPrsStart');
+  if (btnPrsStart) btnPrsStart.addEventListener('click', startPrsSession);
+  const btnPrsHome = document.getElementById('btnPrsHome');
+  if (btnPrsHome) btnPrsHome.addEventListener('click', ()=>{ screen='home'; render(); });
 
   // ── ΕΞΑΣΚΗΣΗ quiz ──
   document.querySelectorAll('[data-drll-domi-ans]').forEach(b =>
@@ -1447,12 +1460,23 @@ function attachEvents() {
     b.addEventListener('click', ()=>{ if(!drll.answered){ drll.answerTropos=b.dataset.drllTroposAns; render(); } }));
   const btnDrillCheck = document.getElementById('btnDrillCheck');
   if (btnDrillCheck) btnDrillCheck.addEventListener('click', doDrillCheck);
+  // Παρουσίαση answers
+  document.querySelectorAll('[data-prs-domi-ans]').forEach(b =>
+    b.addEventListener('click', ()=>{ if(!prs.answered){ prs.answerDomi=b.dataset.prsDomiAns; render(); } }));
+  document.querySelectorAll('[data-prs-tropos-ans]').forEach(b =>
+    b.addEventListener('click', ()=>{ if(!prs.answered){ prs.answerTropos=b.dataset.prsTroposAns; render(); } }));
+  const btnPrsCheck = document.getElementById('btnPrsCheck');
+  if (btnPrsCheck) btnPrsCheck.addEventListener('click', doPrsCheck);
 
   // ── ΕΞΑΣΚΗΣΗ results ──
   const btnDrillAgain = document.getElementById('btnDrillAgain');
   if (btnDrillAgain) btnDrillAgain.addEventListener('click', ()=>{ screen='drill_setup'; render(); });
   const btnDrillHome2 = document.getElementById('btnDrillHome2');
   if (btnDrillHome2) btnDrillHome2.addEventListener('click', ()=>{ screen='home'; render(); });
+  const btnPrsAgain = document.getElementById('btnPrsAgain');
+  if (btnPrsAgain) btnPrsAgain.addEventListener('click', ()=>{ screen='prs_setup'; render(); });
+  const btnPrsHome2 = document.getElementById('btnPrsHome2');
+  if (btnPrsHome2) btnPrsHome2.addEventListener('click', ()=>{ screen='home'; render(); });
 
   // Theory toggle
   const btnTh = document.getElementById('btnTheory');
@@ -1603,6 +1627,243 @@ function doNext() {
     // Round finished — evaluate
     finishRound();
   }
+}
+
+
+
+// ══════════════════════════════════════════════
+// ΠΑΡΟΥΣΙΑΣΗ (αντίγραφο Εξάσκησης)
+// ══════════════════════════════════════════════
+function startPrsSession() {
+  const pool = getDrillPool();
+  prs.queue = shuffle(pool).slice(0, prs.filterCount);
+  prs.qIdx = 0;
+  prs.answerDomi = null;
+  prs.answerTropos = null;
+  prs.answered = false;
+  prs.correct = 0;
+  prs.total = 0;
+  prs.results = [];
+  if (prs._autoTimer) { clearTimeout(prs._autoTimer); prs._autoTimer = null; }
+  screen = 'prs';
+  render();
+}
+
+function doPrsCheck() {
+  if (prs.answered) return;
+  const p = prs.queue[prs.qIdx];
+  const domiOk = prs.answerDomi === p.domi;
+  const troposOk = prs.answerTropos !== null && troposMatches(p, prs.answerTropos);
+  prs.answered = true;
+  prs.results.push({domiOk, troposOk});
+  prs.total++;
+  if (domiOk) prs.correct++;
+  if (troposOk) prs.correct++;
+  render();
+  playSound(domiOk && troposOk ? 'correct' : 'wrong');
+  if (prs._autoTimer) clearTimeout(prs._autoTimer);
+  prs._autoTimer = setTimeout(() => doDrillNext(), 3000);
+}
+
+function doPrsNext() {
+  if (prs._autoTimer) { clearTimeout(prs._autoTimer); prs._autoTimer = null; }
+  if (prs.qIdx < prs.queue.length - 1) {
+    prs.qIdx++;
+    prs.answerDomi = null;
+    prs.answerTropos = null;
+    prs.answered = false;
+    render();
+  } else {
+    screen = 'prs_results';
+    render();
+  }
+}
+
+function renderPrsSetup() {
+  const pool = getDrillPool();
+  const allTropos = getTroposOptions();
+  const counts = [5, 10, 20];
+
+  const domiChips = ['all','Τριμερής','Διμερής'].map(v => {
+    const lbl = v==='all' ? 'Όλες' : v;
+    const cnt = v==='all' ? allParagraphs.length : allParagraphs.filter(p=>p.domi===v).length;
+    return `<button class="fchip ${prs.filterDomi===v?'active':''}" data-prs-domi="${v}">${lbl} <span class="fchip-count">(${cnt})</span></button>`;
+  }).join('');
+
+  const troposChips = ['all', ...allTropos].map(v => {
+    const lbl = v==='all' ? 'Όλοι' : v;
+    const cnt = v==='all' ? allParagraphs.length : allParagraphs.filter(p=>troposMatches(p,v)).length;
+    return `<button class="fchip ${prs.filterTropos===v?'active':''}" data-prs-tropos="${v}">${lbl} <span class="fchip-count">(${cnt})</span></button>`;
+  }).join('');
+
+  const countChips = counts.map(n =>
+    `<button class="fchip ${prs.filterCount===n?'active':''}" data-prs-count="${n}">${n}</button>`
+  ).join('');
+
+  const canStart = pool.length > 0;
+  const actualCount = Math.min(prs.filterCount, pool.length);
+
+  return `
+  <div class="drll-header" style="display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <h2>📽️ Παρουσίαση</h2>
+      <p>Επίλεξε τα φίλτρα και ξεκίνα</p>
+    </div>
+    <button id="btnPrsHome" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 14px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit">🏠 Αρχική</button>
+  </div>
+  <div class="card">
+    <div class="drll-setup-section">
+      <h3>📐 Δομή</h3>
+      <div class="filter-chips">${domiChips}</div>
+    </div>
+    <div class="drll-setup-section">
+      <h3>📚 Τρόπος Ανάπτυξης</h3>
+      <div class="filter-chips">${troposChips}</div>
+    </div>
+    <div class="drll-setup-section">
+      <h3>🔢 Αριθμός Παραγράφων</h3>
+      <div class="filter-chips">${countChips}</div>
+    </div>
+    <div class="info ${canStart?'success':'warn'}" style="margin-top:4px">
+      ${canStart
+        ? `✅ Βρέθηκαν <strong>${pool.length}</strong> παράγραφοι (θα εμφανιστούν <strong>${actualCount}</strong>)`
+        : '⚠️ Δεν βρέθηκαν παράγραφοι με αυτά τα φίλτρα'}
+    </div>
+    <button class="btn-go" id="btnPrsStart" ${canStart?'':'disabled'} style="margin-top:6px">
+      Ξεκινήστε το Quiz →
+    </button>
+  </div>`;
+}
+
+function renderPrs() {
+  const p = prs.queue[prs.qIdx];
+  const total = prs.queue.length;
+  const domiOpts = getDomiOptions();
+  const troposOpts = getTroposOptions();
+  const pct = Math.round(((prs.qIdx) / total) * 100);
+
+  // Progress dots
+  let dots = '';
+  for (let i = 0; i < total; i++) {
+    let cls = 'drll-pd';
+    if (i < prs.results.length) {
+      const r = prs.results[i];
+      cls += (r.domiOk && r.troposOk) ? ' ok' : ' ko';
+    } else if (i === prs.qIdx) cls += ' cur';
+    dots += `<div class="${cls}"></div>`;
+  }
+
+  // Score
+  const maxPossible = prs.total * 2;
+  const scoreDisplay = maxPossible > 0 ? `${prs.correct} / ${maxPossible}` : '—';
+
+  // Domi options
+  let domiHtml = '<div class="drll-opts">';
+  domiOpts.forEach(v => {
+    let cls = 'drll-opt';
+    if (prs.answered) {
+      const isCorrect = v === p.domi;
+      const isSelected = v === prs.answerDomi;
+      if (isSelected && isCorrect) cls += ' ok';
+      else if (isSelected && !isCorrect) cls += ' ko';
+      else if (isCorrect && !isSelected) cls += ' neutral-ok';
+    } else {
+      if (prs.answerDomi === v) cls += ' sel';
+    }
+    domiHtml += `<button class="${cls}" data-prs-domi-ans="${v}" ${prs.answered?'disabled':''}>${v}</button>`;
+  });
+  domiHtml += '</div>';
+
+  // Tropos options — σταθερές 8 επιλογές
+  const TROPOS_OPTS = getTroposOptions();
+  let troposHtml = '<div class="drll-opts">';
+  TROPOS_OPTS.forEach(v => {
+    let cls = 'drll-opt';
+    if (prs.answered) {
+      // Σωστό: η επιλογή ταιριάζει με τον τρόπο της παραγράφου
+      const isCorrect = troposMatches(p, v) && (
+        v === 'Συνδυασμός μεθόδων'
+          ? troposMatches(p, 'Συνδυασμός μεθόδων')
+          : troposMatches(p, v)
+      );
+      const isSelected = v === prs.answerTropos;
+      if (isSelected && isCorrect) cls += ' ok';
+      else if (isSelected && !isCorrect) cls += ' ko';
+      else if (isCorrect && !isSelected) cls += ' neutral-ok';
+    } else {
+      if (prs.answerTropos === v) cls += ' sel';
+    }
+    troposHtml += `<button class="${cls}" data-prs-tropos-ans="${v}" ${prs.answered?'disabled':''}>${v}</button>`;
+  });
+  troposHtml += '</div>';
+
+  const canCheckDrill = prs.answerDomi !== null && prs.answerTropos !== null && !prs.answered;
+
+  return `
+  <div class="drll-header" style="display:flex;justify-content:space-between;align-items:center">
+    <div>
+      <h2>📽️ Παρουσίαση</h2>
+      <p>Ανάλυσε την παράγραφο</p>
+    </div>
+    <button onclick="screen='home';render();" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 14px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit">🏠 Αρχική</button>
+  </div>
+
+  <div class="drll-score-bar">
+    <div>
+      <div class="drll-score-lbl">Πόντοι</div>
+      <div class="drll-score-pts">${scoreDisplay}</div>
+    </div>
+    <div class="drll-prog">${dots}</div>
+    <div style="text-align:right">
+      <div class="drll-score-lbl">Ερώτηση</div>
+      <div style="font-weight:700;color:var(--ink)">${prs.qIdx+1} / ${total}</div>
+    </div>
+  </div>
+
+  <div class="drll-para-card">
+    <p class="drll-para-lbl">Παράγραφος ${prs.qIdx+1}</p>
+    <div class="drll-para-text">${p.text}</div>
+  </div>
+
+  <div class="drll-questions">
+    <div class="drll-q-card ${prs.answered ? (prs.results[prs.qIdx]?.domiOk ? 'ok' : 'ko') : ''}">
+      <p class="drll-q-num">Ερώτηση 1</p>
+      <p class="drll-q-title">Ποια είναι η δομή της παραγράφου;</p>
+      ${domiHtml}
+    </div>
+    <div class="drll-q-card ${prs.answered ? (prs.results[prs.qIdx]?.troposOk ? 'ok' : 'ko') : ''}">
+      <p class="drll-q-num">Ερώτηση 2</p>
+      <p class="drll-q-title">Ποιος είναι ο τρόπος ανάπτυξης;</p>
+      ${troposHtml}
+    </div>
+  </div>
+
+  ${!prs.answered ? `<button class="btn-check" id="btnPrsCheck" ${canCheckDrill?'':'disabled'}>Έλεγξε</button>` : ''}
+  `;
+}
+
+function renderPrsResults() {
+  const total = prs.queue.length;
+  const maxPoints = total * 2;
+  const pct = maxPoints > 0 ? Math.round((prs.correct / maxPoints) * 100) : 0;
+  const emoji = pct >= 80 ? '🎉' : pct >= 60 ? '👍' : '📚';
+
+  return `
+  <div class="card" style="text-align:center;padding:28px 22px">
+    <div style="font-size:2.8rem;margin-bottom:10px">${emoji}</div>
+    <h2 style="font-family:'IBM Plex Serif',serif;font-size:1.4rem;margin-bottom:16px">Τέλος Παρουσίαση!</h2>
+    <div class="drll-results-score">
+      <p class="drll-results-big">${prs.correct} / ${maxPoints}</p>
+      <p class="drll-results-sub">πόντοι (${pct}%)</p>
+    </div>
+    <div class="score-grid" style="margin:14px 0">
+      <div class="sc g"><p>Σωστές</p><p>${prs.correct}</p></div>
+      <div class="sc r"><p>Λάθος</p><p>${maxPoints - prs.correct}</p></div>
+      <div class="sc a"><p>Παράγραφοι</p><p>${total}</p></div>
+    </div>
+  </div>
+  <button class="btn-go" id="btnPrsAgain" style="margin-top:4px">🔄 Νέα παρουσίαση</button>
+  <button class="btn-sec" id="btnPrsHome2" style="margin-top:8px">↩ Αρχική</button>`;
 }
 
 // ══════════════════════════════════════════════
