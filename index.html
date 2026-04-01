@@ -21,6 +21,10 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding:20px 16px 48px;line-height:1.6}
 .wrap{max-width:860px;margin:0 auto}
+/* Setup screens full-height */
+.setup-screen{display:flex;flex-direction:column;min-height:calc(100vh - 68px)}
+.setup-card{flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.setup-sections{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;gap:0}
 
 /* header */
 .app-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;background:var(--white);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:18px;border-left:4px solid var(--indigo)}
@@ -1139,6 +1143,7 @@ function renderDrillSetup() {
   const actualCount = drll.filterCount === 0 ? pool.length : Math.min(drll.filterCount, pool.length);
 
   return `
+  <div class="setup-screen">
   <div class="drll-header" style="display:flex;justify-content:space-between;align-items:center">
     <div>
       <h2>⚡ Εξάσκηση</h2>
@@ -1146,23 +1151,28 @@ function renderDrillSetup() {
     </div>
     <button id="btnDrillHome" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 14px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit">🏠 Αρχική</button>
   </div>
-  <div class="card">
-    <div class="drll-setup-section">
-      <h3>⭐ Βαθμός Δυσκολίας</h3>
-      <div class="filter-chips">${diffChips}</div>
+  <div class="card setup-card">
+    <div class="setup-sections">
+      <div class="drll-setup-section">
+        <h3>⭐ Βαθμός Δυσκολίας</h3>
+        <div class="filter-chips">${diffChips}</div>
+      </div>
+      <div class="drll-setup-section">
+        <h3>🔢 Αριθμός Παραγράφων</h3>
+        <div class="filter-chips">${countChips}</div>
+      </div>
     </div>
-    <div class="drll-setup-section">
-      <h3>🔢 Αριθμός Παραγράφων</h3>
-      <div class="filter-chips">${countChips}</div>
+    <div>
+      <div class="info ${canStart?'success':'warn'}" style="margin-top:4px">
+        ${canStart
+          ? `✅ Διαθέσιμες <strong>${pool.length}</strong> παράγραφοι (θα εμφανιστούν <strong>${actualCount}</strong>)`
+          : '⚠️ Δεν βρέθηκαν παράγραφοι με αυτά τα φίλτρα'}
+      </div>
+      <button class="btn-go" id="btnDrillStart" ${canStart?'':'disabled'} style="margin-top:6px">
+        Ξεκινήστε το Quiz →
+      </button>
     </div>
-    <div class="info ${canStart?'success':'warn'}" style="margin-top:4px">
-      ${canStart
-        ? `✅ Διαθέσιμες <strong>${pool.length}</strong> παράγραφοι (θα εμφανιστούν <strong>${actualCount}</strong>)`
-        : '⚠️ Δεν βρέθηκαν παράγραφοι με αυτά τα φίλτρα'}
-    </div>
-    <button class="btn-go" id="btnDrillStart" ${canStart?'':'disabled'} style="margin-top:6px">
-      Ξεκινήστε το Quiz →
-    </button>
+  </div>
   </div>`;
 }
 
@@ -1841,6 +1851,7 @@ function renderSelSetup() {
   const actualCount = sel.filterCount === 0 ? pool.length : Math.min(sel.filterCount, pool.length);
 
   return `
+  <div class="setup-screen">
   <div class="adp-header" style="display:flex;justify-content:space-between;align-items:center">
     <div>
       <h2>🎲 Επιλογή</h2>
@@ -1848,27 +1859,32 @@ function renderSelSetup() {
     </div>
     <button id="btnSelHome" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 14px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit">🏠 Αρχική</button>
   </div>
-  <div class="card">
-    <div class="drll-setup-section">
-      <h3>❓ Τύπος Ερώτησης</h3>
-      <div class="filter-chips">${typeChips}</div>
+  <div class="card setup-card">
+    <div class="setup-sections">
+      <div class="drll-setup-section">
+        <h3>❓ Τύπος Ερώτησης</h3>
+        <div class="filter-chips">${typeChips}</div>
+      </div>
+      <div class="drll-setup-section">
+        <h3>⭐ Βαθμός Δυσκολίας</h3>
+        <div class="filter-chips">${diffChips}</div>
+      </div>
+      <div class="drll-setup-section">
+        <h3>🔢 Αριθμός Ερωτήσεων</h3>
+        <div class="filter-chips">${countChips}</div>
+      </div>
     </div>
-    <div class="drll-setup-section">
-      <h3>⭐ Βαθμός Δυσκολίας</h3>
-      <div class="filter-chips">${diffChips}</div>
+    <div>
+      <div class="info ${canStart?'success':'warn'}" style="margin-top:4px">
+        ${canStart
+          ? `✅ Βρέθηκαν <strong>${pool.length}</strong> ερωτήσεις (θα εμφανιστούν <strong>${actualCount}</strong>)`
+          : '⚠️ Δεν βρέθηκαν ερωτήσεις με αυτά τα φίλτρα'}
+      </div>
+      <button class="btn-go" id="btnSelStart" ${canStart?'':'disabled'} style="margin-top:6px">
+        Ξεκινήστε →
+      </button>
     </div>
-    <div class="drll-setup-section">
-      <h3>🔢 Αριθμός Ερωτήσεων</h3>
-      <div class="filter-chips">${countChips}</div>
-    </div>
-    <div class="info ${canStart?'success':'warn'}" style="margin-top:4px">
-      ${canStart
-        ? `✅ Βρέθηκαν <strong>${pool.length}</strong> ερωτήσεις (θα εμφανιστούν <strong>${actualCount}</strong>)`
-        : '⚠️ Δεν βρέθηκαν ερωτήσεις με αυτά τα φίλτρα'}
-    </div>
-    <button class="btn-go" id="btnSelStart" ${canStart?'':'disabled'} style="margin-top:6px">
-      Ξεκινήστε →
-    </button>
+  </div>
   </div>`;
 }
 
@@ -2169,6 +2185,7 @@ function renderPrsSetup() {
   const actualCount = prs.filterCount === 0 ? pool.length : Math.min(prs.filterCount, pool.length);
 
   return `
+  <div class="setup-screen">
   <div class="drll-header" style="display:flex;justify-content:space-between;align-items:center">
     <div>
       <h2>📽️ Παρουσίαση</h2>
@@ -2176,31 +2193,36 @@ function renderPrsSetup() {
     </div>
     <button id="btnPrsHome" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.4);border-radius:999px;padding:5px 14px;color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit">🏠 Αρχική</button>
   </div>
-  <div class="card">
-    <div class="drll-setup-section">
-      <h3>📐 Δομή</h3>
-      <div class="filter-chips">${domiChips}</div>
+  <div class="card setup-card">
+    <div class="setup-sections">
+      <div class="drll-setup-section">
+        <h3>📐 Δομή</h3>
+        <div class="filter-chips">${domiChips}</div>
+      </div>
+      <div class="drll-setup-section">
+        <h3>📚 Τρόπος Ανάπτυξης</h3>
+        <div class="filter-chips">${troposChips}</div>
+      </div>
+      <div class="drll-setup-section">
+        <h3>🔢 Αριθμός Παραγράφων</h3>
+        <div class="filter-chips">${countChips}</div>
+      </div>
+      <div class="drll-setup-section">
+        <h3>⭐ Βαθμός Δυσκολίας</h3>
+        <div class="filter-chips">${diffChips}</div>
+      </div>
     </div>
-    <div class="drll-setup-section">
-      <h3>📚 Τρόπος Ανάπτυξης</h3>
-      <div class="filter-chips">${troposChips}</div>
+    <div>
+      <div class="info ${canStart?'success':'warn'}" style="margin-top:4px">
+        ${canStart
+          ? `✅ Διαθέσιμες <strong>${pool.length}</strong> παράγραφοι (θα εμφανιστούν <strong>${actualCount}</strong>)`
+          : '⚠️ Δεν βρέθηκαν παράγραφοι με αυτά τα φίλτρα'}
+      </div>
+      <button class="btn-go" id="btnPrsStart" ${canStart?'':'disabled'} style="margin-top:6px">
+        Ξεκινήστε →
+      </button>
     </div>
-    <div class="drll-setup-section">
-      <h3>🔢 Αριθμός Παραγράφων</h3>
-      <div class="filter-chips">${countChips}</div>
-    </div>
-    <div class="drll-setup-section">
-      <h3>⭐ Βαθμός Δυσκολίας</h3>
-      <div class="filter-chips">${diffChips}</div>
-    </div>
-    <div class="info ${canStart?'success':'warn'}" style="margin-top:4px">
-      ${canStart
-        ? `✅ Διαθέσιμες <strong>${pool.length}</strong> παράγραφοι (θα εμφανιστούν <strong>${actualCount}</strong>)`
-        : '⚠️ Δεν βρέθηκαν παράγραφοι με αυτά τα φίλτρα'}
-    </div>
-    <button class="btn-go" id="btnPrsStart" ${canStart?'':'disabled'} style="margin-top:6px">
-      Ξεκινήστε →
-    </button>
+  </div>
   </div>`;
 }
 
